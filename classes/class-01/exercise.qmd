@@ -1,0 +1,395 @@
+---
+title: "Exercise 1 — First contact with a track"
+subtitle: "Class 1 · Theme 1"
+date-modified: last-modified
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+::: {.objectives}
+**Goals.** Confirm your installation works; read a real Movebank file; find out
+what is actually in it; compute a fix rate and a fix success rate; plot a
+trajectory using nothing but base R.
+
+**Time:** ~50 minutes. **Packages:** none — base R only, on purpose.
+:::
+
+::: {.callout-tip}
+Work inside the course RStudio project (`animtrack-2627.Rproj`). Then the path
+`data/buffalo_kruger.csv.gz` resolves without you editing anything.
+:::
+
+## Task 0 — Does your installation work?
+
+```{r}
+#| eval: false
+sessionInfo()
+
+need <- c("sf", "terra", "move2", "amt", "adehabitatHR", "ctmm",
+          "moveHMM", "survival", "dplyr", "ggplot2", "mapview")
+for (p in need) {
+  ok <- requireNamespace(p, quietly = TRUE)
+  cat(sprintf("%-14s %s\n", p, if (ok) as.character(packageVersion(p)) else "** MISSING **"))
+}
+```
+
+If anything says `MISSING`, go back to the [setup page](../../setup.qmd) now —
+you will need all of these by Class 3.
+
+## Task 1 — Read the data
+
+R reads gzipped CSV directly. No need to decompress anything.
+
+```{r}
+buffalo <- read.csv("data/buffalo_kruger.csv.gz", stringsAsFactors = FALSE)
+
+dim(buffalo)
+names(buffalo)
+```
+
+::: {.callout-note collapse="true"}
+## Why did the column names change?
+
+Movebank uses hyphens: `location-long`. R identifiers cannot contain hyphens,
+so `read.csv()` converts them to dots by default: `location.long`. You can
+keep the originals with `check.names = FALSE`, but then you need backticks
+everywhere — not worth it.
+:::
+
+### Your turn
+
+**1a.** How many rows? How many columns?
+**1b.** How many individual animals, and what are they called?
+**1c.** What species, and what sensor type?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+nrow(buffalo)
+ncol(buffalo)
+
+unique(buffalo$individual.local.identifier)
+length(unique(buffalo$individual.local.identifier))
+
+unique(buffalo$individual.taxon.canonical.name)
+unique(buffalo$sensor.type)
+```
+
+Six buffalo, GPS-collared. Note that `table()` is more informative than
+`unique()` when you also want the number of fixes per animal:
+
+```{r}
+table(buffalo$individual.local.identifier)
+```
+
+Already a lesson: the animals are **not** equally sampled. Any summary that
+pools them without accounting for that is dominated by whichever individual
+contributed most fixes.
+:::
+
+## Task 2 — Timestamps are not text
+
+This is the single most important line of code in the whole course.
+
+```{r}
+buffalo$t <- as.POSIXct(buffalo$timestamp, format = "%Y-%m-%d %H:%M:%S", tz = "UTC")
+
+class(buffalo$t)
+range(buffalo$t)
+```
+
+::: {.callout-warning}
+## Always set `tz`
+
+If you omit `tz`, R silently uses **your computer's** time zone. Your analysis
+then gives different answers on a laptop in Rome and a server in California.
+Movebank timestamps are UTC. Say so.
+:::
+
+### Your turn
+
+**2a.** Over how many days does the study run?
+**2b.** In which months are there most fixes?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+difftime(max(buffalo$t), min(buffalo$t), units = "days")
+
+table(format(buffalo$t, "%Y-%m"))
+```
+
+The monthly counts are very uneven — collars were deployed and failed at
+different times. This matters: a "seasonal" pattern can easily be a deployment
+pattern in disguise.
+:::
+
+## Task 3 — Subset one animal and sort it
+
+Almost every movement calculation assumes the rows are **one individual, in
+time order**. Never assume a file arrives sorted.
+
+```{r}
+queen <- buffalo[buffalo$individual.local.identifier == "Queen", ]
+queen <- queen[order(queen$t), ]
+
+nrow(queen)
+head(queen[, c("t", "location.long", "location.lat")])
+```
+
+### Your turn
+
+**3a.** Were the rows already in time order?
+**3b.** Are there repeated timestamps?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+# Was the original order already sorted in time?
+queen_raw <- buffalo[buffalo$individual.local.identifier == "Queen", ]
+is.unsorted(queen_raw$t)
+
+# Repeated timestamps?
+sum(duplicated(queen$t))
+```
+
+There are duplicated timestamps — the collar transmitted the same fix more
+than once. Across the whole file:
+
+```{r}
+sum(duplicated(buffalo[, c("individual.local.identifier", "timestamp")]))
+```
+
+Roughly 13% of the file. We will remove these properly in Class 3; today just
+register that **real data arrive dirty**, and that you only find out by
+looking.
+:::
+
+## Task 4 — Fix interval and fix success
+
+The collar was *programmed* to attempt a fix on a schedule. What did it
+actually deliver?
+
+```{r}
+# Drop duplicated timestamps first, or every duplicate creates a zero-length interval
+queen_u <- queen[!duplicated(queen$t), ]
+
+dt <- as.numeric(diff(queen_u$t), units = "hours")
+
+summary(dt)
+```
+
+### Your turn
+
+**4a.** What is the *modal* (most common) interval? That is the programmed fix rate.
+**4b.** What fraction of intervals are exactly that? This is your fix success rate.
+**4c.** What is the longest gap, and what might explain it?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+# Round to the nearest 0.1 h so near-identical intervals group together
+tab <- sort(table(round(dt, 1)), decreasing = TRUE)
+head(tab, 5)
+
+modal_dt <- as.numeric(names(tab)[1])
+modal_dt
+
+# Proportion of intervals at the programmed rate
+mean(abs(dt - modal_dt) < 0.1)
+
+# The worst gap, in days
+max(dt) / 24
+```
+
+The modal interval is the programmed schedule. Everything longer is a
+**missed fix** — the collar tried and failed, or was off.
+
+Long gaps have mundane explanations that matter enormously: battery
+saving schedules, the animal under dense canopy or in a gorge, the collar
+temporarily upside-down, or the animal dead and the collar lying face-down.
+
+A cleaner way to count missed fixes — how many scheduled attempts fit in
+each observed gap:
+
+```{r}
+missed <- round(dt / modal_dt) - 1
+sum(missed)
+sum(missed) / (nrow(queen_u) + sum(missed))   # overall failure rate
+```
+:::
+
+## Task 5 — Your first trajectory plot
+
+No spatial packages. Just points and lines.
+
+```{r}
+#| fig-width: 7
+#| fig-height: 6
+#| fig-align: center
+plot(queen_u$location.long, queen_u$location.lat,
+     type = "l", col = "grey60",
+     xlab = "Longitude (°)", ylab = "Latitude (°)",
+     main = "Buffalo 'Queen', Kruger NP",
+     asp = 1)
+points(queen_u$location.long, queen_u$location.lat,
+       pch = 16, cex = 0.3, col = "#1f6f78")
+points(queen_u$location.long[1], queen_u$location.lat[1],
+       pch = 17, cex = 1.6, col = "forestgreen")     # start
+points(tail(queen_u$location.long, 1), tail(queen_u$location.lat, 1),
+       pch = 15, cex = 1.6, col = "firebrick")       # end
+legend("topright", c("start", "end"), pch = c(17, 15),
+       col = c("forestgreen", "firebrick"), bty = "n")
+```
+
+::: {.callout-important}
+## This plot is wrong, and knowing why is the point
+
+`asp = 1` forces one degree of longitude to occupy the same screen distance as
+one degree of latitude. On the ground at 24°S, one degree of latitude is about
+111 km, but one degree of longitude is only about
+`r round(111.32 * cos(24.5 * pi / 180))` km — the map is stretched
+east–west by roughly a factor of 1.1.
+
+At 24° the distortion is modest. Try the same plot for the vulture, which
+ranges from 7°N to 54°N, and it becomes severe.
+
+Distances computed from raw degrees are meaningless. Fixing this — properly,
+with coordinate reference systems — is [Class 2](../class-02/slides.qmd).
+:::
+
+### Your turn
+
+**5a.** Plot all six buffalo on one figure, one colour each.
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+#| fig-width: 7.5
+#| fig-height: 6.5
+#| fig-align: center
+b <- buffalo[!duplicated(buffalo[, c("individual.local.identifier", "timestamp")]), ]
+ids <- unique(b$individual.local.identifier)
+cols <- hcl.colors(length(ids), "Dark 3")
+
+plot(b$location.long, b$location.lat, type = "n", asp = 1,
+     xlab = "Longitude (°)", ylab = "Latitude (°)",
+     main = "Six buffalo, Kruger National Park")
+
+for (i in seq_along(ids)) {
+  d <- b[b$individual.local.identifier == ids[i], ]
+  d <- d[order(d$t), ]
+  lines(d$location.long, d$location.lat, col = cols[i], lwd = 1)
+}
+legend("topleft", legend = ids, col = cols, lwd = 2, bty = "n", cex = 0.8)
+```
+
+The individuals overlap heavily but are not identical — the raw material of
+every question in this course. Do they use the same areas at the same *times*?
+Do they avoid each other? Do they respond to the same rivers?
+:::
+
+## Task 6 — A different animal, a different problem
+
+```{r}
+#| fig-width: 7
+#| fig-height: 5.5
+#| fig-align: center
+vulture <- read.csv("data/vulture_leo.csv.gz", stringsAsFactors = FALSE)
+vulture$t <- as.POSIXct(vulture$timestamp, format = "%Y-%m-%d %H:%M:%S", tz = "UTC")
+vulture <- vulture[order(vulture$t), ]
+
+plot(vulture$location.long, vulture$location.lat, type = "l",
+     col = "grey50", asp = 1,
+     xlab = "Longitude (°)", ylab = "Latitude (°)",
+     main = "Turkey vulture 'Leo', 2007-2013")
+points(vulture$location.long, vulture$location.lat,
+       pch = 16, cex = 0.15, col = "#c1440e")
+```
+
+### Your turn
+
+**6a.** Why would a single home-range estimate for this animal be meaningless?
+**6b.** Plot latitude against time. What do you see?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4
+#| fig-align: center
+plot(vulture$t, vulture$location.lat, type = "l",
+     col = "#c1440e", xlab = "", ylab = "Latitude (°)",
+     main = "Latitude over time — six annual migrations")
+```
+
+A clean sawtooth. Leo is not doing one thing: he alternates between two
+residency phases (Canada, South America) and two directed migrations, and
+repeats that six times.
+
+A home range computed over the whole track would describe an "area of use"
+spanning two continents — an area the animal essentially never occupies. It
+would be arithmetically correct and biologically meaningless.
+
+This is exactly the motivation for [Class 6](../class-06/slides.qmd):
+**segment first, then analyse**. Note also that latitude-over-time is a
+remarkably effective diagnostic plot — always look at your coordinates against
+time before you model anything.
+:::
+
+## Self-check
+
+::: {.quiz}
+You compute `diff(t)` on a data frame you forgot to sort by time. What do you
+get?
+
+- [ ] An error
+- [x] A mixture of positive and negative intervals, and nonsense summaries
+- [ ] Correct intervals — `diff()` sorts internally
+- [ ] All zeros
+
+::: {.quiz-feedback}
+`diff()` does exactly what you asked: it subtracts each element from the next,
+in the order given. Out of order, you get negative time differences, and any
+speed you compute from them is garbage — often silently, because `summary()`
+still returns numbers.
+
+**Always `order(t)` within individual before any step calculation.** This is
+the most common error in beginner movement code.
+:::
+:::
+
+::: {.quiz}
+A collar programmed for hourly fixes returns 14,000 fixes over exactly two
+years. Roughly what was the fix success rate?
+
+- [ ] ~100%
+- [x] ~80%
+- [ ] ~50%
+- [ ] Impossible to say without the DOP values
+
+::: {.quiz-feedback}
+Two years of hourly attempts is 2 × 365 × 24 ≈ 17,520. So 14,000 / 17,520 ≈
+**80%**, which is a fairly typical figure for a GPS collar on a large mammal
+in mixed habitat.
+
+The 20% that failed is not noise: if failures concentrate in closed habitat,
+your data under-represent exactly the places the animal may prefer.
+:::
+:::
+
+## Before Class 2
+
+- Make sure `library(sf)` and `library(terra)` both load without errors.
+- Look at the [Datasets page](../../data.qmd) so the three files are familiar.
+- Optional but useful: skim
+  [Geocomputation with R, chapter 2](https://r.geocompx.org/spatial-class).

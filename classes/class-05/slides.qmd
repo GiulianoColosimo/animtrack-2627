@@ -1,0 +1,426 @@
+---
+title: "Remote sensing and environmental annotation"
+subtitle: "Class 5 · Theme 3 — Remote sensing"
+author: "Giuliano Colosimo"
+institute: "University of Rome Tor Vergata"
+date: last-modified
+format:
+  revealjs:
+    theme: [default, ../../assets/theme-slides.scss]
+    css: ../../assets/quiz.css
+    include-after-body: ../../assets/quiz.html
+    slide-number: c/t
+    show-slide-number: all
+    chalkboard: true
+    preview-links: auto
+    history: false
+    width: 1280
+    height: 760
+    footer: "Animal Tracking 2026-2027 · Class 5"
+    logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
+    highlight-style: github
+execute:
+  echo: true
+---
+
+## Today
+
+::: {.objectives}
+1. What a satellite sensor actually measures
+2. The **four resolutions**, and the trade-offs between them
+3. Spectral indices: **NDVI**, EVI, NDWI — what they mean and where they fail
+4. The main missions and where to get the data
+5. **Environmental annotation**: attaching covariates to a trajectory in space
+   *and* time
+:::
+
+. . .
+
+::: {.keyidea}
+A tracking dataset on its own tells you *where*. Remote sensing tells you
+*what was there* — and that is what turns a map into ecology.
+:::
+
+# 1 · What a sensor measures {background-color="#14525a"}
+
+---
+
+## Radiation, not "pictures"
+
+::: {.incremental}
+- The Sun emits across the electromagnetic spectrum; surfaces **reflect**
+  some of it and **absorb** the rest
+- A passive sensor records the **radiance** arriving at the detector in a set
+  of wavelength **bands**
+- That raw signal is contaminated by the atmosphere, the Sun's angle, the
+  viewing angle and the terrain
+- What you download is the result of a **processing chain**, and the level
+  matters
+:::
+
+. . .
+
+::: {.smaller}
+**Level 1** — top of atmosphere radiance/reflectance.
+**Level 2** — surface reflectance, atmospherically corrected. *Start here.*
+**Level 3+** — derived products: NDVI composites, land cover, LAI.
+:::
+
+---
+
+## Why vegetation looks the way it does
+
+::: {.columns}
+::: {.column width="55%"}
+Healthy green vegetation:
+
+- **absorbs** strongly in the **red** (~660 nm) — chlorophyll is doing
+  photosynthesis
+- **reflects** strongly in the **near infrared** (~850 nm) — the internal leaf
+  structure scatters it
+
+So the *contrast* between red and NIR is a measure of green biomass.
+:::
+::: {.column width="45%"}
+::: {.keyidea}
+That single fact is the basis of essentially every vegetation index ever
+published.
+:::
+:::
+:::
+
+---
+
+## Active sensors
+
+::: {.incremental}
+- **Radar (SAR)** — emits microwaves and measures the return. Sees **through
+  cloud and at night**. Sentinel-1. Sensitive to structure and moisture, not
+  to greenness.
+- **LiDAR** — emits laser pulses, measures return time. Gives **3-D
+  structure**: canopy height, vertical complexity. GEDI (spaceborne),
+  airborne for fine detail.
+:::
+
+. . .
+
+::: {.smaller}
+For a forest animal, canopy height and vertical structure from LiDAR are often
+far more informative than NDVI — greenness saturates in dense forest, but
+structure does not.
+:::
+
+# 2 · The four resolutions {background-color="#14525a"}
+
+---
+
+## You cannot have all four
+
+::: {.incremental}
+- **Spatial** — pixel size. 10 m (Sentinel-2) … 500 m (MODIS) … 25 km (some
+  climate products)
+- **Temporal** — revisit time. 5 days (Sentinel-2) vs **daily** (MODIS) vs
+  16 days (Landsat)
+- **Spectral** — number and width of bands. 4 broad bands vs 200 narrow
+  (hyperspectral)
+- **Radiometric** — bit depth; how finely brightness is quantised
+:::
+
+. . .
+
+::: {.keyidea}
+They trade off against each other: a detector collecting light from a small
+patch, in a narrow band, gets few photons — so it needs a longer dwell time,
+which means a narrower swath and a longer revisit.
+:::
+
+---
+
+## The missions you will actually use {.smaller}
+
+| Mission | Spatial | Temporal | Since | Good for |
+|:--|:--|:--|:--|:--|
+| **MODIS** (Terra/Aqua) | 250–500 m | Daily | 2000 | Long consistent NDVI series |
+| **VIIRS** | 375–750 m | Daily | 2012 | MODIS successor |
+| **Landsat 5/7/8/9** | 30 m | 16 days | **1984** | Long-term landscape change |
+| **Sentinel-2** | 10–20 m | 5 days | 2015 | Fine-grained habitat |
+| **Sentinel-1** (SAR) | 10 m | 6–12 days | 2014 | Cloud-free, structure, water |
+| **GEDI** (LiDAR) | 25 m footprint | sampled | 2019 | Canopy height |
+
+. . .
+
+::: {.keyidea}
+**Match the pixel to the animal and to your positional error.** A 10 m
+Sentinel pixel is wasted on an Argos fix with 5 km error — and a 500 m MODIS
+pixel is useless for a dormouse.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You study habitat selection by a forest ungulate using GPS collars (error
+~15 m, hourly fixes) in a landscape with small forest patches of 1–5 ha. Which
+product for vegetation cover?
+
+- [ ] MODIS NDVI, 250 m, daily
+- [x] Sentinel-2, 10–20 m, every 5 days
+- [ ] A 1 km global land-cover map
+- [ ] Sentinel-1 SAR, 10 m
+
+::: {.quiz-feedback}
+A 1–5 ha patch is roughly 100–220 m across. A **250 m MODIS pixel is larger
+than the patch**, so every fix would get a mixed value averaging forest and
+open land — the very contrast you are trying to measure would be erased. A
+1 km product is hopeless for the same reason.
+
+Sentinel-2 at 10–20 m resolves those patches comfortably, and its 5-day
+revisit captures the growing season. Its resolution is also well matched to
+15 m GPS error: finer would just add noise.
+
+Sentinel-1 is excellent for structure and for cloudy regions, but it does not
+measure greenness — it is the right answer to a different question.
+:::
+:::
+
+# 3 · Spectral indices {background-color="#14525a"}
+
+---
+
+## NDVI
+
+$$\text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}$$
+
+::: {.incremental}
+- Ranges −1 to +1. Water < 0; bare soil/rock ~0.1–0.2; sparse vegetation
+  ~0.2–0.4; dense green vegetation 0.6–0.9
+- A **proxy** for green biomass and primary productivity
+- Normalised, so it partly cancels illumination and viewing-angle effects
+:::
+
+. . .
+
+::: {.callout-warning appearance="simple"}
+**It saturates.** Above ~0.8 — closed canopy — NDVI stops responding to extra
+biomass. In rainforest it is nearly flat and nearly useless.
+:::
+
+---
+
+## The other indices worth knowing {.smaller}
+
+| Index | Formula | Use |
+|:--|:--|:--|
+| **EVI** | $2.5\frac{\text{NIR}-\text{Red}}{\text{NIR}+6\text{Red}-7.5\text{Blue}+1}$ | Like NDVI but resists saturation and soil background |
+| **NDWI** | $\frac{\text{Green}-\text{NIR}}{\text{Green}+\text{NIR}}$ | Open water — very useful for waterholes |
+| **NDSI** | $\frac{\text{Green}-\text{SWIR}}{\text{Green}+\text{SWIR}}$ | Snow cover |
+| **LAI / fPAR** | modelled | Leaf area, absorbed radiation |
+
+---
+
+## Beyond greenness: derived metrics
+
+::: {.incremental}
+- **Rate of green-up** (the derivative of NDVI in time) — this, not NDVI
+  itself, is what drives the *green wave surfing* of migratory ungulates
+- **Phenology metrics** — start of season, peak, length
+- **Terrain** from a DEM: slope, aspect, ruggedness, topographic position
+- **Distance to** — water, roads, forest edge. Often the strongest predictor
+  in the whole model
+:::
+
+. . .
+
+::: {.keyidea}
+The best covariate is rarely the raw band. It is a transformation that
+corresponds to something the animal could plausibly perceive or care about.
+:::
+
+# 4 · Annotation {background-color="#14525a"}
+
+---
+
+## The operation
+
+For every fix, look up the environment **there** and **then**.
+
+::: {.incremental}
+- **Static** covariates — elevation, slope, distance to river. One raster;
+  `extract()` and done.
+- **Dynamic** covariates — NDVI, temperature, snow. A **stack** of rasters
+  with timestamps. You must match each fix to the right layer.
+:::
+
+. . .
+
+::: {.keyidea}
+A track that spans two years annotated with a *single* NDVI image is not
+annotated — it is decorated. If your covariate varies in time and your
+analysis does not, you have thrown away the mechanism.
+:::
+
+---
+
+## Doing it in time
+
+```r
+# Which layer does each fix belong to?
+layer_dates <- as.Date(c("2005-01-01", "2005-01-17", ...))
+
+idx <- findInterval(as.Date(trk$t_), layer_dates)
+
+# Extract from the whole stack, then pick the right column per row
+vals <- terra::extract(ndvi_stack, vect(trk))[, -1]
+trk$ndvi <- vals[cbind(seq_len(nrow(vals)), idx)]
+```
+
+. . .
+
+::: {.smalltext}
+`Movebank Env-DATA` does this for you, including interpolation in time, for
+dozens of products. Use it for real projects — but understand what it is doing
+first, which is what today's exercise is for.
+:::
+
+---
+
+## Scale is a decision, not a detail
+
+::: {.incremental}
+- Do you want the value **at the fix**, or the **mean within a buffer**?
+- A buffer radius is a hypothesis about **perceptual range** — how far the
+  animal can assess its surroundings
+- Different radii can reverse the sign of an effect
+:::
+
+. . .
+
+```r
+terra::extract(ndvi, vect(trk), buffer = 500, fun = mean)
+```
+
+::: {.keyidea}
+Choose the radius from biology, before you look at the results. Fitting at
+ten radii and reporting the best one is a garden of forking paths.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You annotate two years of buffalo fixes with a single dry-season NDVI image
+and find a strong positive selection for high NDVI. What is the main problem?
+
+- [ ] NDVI saturates in dense vegetation
+- [x] The covariate is static while both the animal and the vegetation varied seasonally
+- [ ] The pixel size is too coarse
+- [ ] NDVI cannot be used for savanna
+
+::: {.quiz-feedback}
+The image describes one moment. Over two years, vegetation in a savanna swings
+enormously between wet and dry season, and the buffalo's needs swing with it.
+By holding NDVI fixed you have conflated "places that were green **in that dry
+season**" with "places that are green **when the animal was there**".
+
+What you have measured is selection for *persistently* productive places —
+which may be interesting, but is not what the model claims.
+
+The result can even be the *opposite* sign from the time-matched analysis: an
+animal may select the greenest available patch at every moment while showing
+no preference for places that are green on average.
+
+Fix: use a time series and match each fix to the contemporaneous layer.
+:::
+:::
+
+---
+
+## Common failures {.smaller}
+
+::: {.incremental}
+- **CRS mismatch** — or worse, passing a bare coordinate matrix (Class 2)
+- **Cloud contamination** — an uncomposited optical image over the tropics is
+  mostly cloud. Use quality flags; use composites.
+- **Fill values** — `-3000` or `32767` read as real numbers will destroy your
+  model. Check the product's documentation for the scale factor and no-data value.
+- **Scale factors** — MODIS NDVI is stored as integers; multiply by 0.0001
+- **Time zones** — your fixes are UTC; is the product local solar time?
+:::
+
+. . .
+
+::: {.keyidea}
+After every annotation: `summary()` the new column. If the range is
+`-3000` to `10000`, you have raw integers, not NDVI.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+Your GPS fixes have ~15 m error. You have both a 10 m Sentinel-2 product and a
+500 m MODIS product. You take the 10 m one because finer is better. When is
+that reasoning wrong?
+
+- [ ] Never — finer resolution is always preferable
+- [x] When the process you are modelling operates at a coarser scale than the pixel
+- [ ] When the file is too large to process
+- [ ] Only for aquatic species
+
+::: {.quiz-feedback}
+Resolution should match **the scale of the process**, not simply be as fine as
+available. If an animal responds to the overall productivity of a valley, a
+10 m pixel measures the individual bush it happened to stand next to — real
+variation, but not the variation driving the behaviour. You add noise and lose
+power.
+
+The two constraints are:
+
+- the pixel should not be much **finer** than your positional error (you
+  cannot tell which pixel the animal was in);
+- the pixel should not be much **coarser** than the animal's typical
+  displacement (Class 8 shows exactly what breaks when it is).
+
+Between those bounds, the choice is a hypothesis about the animal's perceptual
+scale — and you should state it.
+:::
+:::
+
+---
+
+## Today's exercise
+
+::: {.objectives}
+**[→ Class 5 exercise](exercise.qmd)**
+
+1. Read real elevation and land-cover rasters for Kruger
+2. Derive slope and terrain ruggedness
+3. Annotate the buffalo fixes, and compare used vs available
+4. Extract at a point vs in a buffer — and see the answer change
+5. Build a **time-varying** covariate and do a time-matched annotation
+:::
+
+---
+
+## Recap
+
+::: {.incremental}
+- Sensors record **radiance in bands**; products are processed, and the
+  processing level matters
+- Four resolutions, all trading off. **Match the pixel to the animal and to
+  your positional error**
+- NDVI is red/NIR contrast: useful, and it **saturates**
+- Annotation must match in **space and in time**; a static covariate for a
+  dynamic process is a modelling error, not a shortcut
+- Buffer radius encodes a hypothesis about perception. Choose it first
+:::
+
+. . .
+
+### Before Class 6
+
+- Pettorelli et al. (2005) on NDVI in ecology
+- Skim the `moveHMM` vignette — we fit our first state model next week

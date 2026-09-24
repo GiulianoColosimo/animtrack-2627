@@ -1,0 +1,95 @@
+<script>
+/* ---------------------------------------------------------------
+   Pop-up quiz engine for the Animal Tracking course.
+
+   Authoring (plain Quarto markdown, works in slides and pages):
+
+     ::: {.quiz}
+     Which of these is a *fix*?
+
+     - [ ] A collar attached to an animal
+     - [x] One timestamped location estimate
+     - [ ] The home range of an individual
+
+     ::: {.quiz-feedback}
+     A fix is a single location estimate with a timestamp.
+     :::
+     :::
+
+   The `[x]` marks the correct answer (several `[x]` are allowed).
+   Clicking any option reveals all correct answers plus the feedback.
+----------------------------------------------------------------*/
+(function () {
+  function revealAnswer(quiz, chosen) {
+    if (quiz.classList.contains("quiz-answered")) return;
+    quiz.classList.add("quiz-answered");
+    if (chosen) chosen.classList.add("quiz-chosen");
+    quiz.querySelectorAll(":scope > ul > li").forEach(function (li) {
+      li.classList.add(li.dataset.correct === "true" ? "quiz-is-correct" : "quiz-is-wrong");
+      li.setAttribute("aria-disabled", "true");
+    });
+    var fb = quiz.querySelector(":scope > .quiz-feedback");
+    if (fb) fb.classList.remove("quiz-hidden");
+    var btn = quiz.querySelector(":scope > .quiz-reset");
+    if (btn) btn.hidden = false;
+  }
+
+  function resetQuiz(quiz) {
+    quiz.classList.remove("quiz-answered");
+    quiz.querySelectorAll(":scope > ul > li").forEach(function (li) {
+      li.classList.remove("quiz-chosen", "quiz-is-correct", "quiz-is-wrong");
+      li.removeAttribute("aria-disabled");
+    });
+    var fb = quiz.querySelector(":scope > .quiz-feedback");
+    if (fb) fb.classList.add("quiz-hidden");
+    var btn = quiz.querySelector(":scope > .quiz-reset");
+    if (btn) btn.hidden = true;
+  }
+
+  function initQuiz(quiz) {
+    if (quiz.dataset.quizReady) return;
+    var list = quiz.querySelector(":scope > ul");
+    if (!list) return;
+    quiz.dataset.quizReady = "1";
+    list.classList.add("quiz-options");
+    list.classList.remove("task-list");
+
+    var fb = quiz.querySelector(":scope > .quiz-feedback");
+    if (fb) fb.classList.add("quiz-hidden");
+
+    Array.prototype.forEach.call(list.children, function (li) {
+      var box = li.querySelector('input[type="checkbox"]');
+      li.dataset.correct = box && box.checked ? "true" : "false";
+      if (box) box.remove();
+      // Pandoc wraps task-list items in <label>; unwrap so the whole row is clickable.
+      var label = li.querySelector("label");
+      if (label) { while (label.firstChild) li.insertBefore(label.firstChild, label); label.remove(); }
+      li.setAttribute("role", "button");
+      li.setAttribute("tabindex", "0");
+      li.addEventListener("click", function () { revealAnswer(quiz, li); });
+      li.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); revealAnswer(quiz, li); }
+      });
+    });
+
+    var reset = document.createElement("button");
+    reset.className = "quiz-reset";
+    reset.type = "button";
+    reset.hidden = true;
+    reset.textContent = "↺ ask again";
+    reset.addEventListener("click", function () { resetQuiz(quiz); });
+    quiz.appendChild(reset);
+  }
+
+  function initAll() { document.querySelectorAll("div.quiz").forEach(initQuiz); }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAll);
+  } else {
+    initAll();
+  }
+  // Reveal.js builds some slides lazily; re-scan on every slide change.
+  document.addEventListener("ready", initAll);
+  if (window.Reveal && window.Reveal.on) window.Reveal.on("slidechanged", initAll);
+})();
+</script>

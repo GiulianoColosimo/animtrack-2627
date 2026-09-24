@@ -1,0 +1,26 @@
+# --- R ---
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# --- Quarto / knitr intermediates next to the SOURCE .qmd files ---
+# (deliberately scoped: the identically-named folders inside docs/ are the
+#  rendered figures and MUST be committed, or the published site loses its plots)
+/.quarto/
+/classes/**/*_files/
+/classes/**/*_cache/
+/*_files/
+/*_cache/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.~lock.*#
+*~
+
+# --- Data too large or too derived to version ---
+data/raw/
+
+# NOTE: docs/ is intentionally NOT ignored — GitHub Pages serves the site from it.
+# NOTE: _freeze/ is intentionally NOT ignored — it lets the site rebuild without R.

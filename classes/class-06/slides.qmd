@@ -1,0 +1,391 @@
+---
+title: "Movement segmentation and hidden Markov models"
+subtitle: "Class 6 · Theme 4 — Movement segmentation"
+author: "Giuliano Colosimo"
+institute: "University of Rome Tor Vergata"
+date: last-modified
+format:
+  revealjs:
+    theme: [default, ../../assets/theme-slides.scss]
+    css: ../../assets/quiz.css
+    include-after-body: ../../assets/quiz.html
+    slide-number: c/t
+    show-slide-number: all
+    chalkboard: true
+    preview-links: auto
+    history: false
+    width: 1280
+    height: 760
+    footer: "Animal Tracking 2026-2027 · Class 6"
+    logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
+    highlight-style: github
+execute:
+  echo: true
+---
+
+## Today
+
+::: {.objectives}
+1. Why one trajectory is **several** processes
+2. The families of segmentation methods
+3. **Hidden Markov models**: the generative story, in plain language
+4. Fitting one with `moveHMM` — and the two things that go wrong
+5. How to decide how many states, and how not to
+:::
+
+. . .
+
+::: {.keyidea}
+Segmentation is where movement analysis stops describing and starts
+**inferring**. That is also where it gets easy to fool yourself.
+:::
+
+# 1 · One track, many processes {background-color="#14525a"}
+
+---
+
+## The problem
+
+An animal is not doing one thing all day.
+
+::: {.incremental}
+- Resting, foraging, travelling, migrating — each with its own **step-length
+  and turning-angle signature**
+- Pool them and every summary is a meaningless average: a "mean step length"
+  that describes no actual behaviour
+- Leo's six-year track contains residency **and** migration. A single home
+  range spans two continents (Class 1)
+:::
+
+. . .
+
+::: {.keyidea}
+**Segment first, then analyse.** Almost every method in this course assumes a
+homogeneous process. Segmentation is how you earn that assumption.
+:::
+
+---
+
+## Two questions, often confused
+
+::: {.columns}
+::: {.column width="50%"}
+### Change-point detection
+*"Where does the process change?"*
+
+Finds **breakpoints** in a time series. Output: a set of segments.
+
+BCPA, `segclust2d`, penalised contrasts.
+:::
+::: {.column width="50%"}
+### State classification
+*"Which of $N$ recurring states is the animal in now?"*
+
+Assigns **every step** to a state, and states can recur.
+
+HMM, EMbC, state-space models.
+:::
+:::
+
+. . .
+
+::: {.smalltext}
+"Migration started on 14 September" is a change-point question. "Was this step
+foraging or travelling?" is a state question. Choose the tool that matches the
+question.
+:::
+
+---
+
+## The families {.smaller}
+
+| Approach | Idea | Notes |
+|:--|:--|:--|
+| **Thresholding** | "Speed > 2 m/s = travelling" | Transparent; arbitrary; no uncertainty |
+| **First-passage time** | Time to leave a circle of radius *r* | Good for finding *scales* of area-restricted search |
+| **BCPA** | Change points in persistence velocity | Behavioural Change Point Analysis; needs a tuning choice |
+| **Clustering / EMbC** | Cluster steps in (speed, turn) space | No time dependence — ignores that behaviour persists |
+| **HMM** | Latent state chain + state-specific distributions | **The standard.** Uses time dependence |
+| **State-space models** | HMM + explicit observation error | Handles messy data; slower, harder |
+
+# 2 · Hidden Markov models {background-color="#14525a"}
+
+---
+
+## The generative story
+
+Imagine the animal has a hidden label at each time step — say
+**"encamped"** or **"travelling"**.
+
+::: {.incremental}
+1. At each step the animal is in one of $N$ states, $S_t$
+2. The state evolves as a **Markov chain**: $P(S_t \mid S_{t-1})$ — where you
+   go next depends only on where you are now
+3. Given the state, the observations are drawn from **state-specific
+   distributions**: step length ~ gamma($\mu_i$, $\sigma_i$), turning angle ~
+   von Mises($\mu_i$, $\kappa_i$)
+4. You never see $S_t$. You see only the steps
+:::
+
+. . .
+
+::: {.keyidea}
+The model asks: *what sequence of hidden states, and what state-specific
+distributions, would make the observed steps most likely?*
+:::
+
+---
+
+## What you get out
+
+::: {.incremental}
+- **State-dependent parameters** — e.g. state 1: mean step 40 m, turning
+  angles ~uniform; state 2: mean step 600 m, angles concentrated at 0
+- **Transition probability matrix** $\Gamma$ — and from it the expected
+  **dwell time** in each state, $1/(1-\gamma_{ii})$
+- **The most likely state sequence** (Viterbi) — one label per step
+- **State probabilities** per step — the honest version, with uncertainty
+:::
+
+. . .
+
+```r
+m <- moveHMM::fitHMM(data, nbStates = 2,
+                     stepPar0 = c(50, 500, 50, 500),   # mu1,mu2,sd1,sd2
+                     anglePar0 = c(0, 0, 1, 5))        # mean1,mean2,kappa1,kappa2
+viterbi(m)
+```
+
+---
+
+## Why the Markov part matters
+
+A clustering method looks at each step in isolation. An HMM knows that
+**behaviour persists**: an animal that was resting is probably still resting.
+
+::: {.incremental}
+- This borrows strength across time and produces far less "flickering" between
+  states
+- The transition matrix is itself biology: how long does a foraging bout last?
+- Transitions can depend on covariates: *is the animal more likely to start
+  travelling when NDVI is low?*
+:::
+
+. . .
+
+```r
+fitHMM(data, nbStates = 2, formula = ~ ndvi + cosinor(hour, period = 24))
+```
+
+::: {.smalltext}
+That formula is the bridge between Class 5 and this one.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+An HMM fitted to hourly buffalo data returns two states: state 1 with mean
+step 45 m, state 2 with mean step 780 m. The diagonal of the transition matrix
+is 0.93 and 0.86. What is the expected dwell time in state 2?
+
+- [ ] 0.86 hours
+- [x] About 7 hours
+- [ ] 14 hours
+- [ ] Cannot be determined from the transition matrix alone
+
+::: {.quiz-feedback}
+For a Markov chain the expected number of consecutive steps in state $i$ is
+$1/(1-\gamma_{ii})$. Here $1/(1-0.86) \approx 7.1$ steps, and since steps are
+hourly, **about 7 hours**.
+
+State 1 gives $1/(1-0.93) \approx 14$ steps, i.e. ~14 hours — plausibly the
+resting/ruminating state.
+
+Note two things. First, the dwell time depends on the **sampling interval**:
+the same animal sampled every 2 hours would give a different $\gamma_{ii}$
+but a similar dwell time in hours. Second, this is a real, checkable
+prediction — if the model says foraging bouts last 7 hours and you know from
+direct observation they last 45 minutes, the model is telling you your states
+are not what you think.
+:::
+:::
+
+# 3 · Where it goes wrong {background-color="#14525a"}
+
+---
+
+## Problem 1 — irregular sampling
+
+HMMs as normally fitted assume a **constant time step**.
+
+::: {.incremental}
+- Feed them irregular data and the step-length distribution mixes intervals;
+  the model interprets a long gap as fast movement
+- "Solutions" that are not solutions: interpolating to a regular grid invents
+  data and biases the state distributions
+- Real solutions: resample and accept the data loss (Class 3); or use a
+  **continuous-time** model (`ctmm`, `momentuHMM` with `crawlWrap`)
+:::
+
+. . .
+
+::: {.keyidea}
+This is why the bat dataset cannot be given an HMM. 165 bursts with a median
+of 4 fixes cannot inform a transition matrix.
+:::
+
+---
+
+## Problem 2 — how many states?
+
+::: {.incremental}
+- AIC and BIC **almost always prefer more states**. They are answering "which
+  model fits best", not "which states are real behaviours"
+- With enough data, 4 and 5 states will beat 2 and 3 every time
+- Extra states often capture **outliers**, or the shape of the step-length
+  distribution, not behaviour
+:::
+
+. . .
+
+::: {.keyidea}
+Choose the number of states from **biology and the question**, then check the
+fit. Pseudo-residuals and state-dependent distribution plots tell you far more
+than a table of AICs. Two or three states are almost always enough for what a
+tracking dataset can actually resolve.
+:::
+
+---
+
+## Problem 3 — naming the states
+
+The model returns *state 1* and *state 2*. It does **not** return "foraging"
+and "travelling".
+
+::: {.incremental}
+- Labelling them is an **interpretation**, and it needs external evidence:
+  accelerometer data, direct observation, known behaviours at known times
+- "Short steps and random turns" is consistent with foraging — and with
+  resting, with sheltering, and with the animal being dead
+- Papers that name states from step lengths alone are making an assumption,
+  not a measurement
+:::
+
+. . .
+
+::: {.smaller}
+State the evidence for your labels, or call them "state 1" and "state 2" and
+describe them by their parameters.
+:::
+
+---
+
+## Practical fitting advice
+
+::: {.incremental}
+- **Starting values matter a lot.** The likelihood is multimodal. Fit from
+  many random starts and keep the best
+- Check for **numerical zero step lengths** — a gamma distribution cannot
+  handle them. `moveHMM` will tell you; add a tiny constant or use a
+  zero-inflated model
+- Always inspect **pseudo-residuals** (`plotPR`) — they are the residual plot
+  of the HMM world
+- Plot the state-dependent densities over the histogram of your data. If they
+  do not look like your data, nothing downstream is trustworthy
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You fit 2-, 3-, 4- and 5-state HMMs. AIC decreases every time. Which do you
+report?
+
+- [ ] The 5-state model — lowest AIC
+- [x] The simplest model whose states are biologically interpretable and whose residuals are acceptable
+- [ ] Always 2 states, for comparability
+- [ ] Average the predictions across all four
+
+::: {.quiz-feedback}
+AIC will keep improving because extra states always fit the shape of the data
+better — they mop up outliers and the tails of the step-length distribution.
+That is a statement about the flexibility of mixture models, not about the
+animal's ethogram.
+
+The defensible procedure: decide how many behavioural modes your data could
+plausibly *resolve* given the sampling interval, fit that model, and then
+**check** it — pseudo-residuals, state-dependent densities against the data,
+and dwell times against what you know about the species.
+
+If a 4-state model gives you two states with nearly identical parameters,
+that is the model telling you it has run out of behaviour to find. Report the
+simpler one, and say why.
+:::
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+Your 2-state HMM gives state 1 a mean step of 15 m with near-uniform turning
+angles. You want to call it "foraging". What is the minimum you need?
+
+- [ ] Nothing — short steps with random turns is the standard definition of foraging
+- [x] External evidence, because resting, sheltering and a dead animal all produce the same signature
+- [ ] A lower AIC than the 3-state model
+- [ ] A larger sample of animals
+
+::: {.quiz-feedback}
+The model returns *state 1*, not *foraging*. Short steps with unstructured
+turning angles are consistent with foraging — and equally with resting,
+ruminating, sheltering from heat, a collar that fell off, and an animal that
+has died. At 15 m, a good part of the apparent movement is GPS error.
+
+To turn the label into a measurement you need something outside the
+trajectory: accelerometer or activity data, direct observation, known
+diel patterns, or a validation subset with ground-truthed behaviour.
+
+Where you have none, the honest write-up describes states **by their
+parameters** — "a low-displacement state (mean step 15 m, dwell time ~14 h)" —
+and discusses the plausible behaviours without asserting one.
+:::
+:::
+
+---
+
+## Today's exercise
+
+::: {.objectives}
+**[→ Class 6 exercise](exercise.qmd)**
+
+1. Prepare buffalo data for `moveHMM`
+2. Fit a 2-state model and read the output properly
+3. Decode states with Viterbi and map them
+4. Compare 2 vs 3 states — AIC against interpretability
+5. Check pseudo-residuals
+6. Segment Leo's migration with a simple NSD-based approach
+:::
+
+---
+
+## Recap
+
+::: {.incremental}
+- One trajectory contains several processes; **segment before you analyse**
+- Change-point ≠ state classification. Match the tool to the question
+- An HMM is a hidden state chain plus state-specific step/angle distributions
+- It needs **regular sampling**; irregular data need continuous-time methods
+- AIC will over-state the number of states. Use biology, then check residuals
+- The model gives you states. **You** supply the names — with evidence
+:::
+
+. . .
+
+### Before Class 7
+
+- Read Fieberg et al. (2021), *J Anim Ecol* 90:1027 — the "how-to" guide.
+  It is the single most useful paper of the course

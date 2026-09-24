@@ -1,0 +1,39 @@
+/*-- scss:defaults --*/
+@import 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap';
+
+$font-family-sans-serif: "Atkinson Hyperlegible", system-ui, sans-serif;
+$presentation-font-size-root: 30px;
+$body-bg:            #fbfcfc;
+$body-color:         #22272b;
+$link-color:         #1f6f78;
+$presentation-heading-color: #14525a;
+$presentation-heading-font-weight: 700;
+$code-block-font-size: 0.62em;
+
+/*-- scss:rules --*/
+.reveal .slide-number { font-size: 0.5em; }
+
+.reveal h1, .reveal h2, .reveal h3 { letter-spacing: -0.01em; }
+
+.reveal section img { border: none; box-shadow: none; }
+
+/* Title slide accent bar */
+.reveal .title-slide h1.title { border-bottom: 4px solid #1f6f78; padding-bottom: 0.2em; }
+
+/* Learning-objective / key-idea boxes */
+.reveal .objectives,
+.reveal .keyidea {
+  border-left: 6px solid #1f6f78;
+  background: rgba(31, 111, 120, 0.07);
+  border-radius: 6px;
+  padding: 0.6em 0.9em;
+  font-size: 0.9em;
+}
+.reveal .keyidea { border-left-color: #b8860b; background: rgba(184, 134, 11, 0.09); }
+
+/* Two-column helper already provided by Quarto (.columns/.column) */
+.reveal .smalltext { font-size: 0.75em; }
+.reveal .tinytext  { font-size: 0.62em; }
+
+/* Source credit under figures */
+.reveal .source { font-size: 0.55em; opacity: 0.7; font-style: italic; }

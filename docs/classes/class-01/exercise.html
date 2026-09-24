@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.21">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Exercise 1 — First contact with a track – Animal Tracking</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../classes/class-04/slides.html" rel="next">
+<link href="../../classes/class-01/slides.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7e9717d9caa9b4d114d189eaeb260ada.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-d929c69893c3fca5e8ac47b42fec3313.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-bf10e36bdc8811b3bc51578003ecf691.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-d929c69893c3fca5e8ac47b42fec3313.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><link rel="stylesheet" href="../../assets/quiz.css">
+<meta property="og:title" content="Exercise 1 — First contact with a track – Animal Tracking">
+<meta property="og:description" content="Class 1 · Theme 1">
+<meta property="og:image" content="https://giulianocolosimo.github.io/animtrack-2627/classes/class-01/exercise_files/figure-html/unnamed-chunk-14-1.png">
+<meta property="og:site_name" content="Animal Tracking">
+<meta property="og:locale" content="en_US">
+<meta property="og:image:height" content="1152">
+<meta property="og:image:width" content="1344">
+</head>
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Animal Tracking</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link active" href="../../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../syllabus.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../setup.html"> 
+<span class="menu-text">Setup</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../data.html"> 
+<span class="menu-text">Data</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resources.html"> 
+<span class="menu-text">Resources</span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../classes/class-01/slides.html">1 · Movement</a></li><li class="breadcrumb-item"><a href="../../classes/class-01/exercise.html">C1 · Exercise — First contact with a track</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-center sidebar-header">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../.././assets/figures/avatar.jpg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none"><img src="../.././assets/figures/avatar.jpg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none"></a>
+      <div class="sidebar-tools-main">
+    <a href="https://github.com/GiulianoColosimo/animtrack-2627" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="mailto:giuliano.colosimo@uniroma2.it" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-envelope"></i></a>
+</div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../syllabus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Syllabus</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Software setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datasets</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">1 · Movement</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-01/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C1 · Slides — Movement &amp; tracking technologies</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-01/exercise.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">C1 · Exercise — First contact with a track</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-04/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C4 · Slides — Movement metrics &amp; home range</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-04/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C4 · Exercise — Steps, angles, home range</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">2 · GIS in R</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-02/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C2 · Slides — Spatial data in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-02/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C2 · Exercise — sf, terra, CRS</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-03/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C3 · Slides — Tracking data in R</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-03/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C3 · Exercise — Clean &amp; map a track</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">3 · Remote sensing</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-05/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C5 · Slides — Remote sensing &amp; annotation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-05/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C5 · Exercise — NDVI along a track</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">4 · Segmentation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-06/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C6 · Slides — Behavioural states &amp; HMMs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-06/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C6 · Exercise — Fit an HMM</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">5 · Selection functions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-07/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C7 · Slides — Resource selection (RSF)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-07/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C7 · Exercise — Fit an RSF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-08/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C8 · Slides — Step selection (SSF/iSSA)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-08/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">C8 · Exercise — Fit an iSSA</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../resources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Resources</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li><a href="#task-0-does-your-installation-work" id="toc-task-0-does-your-installation-work" class="nav-link active" data-scroll-target="#task-0-does-your-installation-work">Task 0 — Does your installation work?</a></li>
+  <li>
+<a href="#task-1-read-the-data" id="toc-task-1-read-the-data" class="nav-link" data-scroll-target="#task-1-read-the-data">Task 1 — Read the data</a>
+  <ul class="collapse">
+<li><a href="#your-turn" id="toc-your-turn" class="nav-link" data-scroll-target="#your-turn">Your turn</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#task-2-timestamps-are-not-text" id="toc-task-2-timestamps-are-not-text" class="nav-link" data-scroll-target="#task-2-timestamps-are-not-text">Task 2 — Timestamps are not text</a>
+  <ul class="collapse">
+<li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">Your turn</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#task-3-subset-one-animal-and-sort-it" id="toc-task-3-subset-one-animal-and-sort-it" class="nav-link" data-scroll-target="#task-3-subset-one-animal-and-sort-it">Task 3 — Subset one animal and sort it</a>
+  <ul class="collapse">
+<li><a href="#your-turn-2" id="toc-your-turn-2" class="nav-link" data-scroll-target="#your-turn-2">Your turn</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#task-4-fix-interval-and-fix-success" id="toc-task-4-fix-interval-and-fix-success" class="nav-link" data-scroll-target="#task-4-fix-interval-and-fix-success">Task 4 — Fix interval and fix success</a>
+  <ul class="collapse">
+<li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">Your turn</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#task-5-your-first-trajectory-plot" id="toc-task-5-your-first-trajectory-plot" class="nav-link" data-scroll-target="#task-5-your-first-trajectory-plot">Task 5 — Your first trajectory plot</a>
+  <ul class="collapse">
+<li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">Your turn</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#task-6-a-different-animal-a-different-problem" id="toc-task-6-a-different-animal-a-different-problem" class="nav-link" data-scroll-target="#task-6-a-different-animal-a-different-problem">Task 6 — A different animal, a different problem</a>
+  <ul class="collapse">
+<li><a href="#your-turn-5" id="toc-your-turn-5" class="nav-link" data-scroll-target="#your-turn-5">Your turn</a></li>
+  </ul>
+</li>
+  <li><a href="#self-check" id="toc-self-check" class="nav-link" data-scroll-target="#self-check">Self-check</a></li>
+  <li><a href="#before-class-2" id="toc-before-class-2" class="nav-link" data-scroll-target="#before-class-2">Before Class 2</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/GiulianoColosimo/animtrack-2627/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../classes/class-01/slides.html">1 · Movement</a></li><li class="breadcrumb-item"><a href="../../classes/class-01/exercise.html">C1 · Exercise — First contact with a track</a></li></ol></nav><div class="quarto-title">
+<h1 class="title">Exercise 1 — First contact with a track</h1>
+<p class="subtitle lead">Class 1 · Theme 1</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">September 24, 2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header><div class="objectives">
+<p><strong>Goals.</strong> Confirm your installation works; read a real Movebank file; find out what is actually in it; compute a fix rate and a fix success rate; plot a trajectory using nothing but base R.</p>
+<p><strong>Time:</strong> ~50 minutes. <strong>Packages:</strong> none — base R only, on purpose.</p>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Work inside the course RStudio project (<code>animtrack-2627.Rproj</code>). Then the path <code>data/buffalo_kruger.csv.gz</code> resolves without you editing anything.</p>
+</div>
+</div>
+<section id="task-0-does-your-installation-work" class="level2"><h2 class="anchored" data-anchor-id="task-0-does-your-installation-work">Task 0 — Does your installation work?</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">need</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sf"</span>, <span class="st">"terra"</span>, <span class="st">"move2"</span>, <span class="st">"amt"</span>, <span class="st">"adehabitatHR"</span>, <span class="st">"ctmm"</span>,</span>
+<span>          <span class="st">"moveHMM"</span>, <span class="st">"survival"</span>, <span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span>, <span class="st">"mapview"</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="va">need</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">ok</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="va">p</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"%-14s %s\n"</span>, <span class="va">p</span>, <span class="kw">if</span> <span class="op">(</span><span class="va">ok</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span> <span class="kw">else</span> <span class="st">"** MISSING **"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If anything says <code>MISSING</code>, go back to the <a href="../../setup.html">setup page</a> now — you will need all of these by Class 3.</p>
+</section><section id="task-1-read-the-data" class="level2"><h2 class="anchored" data-anchor-id="task-1-read-the-data">Task 1 — Read the data</h2>
+<p>R reads gzipped CSV directly. No need to decompress anything.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">buffalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/buffalo_kruger.csv.gz"</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 28410    18</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "event.id"                        "visible"                        </span></span>
+<span><span class="co">#&gt;  [3] "timestamp"                       "location.long"                  </span></span>
+<span><span class="co">#&gt;  [5] "location.lat"                    "behavioural.classification"     </span></span>
+<span><span class="co">#&gt;  [7] "comments"                        "manually.marked.outlier"        </span></span>
+<span><span class="co">#&gt;  [9] "sensor.type"                     "individual.taxon.canonical.name"</span></span>
+<span><span class="co">#&gt; [11] "tag.local.identifier"            "individual.local.identifier"    </span></span>
+<span><span class="co">#&gt; [13] "study.name"                      "utm.easting"                    </span></span>
+<span><span class="co">#&gt; [15] "utm.northing"                    "utm.zone"                       </span></span>
+<span><span class="co">#&gt; [17] "study.timezone"                  "study.local.timestamp"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why did the column names change?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Movebank uses hyphens: <code>location-long</code>. R identifiers cannot contain hyphens, so <code><a href="https://rdrr.io/r/utils/read.table.html">read.csv()</a></code> converts them to dots by default: <code>location.long</code>. You can keep the originals with <code>check.names = FALSE</code>, but then you need backticks everywhere — not worth it.</p>
+</div>
+</div>
+</div>
+<section id="your-turn" class="level3"><h3 class="anchored" data-anchor-id="your-turn">Your turn</h3>
+<p><strong>1a.</strong> How many rows? How many columns? <strong>1b.</strong> How many individual animals, and what are they called? <strong>1c.</strong> What species, and what sensor type?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 28410</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 18</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.local.identifier</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Queen"  "Gabs"   "Cilla"  "Mvubu"  "Toni"   "Pepper"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.local.identifier</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 6</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.taxon.canonical.name</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Syncerus caffer"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">sensor.type</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "gps"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Six buffalo, GPS-collared. Note that <code><a href="https://rdrr.io/r/base/table.html">table()</a></code> is more informative than <code><a href="https://rdrr.io/r/base/unique.html">unique()</a></code> when you also want the number of fixes per animal:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.local.identifier</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Cilla   Gabs  Mvubu Pepper  Queen   Toni </span></span>
+<span><span class="co">#&gt;   3556   4831   3491   5163   4997   6372</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Already a lesson: the animals are <strong>not</strong> equally sampled. Any summary that pools them without accounting for that is dominated by whichever individual contributed most fixes.</p>
+</div>
+</div>
+</div>
+</section></section><section id="task-2-timestamps-are-not-text" class="level2"><h2 class="anchored" data-anchor-id="task-2-timestamps-are-not-text">Task 2 — Timestamps are not text</h2>
+<p>This is the single most important line of code in the whole course.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">timestamp</span>, format <span class="op">=</span> <span class="st">"%Y-%m-%d %H:%M:%S"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "POSIXct" "POSIXt"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "2005-02-17 05:05:00 UTC" "2006-12-31 14:34:00 UTC"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Always set <code>tz</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you omit <code>tz</code>, R silently uses <strong>your computer’s</strong> time zone. Your analysis then gives different answers on a laptop in Rome and a server in California. Movebank timestamps are UTC. Say so.</p>
+</div>
+</div>
+<section id="your-turn-1" class="level3"><h3 class="anchored" data-anchor-id="your-turn-1">Your turn</h3>
+<p><strong>2a.</strong> Over how many days does the study run? <strong>2b.</strong> In which months are there most fixes?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"days"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Time difference of 682.3951 days</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span>, <span class="st">"%Y-%m"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; 2005-02 2005-03 2005-04 2005-05 2005-06 2005-07 2005-08 2005-09 2005-10 2005-11 </span></span>
+<span><span class="co">#&gt;     289     752    1290     887     889    1190    3220    4186    4192    3704 </span></span>
+<span><span class="co">#&gt; 2005-12 2006-01 2006-02 2006-03 2006-04 2006-05 2006-06 2006-07 2006-08 2006-09 </span></span>
+<span><span class="co">#&gt;    2574    1425     841     737     626     582     235     197     147     138 </span></span>
+<span><span class="co">#&gt; 2006-10 2006-11 2006-12 </span></span>
+<span><span class="co">#&gt;     108     140      61</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The monthly counts are very uneven — collars were deployed and failed at different times. This matters: a “seasonal” pattern can easily be a deployment pattern in disguise.</p>
+</div>
+</div>
+</div>
+</section></section><section id="task-3-subset-one-animal-and-sort-it" class="level2"><h2 class="anchored" data-anchor-id="task-3-subset-one-animal-and-sort-it">Task 3 — Subset one animal and sort it</h2>
+<p>Almost every movement calculation assumes the rows are <strong>one individual, in time order</strong>. Never assume a file arrives sorted.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">queen</span> <span class="op">&lt;-</span> <span class="va">buffalo</span><span class="op">[</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.local.identifier</span> <span class="op">==</span> <span class="st">"Queen"</span>, <span class="op">]</span></span>
+<span><span class="va">queen</span> <span class="op">&lt;-</span> <span class="va">queen</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">queen</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">queen</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 4997</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">queen</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"t"</span>, <span class="st">"location.long"</span>, <span class="st">"location.lat"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                     t location.long location.lat</span></span>
+<span><span class="co">#&gt; 1 2005-02-17 05:05:00      31.76642    -24.53730</span></span>
+<span><span class="co">#&gt; 2 2005-02-17 05:05:00      31.76642    -24.53730</span></span>
+<span><span class="co">#&gt; 3 2005-02-17 06:08:00      31.76442    -24.53931</span></span>
+<span><span class="co">#&gt; 4 2005-02-17 06:08:00      31.76442    -24.53931</span></span>
+<span><span class="co">#&gt; 5 2005-02-17 07:05:00      31.76114    -24.54799</span></span>
+<span><span class="co">#&gt; 6 2005-02-17 08:05:00      31.76080    -24.54703</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="your-turn-2" class="level3"><h3 class="anchored" data-anchor-id="your-turn-2">Your turn</h3>
+<p><strong>3a.</strong> Were the rows already in time order? <strong>3b.</strong> Are there repeated timestamps?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Was the original order already sorted in time?</span></span>
+<span><span class="va">queen_raw</span> <span class="op">&lt;-</span> <span class="va">buffalo</span><span class="op">[</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.local.identifier</span> <span class="op">==</span> <span class="st">"Queen"</span>, <span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/is.unsorted.html">is.unsorted</a></span><span class="op">(</span><span class="va">queen_raw</span><span class="op">$</span><span class="va">t</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span></span>
+<span><span class="co"># Repeated timestamps?</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span><span class="op">(</span><span class="va">queen</span><span class="op">$</span><span class="va">t</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 452</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>There are duplicated timestamps — the collar transmitted the same fix more than once. Across the whole file:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"individual.local.identifier"</span>, <span class="st">"timestamp"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 3747</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Roughly 13% of the file. We will remove these properly in Class 3; today just register that <strong>real data arrive dirty</strong>, and that you only find out by looking.</p>
+</div>
+</div>
+</div>
+</section></section><section id="task-4-fix-interval-and-fix-success" class="level2"><h2 class="anchored" data-anchor-id="task-4-fix-interval-and-fix-success">Task 4 — Fix interval and fix success</h2>
+<p>The collar was <em>programmed</em> to attempt a fix on a schedule. What did it actually deliver?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Drop duplicated timestamps first, or every duplicate creates a zero-length interval</span></span>
+<span><span class="va">queen_u</span> <span class="op">&lt;-</span> <span class="va">queen</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span><span class="op">(</span><span class="va">queen</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"hours"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. </span></span>
+<span><span class="co">#&gt; 3.333e-02 1.000e+00 1.000e+00 2.445e+00 1.000e+00 2.523e+03</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="your-turn-3" class="level3"><h3 class="anchored" data-anchor-id="your-turn-3">Your turn</h3>
+<p><strong>4a.</strong> What is the <em>modal</em> (most common) interval? That is the programmed fix rate. <strong>4b.</strong> What fraction of intervals are exactly that? This is your fix success rate. <strong>4c.</strong> What is the longest gap, and what might explain it?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Round to the nearest 0.1 h so near-identical intervals group together</span></span>
+<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">dt</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">tab</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    1  0.9    0    2  0.1 </span></span>
+<span><span class="co">#&gt; 4203  120   55   42   35</span></span>
+<span></span>
+<span><span class="va">modal_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">modal_dt</span></span>
+<span><span class="co">#&gt; [1] 1</span></span>
+<span></span>
+<span><span class="co"># Proportion of intervals at the programmed rate</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">dt</span> <span class="op">-</span> <span class="va">modal_dt</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.9515845</span></span>
+<span></span>
+<span><span class="co"># The worst gap, in days</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span> <span class="op">/</span> <span class="fl">24</span></span>
+<span><span class="co">#&gt; [1] 105.1167</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The modal interval is the programmed schedule. Everything longer is a <strong>missed fix</strong> — the collar tried and failed, or was off.</p>
+<p>Long gaps have mundane explanations that matter enormously: battery saving schedules, the animal under dense canopy or in a gorge, the collar temporarily upside-down, or the animal dead and the collar lying face-down.</p>
+<p>A cleaner way to count missed fixes — how many scheduled attempts fit in each observed gap:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">missed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">dt</span> <span class="op">/</span> <span class="va">modal_dt</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">missed</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 6563</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">missed</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">missed</span><span class="op">)</span><span class="op">)</span>   <span class="co"># overall failure rate</span></span>
+<span><span class="co">#&gt; [1] 0.5908354</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section></section><section id="task-5-your-first-trajectory-plot" class="level2"><h2 class="anchored" data-anchor-id="task-5-your-first-trajectory-plot">Task 5 — Your first trajectory plot</h2>
+<p>No spatial packages. Just points and lines.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">queen_u</span><span class="op">$</span><span class="va">location.lat</span>,</span>
+<span>     type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"grey60"</span>,</span>
+<span>     xlab <span class="op">=</span> <span class="st">"Longitude (°)"</span>, ylab <span class="op">=</span> <span class="st">"Latitude (°)"</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"Buffalo 'Queen', Kruger NP"</span>,</span>
+<span>     asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">queen_u</span><span class="op">$</span><span class="va">location.lat</span>,</span>
+<span>       pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.3</span>, col <span class="op">=</span> <span class="st">"#1f6f78"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">location.long</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">queen_u</span><span class="op">$</span><span class="va">location.lat</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>       pch <span class="op">=</span> <span class="fl">17</span>, cex <span class="op">=</span> <span class="fl">1.6</span>, col <span class="op">=</span> <span class="st">"forestgreen"</span><span class="op">)</span>     <span class="co"># start</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">location.long</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">location.lat</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>       pch <span class="op">=</span> <span class="fl">15</span>, cex <span class="op">=</span> <span class="fl">1.6</span>, col <span class="op">=</span> <span class="st">"firebrick"</span><span class="op">)</span>       <span class="co"># end</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="fl">15</span><span class="op">)</span>,</span>
+<span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"forestgreen"</span>, <span class="st">"firebrick"</span><span class="op">)</span>, bty <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>This plot is wrong, and knowing why is the point
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>asp = 1</code> forces one degree of longitude to occupy the same screen distance as one degree of latitude. On the ground at 24°S, one degree of latitude is about 111 km, but one degree of longitude is only about 101 km — the map is stretched east–west by roughly a factor of 1.1.</p>
+<p>At 24° the distortion is modest. Try the same plot for the vulture, which ranges from 7°N to 54°N, and it becomes severe.</p>
+<p>Distances computed from raw degrees are meaningless. Fixing this — properly, with coordinate reference systems — is <a href="../../classes/class-02/slides.html">Class 2</a>.</p>
+</div>
+</div>
+<section id="your-turn-4" class="level3"><h3 class="anchored" data-anchor-id="your-turn-4">Your turn</h3>
+<p><strong>5a.</strong> Plot all six buffalo on one figure, one colour each.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">buffalo</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"individual.local.identifier"</span>, <span class="st">"timestamp"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">individual.local.identifier</span><span class="op">)</span></span>
+<span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ids</span><span class="op">)</span>, <span class="st">"Dark 3"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">b</span><span class="op">$</span><span class="va">location.lat</span>, type <span class="op">=</span> <span class="st">"n"</span>, asp <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>     xlab <span class="op">=</span> <span class="st">"Longitude (°)"</span>, ylab <span class="op">=</span> <span class="st">"Latitude (°)"</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"Six buffalo, Kruger National Park"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">ids</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">b</span><span class="op">[</span><span class="va">b</span><span class="op">$</span><span class="va">individual.local.identifier</span> <span class="op">==</span> <span class="va">ids</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">]</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, <span class="op">]</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">d</span><span class="op">$</span><span class="va">location.lat</span>, col <span class="op">=</span> <span class="va">cols</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, legend <span class="op">=</span> <span class="va">ids</span>, col <span class="op">=</span> <span class="va">cols</span>, lwd <span class="op">=</span> <span class="fl">2</span>, bty <span class="op">=</span> <span class="st">"n"</span>, cex <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="720"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The individuals overlap heavily but are not identical — the raw material of every question in this course. Do they use the same areas at the same <em>times</em>? Do they avoid each other? Do they respond to the same rivers?</p>
+</div>
+</div>
+</div>
+</section></section><section id="task-6-a-different-animal-a-different-problem" class="level2"><h2 class="anchored" data-anchor-id="task-6-a-different-animal-a-different-problem">Task 6 — A different animal, a different problem</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">vulture</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/vulture_leo.csv.gz"</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">vulture</span><span class="op">$</span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="va">vulture</span><span class="op">$</span><span class="va">timestamp</span>, format <span class="op">=</span> <span class="st">"%Y-%m-%d %H:%M:%S"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span></span>
+<span><span class="va">vulture</span> <span class="op">&lt;-</span> <span class="va">vulture</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">vulture</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">vulture</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">vulture</span><span class="op">$</span><span class="va">location.lat</span>, type <span class="op">=</span> <span class="st">"l"</span>,</span>
+<span>     col <span class="op">=</span> <span class="st">"grey50"</span>, asp <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>     xlab <span class="op">=</span> <span class="st">"Longitude (°)"</span>, ylab <span class="op">=</span> <span class="st">"Latitude (°)"</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"Turkey vulture 'Leo', 2007-2013"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">vulture</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">vulture</span><span class="op">$</span><span class="va">location.lat</span>,</span>
+<span>       pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.15</span>, col <span class="op">=</span> <span class="st">"#c1440e"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="your-turn-5" class="level3"><h3 class="anchored" data-anchor-id="your-turn-5">Your turn</h3>
+<p><strong>6a.</strong> Why would a single home-range estimate for this animal be meaningless? <strong>6b.</strong> Plot latitude against time. What do you see?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">vulture</span><span class="op">$</span><span class="va">t</span>, <span class="va">vulture</span><span class="op">$</span><span class="va">location.lat</span>, type <span class="op">=</span> <span class="st">"l"</span>,</span>
+<span>     col <span class="op">=</span> <span class="st">"#c1440e"</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">"Latitude (°)"</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"Latitude over time — six annual migrations"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A clean sawtooth. Leo is not doing one thing: he alternates between two residency phases (Canada, South America) and two directed migrations, and repeats that six times.</p>
+<p>A home range computed over the whole track would describe an “area of use” spanning two continents — an area the animal essentially never occupies. It would be arithmetically correct and biologically meaningless.</p>
+<p>This is exactly the motivation for <a href="../../classes/class-06/slides.html">Class 6</a>: <strong>segment first, then analyse</strong>. Note also that latitude-over-time is a remarkably effective diagnostic plot — always look at your coordinates against time before you model anything.</p>
+</div>
+</div>
+</div>
+</section></section><section id="self-check" class="level2"><h2 class="anchored" data-anchor-id="self-check">Self-check</h2>
+<div class="quiz">
+<p>You compute <code>diff(t)</code> on a data frame you forgot to sort by time. What do you get?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">An error</label></li>
+<li><label><input type="checkbox" checked="">A mixture of positive and negative intervals, and nonsense summaries</label></li>
+<li><label><input type="checkbox">Correct intervals — <code><a href="https://rdrr.io/r/base/diff.html">diff()</a></code> sorts internally</label></li>
+<li><label><input type="checkbox">All zeros</label></li>
+</ul>
+<div class="quiz-feedback">
+<p><code><a href="https://rdrr.io/r/base/diff.html">diff()</a></code> does exactly what you asked: it subtracts each element from the next, in the order given. Out of order, you get negative time differences, and any speed you compute from them is garbage — often silently, because <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> still returns numbers.</p>
+<p><strong>Always <code>order(t)</code> within individual before any step calculation.</strong> This is the most common error in beginner movement code.</p>
+</div>
+</div>
+<div class="quiz">
+<p>A collar programmed for hourly fixes returns 14,000 fixes over exactly two years. Roughly what was the fix success rate?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">~100%</label></li>
+<li><label><input type="checkbox" checked="">~80%</label></li>
+<li><label><input type="checkbox">~50%</label></li>
+<li><label><input type="checkbox">Impossible to say without the DOP values</label></li>
+</ul>
+<div class="quiz-feedback">
+<p>Two years of hourly attempts is 2 × 365 × 24 ≈ 17,520. So 14,000 / 17,520 ≈ <strong>80%</strong>, which is a fairly typical figure for a GPS collar on a large mammal in mixed habitat.</p>
+<p>The 20% that failed is not noise: if failures concentrate in closed habitat, your data under-represent exactly the places the animal may prefer.</p>
+</div>
+</div>
+</section><section id="before-class-2" class="level2"><h2 class="anchored" data-anchor-id="before-class-2">Before Class 2</h2>
+<ul>
+<li>Make sure <code><a href="https://r-spatial.github.io/sf/">library(sf)</a></code> and <code><a href="https://rspatial.org/">library(terra)</a></code> both load without errors.</li>
+<li>Look at the <a href="../../data.html">Datasets page</a> so the three files are familiar.</li>
+<li>Optional but useful: skim <a href="https://r.geocompx.org/spatial-class">Geocomputation with R, chapter 2</a>.</li>
+</ul>
+
+
+</section></main><!-- /main --><script>
+/* ---------------------------------------------------------------
+   Pop-up quiz engine for the Animal Tracking course.
+
+   Authoring (plain Quarto markdown, works in slides and pages):
+
+     ::: {.quiz}
+     Which of these is a *fix*?
+
+     - [ ] A collar attached to an animal
+     - [x] One timestamped location estimate
+     - [ ] The home range of an individual
+
+     ::: {.quiz-feedback}
+     A fix is a single location estimate with a timestamp.
+     :::
+     :::
+
+   The `[x]` marks the correct answer (several `[x]` are allowed).
+   Clicking any option reveals all correct answers plus the feedback.
+----------------------------------------------------------------*/
+(function () {
+  function revealAnswer(quiz, chosen) {
+    if (quiz.classList.contains("quiz-answered")) return;
+    quiz.classList.add("quiz-answered");
+    if (chosen) chosen.classList.add("quiz-chosen");
+    quiz.querySelectorAll(":scope > ul > li").forEach(function (li) {
+      li.classList.add(li.dataset.correct === "true" ? "quiz-is-correct" : "quiz-is-wrong");
+      li.setAttribute("aria-disabled", "true");
+    });
+    var fb = quiz.querySelector(":scope > .quiz-feedback");
+    if (fb) fb.classList.remove("quiz-hidden");
+    var btn = quiz.querySelector(":scope > .quiz-reset");
+    if (btn) btn.hidden = false;
+  }
+
+  function resetQuiz(quiz) {
+    quiz.classList.remove("quiz-answered");
+    quiz.querySelectorAll(":scope > ul > li").forEach(function (li) {
+      li.classList.remove("quiz-chosen", "quiz-is-correct", "quiz-is-wrong");
+      li.removeAttribute("aria-disabled");
+    });
+    var fb = quiz.querySelector(":scope > .quiz-feedback");
+    if (fb) fb.classList.add("quiz-hidden");
+    var btn = quiz.querySelector(":scope > .quiz-reset");
+    if (btn) btn.hidden = true;
+  }
+
+  function initQuiz(quiz) {
+    if (quiz.dataset.quizReady) return;
+    var list = quiz.querySelector(":scope > ul");
+    if (!list) return;
+    quiz.dataset.quizReady = "1";
+    list.classList.add("quiz-options");
+    list.classList.remove("task-list");
+
+    var fb = quiz.querySelector(":scope > .quiz-feedback");
+    if (fb) fb.classList.add("quiz-hidden");
+
+    Array.prototype.forEach.call(list.children, function (li) {
+      var box = li.querySelector('input[type="checkbox"]');
+      li.dataset.correct = box && box.checked ? "true" : "false";
+      if (box) box.remove();
+      // Pandoc wraps task-list items in <label>; unwrap so the whole row is clickable.
+      var label = li.querySelector("label");
+      if (label) { while (label.firstChild) li.insertBefore(label.firstChild, label); label.remove(); }
+      li.setAttribute("role", "button");
+      li.setAttribute("tabindex", "0");
+      li.addEventListener("click", function () { revealAnswer(quiz, li); });
+      li.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); revealAnswer(quiz, li); }
+      });
+    });
+
+    var reset = document.createElement("button");
+    reset.className = "quiz-reset";
+    reset.type = "button";
+    reset.hidden = true;
+    reset.textContent = "↺ ask again";
+    reset.addEventListener("click", function () { resetQuiz(quiz); });
+    quiz.appendChild(reset);
+  }
+
+  function initAll() { document.querySelectorAll("div.quiz").forEach(initQuiz); }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAll);
+  } else {
+    initAll();
+  }
+  // Reveal.js builds some slides lazily; re-scan on every slide change.
+  document.addEventListener("ready", initAll);
+  if (window.Reveal && window.Reveal.on) window.Reveal.on("slidechanged", initAll);
+})();
+</script><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/giulianocolosimo\.github\.io\/animtrack-2627\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../../classes/class-01/slides.html" class="pagination-link" aria-label="C1 · Slides — Movement &amp; tracking technologies">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">C1 · Slides — Movement &amp; tracking technologies</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../classes/class-04/slides.html" class="pagination-link" aria-label="C4 · Slides — Movement metrics &amp; home range">
+        <span class="nav-page-text">C4 · Slides — Movement metrics &amp; home range</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Giuliano Colosimo — CC BY-NC-SA 4.0</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/GiulianoColosimo/animtrack-2627/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+</body></html>

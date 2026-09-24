@@ -1,0 +1,461 @@
+---
+title: "Exercise 5 — Environmental annotation"
+subtitle: "Class 5 · Theme 3"
+date-modified: last-modified
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+::: {.objectives}
+**Goals.** Read real elevation and land-cover rasters; derive terrain
+covariates; annotate the buffalo track; compare used with available; see how
+the answer changes with buffer radius; and build a **time-matched**
+annotation.
+
+**Time:** ~55 minutes. **Packages:** `terra`, `sf`, `amt`, `dplyr`.
+:::
+
+```{r}
+library(terra)
+library(sf)
+library(amt)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+```
+
+## Task 1 — The rasters
+
+```{r}
+elev <- rast("data/kruger_elevation.tif")
+lc   <- rast("data/kruger_landcover.tif")
+
+elev
+names(lc)
+```
+
+`lc` holds ESA WorldCover **fractional cover** per 30 arc-second cell: the
+proportion of each cell that is trees, grassland, shrubs or cropland.
+
+```{r}
+#| fig-width: 9
+#| fig-height: 6.5
+#| fig-align: center
+plot(c(elev, lc[["trees"]], lc[["grassland"]], lc[["shrubs"]]),
+     col = hcl.colors(50, "Viridis"), nc = 2)
+```
+
+### Your turn
+
+**1a.** Do the two rasters share a CRS, extent and resolution?
+**1b.** What fraction of the area is dominated by grassland (> 0.5)?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+c(elev = crs(elev, describe = TRUE)$code, lc = crs(lc, describe = TRUE)$code)
+ext(elev); ext(lc)
+res(elev); res(lc)
+
+global(lc[["grassland"]] > 0.5, "mean", na.rm = TRUE)
+```
+
+Same CRS, same resolution — and extents that agree **to within floating-point
+noise**: `lc` reports `31.3999999999942` where `elev` reports `31.4`. `terra`
+tolerates a discrepancy that small and stacks them happily, which is why
+`c(elev, lc)` works in Task 2.
+
+Do not rely on that. In real work rasters come from different providers on
+genuinely different grids, and you must align them explicitly — `project()` to
+a common CRS, then `resample()` one onto the other's grid. Always align
+*before* stacking, never after.
+:::
+
+## Task 2 — Derived terrain covariates
+
+Raw elevation is rarely the thing an animal responds to. Slope and ruggedness
+usually are.
+
+```{r}
+terr <- terrain(elev, v = c("slope", "TRI"), unit = "degrees")
+names(terr) <- c("slope", "tri")
+
+covs <- c(elev, terr, lc)
+names(covs)
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4
+#| fig-align: center
+plot(terr, col = hcl.colors(50, "Inferno"), nc = 2)
+```
+
+::: {.callout-tip}
+**TRI** (terrain ruggedness index) is the mean absolute difference between a
+cell and its neighbours. For animals it often matters more than slope: a
+uniformly steep hillside is easy to traverse, a broken one is not.
+:::
+
+## Task 3 — Annotate the track
+
+```{r}
+clean <- read.csv("data/buffalo_kruger.csv.gz") |>
+  transmute(id = individual.local.identifier,
+            t  = as.POSIXct(timestamp, tz = "UTC"),
+            x  = location.long, y = location.lat) |>
+  filter(!is.na(x), !is.na(y)) |>
+  distinct(id, t, .keep_all = TRUE)
+
+trk <- make_track(clean, x, y, t, id = id, crs = 4326)
+
+used <- trk |>
+  st_as_sf(coords = c("x_", "y_"), crs = 4326) |>
+  bind_cols(terra::extract(covs, vect(
+    st_as_sf(trk, coords = c("x_", "y_"), crs = 4326)
+  ))[, -1])
+
+summary(used[, c("elevation", "slope", "trees", "grassland")] |> st_drop_geometry())
+```
+
+### Your turn
+
+**3a.** Now generate *available* points across the study area and annotate them too.
+**3b.** Compare used vs available for each covariate. What stands out?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+set.seed(1)
+
+# Available = random points within the buffalo's collective range
+hull <- st_convex_hull(st_union(used))
+avail_pts <- st_sample(hull, size = nrow(used), type = "random")
+
+avail <- st_sf(geometry = avail_pts) |>
+  bind_cols(terra::extract(covs, vect(st_sf(geometry = avail_pts)))[, -1])
+
+comp <- bind_rows(
+  used  |> st_drop_geometry() |> select(elevation, slope, tri, trees, grassland, shrubs) |> mutate(what = "used"),
+  avail |> st_drop_geometry() |> select(elevation, slope, tri, trees, grassland, shrubs) |> mutate(what = "available")
+)
+
+comp |>
+  pivot_longer(-what) |>
+  group_by(name, what) |>
+  summarise(mean = round(mean(value, na.rm = TRUE), 3), .groups = "drop") |>
+  pivot_wider(names_from = what, values_from = mean) |>
+  mutate(ratio = round(used / available, 2))
+```
+
+```{r}
+#| fig-width: 9
+#| fig-height: 5.5
+#| fig-align: center
+par(mfrow = c(2, 3))
+for (v in c("elevation", "slope", "tri", "trees", "grassland", "shrubs")) {
+  d_u <- density(comp[[v]][comp$what == "used"], na.rm = TRUE)
+  d_a <- density(comp[[v]][comp$what == "available"], na.rm = TRUE)
+  plot(d_a, col = "grey50", lwd = 2, main = v, xlab = "",
+       ylim = c(0, max(d_u$y, d_a$y)))
+  lines(d_u, col = "#1f6f78", lwd = 2)
+  if (v == "elevation") {
+    legend("topright", c("available", "used"), col = c("grey50", "#1f6f78"),
+           lwd = 2, bty = "n", cex = 0.9)
+  }
+}
+par(mfrow = c(1, 1))
+```
+
+Where the teal (used) curve sits to the right of the grey (available) curve,
+the animals are using more of that covariate than the landscape offers —
+**selection**. To the left is **avoidance**.
+
+This side-by-side comparison of used and available distributions *is* the idea
+behind a resource selection function. Class 7 turns it into a model that
+handles several covariates at once and gives you uncertainty.
+:::
+
+## Task 4 — Point or buffer?
+
+The scale at which you measure the environment is a hypothesis about how far
+the animal can perceive. Let us ask for tree cover averaged over a
+neighbourhood.
+
+```{r}
+pts <- st_as_sf(trk, coords = c("x_", "y_"), crs = 4326) |> vect()
+
+at_point <- terra::extract(covs[["trees"]], pts)[, 2]
+buf_500  <- terra::extract(covs[["trees"]], pts, buffer = 500,  fun = mean, na.rm = TRUE)[, 2]
+buf_2000 <- terra::extract(covs[["trees"]], pts, buffer = 2000, fun = mean, na.rm = TRUE)[, 2]
+
+data.frame(
+  scale = c("at fix", "buffer = 500", "buffer = 2000"),
+  mean  = round(c(mean(at_point,  na.rm = TRUE),
+                  mean(buf_500,   na.rm = TRUE),
+                  mean(buf_2000,  na.rm = TRUE)), 4),
+  sd    = round(c(sd(at_point, na.rm = TRUE),
+                  sd(buf_500,  na.rm = TRUE),
+                  sd(buf_2000, na.rm = TRUE)), 4)
+)
+
+identical(at_point, buf_500)
+identical(at_point, buf_2000)
+```
+
+::: {.callout-important}
+## The `buffer=` argument was silently ignored
+
+All three columns are **identical**. In this version of `terra`
+(`r as.character(packageVersion("terra"))`), passing `buffer=` to
+`extract()` with point geometries does nothing at all — no error, no warning,
+just the at-point values three times over.
+
+Had you not checked, you would have reported a "multi-scale analysis" in which
+every scale was the same scale.
+
+**The habit:** when an argument is supposed to change the answer, *verify that
+it did*. `identical()` costs one line.
+:::
+
+The reliable way is to build the buffer polygons yourself. Work in a projected
+CRS so the radius is honestly in metres.
+
+```{r}
+covs_utm <- project(covs, "EPSG:32736")
+pts_utm  <- project(pts, "EPSG:32736")
+
+buffer_mean <- function(r, p, width) {
+  terra::extract(r, buffer(p, width = width), fun = mean, na.rm = TRUE)[, 2]
+}
+
+scales <- c(500, 2000, 5000)
+tab <- lapply(scales, function(w) {
+  v <- buffer_mean(covs_utm[["trees"]], pts_utm, w)
+  data.frame(radius_m = w, mean = mean(v, na.rm = TRUE), sd = sd(v, na.rm = TRUE))
+}) |> bind_rows()
+
+at_pt <- terra::extract(covs_utm[["trees"]], pts_utm)[, 2]
+
+bind_rows(
+  data.frame(radius_m = 0, mean = mean(at_pt, na.rm = TRUE), sd = sd(at_pt, na.rm = TRUE)),
+  tab
+) |> mutate(across(c(mean, sd), \(z) round(z, 4)))
+```
+
+### Your turn
+
+**4a.** What happens to the variance as the radius grows?
+**4b.** Why does a 500 m radius barely differ from the point value?
+**4c.** Which scale would you choose, and on what grounds?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+#| fig-width: 8.5
+#| fig-height: 4.2
+#| fig-align: center
+b2000 <- buffer_mean(covs_utm[["trees"]], pts_utm, 2000)
+
+par(mfrow = c(1, 2))
+plot(at_pt, b2000, pch = 16, cex = 0.2, col = adjustcolor("#1f6f78", 0.2),
+     xlab = "Tree cover at the fix", ylab = "Mean within 2 km",
+     main = "The same covariate at two scales")
+abline(0, 1, col = "firebrick", lty = 2)
+
+plot(c(0, scales), c(sd(at_pt, na.rm = TRUE), tab$sd), type = "b", pch = 16,
+     col = "#1f6f78", lwd = 2, xlab = "Buffer radius (m)",
+     ylab = "SD of the covariate", main = "Smoothing destroys contrast")
+par(mfrow = c(1, 1))
+```
+
+**Variance falls** as the radius grows: you are averaging over more cells, so
+extremes cancel. The mean barely moves; the spread collapses.
+
+That has a direct statistical consequence. A smoothed covariate has less
+contrast between used and available points, so the **effect size you can
+detect shrinks**, and a real preference can be smoothed into
+non-significance.
+
+**Why 500 m does almost nothing.** The raster cells are 30 arc-seconds —
+about 900 m on the ground here:
+
+```{r}
+round(res(covs_utm))
+```
+
+A 500 m radius fits inside a single cell, so the "neighbourhood mean" is
+mostly that one cell's value. **A buffer smaller than your pixel is not a
+scale — it is a rounding error.** If you want a genuine multi-scale analysis,
+your radii must be several times the cell size, or you need finer data.
+
+**How to choose.** From biology, before you look at the results: how far can
+this animal see, smell, or remember? For buffalo in savanna, a few hundred
+metres to a couple of kilometres is defensible. What you must *not* do is fit
+the model at ten radii and report the one with the smallest p-value — that is
+a garden of forking paths, and the "optimal scale" it finds will not
+replicate.
+
+If scale genuinely *is* your question, there are principled multi-scale
+approaches — but you have to say so in advance.
+:::
+
+## Task 5 — Time-matched annotation
+
+Static covariates are easy. Now the one that actually matters.
+
+```{r}
+prec <- rast("data/kruger_prec_monthly.tif")
+nlyr(prec)
+names(prec)
+```
+
+Twelve layers: the long-term average precipitation for each calendar month.
+Kruger has a strong wet/dry seasonality, so this is a real seasonal signal.
+
+```{r}
+#| fig-width: 9
+#| fig-height: 5
+#| fig-align: center
+plot(prec[[c(1, 4, 7, 10)]], col = hcl.colors(50, "Blues", rev = TRUE), nc = 2)
+```
+
+The naive approach — one layer for everything:
+
+```{r}
+static <- terra::extract(prec[[1]], pts)[, 2]   # January, for all fixes
+summary(static)
+```
+
+The correct approach — **each fix gets the layer for its own month**:
+
+```{r}
+month_idx <- as.integer(format(trk$t_, "%m"))
+
+all_months <- terra::extract(prec, pts)[, -1]   # one column per month
+matched <- all_months[cbind(seq_len(nrow(all_months)), month_idx)]
+
+summary(matched)
+```
+
+::: {.callout-important}
+## The indexing trick
+
+`all_months[cbind(row, col)]` is matrix indexing: it picks element
+`[row_i, col_i]` for each `i`. That single line is the whole of time-matched
+annotation. For a real NDVI time series you would build `col` with
+`findInterval()` against the layer dates instead of `format(t, "%m")`.
+:::
+
+### Your turn
+
+**5a.** How different are the static and time-matched values?
+**5b.** Do the buffalo experience more or less rain than the landscape average?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+cmp <- data.frame(static = static, matched = matched)
+round(cor(cmp, use = "complete.obs"), 3)
+
+cmp |>
+  summarise(mean_static = round(mean(static, na.rm = TRUE), 1),
+            mean_matched = round(mean(matched, na.rm = TRUE), 1),
+            mean_abs_diff = round(mean(abs(static - matched), na.rm = TRUE), 1))
+```
+
+```{r}
+#| fig-width: 8.5
+#| fig-height: 4
+#| fig-align: center
+par(mfrow = c(1, 2))
+plot(static, matched, pch = 16, cex = 0.2, col = adjustcolor("#1f6f78", 0.2),
+     xlab = "January value (static)", ylab = "Value for the fix's own month",
+     main = "Static vs time-matched")
+abline(0, 1, col = "firebrick", lty = 2)
+
+boxplot(matched ~ month_idx, col = "#1f6f78", border = "grey30",
+        xlab = "Month", ylab = "Precipitation (mm)",
+        main = "What the animals actually experienced")
+par(mfrow = c(1, 1))
+```
+
+The two are barely related. The static version varies only in **space**; the
+matched version varies in space *and* time, and the temporal swing here
+dominates — Kruger's wet season delivers an order of magnitude more rain than
+its dry season.
+
+Any model using the static column would be answering "do buffalo prefer
+places that are wet **in January**", not "do buffalo respond to rainfall".
+Those are different questions, and they can easily give opposite answers.
+
+::: {.callout-note}
+These are long-term monthly *climatologies*, not the actual weather of
+2005–2006. They carry the seasonal cycle but not the year-to-year anomaly. For
+real work you would use a dated product — MODIS NDVI composites, ERA5
+reanalysis, or Movebank's Env-DATA — and match on the actual date with
+`findInterval()`. The mechanics are identical; only the layer dates change.
+:::
+:::
+
+## Self-check
+
+::: {.quiz}
+You extract NDVI with `terra::extract()` and `summary()` reports a range of
+−2000 to 9500. What is wrong?
+
+- [ ] The raster is corrupt
+- [x] You have raw stored integers — apply the scale factor, and handle the fill value
+- [ ] NDVI can legitimately take these values
+- [ ] The CRS is wrong
+
+::: {.quiz-feedback}
+NDVI is bounded by −1 and +1 **by definition** — it is a normalised
+difference. Values in the thousands mean the product stores NDVI as scaled
+integers to save space; MODIS uses a scale factor of 0.0001, so 9500 → 0.95.
+
+The negative extreme is usually the **fill value** for missing data (MODIS
+uses −3000), which must be set to `NA`, not multiplied. Leave it in and it
+becomes a strongly negative NDVI at exactly the cloudy pixels where you had no
+data.
+
+Rule: after every extraction, `summary()` the new column and ask whether the
+range is physically possible.
+:::
+:::
+
+::: {.quiz}
+Your study area straddles a national border and you stack a land-cover raster
+from one country with a DEM from another. `c(dem, lc)` throws an error about
+extents. What is the right fix?
+
+- [ ] Crop both to their intersection and hope the grids align
+- [x] `project()` to a common CRS if needed, then `resample()` one onto the other's grid
+- [ ] Convert both to data frames and join by coordinates
+- [ ] Use `extract()` separately on each and skip stacking
+
+::: {.quiz-feedback}
+Stacking requires identical CRS, extent **and** cell alignment. Cropping alone
+fixes the extent but not the alignment — two 30 m grids offset by 7 m are
+still incompatible.
+
+`resample()` interpolates one raster onto the other's grid. Use
+`method = "near"` for categorical data such as land-cover classes, or you will
+invent classes that do not exist.
+
+Extracting separately does work and avoids the problem, but only if you never
+need the layers in a single object.
+:::
+:::
+
+## Before Class 6
+
+- Pettorelli et al. (2005) on NDVI in ecology.
+- Try `vignette("moveHMM-guide", package = "moveHMM")`.

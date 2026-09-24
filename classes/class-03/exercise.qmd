@@ -1,0 +1,491 @@
+---
+title: "Exercise 3 — Clean, resample and map a track"
+subtitle: "Class 3 · Theme 2"
+date-modified: last-modified
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+::: {.objectives}
+**Goals.** Build an `amt` track; quantify and remove duplicates; find speed
+outliers and *look at them* before deleting; resample to regular bursts;
+discover why the bat data resist all of this; make an interactive map.
+
+**Time:** ~55 minutes. **Packages:** `amt`, `dplyr`, `lubridate`, `sf`, `mapview`.
+:::
+
+```{r}
+library(amt)
+library(dplyr)
+library(lubridate)
+library(sf)
+```
+
+## Task 1 — Build a track
+
+```{r}
+raw <- read.csv("data/buffalo_kruger.csv.gz") |>
+  transmute(
+    id = individual.local.identifier,
+    t  = as.POSIXct(timestamp, tz = "UTC"),
+    x  = location.long,
+    y  = location.lat
+  )
+
+nrow(raw)
+```
+
+Now clean, **counting every step**. This block is the template for every
+dataset you will ever handle.
+
+```{r}
+n0 <- nrow(raw)
+
+clean <- raw |> filter(!is.na(x), !is.na(y))
+n1 <- nrow(clean)
+
+clean <- clean |> filter(!(x == 0 & y == 0))
+n2 <- nrow(clean)
+
+clean <- clean |> distinct(id, t, .keep_all = TRUE)
+n3 <- nrow(clean)
+
+data.frame(
+  step = c("raw", "drop missing coords", "drop (0,0)", "drop duplicate id+time"),
+  rows = c(n0, n1, n2, n3),
+  removed = c(NA, n0 - n1, n1 - n2, n2 - n3)
+)
+```
+
+::: {.callout-important}
+## Always produce this table
+
+It goes in your methods section, and it is the first thing a reviewer — or a
+future you — will want. "We removed 3,747 duplicated records (13.2%)" is a
+sentence you can defend. "We cleaned the data" is not.
+:::
+
+```{r}
+trk <- make_track(clean, x, y, t, id = id, crs = 4326) |>
+  transform_coords(crs_to = 32736)
+
+trk
+```
+
+### Your turn
+
+**1a.** What class is `trk`? What are its columns called?
+**1b.** Confirm the coordinates are now metres.
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+class(trk)
+names(trk)
+summary(trk$x_)
+```
+
+`track_xyt` — a tibble with `x_`, `y_`, `t_` plus the columns you carried
+along. The coordinates are now six-figure eastings and seven-figure northings:
+UTM 36S metres.
+:::
+
+## Task 2 — Sampling rate
+
+```{r}
+trk |>
+  summarize_sampling_rate_many(cols = "id", time_unit = "hour") |>
+  mutate(across(where(is.numeric), \(z) round(z, 2)))
+```
+
+### Your turn
+
+**2a.** What is the programmed fix interval?
+**2b.** Why is the mean so much larger than the median?
+**2c.** Which individual has the worst gap, and how long is it in days?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+The **median is 1 hour** for every animal — that is the schedule. The mean is
+inflated by a handful of enormous gaps:
+
+```{r}
+gaps <- trk |>
+  group_by(id) |>
+  arrange(t_, .by_group = TRUE) |>
+  mutate(dt_h = as.numeric(difftime(t_, lag(t_), units = "hours"))) |>
+  ungroup()
+
+gaps |>
+  group_by(id) |>
+  summarise(
+    median_dt = median(dt_h, na.rm = TRUE),
+    mean_dt   = round(mean(dt_h, na.rm = TRUE), 1),
+    max_gap_days = round(max(dt_h, na.rm = TRUE) / 24, 1),
+    gaps_over_1d = sum(dt_h > 24, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+Always report the **median**. A mean sampling interval is a summary of your
+collar failures, not of your sampling design.
+:::
+
+## Task 3 — Hunt the speed outliers
+
+First, look. Then delete.
+
+```{r}
+steps_raw <- trk |>
+  group_by(id) |>
+  arrange(t_, .by_group = TRUE) |>
+  mutate(
+    dt_h = as.numeric(difftime(t_, lag(t_), units = "hours")),
+    dist_m = sqrt((x_ - lag(x_))^2 + (y_ - lag(y_))^2),
+    speed_kmh = (dist_m / 1000) / dt_h
+  ) |>
+  ungroup() |>
+  filter(!is.na(speed_kmh))
+
+summary(steps_raw$speed_kmh)
+sum(steps_raw$speed_kmh > 15)
+```
+
+### Your turn
+
+**3a.** Look at the fastest steps. Are they *long* or are they *brief*?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+steps_raw |>
+  slice_max(speed_kmh, n = 10) |>
+  transmute(id, t_, dt_min = round(dt_h * 60, 1),
+            dist_m = round(dist_m), speed_kmh = round(speed_kmh))
+```
+
+The worst offenders have **tiny time gaps**, not large distances — a couple of
+hundred metres over a minute or two. These are near-duplicate transmissions
+that survived the exact-duplicate filter.
+
+Confirm it across all the fast steps:
+
+```{r}
+fast <- steps_raw |> filter(speed_kmh > 15)
+summary(fast$dt_h * 60)     # minutes
+summary(fast$dist_m)        # metres
+```
+
+```{r}
+#| fig-width: 6.5
+#| fig-height: 4.5
+#| fig-align: center
+plot(steps_raw$dt_h * 60, steps_raw$speed_kmh, log = "xy",
+     pch = 16, cex = 0.25, col = adjustcolor("#1f6f78", 0.25),
+     xlab = "Time gap (minutes, log)", ylab = "Speed km/h (log)",
+     main = "Fast steps are short-interval steps")
+abline(h = 15, col = "firebrick", lty = 2, lwd = 2)
+```
+
+The diagonal edge is the signature: apparent speed is bounded by
+(GPS error)/dt, so as dt shrinks, apparent speed explodes. **This is a time
+problem masquerading as a speed problem** — and deleting the "fast" fixes
+would remove perfectly good locations.
+
+The correct remedy is to resample onto a regular grid, which is Task 4.
+:::
+
+## Task 4 — Resample into bursts
+
+This is where almost everyone writes a silent bug. Try the obvious thing first.
+
+```{r}
+# The "obvious" pipeline — grouped by individual
+naive <- trk |>
+  group_by(id) |>
+  track_resample(rate = hours(1), tolerance = minutes(10)) |>
+  filter_min_n_burst(min_n = 3) |>
+  ungroup()
+
+nrow(trk)
+nrow(naive)
+naive |> count(id, name = "kept")
+```
+
+::: {.callout-important}
+## `track_resample()` does not respect `group_by()`
+
+Look at the per-animal counts. Mvubu goes from 2,572 fixes to a couple of
+hundred — but Mvubu's data are *fine*: 98.8% of that animal's intervals are
+within 10 minutes of one hour.
+
+`track_resample()` walks the rows in time order and builds one grid across
+**everything you hand it**. With six animals interleaved, fixes from animal B
+fall between the grid points of animal A, and most of the track is discarded.
+No error. No warning. Just a much smaller dataset.
+:::
+
+The documented `amt` idiom is to split, resample each animal separately, and
+recombine:
+
+```{r}
+library(tidyr)
+
+trk_hr <- trk |>
+  nest(data = -id) |>
+  mutate(data = lapply(data, \(d) {
+    d |>
+      track_resample(rate = hours(1), tolerance = minutes(10)) |>
+      filter_min_n_burst(min_n = 3)
+  })) |>
+  unnest(cols = data)
+
+nrow(trk_hr)
+```
+
+```{r}
+trk |> count(id, name = "before") |>
+  left_join(naive   |> count(id, name = "grouped_WRONG"), by = "id") |>
+  left_join(trk_hr  |> count(id, name = "nested_right"), by = "id") |>
+  mutate(pct_kept = round(100 * nested_right / before, 1))
+```
+
+Now we keep ~93% of the fixes, which is what an hourly schedule with
+occasional failures should give.
+
+### Your turn
+
+**4a.** Recompute speeds on the correctly resampled track. Did the problem go away?
+**4b.** What happens if you set `tolerance = minutes(1)`?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+st <- trk_hr |> steps_by_burst()
+
+summary(as.numeric(st$dt_, units = "mins"))
+
+sp <- (st$sl_ / 1000) / as.numeric(st$dt_, units = "hours")
+round(quantile(sp, c(0.5, 0.9, 0.99, 0.999, 1)), 2)
+sum(sp > 15)
+```
+
+Every step now spans 50–70 minutes, and the **time-artefact** speeds are gone:
+the median is a few hundred metres per hour, which is what a buffalo does.
+
+But a handful of steps remain absurdly fast. These are different animals
+entirely — look at them:
+
+```{r}
+st[sp > 15, c("t1_", "sl_", "dt_")] |> head(5)
+```
+
+Sixty-five **kilometres** in an hour. That is not a short time gap; it is a
+genuine spatial outlier — a corrupt fix that teleported the animal and back.
+Now that every step spans the same interval, a fast step really does mean a
+long distance, and a speed filter finally does what you meant it to do.
+
+```{r}
+#| fig-width: 6.5
+#| fig-height: 4.5
+#| fig-align: center
+plot(as.numeric(st$dt_, units = "mins"), sp, log = "y", pch = 16, cex = 0.3,
+     col = adjustcolor("#1f6f78", 0.3),
+     xlab = "Step duration (minutes)", ylab = "Speed km/h (log)",
+     main = "After resampling: fast = far, not brief")
+abline(h = 15, col = "firebrick", lty = 2, lwd = 2)
+```
+
+Compare this with the plot in Task 3: the diagonal artefact edge has gone, and
+what is left above the line is a small, isolated cluster of real errors.
+
+```{r}
+tight <- trk |>
+  nest(data = -id) |>
+  mutate(data = lapply(data, \(d) d |>
+    track_resample(rate = hours(1), tolerance = minutes(1)) |>
+    filter_min_n_burst(min_n = 3))) |>
+  unnest(cols = data)
+
+c(tolerance_10min = nrow(trk_hr), tolerance_1min = nrow(tight))
+```
+
+A tight tolerance discards fixes that arrived a few minutes late — real data
+you would rather keep. A loose one lets "hourly" steps range from 40 to 80
+minutes, weakening every step-length comparison. 5–10% of the interval is a
+reasonable compromise; state whichever you chose.
+:::
+
+## Task 5 — Now try the bats
+
+```{r}
+bat <- read.csv("data/bat_safi.csv.gz") |>
+  transmute(id = individual.local.identifier,
+            t  = as.POSIXct(timestamp, tz = "UTC"),
+            x  = location.long, y = location.lat) |>
+  filter(!is.na(x), !is.na(y)) |>
+  distinct(id, t, .keep_all = TRUE)
+
+bat_trk <- make_track(bat, x, y, t, id = id, crs = 4326) |>
+  transform_coords(crs_to = 32632)     # UTM 32N, Switzerland
+
+bat_trk |>
+  summarize_sampling_rate_many(cols = "id", time_unit = "min") |>
+  mutate(across(where(is.numeric), \(z) round(z, 1))) |>
+  head(8)
+```
+
+### Your turn
+
+**5a.** Try to resample the bats to a regular 15-minute interval. What survives?
+**5b.** What would you do instead?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+bat_15 <- bat_trk |>
+  nest(data = -id) |>
+  mutate(data = lapply(data, \(d) d |>
+    track_resample(rate = minutes(15), tolerance = minutes(5)) |>
+    filter_min_n_burst(min_n = 3))) |>
+  unnest(cols = data)
+
+c(before = nrow(bat_trk), after = nrow(bat_15))
+
+bursts <- bat_15 |> count(id, burst_)
+c(n_bursts = nrow(bursts), median_length = median(bursts$n), max_length = max(bursts$n))
+table(bursts$n)
+```
+
+Fewer than half the fixes survive — but the real problem is the *shape* of
+what is left. The 802 surviving fixes shatter into **165 bursts with a median
+length of 4**, i.e. three steps each. There is no programmed schedule to
+recover: fixes arrived whenever a field worker obtained a bearing.
+
+A hidden Markov model (Class 6) estimates *transition* probabilities between
+behavioural states. With bursts of three steps, there is almost nothing to
+transition — you would be asking the model to learn the dynamics of a process
+from fragments shorter than the process itself.
+
+```{r}
+#| fig-width: 7
+#| fig-height: 4
+#| fig-align: center
+lags <- bat_trk |>
+  group_by(id) |>
+  arrange(t_, .by_group = TRUE) |>
+  mutate(dt_min = as.numeric(difftime(t_, lag(t_), units = "mins"))) |>
+  ungroup() |> filter(!is.na(dt_min), dt_min > 0)
+
+hist(log10(lags$dt_min), breaks = 40, col = "#1f6f78", border = "white",
+     xlab = "log10 interval (minutes)", main = "Bat sampling intervals span five orders of magnitude")
+```
+
+**What to do instead.** Not: force a regular grid and pretend. The honest
+options are
+
+- restrict to the questions these data *can* answer — which sites were used,
+  broad home-range extent, night-time activity periods;
+- use methods that tolerate irregular sampling, i.e. **continuous-time**
+  models (`ctmm`) rather than discrete-step models;
+- treat each night as a separate short burst and analyse only within-night
+  movement.
+
+Recognising which of your datasets is a "buffalo" and which is a "bat" is one
+of the more valuable things you will take from this course.
+:::
+
+## Task 6 — An interactive map
+
+```{r}
+#| eval: false
+library(mapview)
+
+queen_sf <- trk_hr |>
+  filter(id == "Queen") |>
+  st_as_sf(coords = c("x_", "y_"), crs = 32736)
+
+mapview(queen_sf, zcol = "burst_", legend = FALSE, cex = 3)
+```
+
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 6
+#| fig-align: center
+q <- trk_hr |> filter(id == "Queen")
+cols <- hcl.colors(n_distinct(q$burst_), "Dark 3")
+plot(q$x_, q$y_, type = "n", asp = 1,
+     xlab = "Easting (m, UTM 36S)", ylab = "Northing (m)",
+     main = "Buffalo 'Queen': hourly bursts after cleaning")
+for (i in seq_along(unique(q$burst_))) {
+  d <- q[q$burst_ == unique(q$burst_)[i], ]
+  lines(d$x_, d$y_, col = adjustcolor(cols[i], 0.8))
+}
+```
+
+::: {.callout-tip}
+`mapview()` needs a live browser, so the static version is shown here. Run the
+`mapview` chunk yourself — zoom in and you will see the collar's hourly
+rhythm, and the places where bursts break.
+:::
+
+## Self-check
+
+::: {.quiz}
+Which cleaning order is correct?
+
+- [ ] Speed filter → remove duplicates → resample
+- [x] Remove duplicates → resample to a regular rate → inspect remaining outliers
+- [ ] Resample → remove duplicates → speed filter
+- [ ] The order does not matter
+
+::: {.quiz-feedback}
+Duplicates and near-duplicates create tiny time gaps, and tiny time gaps
+create enormous apparent speeds. Filter on speed first and you delete good
+fixes for a fault that belongs to their neighbours.
+
+Remove duplicates, then resample so that every step spans a comparable
+interval, and *then* look at what is still implausible. By that point, a
+genuinely fast step really is a long distance.
+:::
+:::
+
+::: {.quiz}
+You pipe six animals into `group_by(id) |> track_resample(rate = hours(1))`
+and keep 42% of your fixes. The same animals resampled one at a time keep 93%.
+Why?
+
+- [x] `track_resample()` ignores `group_by()` and builds one time grid across all animals
+- [ ] `group_by()` removed the duplicate timestamps
+- [ ] The tolerance was too tight
+- [ ] 42% is correct; the per-animal version double-counts
+
+::: {.quiz-feedback}
+`track_resample()` walks the rows in time order and lays a single regular grid
+over whatever you give it. Hand it six interleaved animals and most fixes fall
+between grid points set by some *other* individual, so they are dropped.
+
+It fails silently — no error, no warning, just a smaller dataset — which is
+what makes it dangerous. Use the `nest()` / `lapply()` / `unnest()` idiom so
+each animal gets its own grid.
+
+**The general lesson:** not every function respects `dplyr` grouping. When a
+step drops far more data than you expected, check the per-group counts before
+you accept the result.
+:::
+:::
+
+## Before Class 4
+
+- `vignette("p1_basics", package = "amt")`
+- Read Powell & Mitchell (2012), *What is a home range?* — it is short and it
+  will change how you read the next twenty papers.

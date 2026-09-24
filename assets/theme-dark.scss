@@ -1,0 +1,31 @@
+/*-- scss:defaults --*/
+@import 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap';
+
+$font-family-sans-serif: "Atkinson Hyperlegible", system-ui, sans-serif;
+$primary:    #6fc3cd;
+$link-color: #6fc3cd;
+$body-bg:    #161b1d;
+$body-color: #e6eaec;
+
+/*-- scss:rules --*/
+.class-card {
+  border: 1px solid rgba(111, 195, 205, 0.25);
+  border-radius: 8px;
+  padding: 0.9em 1.1em;
+  margin-bottom: 0.9em;
+  background: rgba(111, 195, 205, 0.06);
+}
+.class-card h3 { margin-top: 0; }
+
+.topic-badge {
+  display: inline-block;
+  font-size: 0.75em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+  background: #6fc3cd;
+  color: #10181a;
+  margin-bottom: 0.4em;
+}

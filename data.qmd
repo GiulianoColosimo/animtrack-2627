@@ -1,0 +1,188 @@
+---
+title: "Datasets"
+subtitle: "Three tracks, three very different problems"
+date-modified: last-modified
+---
+
+```{r}
+#| include: false
+library(dplyr)
+```
+
+All three datasets come from [Movebank](https://www.movebank.org/), the public
+repository for animal tracking data, and are redistributed here under their
+original licences for teaching. They live in the `data/` folder of the course
+repository, gzipped — R reads `.csv.gz` directly, no need to decompress.
+
+They were chosen because they **fail in different ways**. Real tracking data
+is never clean, and each of these teaches a different lesson about that.
+
+## Overview
+
+```{r}
+#| echo: false
+files <- c(
+  "African buffalo"  = "data/buffalo_kruger.csv.gz",
+  "Parti-coloured bat" = "data/bat_safi.csv.gz",
+  "Turkey vulture"   = "data/vulture_leo.csv.gz"
+)
+
+summarise_track <- function(path) {
+  d <- read.csv(path)
+  ts <- as.POSIXct(d$timestamp, tz = "UTC")
+  data.frame(
+    Species     = unique(d$individual.taxon.canonical.name)[1],
+    Sensor      = paste(unique(d$sensor.type), collapse = ", "),
+    Individuals = length(unique(d$individual.local.identifier)),
+    Fixes       = nrow(d),
+    From        = format(min(ts, na.rm = TRUE), "%Y-%m"),
+    To          = format(max(ts, na.rm = TRUE), "%Y-%m")
+  )
+}
+
+tab <- do.call(rbind, lapply(files, summarise_track))
+tab <- cbind(Dataset = names(files), tab)
+knitr::kable(tab, row.names = FALSE, format.args = list(big.mark = ","))
+```
+
+---
+
+## 1. African buffalo, Kruger National Park
+
+`data/buffalo_kruger.csv.gz`
+
+Six GPS-collared buffalo (*Syncerus caffer*) in Kruger National Park, South
+Africa, 2005–2006. Collars reported roughly hourly. This is our workhorse
+dataset: several individuals, a long series, a confined landscape with strong
+environmental gradients (rivers, vegetation).
+
+::: {.callout-important}
+## The lesson this dataset teaches: duplicates
+
+The raw file contains **3,747 rows that duplicate an existing
+individual + timestamp combination** — about 13% of the file. These come from
+the tag transmitting the same fix more than once. If you compute step lengths
+without removing them you get a large number of zero-length steps in zero
+elapsed time, and your speed distribution acquires an infinite tail.
+
+We fix this properly in [Class 3](classes/class-03/exercise.qmd).
+:::
+
+Used in: Classes 3, 4, 5, 7, 8.
+
+Source: Getz WM, Fortmann-Roe S, Cross PC, Lyons AJ, Ryan SJ, Wilmers CC.
+Movebank study *Kruger African Buffalo, GPS tracking, South Africa*.
+
+---
+
+## 2. Parti-coloured bat, Switzerland
+
+`data/bat_safi.csv.gz`
+
+Seventeen bats (*Vespertilio murinus*) tracked by **VHF radio-telemetry** near
+Bern, Switzerland, 2002–2003. Only 1,740 fixes in total.
+
+::: {.callout-important}
+## The lesson this dataset teaches: small, irregular, hand-collected data
+
+This is what tracking looked like before GPS, and what it still looks like for
+any animal too small to carry a satellite tag. Fixes arrive when a human with
+an antenna managed to get a bearing — so intervals are wildly irregular, nights
+are dense and days are empty, and individuals have between a handful and a few
+hundred locations.
+
+Most of the methods in this course assume regular sampling. Applying them here
+without thinking produces confident nonsense — which is exactly why we use this
+dataset to practise saying *"no, not with these data"*.
+:::
+
+Used in: Classes 3, 4 (as a cautionary counter-example).
+
+Source: Safi K, et al. Movebank study *Parti-colored bat Safi Switzerland*.
+
+---
+
+## 3. Turkey vulture "Leo"
+
+`data/vulture_leo.csv.gz`
+
+A single turkey vulture (*Cathartes aura*) called Leo, tracked by GPS for
+almost **six years** (2007–2013) between Canada and Venezuela — over 60° of
+latitude.
+
+::: {.callout-important}
+## The lesson this dataset teaches: one animal, many behaviours
+
+Leo is not doing one thing. He has breeding-ground residency, autumn migration,
+wintering residency, and spring migration, repeated over six annual cycles. A
+single home range estimate over the whole track is meaningless — it would
+describe a "range" covering two continents.
+
+This is the dataset for [Class 6](classes/class-06/slides.qmd): a trajectory
+that *demands* segmentation before any other analysis makes sense. It also
+crosses many UTM zones, which makes it a good test of whether you have
+understood projections.
+:::
+
+Used in: Classes 4, 6.
+
+Source: Bildstein K, Barber D, Bechard MJ. Movebank study
+*Turkey Vulture Acopian Center USA GPS*.
+
+---
+
+## Movebank column conventions
+
+Movebank exports share a vocabulary. When R reads the CSV, hyphens in the
+header become dots, so `location-long` becomes `location.long`.
+
+| Column | Meaning |
+|:--|:--|
+| `event.id` | Unique id of this record |
+| `timestamp` | Fix time, **UTC**, `YYYY-MM-DD HH:MM:SS.sss` |
+| `location.long`, `location.lat` | Longitude / latitude, decimal degrees, **WGS84 (EPSG:4326)** |
+| `individual.local.identifier` | The animal's name or code — your grouping variable |
+| `tag.local.identifier` | The device — *not* the same as the animal |
+| `individual.taxon.canonical.name` | Species |
+| `sensor.type` | `gps`, `radio-transmitter`, `argos-doppler-shift`, … |
+| `visible` | `false` = flagged as bad by the data owner |
+| `manually.marked.outlier` | `true` = flagged by hand as an outlier |
+| `study.local.timestamp`, `study.timezone` | Local time, if you need day/night |
+
+::: {.callout-tip}
+## Two habits worth forming now
+
+**Always keep `timestamp` in UTC** for computation and convert to local time
+only for interpretation. Mixing the two is the single most common source of
+silent errors in movement analysis.
+
+**Never assume `individual` == `tag`.** Tags get redeployed on different
+animals, and animals get recollared. Group by the individual.
+:::
+
+## Loading a dataset
+
+```{r}
+#| eval: false
+library(dplyr)
+
+buffalo <- read.csv("data/buffalo_kruger.csv.gz") |>
+  transmute(
+    id   = individual.local.identifier,
+    t    = as.POSIXct(timestamp, tz = "UTC"),
+    x    = location.long,
+    y    = location.lat
+  ) |>
+  filter(!is.na(x), !is.na(y)) |>
+  distinct(id, t, .keep_all = TRUE) |>   # the duplicate fix described above
+  arrange(id, t)
+
+glimpse(buffalo)
+```
+
+## Using your own data
+
+You are welcome to use your own tracking data for the final project. Bring it
+in the same shape — one row per fix, with `id`, `t`, `x`, `y` — and tell me
+the CRS of the coordinates if they are not longitude/latitude. Talk to me
+before Class 5 so we can check the analysis you have in mind is feasible.

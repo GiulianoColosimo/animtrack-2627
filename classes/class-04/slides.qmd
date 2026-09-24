@@ -1,0 +1,434 @@
+---
+title: "Movement metrics and home range"
+subtitle: "Class 4 · Theme 1 — Movement and movement analysis"
+author: "Giuliano Colosimo"
+institute: "University of Rome Tor Vergata"
+date: last-modified
+format:
+  revealjs:
+    theme: [default, ../../assets/theme-slides.scss]
+    css: ../../assets/quiz.css
+    include-after-body: ../../assets/quiz.html
+    slide-number: c/t
+    show-slide-number: all
+    chalkboard: true
+    preview-links: auto
+    history: false
+    width: 1280
+    height: 760
+    footer: "Animal Tracking 2026-2027 · Class 4"
+    logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
+    highlight-style: github
+execute:
+  echo: true
+---
+
+## Today
+
+::: {.objectives}
+1. Describe a trajectory with numbers: **step length, turning angle, speed,
+   net displacement**
+2. Why these numbers are **scale-dependent**
+3. Random walks: BRW, CRW, Lévy — the null models
+4. **Home range**: what it is, and what the estimators actually estimate
+5. MCP, KDE and why autocorrelation broke them — **AKDE**
+:::
+
+# 1 · Describing a trajectory {background-color="#14525a"}
+
+---
+
+## The step
+
+Two consecutive fixes define a **step**.
+
+::: {.columns}
+::: {.column width="55%"}
+- **Step length** $s_t = \lVert \mathbf{x}_{t+1} - \mathbf{x}_t \rVert$
+- **Absolute direction** $\phi_t = \operatorname{atan2}(\Delta y, \Delta x)$
+- **Turning angle** $\theta_t = \phi_t - \phi_{t-1}$, wrapped to $(-\pi, \pi]$
+- **Speed** $v_t = s_t / \Delta t$
+:::
+::: {.column width="45%"}
+::: {.keyidea}
+A turning angle needs **three** fixes. A step needs two. That is why
+`filter_min_n_burst(min_n = 3)` exists.
+:::
+:::
+:::
+
+. . .
+
+::: {.smalltext}
+Turning angles are **circular** data: −179° and +179° are 2° apart, not 358°.
+Never take an arithmetic mean of angles.
+:::
+
+---
+
+## Everything here is scale-dependent
+
+::: {.incremental}
+- Sample every 5 minutes: many short steps — but so short that GPS error
+  randomises their *direction*
+- Sample hourly: clear directional persistence
+- Sample every 12 hours: few long steps, turning angles ≈ uniform
+  (the animal looks like it moves at random)
+- **Total path length** grows without bound as the interval shrinks — the
+  coastline paradox
+:::
+
+. . .
+
+::: {.keyidea}
+"Mean step length" is not a property of the animal. It is a property of the
+animal **and your sampling interval**. Always report the interval alongside
+it, and never compare step lengths measured at different rates.
+
+There is a sweet spot: fine enough to resolve the behaviour, coarse enough
+that a typical step is much longer than your GPS error.
+:::
+
+---
+
+## Net squared displacement (NSD)
+
+$$\text{NSD}(t) = \lVert \mathbf{x}_t - \mathbf{x}_0 \rVert^2$$
+
+The squared distance from the starting point. A remarkably effective
+diagnostic:
+
+::: {.incremental}
+- **Sedentary** — NSD rises then plateaus at a low value
+- **Migratory** — a sigmoid up, a plateau, a sigmoid back down
+- **Dispersal** — a single step up to a new plateau
+- **Nomadic** — rises roughly linearly, no plateau
+:::
+
+. . .
+
+::: {.smalltext}
+Fitting these shapes as competing non-linear models (Bunnefeld et al. 2011) is
+a cheap and surprisingly effective way to classify movement strategies.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+Two studies report mean step length for the same population of roe deer. Study
+A reports 180 m, study B reports 640 m. Both are competent. What is the most
+likely explanation?
+
+- [ ] Study B's collars had worse GPS accuracy
+- [x] Study B sampled at a longer interval
+- [ ] Study B included migratory individuals
+- [ ] One of them made an arithmetic error
+
+::: {.quiz-feedback}
+Step length scales with the sampling interval. An animal sampled hourly
+produces shorter steps than the same animal sampled every four hours, because
+the straight line between fixes cuts across all the wiggles in between.
+
+This is why **step length is not comparable across studies** unless the
+interval matches, and why you must state the interval in every methods
+section.
+
+It is also why Class 8's step selection functions always compare an observed
+step with alternatives of *exactly the same duration*.
+:::
+:::
+
+# 2 · Random walks as null models {background-color="#14525a"}
+
+---
+
+## Three canonical walks
+
+::: {.columns}
+::: {.column width="33%"}
+### Simple / BRW
+Turning angles **uniform**; direction has no memory.
+
+Diffusive: displacement grows as $\sqrt{t}$.
+:::
+::: {.column width="33%"}
+### Correlated (CRW)
+Turning angles **concentrated near 0**; direction persists.
+
+Locally directed, diffusive at long range.
+:::
+::: {.column width="33%"}
+### Lévy walk
+Step lengths from a **heavy-tailed** distribution.
+
+Rare very long steps; super-diffusive. Much argued over.
+:::
+:::
+
+. . .
+
+::: {.keyidea}
+These are **null models**. They tell you what a trajectory would look like if
+the animal responded to nothing. Departures from them are where the biology
+is.
+:::
+
+---
+
+## Biased random walk
+
+Add a preferred direction — towards a den, a water hole, a wintering ground —
+and you have a **biased** random walk. Combine with persistence and you get
+the BCRW, the workhorse null model for animals with both memory and a goal.
+
+. . .
+
+::: {.smalltext}
+Class 8's integrated step selection analysis is, in effect, a biased
+correlated random walk whose bias is estimated from environmental covariates.
+Keep that connection in mind.
+:::
+
+# 3 · Home range {background-color="#14525a"}
+
+---
+
+## What is a home range?
+
+> "That area traversed by the individual in its normal activities of food
+> gathering, mating and caring for young."
+> — Burt (1943)
+
+. . .
+
+::: {.incremental}
+- Note what it **excludes**: exploratory forays, migration, dispersal
+- Note what it does **not** say: nothing about a probability distribution,
+  nothing about a percentage
+- Powell & Mitchell (2012): a home range is a **cognitive map** the animal
+  uses — and our estimators are crude proxies for it
+:::
+
+. . .
+
+::: {.keyidea}
+Every estimator answers a slightly different question. "95% home range" is
+not a fact about the animal; it is a number produced by a method with
+assumptions. Say which method, and why.
+:::
+
+---
+
+## MCP — minimum convex polygon
+
+The smallest convex polygon containing $x$% of the fixes.
+
+::: {.columns}
+::: {.column width="50%"}
+**For**
+
+- Trivial to compute and explain
+- Comparable with a century of literature
+- No smoothing parameter to argue about
+:::
+::: {.column width="50%"}
+**Against**
+
+- **Convex** — includes land the animal never used (lakes, cliffs, cities)
+- Extremely sensitive to outliers and to sample size
+- Area grows with the number of fixes; no asymptote
+- No density information — every point counts the same
+:::
+:::
+
+. . .
+
+::: {.smalltext}
+Use it for comparability with old studies. Do not use it as your only estimate.
+:::
+
+---
+
+## KDE — kernel density estimation
+
+Put a small "bump" (kernel) on each fix, sum them into a **utilisation
+distribution** (UD), then draw the contour containing 95% of the volume.
+
+::: {.incremental}
+- Gives a **density**, not just a boundary — you can have disjoint core areas
+- The answer is dominated by the **bandwidth** $h$
+  - `href` (reference) — assumes bivariate normal; usually over-smooths
+  - `hlscv` (least-squares cross-validation) — often fails to converge, or
+    fragments the UD into confetti
+  - `hpi` (plug-in) — generally the most reliable default
+:::
+
+. . .
+
+::: {.keyidea}
+Report your bandwidth selector. Two papers using "95% KDE" with different
+bandwidths are not comparable.
+:::
+
+---
+
+## The problem KDE has with tracking data
+
+Classical KDE assumes fixes are **independent** samples from the UD.
+
+. . .
+
+GPS fixes an hour apart are nothing of the sort — the animal was 300 m away an
+hour ago and will be 300 m away in an hour.
+
+::: {.incremental}
+- Effective sample size is far smaller than $n$
+- So the UD is **under-estimated** — the home range comes out too small
+- And collecting more fixes at a higher rate makes it **worse**, not better
+:::
+
+. . .
+
+::: {.keyidea}
+This is why area estimates from the 1990s (a few dozen VHF fixes) and from
+today (50,000 GPS fixes) are not comparable. It is not that the animals
+changed.
+:::
+
+---
+
+## AKDE — autocorrelated KDE
+
+Fleming et al. (2015): first fit a **continuous-time movement model** to the
+track, estimate the autocorrelation structure, and use it to derive the
+*effective* sample size. Then do the kernel estimate.
+
+::: {.incremental}
+- Gives **confidence intervals** on the area — almost nothing else does
+- Handles irregular sampling gracefully
+- Tells you when your data are inadequate, instead of returning a
+  confident-looking number
+- `ctmm` package; also a point-and-click web app
+:::
+
+. . .
+
+::: {.keyidea}
+If you report one home-range estimate in a modern paper, make it AKDE, and
+report the confidence interval. If your CI spans an order of magnitude, that
+is the honest answer.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You estimate a 95% KDE home range from hourly GPS data (n = 8,000) and get
+12 km². A 1995 study of the same population using VHF (n = 60) reported
+31 km². What is the most likely explanation?
+
+- [ ] The population's range has genuinely shrunk by 60%
+- [x] Autocorrelation in the GPS data biases classical KDE downwards
+- [ ] The VHF study had larger location errors, inflating the area
+- [ ] The two studies used different percentage contours
+
+::: {.quiz-feedback}
+Classical KDE assumes independent fixes. Hourly GPS locations are strongly
+autocorrelated, so 8,000 fixes carry the information of perhaps a few hundred
+independent ones — and the estimator systematically **under-estimates** the
+range. The sparse VHF fixes, days apart, were much closer to independent.
+
+Location error does inflate areas, but it is a far smaller effect than this.
+
+The way to settle it is **AKDE**: fit the movement model, get the effective
+sample size, and produce an area with a confidence interval. Very often the
+modern estimate then agrees with the old one — and you have learned that the
+population did not change, your method did.
+:::
+:::
+
+---
+
+## Choosing an estimator {.smaller}
+
+| | Use when | Watch out for |
+|:--|:--|:--|
+| **MCP** | Comparing to historical literature | Convexity, outliers, no asymptote |
+| **KDE** | Many roughly independent fixes | Bandwidth choice, autocorrelation |
+| **AKDE** | Modern GPS data — the default | Needs enough data to fit the model |
+| **LoCoH** | Hard boundaries (coast, cliffs) | Parameter choice |
+| **dBBMM** | You care about the *path*, not the points | Assumes Brownian motion |
+
+. . .
+
+::: {.keyidea}
+And before any of them: **should you be estimating a home range at all?**
+For Leo the vulture the answer is no — not until you have segmented the track.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You compute a 100% MCP for an animal after 3 months, then again after 12
+months. The area has tripled. What can you conclude?
+
+- [ ] The animal expanded its home range over the year
+- [x] Very little — MCP area grows with the number of fixes and has no asymptote
+- [ ] The collar's accuracy degraded
+- [ ] The 100% contour is invalid; use 95%
+
+::: {.quiz-feedback}
+The MCP is the convex hull of your points, so **every** new fix can only
+enlarge it or leave it unchanged — never shrink it. Its area therefore
+increases with sample size and duration without converging, which makes
+comparisons across different tracking durations meaningless.
+
+This is the single biggest problem with MCP, and it is why area-vs-sample-size
+curves used to be standard practice.
+
+Dropping to 95% removes the most extreme points and helps a little, but it
+does not fix the underlying behaviour. A genuine expansion would need to be
+demonstrated with an estimator that converges — AKDE, with confidence
+intervals, on comparable time windows.
+:::
+:::
+
+---
+
+## Today's exercise
+
+::: {.objectives}
+**[→ Class 4 exercise](exercise.qmd)**
+
+1. Step lengths, turning angles, speeds — and their distributions
+2. Show that step length depends on sampling interval
+3. NSD for the buffalo and for the vulture
+4. MCP, KDE and AKDE for one buffalo, compared
+5. Demonstrate the autocorrelation problem by thinning your own data
+:::
+
+---
+
+## Recap
+
+::: {.incremental}
+- Step length, turning angle and speed are **scale-dependent** — always report
+  the interval
+- Turning angles are circular data
+- NSD is a cheap, powerful diagnostic of movement strategy
+- Random walks are null models; biology lives in the departures
+- MCP is comparable but crude; KDE is biased by autocorrelation; **AKDE**
+  addresses it and gives you a CI
+:::
+
+. . .
+
+### Before Class 5
+
+- Fleming et al. (2015), *Ecology* 96:1182 — the AKDE paper
+- Check `library(terra)` still works; Class 5 is raster-heavy

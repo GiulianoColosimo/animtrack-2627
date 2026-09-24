@@ -1,0 +1,140 @@
+/* ===== Pop-up quiz styling (shared by website pages and reveal.js slides) ===== */
+
+:root {
+  --quiz-accent:  #1f6f78;
+  --quiz-correct: #2e7d32;
+  --quiz-wrong:   #c62828;
+  --quiz-surface: rgba(31, 111, 120, 0.06);
+  --quiz-border:  rgba(31, 111, 120, 0.35);
+}
+
+div.quiz {
+  counter-reset: quizopt;
+  border: 1px solid var(--quiz-border);
+  border-left: 6px solid var(--quiz-accent);
+  border-radius: 8px;
+  background: var(--quiz-surface);
+  padding: 0.9em 1.1em 1em;
+  margin: 1em 0;
+}
+
+div.quiz > p:first-child { margin-top: 0; font-weight: 600; }
+
+div.quiz > ul.quiz-options {
+  list-style: none;
+  margin: 0.6em 0 0;
+  padding: 0;
+}
+
+div.quiz > ul.quiz-options > li {
+  counter-increment: quizopt;
+  position: relative;
+  cursor: pointer;
+  margin: 0.4em 0;
+  padding: 0.5em 0.8em 0.5em 2.6em;
+  border: 1px solid var(--quiz-border);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.65);
+  transition: background 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
+}
+
+div.quiz > ul.quiz-options > li::before {
+  content: counter(quizopt, upper-alpha);
+  position: absolute;
+  left: 0.7em;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
+  text-align: center;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.85em;
+  color: #fff;
+  background: var(--quiz-accent);
+}
+
+div.quiz:not(.quiz-answered) > ul.quiz-options > li:hover {
+  background: #fff;
+  border-color: var(--quiz-accent);
+  transform: translateX(2px);
+}
+
+div.quiz.quiz-answered > ul.quiz-options > li { cursor: default; }
+
+/* Answered state. The A/B/C letter is kept on purpose — it is what you point
+   at when discussing the question with the room. Colour carries correctness. */
+div.quiz > ul.quiz-options > li.quiz-is-correct {
+  border-color: var(--quiz-correct);
+  background: rgba(46, 125, 50, 0.14);
+}
+div.quiz > ul.quiz-options > li.quiz-is-correct::before {
+  background: var(--quiz-correct);
+}
+div.quiz > ul.quiz-options > li.quiz-is-correct::after {
+  content: "✓";
+  margin-left: 0.5em;
+  font-weight: 700;
+  color: var(--quiz-correct);
+}
+
+div.quiz > ul.quiz-options > li.quiz-is-wrong { opacity: 0.5; }
+
+div.quiz > ul.quiz-options > li.quiz-chosen.quiz-is-wrong {
+  opacity: 1;
+  border-color: var(--quiz-wrong);
+  background: rgba(198, 40, 40, 0.12);
+}
+div.quiz > ul.quiz-options > li.quiz-chosen.quiz-is-wrong::before {
+  background: var(--quiz-wrong);
+}
+div.quiz > ul.quiz-options > li.quiz-chosen.quiz-is-wrong::after {
+  content: "✕  your answer";
+  margin-left: 0.5em;
+  font-size: 0.8em;
+  font-weight: 700;
+  color: var(--quiz-wrong);
+}
+
+div.quiz > .quiz-feedback {
+  margin-top: 0.8em;
+  padding: 0.6em 0.9em;
+  border-radius: 6px;
+  background: rgba(31, 111, 120, 0.12);
+  border-left: 3px solid var(--quiz-accent);
+  font-size: 0.92em;
+}
+
+div.quiz > .quiz-feedback.quiz-hidden { display: none; }
+
+button.quiz-reset {
+  margin-top: 0.7em;
+  font-size: 0.78em;
+  padding: 0.25em 0.7em;
+  border-radius: 999px;
+  border: 1px solid var(--quiz-border);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+}
+button.quiz-reset:hover { opacity: 1; }
+
+/* Dark mode / dark slide themes */
+@media (prefers-color-scheme: dark) {
+  div.quiz > ul.quiz-options > li { background: rgba(255, 255, 255, 0.06); }
+}
+.quarto-dark div.quiz > ul.quiz-options > li,
+.reveal div.quiz > ul.quiz-options > li { background: rgba(255, 255, 255, 0.06); }
+
+/* Slides: keep quizzes compact so they fit one slide */
+.reveal div.quiz { font-size: 0.85em; padding: 0.6em 0.8em; }
+.reveal div.quiz > ul.quiz-options > li { margin: 0.3em 0; padding: 0.35em 0.7em 0.35em 2.4em; }
+.reveal div.quiz > .quiz-feedback { font-size: 0.95em; }
+
+/* Print / PDF export: show everything */
+@media print {
+  div.quiz > .quiz-feedback.quiz-hidden { display: block; }
+  button.quiz-reset { display: none; }
+}

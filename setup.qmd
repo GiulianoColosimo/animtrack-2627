@@ -1,0 +1,143 @@
+---
+title: "Software setup"
+subtitle: "Do this before Class 1"
+date-modified: last-modified
+---
+
+Everything in this course runs on free, open-source software. Budget about
+45 minutes for this page — spatial packages are large and compile slowly.
+
+## 1. R
+
+Install **R ≥ 4.3** from [cran.r-project.org](https://cran.r-project.org/).
+
+- **Windows** — download the `.exe`, accept the defaults.
+- **macOS** — download the `.pkg` matching your chip (Apple silicon vs Intel).
+- **Linux** — use your distribution's packages, or
+  [r2u](https://eddelbuettel.github.io/r2u/) on Ubuntu for fast binary installs.
+
+## 2. RStudio
+
+Install **RStudio Desktop** from
+[posit.co/download/rstudio-desktop](https://posit.co/download/rstudio-desktop/).
+It bundles Quarto, so you do not need to install Quarto separately.
+
+## 3. System libraries (Linux only)
+
+`sf` and `terra` wrap the GDAL/GEOS/PROJ C++ libraries. macOS and Windows get
+pre-built binaries; Linux usually needs the development headers first:
+
+```bash
+sudo apt install libgdal-dev libgeos-dev libproj-dev libudunits2-dev libssl-dev
+```
+
+## 4. R packages
+
+Open RStudio and paste this into the console. It installs only what is
+missing, so it is safe to rerun.
+
+```{r}
+#| eval: false
+pkgs <- c(
+  # --- spatial core (Classes 2, 3, 5) ---
+  "sf", "terra", "units",
+  # --- tracking data (Classes 3, 4, 7, 8) ---
+  "move2", "amt", "adehabitatHR", "ctmm",
+  # --- segmentation (Class 6) ---
+  "moveHMM", "circular",
+  # --- selection functions (Classes 7, 8) ---
+  "survival", "glmmTMB",
+  # --- wrangling and graphics ---
+  "dplyr", "tidyr", "lubridate", "ggplot2", "patchwork", "viridis",
+  # --- maps and tables ---
+  "mapview", "leaflet", "tmap", "rnaturalearth", "gt", "DT",
+  # --- documents ---
+  "knitr", "rmarkdown"
+)
+
+missing <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]
+if (length(missing)) install.packages(missing) else message("All set.")
+```
+
+::: {.callout-warning collapse="true"}
+## If installation fails
+
+**`sf` or `terra` fail to compile (Linux/macOS)** — you are missing the system
+libraries in step 3. Install them, restart R, try again.
+
+**`Warning: package 'X' is in use and will not be installed`** — restart R
+(Session → Restart R) and rerun before loading anything.
+
+**Everything is glacially slow** — you are compiling from source. On Windows
+and macOS choose "no" when asked *"Do you want to install from sources the
+package which needs compilation?"*.
+
+**Corporate or university proxy blocks CRAN** — set a mirror explicitly:
+`options(repos = c(CRAN = "https://cloud.r-project.org"))`.
+:::
+
+## 5. Check your installation
+
+Run this. If it prints a green-ish summary with no `MISSING` lines, you are
+ready.
+
+```{r}
+#| eval: false
+need <- c("sf", "terra", "move2", "amt", "adehabitatHR", "ctmm",
+          "moveHMM", "survival", "dplyr", "ggplot2", "mapview")
+for (p in need) {
+  ok <- requireNamespace(p, quietly = TRUE)
+  cat(sprintf("%-14s %s\n", p, if (ok) as.character(packageVersion(p)) else "MISSING"))
+}
+
+# GDAL / GEOS / PROJ must all report a version:
+sf::sf_extSoftVersion()
+```
+
+## 6. Get the course project
+
+The tidiest way to work is to keep everything in one folder.
+
+::: {.panel-tabset}
+
+### With git (recommended)
+
+```bash
+git clone https://github.com/GiulianoColosimo/animtrack-2627.git
+```
+
+Then open `animtrack-2627.Rproj` in RStudio. You get every update with
+`git pull`.
+
+### Without git
+
+Go to the
+[repository](https://github.com/GiulianoColosimo/animtrack-2627),
+click **Code → Download ZIP**, unzip it somewhere sensible (*not* inside a
+syncing folder that renames files), and open the `.Rproj` file.
+
+:::
+
+Working inside the project means every path in the exercises —
+`data/buffalo_kruger.csv.gz` and friends — resolves without you editing
+anything.
+
+## 7. A five-minute R refresher
+
+If R is new to you, these are worth the evening:
+
+- [R for Data Science (2e), chapters 1–5](https://r4ds.hadley.nz/) — the
+  standard introduction to the data-wrangling verbs used throughout.
+- [Spatial Data Science with R and `terra`](https://rspatial.org/) — the
+  reference for Classes 2 and 5.
+- [Geocomputation with R](https://r.geocompx.org/) — the best free GIS-in-R book.
+
+The three things you must be comfortable with before Class 2:
+
+```{r}
+#| eval: false
+x <- c(1, 4, 9)         # assignment and vectors
+df <- data.frame(a = x, b = sqrt(x))   # data frames
+library(dplyr)          # loading a package
+df |> filter(a > 1) |> mutate(c = a * b)   # the pipe
+```

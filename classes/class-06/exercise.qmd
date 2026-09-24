@@ -1,0 +1,408 @@
+---
+title: "Exercise 6 — Fitting a hidden Markov model"
+subtitle: "Class 6 · Theme 4"
+date-modified: last-modified
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+::: {.objectives}
+**Goals.** Prepare a track for `moveHMM`; fit a 2-state model; read its
+output properly; decode and map the states; compare 2 and 3 states; check
+pseudo-residuals; and segment Leo's migration a different way.
+
+**Time:** ~55 minutes. **Packages:** `moveHMM`, `amt`, `dplyr`, `tidyr`,
+`lubridate`.
+:::
+
+```{r}
+library(moveHMM)
+library(amt)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+```
+
+## Task 1 — Prepare the data
+
+An HMM needs **regular** sampling and **contiguous** sequences. That is exactly
+what the bursts from Class 3 give us.
+
+```{r}
+clean <- read.csv("data/buffalo_kruger.csv.gz") |>
+  transmute(id = individual.local.identifier,
+            t  = as.POSIXct(timestamp, tz = "UTC"),
+            x  = location.long, y = location.lat) |>
+  filter(!is.na(x), !is.na(y)) |>
+  distinct(id, t, .keep_all = TRUE)
+
+trk_hr <- make_track(clean, x, y, t, id = id, crs = 4326) |>
+  transform_coords(crs_to = 32736) |>
+  nest(data = -id) |>
+  mutate(data = lapply(data, \(d) {
+    d |> track_resample(rate = hours(1), tolerance = minutes(10)) |>
+      filter_min_n_burst(min_n = 3)
+  })) |>
+  unnest(cols = data)
+
+# Each burst is an independent sequence: that is what moveHMM calls an "ID"
+hmm_in <- trk_hr |>
+  filter(id %in% c("Cilla", "Toni")) |>
+  transmute(ID = paste(id, burst_, sep = "_"), x = x_, y = y_)
+
+pd <- prepData(as.data.frame(hmm_in), type = "UTM", coordNames = c("x", "y"))
+
+summary(pd$step)
+sum(pd$step == 0, na.rm = TRUE)
+```
+
+::: {.callout-important}
+## Two things to notice before fitting
+
+**Zero step lengths.** A gamma distribution has zero density at zero, so any
+exact zero makes the likelihood infinite. `moveHMM` handles this with a
+**zero-mass** parameter per state — but only if you supply initial values for
+it, otherwise you get
+`Wrong number of initial parameters -- there should be 6`.
+
+**A 63 km step.** That is the spatial outlier we found in Class 3. An HMM will
+happily invent a "teleporting" state to accommodate two bad fixes. Remove them.
+:::
+
+```{r}
+max(pd$step, na.rm = TRUE)
+sum(pd$step > 5000, na.rm = TRUE)
+
+bad_ids <- unique(pd$ID[which(pd$step > 5000)])
+pd <- pd[!(pd$ID %in% bad_ids), ]
+
+nrow(pd)
+round(max(pd$step, na.rm = TRUE))
+```
+
+## Task 2 — Fit a 2-state model
+
+```{r}
+#| cache: true
+set.seed(42)
+
+m2 <- fitHMM(
+  pd, nbStates = 2,
+  # mu1, mu2, sd1, sd2, zeromass1, zeromass2
+  stepPar0  = c(50, 500, 50, 500, 0.01, 0.001),
+  # angle mean1, mean2, concentration1, concentration2
+  anglePar0 = c(0, 0, 1, 3)
+)
+
+m2$mle$stepPar
+m2$mle$anglePar
+m2$mle$gamma
+```
+
+### Your turn
+
+**2a.** Describe the two states in words.
+**2b.** What is the expected dwell time in each?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+round(m2$mle$stepPar, 3)
+round(m2$mle$anglePar, 3)
+
+gam <- m2$mle$gamma
+dwell <- 1 / (1 - diag(gam))
+round(dwell, 2)
+```
+
+**State 1** — mean step of about 15 m with very low angular concentration and
+a mean turning angle near π: the animal barely moves and reverses direction
+constantly. This is an *encamped* state: resting, ruminating, or grazing
+within a very small patch.
+
+**State 2** — mean step of a few hundred metres, mean turning angle near 0 and
+higher concentration: **directed movement**.
+
+Dwell times: roughly 2 hours in the encamped state and about 8 hours in the
+moving state. Note that these are in **hours** only because the data are
+hourly — the units of a dwell time are always "number of sampling intervals".
+
+```{r}
+states <- viterbi(m2)
+round(table(states) / length(states), 3)
+```
+
+::: {.callout-warning}
+The model has given you *state 1* and *state 2*. Calling them "resting" and
+"travelling" is an **interpretation**, and everything above is consistent with
+several other stories. To make the labels a measurement rather than a guess
+you would need external evidence: accelerometer data, direct observation, or
+known activity patterns.
+:::
+:::
+
+## Task 3 — Decode and map
+
+```{r}
+#| fig-width: 8.5
+#| fig-height: 5
+#| fig-align: center
+pd$state <- factor(viterbi(m2))
+
+one <- pd[pd$ID == names(sort(table(pd$ID), decreasing = TRUE))[1], ]
+
+par(mfrow = c(1, 2))
+plot(one$x, one$y, type = "l", col = "grey70", asp = 1,
+     xlab = "Easting (m)", ylab = "Northing (m)", main = "Track coloured by state")
+points(one$x, one$y, col = c("#1f6f78", "#c1440e")[one$state], pch = 16, cex = 0.5)
+legend("topleft", c("state 1 (encamped)", "state 2 (moving)"),
+       col = c("#1f6f78", "#c1440e"), pch = 16, bty = "n", cex = 0.8)
+
+plot(one$step, type = "h", col = c("#1f6f78", "#c1440e")[one$state],
+     xlab = "Step index", ylab = "Step length (m)", main = "Step length by state")
+par(mfrow = c(1, 1))
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4.5
+#| fig-align: center
+plot(m2, ask = FALSE, plotCI = FALSE, plotTracks = FALSE)
+```
+
+::: {.callout-tip}
+The second plot is the one to inspect most carefully: it overlays the
+**state-dependent densities** on the histogram of your data. If the coloured
+curves do not add up to the shape of the histogram, the model has not
+described your data and nothing downstream is trustworthy.
+:::
+
+## Task 4 — How many states?
+
+```{r}
+#| cache: true
+m3 <- fitHMM(
+  pd, nbStates = 3,
+  stepPar0  = c(30, 200, 800, 30, 200, 800, 0.01, 0.001, 0.001),
+  anglePar0 = c(0, 0, 0, 0.5, 1, 3)
+)
+
+data.frame(states = c(2, 3), AIC = c(AIC(m2), AIC(m3)))
+round(m3$mle$stepPar, 1)
+```
+
+### Your turn
+
+**4a.** AIC prefers 3 states. Should you report 3 states?
+**4b.** What would make you confident that a third state is real?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+round(m3$mle$anglePar, 2)
+round(1 / (1 - diag(m3$mle$gamma)), 2)
+round(table(viterbi(m3)) / nrow(pd), 3)
+```
+
+AIC is **lower** for 3 states, and it would very likely keep falling for 4 and
+5. That is what mixture models do: extra components always improve the fit to
+the shape of the data, whether or not they correspond to behaviours.
+
+Ask instead:
+
+1. **Are the states distinct?** If two states have overlapping step-length
+   distributions and similar turning angles, the model has split one behaviour
+   in two.
+2. **Are the dwell times plausible?** A state occupied for a single step at a
+   time is a statistical artefact, not a behaviour.
+3. **Is any state rare?** A state holding 2% of steps is usually absorbing
+   outliers.
+4. **Does it survive?** Refit on a different individual, or a different
+   season. A real behaviour recurs; an artefact does not.
+
+Here the third state sits between the other two, which is biologically
+reasonable for a large grazer (rest / graze / travel) — but you should say
+that you chose 3 for *that* reason, not because AIC said so.
+
+**Report the simplest model that answers your question and passes its
+checks**, and state your criterion in the methods.
+:::
+
+## Task 5 — Check the residuals
+
+```{r}
+#| fig-width: 8
+#| fig-height: 5
+#| fig-align: center
+pr <- pseudoRes(m2)
+
+par(mfrow = c(1, 2))
+qqnorm(pr$stepRes, main = "Step pseudo-residuals", pch = 16, cex = 0.3,
+       col = adjustcolor("#1f6f78", 0.4))
+qqline(pr$stepRes, col = "firebrick", lwd = 2)
+qqnorm(pr$angleRes, main = "Angle pseudo-residuals", pch = 16, cex = 0.3,
+       col = adjustcolor("#1f6f78", 0.4))
+qqline(pr$angleRes, col = "firebrick", lwd = 2)
+par(mfrow = c(1, 1))
+```
+
+::: {.callout-note collapse="true"}
+## Reading a pseudo-residual plot
+
+If the model describes the data, pseudo-residuals are standard normal and the
+points lie on the line. Departures tell you *where* the model fails:
+
+- **Heavy tails** — the step-length distribution is wrong (try log-normal or
+  Weibull), or outliers remain
+- **Systematic curvature** — the wrong number of states, or a state whose
+  distribution family does not match
+- **Structure when plotted against time** — a covariate is missing: perhaps
+  behaviour depends on time of day and you have not let it
+
+This is the HMM equivalent of plotting residuals in a regression, and it is
+skipped in far too many papers.
+:::
+
+## Task 6 — A different kind of segmentation
+
+Leo the vulture needs **change-point** thinking, not state classification. The
+question is *when did migration start*, and the NSD profile from Class 4 is
+enough to answer it.
+
+```{r}
+#| fig-width: 9
+#| fig-height: 4
+#| fig-align: center
+vul <- read.csv("data/vulture_leo.csv.gz") |>
+  transmute(t = as.POSIXct(timestamp, tz = "UTC"),
+            x = location.long, y = location.lat) |>
+  filter(!is.na(x)) |> distinct(t, .keep_all = TRUE) |> arrange(t)
+
+vt <- make_track(vul, x, y, t, crs = 4326) |> transform_coords(crs_to = 6933)
+
+daily <- vt |>
+  mutate(day = as.Date(t_)) |>
+  group_by(day) |>
+  summarise(x = mean(x_), y = mean(y_), .groups = "drop") |>
+  arrange(day) |>
+  mutate(disp_km = c(NA, sqrt(diff(x)^2 + diff(y)^2)) / 1000)
+
+daily <- daily |> mutate(migrating = disp_km > 50)
+
+plot(daily$day, daily$disp_km, type = "h",
+     col = ifelse(daily$migrating, "#c1440e", "grey65"),
+     xlab = "", ylab = "Daily displacement (km)",
+     main = "Leo: daily displacement, migration days in red")
+abline(h = 50, col = "firebrick", lty = 2)
+```
+
+### Your turn
+
+**6a.** How many migration days per year, and in which months?
+**6b.** Why is a simple threshold acceptable here, when it would not be for the buffalo?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+daily |>
+  filter(migrating) |>
+  count(year = year(day), name = "migration_days")
+
+daily |>
+  filter(migrating) |>
+  count(month = month(day, label = TRUE), name = "days")
+```
+
+Migration days cluster strongly in the **spring and autumn** months, exactly
+as the NSD sawtooth in Class 4 suggested.
+
+**Why a threshold is defensible here.** The two behaviours are separated by
+roughly an order of magnitude: a resident vulture moves a few kilometres a
+day, a migrating one moves hundreds. The distribution of daily displacement is
+clearly bimodal with a wide, empty valley between the modes, so the exact
+threshold barely matters.
+
+```{r}
+#| fig-width: 6.5
+#| fig-height: 4
+#| fig-align: center
+hist(log10(daily$disp_km + 1), breaks = 50, col = "#1f6f78", border = "white",
+     xlab = "log10(daily displacement km + 1)", main = "Two clearly separated modes")
+abline(v = log10(51), col = "firebrick", lwd = 2, lty = 2)
+```
+
+For the buffalo there is no such valley: resting, grazing and travelling
+produce overlapping step-length distributions with no gap to cut at. That is
+precisely when you need a model that assigns states probabilistically and uses
+the time dependence to resolve the overlap — an HMM.
+
+**The general rule:** if a histogram of your metric shows a clean gap, a
+threshold is honest and transparent. If it does not, a threshold is an
+arbitrary decision dressed as a result.
+:::
+
+## Self-check
+
+::: {.quiz}
+Your 2-state HMM assigns 97% of steps to state 1 and 3% to state 2, and state
+2 has a mean step length of 12 km. What has probably happened?
+
+- [ ] The animal genuinely travels 3% of the time
+- [x] State 2 is absorbing location errors rather than describing a behaviour
+- [ ] The model needs more states
+- [ ] The sampling interval is too short
+
+::: {.quiz-feedback}
+A rare state with an extreme mean is the classic signature of a model mopping
+up **outliers**. Twelve kilometres in one step is implausible for most
+terrestrial mammals at an hourly interval, and the HMM has done what it was
+asked to do: found the mixture that best fits the data, including the bad
+points.
+
+Clean first, then model. Find the offending steps, look at them on a map,
+decide whether they are real, and remove them (or the affected bursts) before
+refitting. This is why Task 1 drops the 63 km steps.
+
+More states would not help — you would simply get more outlier-absorbing
+states.
+:::
+:::
+
+::: {.quiz}
+You want to know whether buffalo are more likely to start moving when it is
+hot. What do you change in `fitHMM()`?
+
+- [ ] Add temperature to `stepPar0`
+- [x] Pass `formula = ~ temperature` so the covariate acts on the transition probabilities
+- [ ] Fit separate models for hot and cold days
+- [ ] Nothing — HMMs cannot include covariates
+
+::: {.quiz-feedback}
+The question is about **switching between behaviours**, and switching is
+governed by the transition probability matrix. `formula = ~ temperature` makes
+the transition probabilities a (multinomial-logit) function of temperature,
+which is exactly the hypothesis.
+
+Putting a covariate on the *state-dependent distributions* instead would ask a
+different question — "does the animal travel faster when it is hot", given
+that it is already travelling.
+
+Fitting separate models for hot and cold days throws away the transitions
+between them and gives you no test of the difference.
+
+This is where Class 5 and Class 6 join up: annotate each fix with the
+contemporaneous covariate, then let it drive the transitions.
+:::
+:::
+
+## Before Class 7
+
+- **Read Fieberg et al. (2021)**, *J Anim Ecol* 90:1027–1043. Genuinely the
+  most useful paper in this course.
+- Make sure `library(amt)` and `library(survival)` both load.

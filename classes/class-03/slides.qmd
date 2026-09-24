@@ -1,0 +1,422 @@
+---
+title: "Tracking data in R"
+subtitle: "Class 3 · Theme 2 — Informatics tools for movement"
+author: "Giuliano Colosimo"
+institute: "University of Rome Tor Vergata"
+date: last-modified
+format:
+  revealjs:
+    theme: [default, ../../assets/theme-slides.scss]
+    css: ../../assets/quiz.css
+    include-after-body: ../../assets/quiz.html
+    slide-number: c/t
+    show-slide-number: all
+    chalkboard: true
+    preview-links: auto
+    history: false
+    width: 1280
+    height: 760
+    footer: "Animal Tracking 2026-2027 · Class 3"
+    logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
+    highlight-style: github
+execute:
+  echo: true
+---
+
+## Today
+
+::: {.objectives}
+1. Movebank, and the `move2` package
+2. The **`amt` track**: the object the rest of the course is built on
+3. **Cleaning**: duplicates, impossible locations, speed outliers
+4. **Sampling regularity** — why it decides which methods you may use
+5. **Resampling and bursts**
+6. Interactive maps in one line
+:::
+
+. . .
+
+::: {.keyidea}
+80% of a movement analysis is getting the data into a defensible state.
+Today is that 80%.
+:::
+
+# 1 · Getting data {background-color="#14525a"}
+
+---
+
+## Movebank in R
+
+```r
+library(move2)
+
+# Interactive login, stored in your keyring
+movebank_store_credentials("your_username")
+
+# What is available?
+movebank_download_study_info(license_type = "CC_0")
+
+# Download a study
+buff <- movebank_download_study(
+  study_id  = 1764627,
+  sensor_type_id = "gps"
+)
+```
+
+. . .
+
+::: {.smalltext}
+Today we read the CSVs from `data/` instead — no accounts, no network, and
+everyone gets identical results. But this is how you get your own data.
+:::
+
+---
+
+## Two object models
+
+::: {.columns}
+::: {.column width="50%"}
+### `move2`
+An **`sf` data frame** with a track id and a time column, plus metadata.
+
+Closest to Movebank's own structure. Good for **data management**: multiple
+studies, deployments, sensors.
+
+`mt_time()`, `mt_track_id()`, `mt_distance()`, `mt_speed()`
+:::
+::: {.column width="50%"}
+### `amt`
+A **tibble** with columns `x_`, `y_`, `t_` and a CRS.
+
+Deliberately minimal. Built for **analysis**: resampling, steps, home ranges,
+RSF, SSF.
+
+`make_track()`, `track_resample()`, `steps()`
+:::
+:::
+
+. . .
+
+::: {.keyidea}
+They convert into each other. Use `move2` to *organise*, `amt` to *analyse*.
+This course lives mostly in `amt`.
+:::
+
+---
+
+## Making a track
+
+```{r}
+#| echo: fenced
+#| eval: false
+library(amt)
+library(dplyr)
+
+buffalo <- read.csv("data/buffalo_kruger.csv.gz") |>
+  transmute(id  = individual.local.identifier,
+            t   = as.POSIXct(timestamp, tz = "UTC"),
+            x   = location.long,
+            y   = location.lat) |>
+  filter(!is.na(x), !is.na(y)) |>
+  distinct(id, t, .keep_all = TRUE)
+
+trk <- make_track(buffalo, x, y, t, id = id, crs = 4326) |>
+  transform_coords(crs_to = 32736)
+```
+
+. . .
+
+::: {.smalltext}
+The trailing underscores (`x_`, `y_`, `t_`) are `amt`'s way of guaranteeing
+its own columns never collide with yours.
+:::
+
+# 2 · Cleaning {background-color="#14525a"}
+
+---
+
+## The four things that are always wrong
+
+::: {.incremental}
+1. **Duplicated fixes** — same individual, same timestamp. The collar
+   re-transmitted. ~13% of our buffalo file.
+2. **Missing coordinates** — a row exists, the location failed.
+3. **Impossible locations** — (0, 0), land animals at sea, points on another
+   continent. Usually a corrupt transmission.
+4. **Speed outliers** — a fix that implies 200 km/h for a buffalo, then a
+   return. A *spike*.
+:::
+
+. . .
+
+::: {.keyidea}
+Clean in this order, and **count what you remove at each step**. A cleaning
+step that silently deletes 30% of your data has changed your study.
+:::
+
+---
+
+## Duplicates are not all the same
+
+::: {.incremental}
+- **Exact duplicates** — every field identical. Safe to drop.
+- **Same timestamp, different coordinates** — which is right? Keep the one
+  with better quality (more satellites, lower DOP); if you cannot tell, keep
+  the first and document it.
+- **Near-duplicates** — timestamps a few seconds apart. These create
+  near-zero `dt` and therefore enormous apparent speeds.
+:::
+
+. . .
+
+```r
+# Blunt but explicit
+trk |> distinct(id, t_, .keep_all = TRUE)
+
+# move2 is more careful about the ambiguous case
+move2::mt_filter_unique(x, criterion = "first")
+```
+
+---
+
+## Speed filtering: useful and dangerous
+
+::: {.incremental}
+- Compute speed between consecutive fixes; drop anything above a biologically
+  plausible maximum
+- Buffalo ~ 10 km/h sustained; vulture ~ 80 km/h in flight
+- **The danger**: a threshold that is too low deletes real fast movement —
+  exactly the migration or escape events you may care about
+- **The subtlety**: one bad fix creates *two* fast steps (out and back). Naïve
+  filters often delete the good neighbour instead of the bad point
+:::
+
+. . .
+
+::: {.keyidea}
+Never filter silently. Plot what you are about to remove, look at it, then
+remove it. The `sdafilter`/`argosfilter` approach — which tests whether a
+point is fast **and** forms a spike — is better than a plain speed threshold.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You remove all fixes implying a speed above 15 km/h from the buffalo data, and
+your dataset shrinks by 0.4%. Then you compute mean daily displacement and it
+*drops by 18%*. What is the most likely explanation?
+
+- [ ] The filter worked correctly; the old value was inflated by errors
+- [x] Many removed "fast" steps were actually short time gaps, not long distances
+- [ ] Buffalo never exceed 15 km/h so nothing real was removed
+- [ ] Daily displacement is unrelated to speed
+
+::: {.quiz-feedback}
+Speed is distance **divided by time**. A pair of fixes 40 seconds apart —
+a near-duplicate — gives a huge apparent speed even if the animal moved 200 m.
+Filtering on speed therefore preferentially removes fixes with *small time
+gaps*, not fixes with large distances.
+
+An 18% change in a summary statistic from deleting 0.4% of rows is a red flag
+that the filter is doing something other than what you intended.
+
+Correct order: remove duplicates and near-duplicates **first**, resample to a
+regular interval **second**, and only then consider a speed filter — on steps
+that share a common `dt`.
+:::
+:::
+
+# 3 · Sampling regularity {background-color="#14525a"}
+
+---
+
+## Why it governs everything
+
+::: {.incremental}
+- **Step length and turning angle** are only comparable across steps of the
+  same duration
+- **HMMs** (Class 6) assume a regular interval; irregular data need a
+  continuous-time model instead
+- **SSFs** (Class 8) compare each observed step to alternatives of the *same*
+  duration
+- **KDE home ranges** assume roughly even coverage in time
+:::
+
+. . .
+
+```r
+trk |> summarize_sampling_rate_many(cols = "id", time_unit = "hour")
+```
+
+---
+
+## What our buffalo actually look like {.smaller}
+
+| id | min | q1 | median | mean | q3 | max | n |
+|:--|--:|--:|--:|--:|--:|--:|--:|
+| Queen | 0.03 | 1 | 1 | 2.45 | 1 | 2523 | 4544 |
+| Gabs | 0.03 | 1 | 1 | 1.22 | 1 | 723 | 3669 |
+| Cilla | 0.05 | 1 | 1 | 1.00 | 1 | 2 | 3527 |
+
+. . .
+
+::: {.incremental}
+- Median 1 hour — that is the programmed schedule
+- Minimum 0.03 h = **2 minutes** — near-duplicates
+- Maximum **2523 hours = 105 days** for Queen — the collar stopped and restarted
+- Mean ≫ median: the distribution is dominated by a few enormous gaps
+:::
+
+. . .
+
+::: {.keyidea}
+Report the **median**, not the mean, for sampling intervals. And always look
+at the maximum.
+:::
+
+---
+
+## Resampling and bursts
+
+`track_resample()` keeps fixes that fall on a regular grid within a tolerance,
+and labels contiguous runs as **bursts**.
+
+```r
+trk |>
+  track_resample(rate = hours(1), tolerance = minutes(10)) |>
+  filter_min_n_burst(min_n = 3)
+```
+
+::: {.incremental}
+- `rate` — the interval you want
+- `tolerance` — how much slack. Too tight and you throw away good data; too
+  loose and "hourly" steps are really 40–80 minutes
+- A **burst** breaks wherever a fix is missing. Steps are computed *within*
+  bursts, never across a gap
+- `min_n = 3` because a turning angle needs three points
+:::
+
+---
+
+## The trap: `track_resample()` ignores `group_by()`
+
+```r
+# WRONG — one time grid laid across six interleaved animals
+trk |> group_by(id) |> track_resample(rate = hours(1))
+```
+
+::: {.smaller}
+| id | fixes before | grouped (wrong) | per animal (right) |
+|:--|--:|--:|--:|
+| Cilla | 3528 | 2731 | 3518 |
+| Mvubu | 2572 | **166** | 2544 |
+| Queen | 4545 | 1741 | 4354 |
+:::
+
+. . .
+
+```r
+# RIGHT — each animal gets its own grid
+trk |>
+  nest(data = -id) |>
+  mutate(data = lapply(data, \(d) track_resample(d, rate = hours(1),
+                                                 tolerance = minutes(10)))) |>
+  unnest(cols = data)
+```
+
+::: {.keyidea}
+No error, no warning — just 58% of your data gone. **Not every function
+respects `dplyr` grouping.** When a step removes far more than you expected,
+check the per-group counts before you accept it.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+`track_resample()` **interpolates** missing locations to give you a regular
+series. True or false?
+
+- [ ] True — that is what resampling means
+- [x] False — it selects existing fixes and discards the rest
+
+::: {.quiz-feedback}
+`amt::track_resample()` is a **filter**, not an interpolator. It walks the
+track and keeps the fixes that fall close enough to a regular time grid; where
+no fix is available, the burst simply ends. You never gain observations you
+did not make.
+
+That is deliberate. Interpolating locations invents data and then feeds the
+invention into a model as if it were an observation, which biases step-length
+and turning-angle distributions towards straighter, slower movement.
+
+If you genuinely need locations between fixes, use a model that says so —
+a continuous-time movement model (`ctmm`) or a state-space model — which
+gives you interpolated positions **with uncertainty attached**.
+:::
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+A colleague reports a mean sampling interval of 2.45 hours for a collar
+programmed to fix hourly. What does that number actually tell you?
+
+- [ ] The collar was reprogrammed partway through
+- [x] Almost nothing about the schedule — a few very long gaps have inflated the mean
+- [ ] The fix success rate was about 41%
+- [ ] The animal was inactive, so the collar skipped fixes
+
+::: {.quiz-feedback}
+The **median** for this collar is 1 hour — the schedule is intact. The mean is
+2.45 h because the distribution has a long tail: one gap of 2,523 hours
+(105 days) drags it up on its own.
+
+A mean sampling interval is a summary of your *collar failures*, not of your
+sampling design. Report the **median**, the **maximum gap**, and the number of
+gaps beyond some threshold.
+
+And no, you cannot read the fix success rate off the mean. Success rate is the
+proportion of *scheduled attempts* that returned a location, which you get by
+dividing each gap by the modal interval and counting the misses.
+:::
+:::
+
+---
+
+## Today's exercise
+
+::: {.objectives}
+**[→ Class 3 exercise](exercise.qmd)**
+
+1. Build an `amt` track and inspect the sampling rate
+2. Find and remove duplicates — and count them
+3. Hunt speed outliers, and look at them before deleting
+4. Resample to hourly bursts
+5. Try the same on the bat data and discover you cannot
+6. Make an interactive map
+:::
+
+---
+
+## Recap
+
+::: {.incremental}
+- `move2` to organise, `amt` to analyse
+- Clean in order: **duplicates → missing → impossible → speed**, counting as you go
+- Speed outliers are often *time* problems, not *distance* problems
+- Report **median** sampling interval and the **maximum gap**
+- `track_resample()` selects; it does not invent
+:::
+
+. . .
+
+### Before Class 4
+
+- Re-read the `amt` vignette: `vignette("p1_basics", package = "amt")`
+- Skim Powell & Mitchell (2012), *What is a home range?*

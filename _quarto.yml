@@ -1,0 +1,127 @@
+project:
+  type: website
+  output-dir: docs          # GitHub Pages serves from /docs on the main branch
+  execute-dir: project      # every chunk runs at the project root, so `data/...` always works
+  render:
+    - "*.qmd"
+    - "classes/**/*.qmd"
+    - "!README.md"
+
+execute:
+  freeze: auto              # cache R results; CI/Pages never needs to run R
+  warning: false
+  message: false
+
+website:
+  title: "Animal Tracking"
+  site-url: https://giulianocolosimo.github.io/animtrack-2627/
+  repo-url: https://github.com/GiulianoColosimo/animtrack-2627
+  repo-actions: [issue]
+  reader-mode: true
+  page-navigation: true
+  description: "Animal tracking in conservation biology — MSc Biologia Ambientale, University of Rome Tor Vergata (2026-2027)."
+  open-graph:
+    locale: en_US
+
+  navbar:
+    search: true
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Syllabus"
+        href: syllabus.qmd
+      - text: "Setup"
+        href: setup.qmd
+      - text: "Data"
+        href: data.qmd
+      - text: "Resources"
+        href: resources.qmd
+
+  sidebar:
+    logo: "./assets/figures/avatar.jpg"
+    pinned: false
+    align: center
+    style: "docked"
+    background: light
+    collapse-level: 2
+    contents:
+      - text: "Home"
+        href: index.qmd
+      - text: "Syllabus"
+        href: syllabus.qmd
+      - text: "Software setup"
+        href: setup.qmd
+      - text: "Datasets"
+        href: data.qmd
+      - section: "1 · Movement"
+        contents:
+          - text: "C1 · Slides — Movement & tracking technologies"
+            href: classes/class-01/slides.qmd
+          - text: "C1 · Exercise — First contact with a track"
+            href: classes/class-01/exercise.qmd
+          - text: "C4 · Slides — Movement metrics & home range"
+            href: classes/class-04/slides.qmd
+          - text: "C4 · Exercise — Steps, angles, home range"
+            href: classes/class-04/exercise.qmd
+      - section: "2 · GIS in R"
+        contents:
+          - text: "C2 · Slides — Spatial data in R"
+            href: classes/class-02/slides.qmd
+          - text: "C2 · Exercise — sf, terra, CRS"
+            href: classes/class-02/exercise.qmd
+          - text: "C3 · Slides — Tracking data in R"
+            href: classes/class-03/slides.qmd
+          - text: "C3 · Exercise — Clean & map a track"
+            href: classes/class-03/exercise.qmd
+      - section: "3 · Remote sensing"
+        contents:
+          - text: "C5 · Slides — Remote sensing & annotation"
+            href: classes/class-05/slides.qmd
+          - text: "C5 · Exercise — NDVI along a track"
+            href: classes/class-05/exercise.qmd
+      - section: "4 · Segmentation"
+        contents:
+          - text: "C6 · Slides — Behavioural states & HMMs"
+            href: classes/class-06/slides.qmd
+          - text: "C6 · Exercise — Fit an HMM"
+            href: classes/class-06/exercise.qmd
+      - section: "5 · Selection functions"
+        contents:
+          - text: "C7 · Slides — Resource selection (RSF)"
+            href: classes/class-07/slides.qmd
+          - text: "C7 · Exercise — Fit an RSF"
+            href: classes/class-07/exercise.qmd
+          - text: "C8 · Slides — Step selection (SSF/iSSA)"
+            href: classes/class-08/slides.qmd
+          - text: "C8 · Exercise — Fit an iSSA"
+            href: classes/class-08/exercise.qmd
+      - text: "Resources"
+        href: resources.qmd
+
+    tools:
+      - icon: github
+        url: "https://github.com/GiulianoColosimo/animtrack-2627"
+      - icon: envelope
+        url: "mailto:giuliano.colosimo@uniroma2.it"
+
+  page-footer:
+    left: "© 2026 Giuliano Colosimo — CC BY-NC-SA 4.0"
+    right: "Built with [Quarto](https://quarto.org/)."
+    background: dark
+
+bibliography: comprehensive_database.bib
+csl: apa_5th_edition.csl
+
+format:
+  html:
+    theme:
+      light: [cosmo, assets/theme.scss]
+      dark: [cosmo, assets/theme-dark.scss]
+    mainfont: "Atkinson Hyperlegible"
+    css: assets/quiz.css
+    include-after-body: assets/quiz.html
+    code-copy: true
+    code-overflow: wrap
+    code-link: true
+    toc: true
+    link-external-newwindow: true

@@ -1,0 +1,397 @@
+---
+title: "Resource selection functions"
+subtitle: "Class 7 · Theme 5 — Selection functions"
+author: "Giuliano Colosimo"
+institute: "University of Rome Tor Vergata"
+date: last-modified
+format:
+  revealjs:
+    theme: [default, ../../assets/theme-slides.scss]
+    css: ../../assets/quiz.css
+    include-after-body: ../../assets/quiz.html
+    slide-number: c/t
+    show-slide-number: all
+    chalkboard: true
+    preview-links: auto
+    history: false
+    width: 1280
+    height: 760
+    footer: "Animal Tracking 2026-2027 · Class 7"
+    logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
+    highlight-style: github
+execute:
+  echo: true
+---
+
+## Today
+
+::: {.objectives}
+1. **Use vs availability** — the central idea of habitat selection
+2. Johnson's **four orders** of selection
+3. The RSF: what it is, and what the coefficients mean
+4. **Availability is a decision**, and it drives your conclusions
+5. Fitting, weighting, and the multiple-animal problem
+:::
+
+# 1 · The central idea {background-color="#14525a"}
+
+---
+
+## Selection is a comparison
+
+An animal **selects** a resource when it uses it **disproportionately to its
+availability**.
+
+::: {.incremental}
+- Use alone tells you nothing. A wolf in a landscape that is 95% forest will
+  be found mostly in forest whether or not it prefers forest
+- So every selection analysis needs two samples:
+  - **Used** — where the animal was
+  - **Available** — where it could have been
+:::
+
+. . .
+
+::: {.keyidea}
+The second sample is not data. **You construct it**, and the construction
+encodes a hypothesis. Most disagreements about habitat selection results are
+disagreements about availability.
+:::
+
+---
+
+## Johnson's four orders (1980) {.smaller}
+
+| Order | Question | Available = |
+|:--|:--|:--|
+| **1st** | Where is the species' range? | The planet |
+| **2nd** | Where does this individual put its home range? | The study area / population range |
+| **3rd** | Where within its home range does it go? | The home range |
+| **4th** | Which items does it take at a site? | Items at the site |
+
+. . .
+
+::: {.keyidea}
+The **same animal** can show opposite results at different orders. A deer may
+place its home range in forest (2nd order) yet prefer clearings within it
+(3rd order). Always state your order — it is the definition of "available".
+:::
+
+---
+
+## The RSF
+
+$$w(\mathbf{x}) = \exp(\beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_k x_k)$$
+
+$w(\mathbf{x})$ is the **relative** probability of use, proportional to the
+true probability by an unknown constant.
+
+::: {.incremental}
+- Fitted with logistic regression on used (1) vs available (0) points
+- There is **no intercept you can interpret** — it absorbs the arbitrary
+  number of available points you drew
+- Only **relative** statements are licensed: "twice as likely as", never
+  "40% probability of use"
+:::
+
+---
+
+## Used–available is not case–control
+
+::: {.incremental}
+- "Available" points are not known **absences**. The animal may well have used
+  them; you just did not observe it
+- Formally, the used–available design fits an **inhomogeneous Poisson point
+  process**, and logistic regression is a computational device for it
+- This is why the **infinitely weighted logistic regression** trick works:
+  give available points a huge weight and the logistic coefficients converge
+  to the correct point-process coefficients
+:::
+
+. . .
+
+```r
+d$w <- ifelse(d$case_, 1, 5000)
+glm(case_ ~ elevation + grassland, data = d,
+    family = binomial(), weights = d$w)
+```
+
+---
+
+## Quiz
+
+::: {.quiz}
+Your RSF gives $\hat\beta = 0.69$ for a standardised NDVI covariate. What can
+you correctly say?
+
+- [ ] There is a 69% probability the animal uses high-NDVI areas
+- [x] A one-SD increase in NDVI roughly **doubles** the relative probability of use
+- [ ] NDVI explains 69% of the variation in use
+- [ ] The animal uses high-NDVI areas 69% of the time
+
+::: {.quiz-feedback}
+RSF coefficients are on the log scale, so the effect is multiplicative:
+$e^{0.69} \approx 2$. A one-standard-deviation increase in NDVI **doubles the
+relative probability of use**, holding the other covariates fixed.
+
+"Relative" is doing essential work in that sentence. The RSF is proportional
+to the probability of use by an unknown constant — the intercept depends
+entirely on how many available points you happened to draw — so absolute
+probabilities are not available to you.
+
+Standardising covariates before fitting is what makes "one SD" meaningful and
+lets you compare effect sizes across covariates measured in different units.
+:::
+:::
+
+# 2 · Availability, the hard part {background-color="#14525a"}
+
+---
+
+## Three decisions
+
+::: {.incremental}
+1. **The domain.** Study area? MCP? KDE? Buffer around the track? This *is*
+   your choice of Johnson order.
+2. **How many points.** Too few and the estimates are noisy; the coefficients
+   should **stabilise** as you add more. Check that they do.
+3. **How they are distributed.** Uniform random is the default. But should
+   inaccessible areas (open water, cliffs, the other side of a motorway) be
+   "available" at all?
+:::
+
+. . .
+
+::: {.keyidea}
+Changing the availability domain can reverse the sign of a coefficient. This
+is not a flaw in the method — it is the method working. Different domains ask
+different questions.
+:::
+
+---
+
+## How many available points?
+
+::: {.incremental}
+- There is no magic number. The practical test: **increase the number until
+  the coefficients stop changing**
+- Typically thousands to tens of thousands per animal
+- With infinite weighting, more available points is always better — the only
+  cost is computation
+:::
+
+. . .
+
+```r
+for (n in c(1e3, 5e3, 2e4, 1e5)) {
+  d <- random_points(trk, n = n) |> extract_covariates(covs)
+  # ... refit, record coefficients, plot them against n
+}
+```
+
+---
+
+## The functional response
+
+Selection is not a fixed property of an animal.
+
+::: {.incremental}
+- An animal in a forest-rich landscape may show **weak** selection for forest;
+  the same animal in a forest-poor landscape shows **strong** selection
+- So $\beta$ depends on availability — the *functional response in habitat
+  use* (Mysterud & Ims 1998)
+- Pooling individuals across different landscapes without modelling this
+  averages away the very thing you are studying
+:::
+
+. . .
+
+::: {.smaller}
+Practical consequence: report the availability each individual faced, and
+consider modelling $\beta$ as a function of it.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+Two studies of the same wolf population reach opposite conclusions about
+selection for roads. Study A used available points drawn from the whole
+national park; study B drew them from within each wolf's home range. Who is
+right?
+
+- [ ] Study A — a larger availability domain is more objective
+- [ ] Study B — home ranges are the only biologically meaningful domain
+- [x] Both, and they answer different questions
+- [ ] Neither; the analysis is invalid without known absences
+
+::: {.quiz-feedback}
+Study A asks a **second-order** question: given the whole park, do wolves put
+their home ranges in areas with more or fewer roads? Study B asks a
+**third-order** question: within the home range a wolf has already chosen,
+does it approach or avoid roads?
+
+These routinely give opposite answers, and the pattern is common and
+interpretable: wolves may settle in road-poor parts of the park (avoidance at
+2nd order) while using road verges and tracks as travel routes once there
+(selection at 3rd order).
+
+Neither study is wrong. Both are incomplete if they do not **state the order**
+and the availability domain — which is why that belongs in the abstract, not
+buried in the methods.
+:::
+:::
+
+# 3 · Fitting it properly {background-color="#14525a"}
+
+---
+
+## The workflow in `amt`
+
+```r
+library(amt)
+
+rsf_data <- trk |>
+  filter(id == "Cilla") |>
+  random_points(n = nrow(trk) * 20) |>     # available within the MCP
+  extract_covariates(covs) |>
+  mutate(w = ifelse(case_, 1, 5000))
+
+fit <- glm(case_ ~ elevation + slope + grassland + trees,
+           data = rsf_data, family = binomial(), weights = w)
+```
+
+. . .
+
+::: {.smalltext}
+`random_points()` on a track defaults to the MCP of that track — a third-order
+analysis. Pass an `hr` object to control the domain explicitly.
+:::
+
+---
+
+## Standardise your covariates
+
+```r
+rsf_data <- rsf_data |>
+  mutate(across(c(elevation, slope, grassland, trees),
+                \(z) as.numeric(scale(z))))
+```
+
+::: {.incremental}
+- Makes coefficients **comparable** across covariates with different units
+- "Per one standard deviation" is an interpretable effect size
+- Improves numerical conditioning
+- **Keep the means and SDs** — you need them to back-transform for prediction
+:::
+
+---
+
+## More than one animal
+
+The wrong way: pool all fixes and fit one model. Individuals differ, and the
+animal with most fixes dominates.
+
+::: {.incremental}
+- **Two-stage**: fit each animal separately, then summarise the coefficients
+  across individuals (mean, SE, a t-test against zero). Transparent, robust,
+  easy to explain
+- **Mixed models**: random intercept **and random slopes** per individual. Muff
+  et al. (2020) show the random slopes are essential — without them you
+  under-estimate the uncertainty badly
+- A random intercept alone is *not* enough
+:::
+
+. . .
+
+::: {.smaller}
+For 6 buffalo, the two-stage approach is honest and adequate. For 60, use a
+mixed model.
+:::
+
+---
+
+## Validation
+
+$R^2$ is not available for a point-process model. Use instead:
+
+::: {.incremental}
+- **k-fold cross-validation with used–available data** (Boyce et al. 2002):
+  bin the predicted RSF values, and check that the number of *withheld* used
+  points per bin increases with the bin's rank. Report the Spearman
+  correlation
+- **Withhold whole individuals**, not random points — otherwise
+  autocorrelation leaks the answer into your test set
+:::
+
+. . .
+
+::: {.keyidea}
+A model can have highly significant coefficients and no predictive ability at
+all. With tens of thousands of points, *everything* is significant. Report
+effect sizes and validation, not p-values.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You fit an RSF with 25,000 available points per animal and every covariate has
+p < 0.001. What should you conclude?
+
+- [ ] All the covariates matter a lot
+- [x] Almost nothing — p-values are driven by the number of available points, which you chose
+- [ ] The model is overfitted
+- [ ] You should reduce the number of available points to get honest p-values
+
+::: {.quiz-feedback}
+You chose the sample size, so you chose the p-values. Doubling the available
+points roughly halves the standard errors without adding any information about
+the animal. In used–available designs, p-values are close to meaningless.
+
+What *is* informative: the **effect sizes** ($e^\beta$, on standardised
+covariates), their **confidence intervals**, the **consistency across
+individuals**, and **out-of-sample validation**.
+
+And no — reducing the available sample to manufacture plausible p-values would
+be worse. It throws away precision in the estimate of availability to make a
+statistic look respectable. Report effect sizes.
+:::
+:::
+
+---
+
+## Today's exercise
+
+::: {.objectives}
+**[→ Class 7 exercise](exercise.qmd)**
+
+1. Build used and available samples for one buffalo
+2. Fit an RSF and interpret the coefficients as odds ratios
+3. Show that coefficients stabilise as availability grows
+4. Change the availability domain and watch the answer change
+5. Fit all six animals two-stage and compare
+6. Map the predicted selection surface
+:::
+
+---
+
+## Recap
+
+::: {.incremental}
+- Selection = use **relative to availability**. You construct availability
+- State your **Johnson order** — it is the definition of available
+- RSF coefficients are **log relative** effects: $e^\beta$, and no intercept
+- Availability domain, sample size and distribution all change the answer
+- Individuals differ: two-stage, or mixed models **with random slopes**
+- p-values are meaningless here. Effect sizes and validation are not
+:::
+
+. . .
+
+### Before Class 8
+
+- Avgar et al. (2016) on integrated step selection analysis
+- Re-read section 3 of Fieberg et al. (2021)

@@ -1,0 +1,113 @@
+---
+title: "Animal Tracking in Conservation Biology"
+subtitle: "MSc Biologia Ambientale — University of Rome Tor Vergata, 2026-2027"
+author:
+  - name: Giuliano Colosimo
+    orcid: 0000-0002-0485-9758
+    affiliations: "Department of Biology, University of Rome Tor Vergata"
+date-modified: last-modified
+toc: false
+---
+
+Welcome. These pages hold **everything** you need for *Animal Tracking in
+Conservation Biology*: slides, R exercises, datasets and further reading.
+
+::: {.callout-tip appearance="simple"}
+Everything here is public and permanent. Slides open in your browser — press
+`F` for fullscreen, `S` for speaker notes, `E` for print/PDF view, `?` for all
+shortcuts. Exercises are plain web pages you can work through at your own pace.
+:::
+
+## What this course is about
+
+Biologging has changed what we can ask about animals. A collar that reports a
+position every hour produces more raw observations in a week than a generation
+of field naturalists could collect in a career. The bottleneck is no longer
+data — it is **asking a well-posed question and knowing which analysis answers
+it**.
+
+Over eight two-hour meetings we go from *how do you put a tag on an animal* to
+*how do you infer, from its trajectory, what the animal was doing and which
+parts of the landscape it chose*. Every concept is paired with code you run
+yourself, because tracking analysis is a craft you learn by doing.
+
+## Course at a glance
+
+| | |
+|---|---|
+| **Degree** | MSc Biologia Ambientale |
+| **Credits** | 2 CFU — 16 hours |
+| **Structure** | 8 classes × 2 hours |
+| **Language** | English |
+| **Software** | R, RStudio, Quarto — all free and open source |
+| **Assessment** | See the [syllabus](syllabus.qmd) |
+
+## The five themes
+
+::: {.class-card}
+[Theme 1]{.topic-badge}
+
+### Movement and movement analysis
+Why animals move, the movement-ecology framework, and the full toolbox for
+tracking them — from toe-clipping to Argos satellites. Then the quantitative
+description of a trajectory: steps, turning angles, speeds, home ranges.
+
+→ [Class 1](classes/class-01/slides.qmd) · [Class 4](classes/class-04/slides.qmd)
+:::
+
+::: {.class-card}
+[Theme 2]{.topic-badge}
+
+### Informatics tools: GIS in R
+Coordinate reference systems, vector and raster data, and the `sf` / `terra`
+stack. Then the specifics of tracking data: Movebank, `move2`, `amt`, cleaning
+duplicates and outliers, and making a map you would not be ashamed to publish.
+
+→ [Class 2](classes/class-02/slides.qmd) · [Class 3](classes/class-03/slides.qmd)
+:::
+
+::: {.class-card}
+[Theme 3]{.topic-badge}
+
+### Remote sensing
+What a satellite actually measures, the four resolutions, the vegetation
+indices you will meet in every paper, and how to annotate a trajectory with
+environmental covariates in space *and* time.
+
+→ [Class 5](classes/class-05/slides.qmd)
+:::
+
+::: {.class-card}
+[Theme 4]{.topic-badge}
+
+### Movement segmentation
+An animal is not one thing all day. Behavioural states, change-point methods
+and hidden Markov models: how to cut a trajectory into behaviourally
+meaningful pieces, and how to avoid fooling yourself while doing it.
+
+→ [Class 6](classes/class-06/slides.qmd)
+:::
+
+::: {.class-card}
+[Theme 5]{.topic-badge}
+
+### Resource and step selection functions
+Use versus availability — the central idea of habitat selection. RSFs, then
+step selection functions and integrated SSA, which fold movement and selection
+into one model.
+
+→ [Class 7](classes/class-07/slides.qmd) · [Class 8](classes/class-08/slides.qmd)
+:::
+
+## Before the first class
+
+1. Install R, RStudio and the course packages — see **[Software setup](setup.qmd)**.
+2. Download the **[datasets](data.qmd)**.
+3. Bring a laptop. Every class has hands-on time.
+
+## Reusing this material
+
+All material is released under
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+Source code lives on [GitHub](https://github.com/GiulianoColosimo/animtrack-2627) —
+corrections and issues are welcome.
