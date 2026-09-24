@@ -24,3 +24,5 @@ data/raw/
 
 # NOTE: docs/ is intentionally NOT ignored — GitHub Pages serves the site from it.
 # NOTE: _freeze/ is intentionally NOT ignored — it lets the site rebuild without R.
+
+**/*.quarto_ipynb

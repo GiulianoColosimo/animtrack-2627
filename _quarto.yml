@@ -43,7 +43,7 @@ website:
     align: center
     style: "docked"
     background: light
-    collapse-level: 2
+    collapse-level: 1
     contents:
       - text: "Home"
         href: index.qmd
@@ -53,48 +53,56 @@ website:
         href: setup.qmd
       - text: "Datasets"
         href: data.qmd
-      - section: "1 · Movement"
+      - section: "Classes"
         contents:
-          - text: "C1 · Slides — Movement & tracking technologies"
-            href: classes/class-01/slides.qmd
-          - text: "C1 · Exercise — First contact with a track"
-            href: classes/class-01/exercise.qmd
-          - text: "C4 · Slides — Movement metrics & home range"
-            href: classes/class-04/slides.qmd
-          - text: "C4 · Exercise — Steps, angles, home range"
-            href: classes/class-04/exercise.qmd
-      - section: "2 · GIS in R"
-        contents:
-          - text: "C2 · Slides — Spatial data in R"
-            href: classes/class-02/slides.qmd
-          - text: "C2 · Exercise — sf, terra, CRS"
-            href: classes/class-02/exercise.qmd
-          - text: "C3 · Slides — Tracking data in R"
-            href: classes/class-03/slides.qmd
-          - text: "C3 · Exercise — Clean & map a track"
-            href: classes/class-03/exercise.qmd
-      - section: "3 · Remote sensing"
-        contents:
-          - text: "C5 · Slides — Remote sensing & annotation"
-            href: classes/class-05/slides.qmd
-          - text: "C5 · Exercise — NDVI along a track"
-            href: classes/class-05/exercise.qmd
-      - section: "4 · Segmentation"
-        contents:
-          - text: "C6 · Slides — Behavioural states & HMMs"
-            href: classes/class-06/slides.qmd
-          - text: "C6 · Exercise — Fit an HMM"
-            href: classes/class-06/exercise.qmd
-      - section: "5 · Selection functions"
-        contents:
-          - text: "C7 · Slides — Resource selection (RSF)"
-            href: classes/class-07/slides.qmd
-          - text: "C7 · Exercise — Fit an RSF"
-            href: classes/class-07/exercise.qmd
-          - text: "C8 · Slides — Step selection (SSF/iSSA)"
-            href: classes/class-08/slides.qmd
-          - text: "C8 · Exercise — Fit an iSSA"
-            href: classes/class-08/exercise.qmd
+          - section: "Class 1 — Movement & tracking technologies"
+            contents:
+              - text: "Slides · Theme 1"
+                href: classes/class-01/slides.qmd
+              - text: "Exercise · First contact with a track"
+                href: classes/class-01/exercise.qmd
+          - section: "Class 2 — Spatial data in R"
+            contents:
+              - text: "Slides · Theme 2"
+                href: classes/class-02/slides.qmd
+              - text: "Exercise · sf, terra and CRS"
+                href: classes/class-02/exercise.qmd
+          - section: "Class 3 — Tracking data in R"
+            contents:
+              - text: "Slides · Theme 2"
+                href: classes/class-03/slides.qmd
+              - text: "Exercise · Clean, resample, map"
+                href: classes/class-03/exercise.qmd
+          - section: "Class 4 — Movement metrics & home range"
+            contents:
+              - text: "Slides · Theme 1"
+                href: classes/class-04/slides.qmd
+              - text: "Exercise · Steps, angles, home range"
+                href: classes/class-04/exercise.qmd
+          - section: "Class 5 — Remote sensing & annotation"
+            contents:
+              - text: "Slides · Theme 3"
+                href: classes/class-05/slides.qmd
+              - text: "Exercise · Environmental annotation"
+                href: classes/class-05/exercise.qmd
+          - section: "Class 6 — Segmentation & HMMs"
+            contents:
+              - text: "Slides · Theme 4"
+                href: classes/class-06/slides.qmd
+              - text: "Exercise · Fitting an HMM"
+                href: classes/class-06/exercise.qmd
+          - section: "Class 7 — Resource selection (RSF)"
+            contents:
+              - text: "Slides · Theme 5"
+                href: classes/class-07/slides.qmd
+              - text: "Exercise · Fitting an RSF"
+                href: classes/class-07/exercise.qmd
+          - section: "Class 8 — Step selection (SSF/iSSA)"
+            contents:
+              - text: "Slides · Theme 5"
+                href: classes/class-08/slides.qmd
+              - text: "Exercise · Step selection and iSSA"
+                href: classes/class-08/exercise.qmd
       - text: "Resources"
         href: resources.qmd
 
