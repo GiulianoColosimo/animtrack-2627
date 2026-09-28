@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-09-24">
+  <meta name="dcterms.date" content="2026-09-28">
   <title>Animal Tracking – Step selection functions and iSSA</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -96,7 +96,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-4e003b5652001adc8283f5608f4dff7c.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-bbf851726720281c14c3e45d8e01b576.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-09-24</p>
+  <p class="date">2026-09-28</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -259,9 +259,7 @@ Giuliano Colosimo
 <li class="fragment">Compare them with <strong>conditional logistic regression</strong></li>
 </ol>
 <div class="fragment">
-<div class="smaller">
 <p>Because the comparison is <em>within</em> a stratum, everything constant at that moment — time of day, season, the animal’s internal state, its identity — cancels out. That is a remarkably clean piece of control.</p>
-</div>
 </div>
 </section>
 <section id="conditional-logistic-regression" class="slide level2">
@@ -277,7 +275,9 @@ P(\text{step } j \text{ chosen}) =
 <li class="fragment">No intercept. Again, only <strong>relative</strong> statements</li>
 </ul>
 <div class="fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">fit_issf</span>(case_ <span class="sc">~</span> elevation_end <span class="sc">+</span> sl_ <span class="sc">+</span> <span class="fu">log</span>(sl_) <span class="sc">+</span> <span class="fu">strata</span>(step_id_), <span class="at">data =</span> d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">fit_issf</span>(case_ <span class="sc">~</span> elevation_end <span class="sc">+</span> sl_ <span class="sc">+</span> <span class="fu">log</span>(sl_) <span class="sc">+</span></span>
+<span id="cb1-2"><a></a>                 <span class="fu">strata</span>(step_id_),</span>
+<span id="cb1-3"><a></a>         <span class="at">data =</span> d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="quiz" class="slide level2">
@@ -330,7 +330,7 @@ P(\text{step } j \text{ chosen}) =
 <span id="cb2-3"><a></a>                 <span class="fu">strata</span>(step_id_), <span class="at">data =</span> d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="reading-the-movement-coefficients" class="slide level2 smaller">
+<section id="reading-the-movement-coefficients" class="slide level2">
 <h2>Reading the movement coefficients</h2>
 <p>If controls were drawn from a gamma with shape <span class="math inline">\(k\)</span> and scale <span class="math inline">\(\theta\)</span>:</p>
 <table class="caption-top">
@@ -370,8 +370,8 @@ P(\text{step } j \text{ chosen}) =
 <p>The real power is asking whether <strong>movement depends on habitat</strong>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>case_ <span class="sc">~</span> grassland_end <span class="sc">+</span></span>
 <span id="cb3-2"><a></a>        sl_ <span class="sc">+</span> <span class="fu">log</span>(sl_) <span class="sc">+</span> <span class="fu">cos</span>(ta_) <span class="sc">+</span></span>
-<span id="cb3-3"><a></a>        sl_<span class="sc">:</span>grassland_start <span class="sc">+</span>           <span class="co"># does it move faster in grassland?</span></span>
-<span id="cb3-4"><a></a>        <span class="fu">cos</span>(ta_)<span class="sc">:</span>grassland_start <span class="sc">+</span>      <span class="co"># more directionally?</span></span>
+<span id="cb3-3"><a></a>        sl_<span class="sc">:</span>grassland_start <span class="sc">+</span>        <span class="co"># faster in grassland?</span></span>
+<span id="cb3-4"><a></a>        <span class="fu">cos</span>(ta_)<span class="sc">:</span>grassland_start <span class="sc">+</span>   <span class="co"># straighter?</span></span>
 <span id="cb3-5"><a></a>        <span class="fu">strata</span>(step_id_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li class="fragment"><code>_start</code> covariates modify the <strong>movement kernel</strong> — how the animal moves <em>from</em> that habitat</li>
@@ -401,7 +401,7 @@ P(\text{step } j \text{ chosen}) =
 <h1>3 · Doing it well</h1>
 
 </section>
-<section id="practical-decisions" class="slide level2 smaller">
+<section id="practical-decisions" class="slide level2">
 <h2>Practical decisions</h2>
 <ul>
 <li class="fragment"><strong>How many control steps?</strong> 10 is a common default; check that coefficients stabilise as you increase it, exactly as for RSF availability</li>
@@ -446,7 +446,7 @@ P(\text{step } j \text{ chosen}) =
 </div>
 </div>
 </section>
-<section id="rsf-or-ssf" class="slide level2 smaller">
+<section id="rsf-or-ssf" class="slide level2">
 <h2>RSF or SSF?</h2>
 <table class="caption-top">
 <colgroup>
@@ -560,11 +560,9 @@ P(\text{step } j \text{ chosen}) =
 <section id="section" class="slide level2 center">
 <h2></h2>
 <h3 id="thank-you">Thank you</h3>
-<div class="smalltext">
 <p><a href="mailto:giuliano.colosimo@uniroma2.it">giuliano.colosimo@uniroma2.it</a></p>
 <p>All material: <a href="https://github.com/GiulianoColosimo/animtrack-2627">github.com/GiulianoColosimo/animtrack-2627</a></p>
 <p>Go and track something.</p>
-</div>
 
 
 </section></section>

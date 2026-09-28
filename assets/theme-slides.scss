@@ -2,13 +2,13 @@
 @import 'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap';
 
 $font-family-sans-serif: "Atkinson Hyperlegible", system-ui, sans-serif;
-$presentation-font-size-root: 30px;
+$presentation-font-size-root: 26px;   // ONE size for all slide body text
 $body-bg:            #fbfcfc;
 $body-color:         #22272b;
 $link-color:         #1f6f78;
 $presentation-heading-color: #14525a;
 $presentation-heading-font-weight: 700;
-$code-block-font-size: 0.62em;
+$code-block-font-size: 0.85em;        // ONE size for every code block in every deck
 
 /*-- scss:rules --*/
 .reveal .slide-number { font-size: 0.5em; }
@@ -27,13 +27,85 @@ $code-block-font-size: 0.62em;
   background: rgba(31, 111, 120, 0.07);
   border-radius: 6px;
   padding: 0.6em 0.9em;
-  font-size: 0.9em;
+  font-size: 1em;
 }
 .reveal .keyidea { border-left-color: #b8860b; background: rgba(184, 134, 11, 0.09); }
 
 /* Two-column helper already provided by Quarto (.columns/.column) */
-.reveal .smalltext { font-size: 0.75em; }
-.reveal .tinytext  { font-size: 0.62em; }
 
-/* Source credit under figures */
-.reveal .source { font-size: 0.55em; opacity: 0.7; font-style: italic; }
+/* ---------------------------------------------------------------
+   ONE character size across every slide.
+
+   Quarto's built-in `{.smaller}` and the old .smalltext/.tinytext
+   helpers are deliberately neutralised: a deck where some slides
+   shrink to fit is harder to read from the back of the room than a
+   deck with fewer words on each slide. If a slide overflows, split
+   it — do not shrink it.
+----------------------------------------------------------------*/
+.reveal .smaller,
+.reveal .smaller h1, .reveal .smaller h2,
+.reveal .smaller h3, .reveal .smaller h4,
+.reveal .smalltext,
+.reveal .tinytext,
+.reveal .source { font-size: inherit; }
+
+.reveal .source { opacity: 0.7; font-style: italic; }
+
+/* Tables: same character size, tighter cells so they still fit */
+.reveal table { font-size: 1em; }
+.reveal table th, .reveal table td { padding: 0.25em 0.5em; line-height: 1.25; }
+
+/* ---------------------------------------------------------------
+   Every piece of BODY text renders at exactly one size.
+
+   Quarto and reveal.js ship their own smaller defaults for captions
+   (0.7em), inline code (0.875em) and the title-slide affiliation,
+   with selectors more specific than anything reasonable here — hence
+   !important. Headings keep their hierarchy; only body text is
+   normalised.
+----------------------------------------------------------------*/
+.reveal figcaption,
+.reveal .figure-caption,
+.reveal .slides p.caption,
+.reveal .slides caption,
+.reveal .slides .caption,
+.reveal .slides figcaption * ,
+.reveal .slides p.caption * {
+  font-size: 1em !important;
+  opacity: 0.8;
+  line-height: 1.25;
+}
+
+.reveal .quarto-title-block .quarto-title-authors .quarto-title-author
+  .quarto-title-affiliation,
+.reveal .quarto-title-affiliation { font-size: 1em !important; }
+
+/* Quarto callouts on slides default to 0.7em — bring them to body size */
+.reveal .slides .callout,
+.reveal .slides .callout-body,
+.reveal .slides .callout-content,
+.reveal .slides .callout-content p,
+.reveal .slides .callout-title,
+.reveal .slides .callout-caption { font-size: 1em !important; }
+
+/* Code inside a heading matches that heading, not the body */
+.reveal .slides h1 code,
+.reveal .slides h2 code,
+.reveal .slides h3 code,
+.reveal .slides h4 code { font-size: 1em !important; }
+
+/* Inline code sits inside sentences — same size as the words around it */
+.reveal .slides p code,
+.reveal .slides li code,
+.reveal .slides td code,
+.reveal .slides th code,
+.reveal .slides a code { font-size: 1em !important; }
+
+/* ---------------------------------------------------------------
+   Images can never push a slide past the 760px canvas.
+   The deck is 1280x760; a heading plus a caption needs ~200px, so
+   cap the picture itself. Widths given in the .qmd (e.g. 72%) still
+   apply — this only stops a tall image from overflowing.
+----------------------------------------------------------------*/
+.reveal .slides img { max-height: 430px; height: auto; object-fit: contain; }
+.reveal .slides .columns img { max-height: 400px; }

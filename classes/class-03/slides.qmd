@@ -65,10 +65,8 @@ buff <- movebank_download_study(
 
 . . .
 
-::: {.smalltext}
 Today we read the CSVs from `data/` instead — no accounts, no network, and
 everyone gets identical results. But this is how you get your own data.
-:::
 
 ---
 
@@ -126,10 +124,8 @@ trk <- make_track(buffalo, x, y, t, id = id, crs = 4326) |>
 
 . . .
 
-::: {.smalltext}
 The trailing underscores (`x_`, `y_`, `t_`) are `amt`'s way of guaranteeing
 its own columns never collide with yours.
-:::
 
 # 2 · Cleaning {background-color="#14525a"}
 
@@ -252,8 +248,7 @@ trk |> summarize_sampling_rate_many(cols = "id", time_unit = "hour")
 
 ---
 
-## What our buffalo actually look like {.smaller}
-
+## What our buffalo actually look like
 | id | min | q1 | median | mean | q3 | max | n |
 |:--|--:|--:|--:|--:|--:|--:|--:|
 | Queen | 0.03 | 1 | 1 | 2.45 | 1 | 2523 | 4544 |
@@ -307,22 +302,23 @@ trk |>
 trk |> group_by(id) |> track_resample(rate = hours(1))
 ```
 
-::: {.smaller}
 | id | fixes before | grouped (wrong) | per animal (right) |
 |:--|--:|--:|--:|
 | Cilla | 3528 | 2731 | 3518 |
 | Mvubu | 2572 | **166** | 2544 |
 | Queen | 4545 | 1741 | 4354 |
-:::
 
 . . .
 
 ```r
 # RIGHT — each animal gets its own grid
+resample_one <- function(d) {
+  track_resample(d, rate = hours(1), tolerance = minutes(10))
+}
+
 trk |>
   nest(data = -id) |>
-  mutate(data = lapply(data, \(d) track_resample(d, rate = hours(1),
-                                                 tolerance = minutes(10)))) |>
+  mutate(data = lapply(data, resample_one)) |>
   unnest(cols = data)
 ```
 

@@ -75,11 +75,9 @@ For each observed step:
 
 . . .
 
-::: {.smaller}
 Because the comparison is *within* a stratum, everything constant at that
 moment — time of day, season, the animal's internal state, its identity —
 cancels out. That is a remarkably clean piece of control.
-:::
 
 ---
 
@@ -102,7 +100,9 @@ $$
 . . .
 
 ```r
-fit_issf(case_ ~ elevation_end + sl_ + log(sl_) + strata(step_id_), data = d)
+fit_issf(case_ ~ elevation_end + sl_ + log(sl_) +
+                 strata(step_id_),
+         data = d)
 ```
 
 ---
@@ -183,8 +183,7 @@ fit_issf(case_ ~ elevation_end + grassland_end +
 
 ---
 
-## Reading the movement coefficients {.smaller}
-
+## Reading the movement coefficients
 If controls were drawn from a gamma with shape $k$ and scale $\theta$:
 
 | Term | Effect on the realised kernel |
@@ -211,8 +210,8 @@ The real power is asking whether **movement depends on habitat**:
 ```r
 case_ ~ grassland_end +
         sl_ + log(sl_) + cos(ta_) +
-        sl_:grassland_start +           # does it move faster in grassland?
-        cos(ta_):grassland_start +      # more directionally?
+        sl_:grassland_start +        # faster in grassland?
+        cos(ta_):grassland_start +   # straighter?
         strata(step_id_)
 ```
 
@@ -255,8 +254,7 @@ exactly what iSSA buys you, and it is invisible to an RSF.
 
 ---
 
-## Practical decisions {.smaller}
-
+## Practical decisions
 ::: {.incremental}
 - **How many control steps?** 10 is a common default; check that coefficients
   stabilise as you increase it, exactly as for RSF availability
@@ -333,8 +331,7 @@ estimates were stable with respect to that choice.
 
 ---
 
-## RSF or SSF? {.smaller}
-
+## RSF or SSF?
 | | RSF | SSF / iSSA |
 |:--|:--|:--|
 | Availability | Whole domain, fixed | Local, moves with the animal |
@@ -424,10 +421,8 @@ run `fit_issf()`. Knowing what it cannot tell you is the skill.
 
 ### Thank you
 
-::: {.smalltext}
 [giuliano.colosimo@uniroma2.it](mailto:giuliano.colosimo@uniroma2.it)
 
 All material: [github.com/GiulianoColosimo/animtrack-2627](https://github.com/GiulianoColosimo/animtrack-2627)
 
 Go and track something.
-:::

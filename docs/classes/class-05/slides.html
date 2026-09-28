@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-09-24">
+  <meta name="dcterms.date" content="2026-09-28">
   <title>Animal Tracking – Remote sensing and environmental annotation</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -96,7 +96,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-4e003b5652001adc8283f5608f4dff7c.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-bbf851726720281c14c3e45d8e01b576.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-09-24</p>
+  <p class="date">2026-09-28</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -248,9 +248,7 @@ Giuliano Colosimo
 <li class="fragment">What you download is the result of a <strong>processing chain</strong>, and the level matters</li>
 </ul>
 <div class="fragment">
-<div class="smaller">
 <p><strong>Level 1</strong> — top of atmosphere radiance/reflectance. <strong>Level 2</strong> — surface reflectance, atmospherically corrected. <em>Start here.</em> <strong>Level 3+</strong> — derived products: NDVI composites, land cover, LAI.</p>
-</div>
 </div>
 </section>
 <section id="why-vegetation-looks-the-way-it-does" class="slide level2">
@@ -276,9 +274,7 @@ Giuliano Colosimo
 <li class="fragment"><strong>LiDAR</strong> — emits laser pulses, measures return time. Gives <strong>3-D structure</strong>: canopy height, vertical complexity. GEDI (spaceborne), airborne for fine detail.</li>
 </ul>
 <div class="fragment">
-<div class="smaller">
 <p>For a forest animal, canopy height and vertical structure from LiDAR are often far more informative than NDVI — greenness saturates in dense forest, but structure does not.</p>
-</div>
 </div>
 </section></section>
 <section>
@@ -300,7 +296,7 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section id="the-missions-you-will-actually-use" class="slide level2 smaller">
+<section id="the-missions-you-will-actually-use" class="slide level2">
 <h2>The missions you will actually use</h2>
 <table class="caption-top">
 <colgroup>
@@ -413,7 +409,7 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section id="the-other-indices-worth-knowing" class="slide level2 smaller">
+<section id="the-other-indices-worth-knowing" class="slide level2">
 <h2>The other indices worth knowing</h2>
 <table class="caption-top">
 <colgroup>
@@ -495,9 +491,7 @@ Giuliano Colosimo
 <span id="cb1-7"><a></a>vals <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(ndvi_stack, <span class="fu">vect</span>(trk))[, <span class="sc">-</span><span class="dv">1</span>]</span>
 <span id="cb1-8"><a></a>trk<span class="sc">$</span>ndvi <span class="ot">&lt;-</span> vals[<span class="fu">cbind</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(vals)), idx)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="fragment">
-<div class="smalltext">
 <p><code>Movebank Env-DATA</code> does this for you, including interpolation in time, for dozens of products. Use it for real projects — but understand what it is doing first, which is what today’s exercise is for.</p>
-</div>
 </div>
 </section>
 <section id="scale-is-a-decision-not-a-detail" class="slide level2">
@@ -532,7 +526,7 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section id="common-failures" class="slide level2 smaller">
+<section id="common-failures" class="slide level2">
 <h2>Common failures</h2>
 <ul>
 <li class="fragment"><strong>CRS mismatch</strong> — or worse, passing a bare coordinate matrix (Class 2)</li>

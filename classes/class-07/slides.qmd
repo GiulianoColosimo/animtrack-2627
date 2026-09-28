@@ -60,8 +60,7 @@ disagreements about availability.
 
 ---
 
-## Johnson's four orders (1980) {.smaller}
-
+## Johnson's four orders (1980)
 | Order | Question | Available = |
 |:--|:--|:--|
 | **1st** | Where is the species' range? | The planet |
@@ -206,10 +205,8 @@ Selection is not a fixed property of an animal.
 
 . . .
 
-::: {.smaller}
 Practical consequence: report the availability each individual faced, and
 consider modelling $\beta$ as a function of it.
-:::
 
 ---
 
@@ -264,10 +261,8 @@ fit <- glm(case_ ~ elevation + slope + grassland + trees,
 
 . . .
 
-::: {.smalltext}
 `random_points()` on a track defaults to the MCP of that track — a third-order
 analysis. Pass an `hr` object to control the domain explicitly.
-:::
 
 ---
 
@@ -305,10 +300,8 @@ animal with most fixes dominates.
 
 . . .
 
-::: {.smaller}
 For 6 buffalo, the two-stage approach is honest and adequate. For 60, use a
 mixed model.
-:::
 
 ---
 

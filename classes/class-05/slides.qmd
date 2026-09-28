@@ -60,11 +60,9 @@ A tracking dataset on its own tells you *where*. Remote sensing tells you
 
 . . .
 
-::: {.smaller}
 **Level 1** — top of atmosphere radiance/reflectance.
 **Level 2** — surface reflectance, atmospherically corrected. *Start here.*
 **Level 3+** — derived products: NDVI composites, land cover, LAI.
-:::
 
 ---
 
@@ -104,11 +102,9 @@ published.
 
 . . .
 
-::: {.smaller}
 For a forest animal, canopy height and vertical structure from LiDAR are often
 far more informative than NDVI — greenness saturates in dense forest, but
 structure does not.
-:::
 
 # 2 · The four resolutions {background-color="#14525a"}
 
@@ -136,8 +132,7 @@ which means a narrower swath and a longer revisit.
 
 ---
 
-## The missions you will actually use {.smaller}
-
+## The missions you will actually use
 | Mission | Spatial | Temporal | Since | Good for |
 |:--|:--|:--|:--|:--|
 | **MODIS** (Terra/Aqua) | 250–500 m | Daily | 2000 | Long consistent NDVI series |
@@ -208,8 +203,7 @@ biomass. In rainforest it is nearly flat and nearly useless.
 
 ---
 
-## The other indices worth knowing {.smaller}
-
+## The other indices worth knowing
 | Index | Formula | Use |
 |:--|:--|:--|
 | **EVI** | $2.5\frac{\text{NIR}-\text{Red}}{\text{NIR}+6\text{Red}-7.5\text{Blue}+1}$ | Like NDVI but resists saturation and soil background |
@@ -277,11 +271,9 @@ trk$ndvi <- vals[cbind(seq_len(nrow(vals)), idx)]
 
 . . .
 
-::: {.smalltext}
 `Movebank Env-DATA` does this for you, including interpolation in time, for
 dozens of products. Use it for real projects — but understand what it is doing
 first, which is what today's exercise is for.
-:::
 
 ---
 
@@ -337,8 +329,7 @@ Fix: use a time series and match each fix to the contemporaneous layer.
 
 ---
 
-## Common failures {.smaller}
-
+## Common failures
 ::: {.incremental}
 - **CRS mismatch** — or worse, passing a bare coordinate matrix (Class 2)
 - **Cloud contamination** — an uncomposited optical image over the tropics is

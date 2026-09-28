@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-09-24">
+  <meta name="dcterms.date" content="2026-09-28">
   <title>Animal Tracking – Tracking data in R</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -96,7 +96,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-4e003b5652001adc8283f5608f4dff7c.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-bbf851726720281c14c3e45d8e01b576.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-09-24</p>
+  <p class="date">2026-09-28</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -256,9 +256,7 @@ Giuliano Colosimo
 <span id="cb1-12"><a></a>  <span class="at">sensor_type_id =</span> <span class="st">"gps"</span></span>
 <span id="cb1-13"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="fragment">
-<div class="smalltext">
 <p>Today we read the CSVs from <code>data/</code> instead — no accounts, no network, and everyone gets identical results. But this is how you get your own data.</p>
-</div>
 </div>
 </section>
 <section id="two-object-models" class="slide level2">
@@ -302,9 +300,7 @@ Giuliano Colosimo
 <span id="cb2-16"><a></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="fragment">
-<div class="smalltext">
 <p>The trailing underscores (<code>x_</code>, <code>y_</code>, <code>t_</code>) are <code>amt</code>’s way of guaranteeing its own columns never collide with yours.</p>
-</div>
 </div>
 </section></section>
 <section>
@@ -389,7 +385,7 @@ Giuliano Colosimo
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>trk <span class="sc">|&gt;</span> <span class="fu">summarize_sampling_rate_many</span>(<span class="at">cols =</span> <span class="st">"id"</span>, <span class="at">time_unit =</span> <span class="st">"hour"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="what-our-buffalo-actually-look-like" class="slide level2 smaller">
+<section id="what-our-buffalo-actually-look-like" class="slide level2">
 <h2>What our buffalo actually look like</h2>
 <table class="caption-top">
 <thead>
@@ -468,7 +464,6 @@ Giuliano Colosimo
 <h2>The trap: <code>track_resample()</code> ignores <code>group_by()</code></h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># WRONG — one time grid laid across six interleaved animals</span></span>
 <span id="cb6-2"><a></a>trk <span class="sc">|&gt;</span> <span class="fu">group_by</span>(id) <span class="sc">|&gt;</span> <span class="fu">track_resample</span>(<span class="at">rate =</span> <span class="fu">hours</span>(<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="smaller">
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -499,14 +494,16 @@ Giuliano Colosimo
 </tr>
 </tbody>
 </table>
-</div>
 <div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co"># RIGHT — each animal gets its own grid</span></span>
-<span id="cb7-2"><a></a>trk <span class="sc">|&gt;</span></span>
-<span id="cb7-3"><a></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>id) <span class="sc">|&gt;</span></span>
-<span id="cb7-4"><a></a>  <span class="fu">mutate</span>(<span class="at">data =</span> <span class="fu">lapply</span>(data, \(d) <span class="fu">track_resample</span>(d, <span class="at">rate =</span> <span class="fu">hours</span>(<span class="dv">1</span>),</span>
-<span id="cb7-5"><a></a>                                                 <span class="at">tolerance =</span> <span class="fu">minutes</span>(<span class="dv">10</span>)))) <span class="sc">|&gt;</span></span>
-<span id="cb7-6"><a></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-2"><a></a>resample_one <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
+<span id="cb7-3"><a></a>  <span class="fu">track_resample</span>(d, <span class="at">rate =</span> <span class="fu">hours</span>(<span class="dv">1</span>), <span class="at">tolerance =</span> <span class="fu">minutes</span>(<span class="dv">10</span>))</span>
+<span id="cb7-4"><a></a>}</span>
+<span id="cb7-5"><a></a></span>
+<span id="cb7-6"><a></a>trk <span class="sc">|&gt;</span></span>
+<span id="cb7-7"><a></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>id) <span class="sc">|&gt;</span></span>
+<span id="cb7-8"><a></a>  <span class="fu">mutate</span>(<span class="at">data =</span> <span class="fu">lapply</span>(data, resample_one)) <span class="sc">|&gt;</span></span>
+<span id="cb7-9"><a></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="keyidea">
 <p>No error, no warning — just 58% of your data gone. <strong>Not every function respects <code>dplyr</code> grouping.</strong> When a step removes far more than you expected, check the per-group counts before you accept it.</p>
 </div>

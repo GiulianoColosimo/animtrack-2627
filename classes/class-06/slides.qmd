@@ -89,16 +89,13 @@ HMM, EMbC, state-space models.
 
 . . .
 
-::: {.smalltext}
 "Migration started on 14 September" is a change-point question. "Was this step
 foraging or travelling?" is a state question. Choose the tool that matches the
 question.
-:::
 
 ---
 
-## The families {.smaller}
-
+## The families
 | Approach | Idea | Notes |
 |:--|:--|:--|
 | **Thresholding** | "Speed > 2 m/s = travelling" | Transparent; arbitrary; no uncertainty |
@@ -177,9 +174,7 @@ A clustering method looks at each step in isolation. An HMM knows that
 fitHMM(data, nbStates = 2, formula = ~ ndvi + cosinor(hour, period = 24))
 ```
 
-::: {.smalltext}
 That formula is the bridge between Class 5 and this one.
-:::
 
 ---
 
@@ -275,10 +270,8 @@ and "travelling".
 
 . . .
 
-::: {.smaller}
 State the evidence for your labels, or call them "state 1" and "state 2" and
 describe them by their parameters.
-:::
 
 ---
 

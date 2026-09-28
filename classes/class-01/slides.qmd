@@ -21,8 +21,7 @@ format:
     highlight-style: github
 ---
 
-## Where we are going {.smaller}
-
+## Where we are going
 ::: {.objectives}
 **By the end of today you will be able to**
 
@@ -96,10 +95,8 @@ respond to a changing landscape.
 
 ![Trend of "movement-related" package downloads from CRAN](../../assets/figures/cran_movement_packages.jpg){width="72%" fig-align="center"}
 
-::: {.smalltext}
 The constraint has moved. It used to be *getting* locations. It is now
 *knowing what to do with them*.
-:::
 
 ---
 
@@ -162,8 +159,7 @@ linked: a distribution is what you get when you integrate movement over time.
 
 ---
 
-## Vocabulary — get this right now {.smaller}
-
+## Vocabulary — get this right now
 | Term | Meaning |
 |:--|:--|
 | **Fix** (or *relocation*) | One estimated location **with a timestamp**. The atom of everything. |
@@ -215,7 +211,6 @@ themselves an ecological signal.
 
 ## The toolbox, from cheapest to most expensive
 
-::: {.smaller}
 | | Method | Locations? | Typical cost |
 |:--|:--|:--|:--|
 | 🏷️ | Marks & recapture | Two points, maybe | € |
@@ -226,7 +221,6 @@ themselves an ecological signal.
 | 💡 | Light-level geolocators | ~100–200 km | €€ |
 | 📈 | Accelerometers / IMU | No — *behaviour* | €€ |
 | 🔊 | Acoustic telemetry | Receiver range | €€€ |
-:::
 
 . . .
 
@@ -249,11 +243,9 @@ decides for you.
 :::
 :::
 
-::: {.smalltext}
 Marks give you **recaptures**, not tracks — two or more points separated by a
 long, unobserved interval. Cheap, long-lasting, and still the backbone of
 demographic work.
-:::
 
 ---
 
@@ -263,17 +255,13 @@ demographic work.
 ::: {.column width="46%"}
 ![Toe-clipping combinations (Waichman 1992)](../../assets/figures/toe_clipping.jpg){width="100%"}
 
-::: {.tinytext}
 Effective, permanent — and now ethically contested. Increasingly replaced.
-:::
 :::
 ::: {.column width="54%"}
 ![*Bombina* spot patterns are unique](../../assets/figures/morpho_pattern.jpg){width="100%"}
 
-::: {.tinytext}
 Natural markings cost the animal nothing. Photo-ID software now does the
 matching at scale.
-:::
 :::
 :::
 
@@ -292,10 +280,8 @@ capture–recapture dataset — for whale sharks, giraffes, newts, iguanas.
 
 ![Species and locations where genetic tagging has delivered demographic insight (after Lamb et al. 2019)](../../assets/figures/genetic_tagging.jpg){width="66%" fig-align="center"}
 
-::: {.smalltext}
 Hair snags, scats, feathers: the animal is never handled. Biased towards
 mid-to-large mobile mammals, because that is where the money and the conflict are.
-:::
 
 ---
 
@@ -310,11 +296,9 @@ mid-to-large mobile mammals, because that is where the money and the conflict ar
 :::
 :::
 
-::: {.smalltext}
 The tag emits a pulse; **you** find it. A location comes from *homing in* or
 from **triangulation** of ≥2 bearings. Tags go down to **0.2 g** — nothing
 else reaches insects and the smallest bats.
-:::
 
 ---
 
@@ -353,8 +337,7 @@ data"**.
 
 ---
 
-## GPS in practice, on an animal {.smaller}
-
+## GPS in practice, on an animal
 ::: {.columns}
 ::: {.column width="55%"}
 **What you get**
@@ -398,8 +381,7 @@ question most first projects get wrong.
 
 ---
 
-## Argos, geolocators, and the aquatic world {.smaller}
-
+## Argos, geolocators, and the aquatic world
 ::: {.columns}
 ::: {.column width="33%"}
 ### Argos
@@ -481,8 +463,7 @@ detail, it is the study.
 
 ---
 
-## Choosing: the trade-off table {.smaller}
-
+## Choosing: the trade-off table
 | | Accuracy | Min. mass | Data return | Temporal coverage |
 |:--|:--|:--|:--|:--|
 | Marks / PIT | Point of capture | ~0.1 g | On recapture | Sparse |
@@ -604,10 +585,8 @@ collars in each habitat type, and model fix success explicitly.
 
 . . .
 
-::: {.smalltext}
 Keep the DOP / satellite-count columns. They are your evidence about which
 fixes to distrust. We use them in Class 3.
-:::
 
 ---
 
@@ -724,8 +703,6 @@ latitude as if they were plane coordinates. Fixing that is Class 2.
 
 ### Questions?
 
-::: {.smalltext}
 [giuliano.colosimo@uniroma2.it](mailto:giuliano.colosimo@uniroma2.it)
 
 Slides, code and data: [github.com/GiulianoColosimo/animtrack-2627](https://github.com/GiulianoColosimo/animtrack-2627)
-:::

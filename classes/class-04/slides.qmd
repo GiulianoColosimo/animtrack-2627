@@ -59,10 +59,8 @@ A turning angle needs **three** fixes. A step needs two. That is why
 
 . . .
 
-::: {.smalltext}
 Turning angles are **circular** data: −179° and +179° are 2° apart, not 358°.
 Never take an arithmetic mean of angles.
-:::
 
 ---
 
@@ -107,10 +105,8 @@ diagnostic:
 
 . . .
 
-::: {.smalltext}
 Fitting these shapes as competing non-linear models (Bunnefeld et al. 2011) is
 a cheap and surprisingly effective way to classify movement strategies.
-:::
 
 ---
 
@@ -185,11 +181,9 @@ the BCRW, the workhorse null model for animals with both memory and a goal.
 
 . . .
 
-::: {.smalltext}
 Class 8's integrated step selection analysis is, in effect, a biased
 correlated random walk whose bias is estimated from environmental covariates.
 Keep that connection in mind.
-:::
 
 # 3 · Home range {background-color="#14525a"}
 
@@ -245,9 +239,7 @@ The smallest convex polygon containing $x$% of the fixes.
 
 . . .
 
-::: {.smalltext}
 Use it for comparability with old studies. Do not use it as your only estimate.
-:::
 
 ---
 
@@ -352,8 +344,7 @@ population did not change, your method did.
 
 ---
 
-## Choosing an estimator {.smaller}
-
+## Choosing an estimator
 | | Use when | Watch out for |
 |:--|:--|:--|
 | **MCP** | Comparing to historical literature | Convexity, outliers, no asymptote |

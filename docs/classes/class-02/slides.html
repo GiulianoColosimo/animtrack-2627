@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-09-24">
+  <meta name="dcterms.date" content="2026-09-28">
   <title>Animal Tracking – Spatial data in R</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -96,7 +96,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-4e003b5652001adc8283f5608f4dff7c.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-bbf851726720281c14c3e45d8e01b576.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-09-24</p>
+  <p class="date">2026-09-28</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -270,7 +270,6 @@ Giuliano Colosimo
 </section>
 <section id="choosing-the-model" class="slide level2">
 <h2>Choosing the model</h2>
-<div class="smaller">
 <table class="caption-top">
 <colgroup>
 <col style="width: 50%">
@@ -305,7 +304,6 @@ Giuliano Colosimo
 </tr>
 </tbody>
 </table>
-</div>
 <div class="fragment">
 <p>The same reality can be either. A river is a <strong>line</strong> if you care about its course, and a <strong>distance-to-river raster</strong> if you care about how far the animal is from it. Choose by the operation you need, not by what the thing “is”.</p>
 </div>
@@ -330,9 +328,7 @@ Giuliano Colosimo
 <section id="geographic-coordinates" class="slide level2">
 <h2>Geographic coordinates</h2>
 
-<img data-src="../../assets/figures/geographic_coordinates.jpg" style="width:55.0%" class="r-stretch quarto-figure-center"><p class="caption">Longitude and latitude are <em>angles</em>, not distances</p><div class="smaller">
-<p>Latitude: angle north/south of the equator. Longitude: angle east/west of Greenwich. Units are <strong>degrees</strong>. This is what every GPS and every Movebank file gives you — usually <strong>WGS84, EPSG:4326</strong>.</p>
-</div>
+<img data-src="../../assets/figures/geographic_coordinates.jpg" style="width:55.0%" class="r-stretch quarto-figure-center"><p class="caption">Longitude and latitude are <em>angles</em>, not distances</p><p>Latitude: angle north/south of the equator. Longitude: angle east/west of Greenwich. Units are <strong>degrees</strong>. This is what every GPS and every Movebank file gives you — usually <strong>WGS84, EPSG:4326</strong>.</p>
 </section>
 <section id="why-you-cannot-do-arithmetic-with-degrees" class="slide level2">
 <h2>Why you cannot do arithmetic with degrees</h2>
@@ -357,9 +353,7 @@ Giuliano Colosimo
 <section id="projected-coordinates" class="slide level2">
 <h2>Projected coordinates</h2>
 
-<img data-src="../../assets/figures/projected_coordinates.jpg" style="width:62.0%" class="r-stretch quarto-figure-center"><p class="caption">Every projection preserves some properties and destroys others</p><div class="smaller">
-<p><strong>Conformal</strong> keeps angles/shape (Mercator, UTM). <strong>Equal-area</strong> keeps area (Albers, Mollweide). <strong>Equidistant</strong> keeps distances from a point. <em>No projection keeps everything.</em></p>
-</div>
+<img data-src="../../assets/figures/projected_coordinates.jpg" style="width:62.0%" class="r-stretch quarto-figure-center"><p class="caption">Every projection preserves some properties and destroys others</p><p><strong>Conformal</strong> keeps angles/shape (Mercator, UTM). <strong>Equal-area</strong> keeps area (Albers, Mollweide). <strong>Equidistant</strong> keeps distances from a point. <em>No projection keeps everything.</em></p>
 </section>
 <section id="utm-the-practical-default" class="slide level2">
 <h2>UTM: the practical default</h2>
@@ -378,7 +372,6 @@ Giuliano Colosimo
 </section>
 <section id="epsg-codes-the-vocabulary-you-need" class="slide level2">
 <h2>EPSG codes — the vocabulary you need</h2>
-<div class="smaller">
 <table class="caption-top">
 <colgroup>
 <col style="width: 33%">
@@ -425,7 +418,6 @@ Giuliano Colosimo
 </tr>
 </tbody>
 </table>
-</div>
 <div class="fragment">
 <div class="callout callout-warning callout-style-simple">
 <div class="callout-body">
@@ -511,12 +503,10 @@ Geodetic CRS:  WGS 84
 </div>
 </div>
 <div class="fragment">
-<div class="smalltext">
 <p>Note the geometry column survives <code>select()</code> without being named — it is “sticky”. Use <code>st_drop_geometry()</code> when you genuinely want a plain data frame.</p>
 </div>
-</div>
 </section>
-<section id="the-functions-you-will-actually-use" class="slide level2 smaller">
+<section id="the-functions-you-will-actually-use" class="slide level2">
 <h2>The functions you will actually use</h2>
 <table class="caption-top">
 <thead>
@@ -630,7 +620,7 @@ max value   :    24</code></pre>
 </div>
 </div>
 </section>
-<section id="what-defines-a-raster" class="slide level2 smaller">
+<section id="what-defines-a-raster" class="slide level2">
 <h2>What defines a raster</h2>
 <ul>
 <li class="fragment"><strong>Extent</strong> — xmin, xmax, ymin, ymax</li>
@@ -643,7 +633,7 @@ max value   :    24</code></pre>
 <p>A multi-layer raster (<code>SpatRaster</code> with several layers) is how you store a <strong>time series</strong>: one NDVI layer per 16-day composite, stacked. That is exactly what we need in Class 5.</p>
 </div>
 </section>
-<section id="the-terra-functions-you-will-use" class="slide level2 smaller">
+<section id="the-terra-functions-you-will-use" class="slide level2">
 <h2>The <code>terra</code> functions you will use</h2>
 <table class="caption-top">
 <thead>

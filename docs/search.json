@@ -1251,7 +1251,7 @@
     "href": "classes/class-01/slides.html#the-data-deluge",
     "title": "Movement, and how we track animals",
     "section": "The data deluge",
-    "text": "The data deluge\n\nTrend of “movement-related” package downloads from CRAN\nThe constraint has moved. It used to be getting locations. It is now knowing what to do with them.",
+    "text": "The data deluge\n\nTrend of “movement-related” package downloads from CRANThe constraint has moved. It used to be getting locations. It is now knowing what to do with them.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1316,7 +1316,7 @@
     "href": "classes/class-01/slides.html#the-toolbox-from-cheapest-to-most-expensive",
     "title": "Movement, and how we track animals",
     "section": "The toolbox, from cheapest to most expensive",
-    "text": "The toolbox, from cheapest to most expensive\n\n\n\n\n\nMethod\nLocations?\nTypical cost\n\n\n\n\n🏷️\nMarks & recapture\nTwo points, maybe\n€\n\n\n📻\nVHF radio-telemetry\nHuman-limited\n€€\n\n\n🛰️\nArgos (Doppler)\n250 m – 10 km\n€€€\n\n\n📡\nGPS store-on-board\n5–30 m\n€€€\n\n\n📱\nGPS + GSM / Iridium\n5–30 m, live\n€€€€\n\n\n💡\nLight-level geolocators\n~100–200 km\n€€\n\n\n📈\nAccelerometers / IMU\nNo — behaviour\n€€\n\n\n🔊\nAcoustic telemetry\nReceiver range\n€€€\n\n\n\n\n\n\nThere is no best technology. There is only the best technology for this animal, this question, and this budget — and the animal’s body mass usually decides for you.",
+    "text": "The toolbox, from cheapest to most expensive\n\n\n\n\nMethod\nLocations?\nTypical cost\n\n\n\n\n🏷️\nMarks & recapture\nTwo points, maybe\n€\n\n\n📻\nVHF radio-telemetry\nHuman-limited\n€€\n\n\n🛰️\nArgos (Doppler)\n250 m – 10 km\n€€€\n\n\n📡\nGPS store-on-board\n5–30 m\n€€€\n\n\n📱\nGPS + GSM / Iridium\n5–30 m, live\n€€€€\n\n\n💡\nLight-level geolocators\n~100–200 km\n€€\n\n\n📈\nAccelerometers / IMU\nNo — behaviour\n€€\n\n\n🔊\nAcoustic telemetry\nReceiver range\n€€€\n\n\n\n\n\nThere is no best technology. There is only the best technology for this animal, this question, and this budget — and the animal’s body mass usually decides for you.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1329,7 +1329,7 @@
     "href": "classes/class-01/slides.html#marking-individuals-the-cheap-and-enduring-methods",
     "title": "Movement, and how we track animals",
     "section": "Marking individuals: the cheap and enduring methods",
-    "text": "Marking individuals: the cheap and enduring methods\n\n\n\n\n\nCyclura carinata with coloured bead tags\n\n\n\n\n\n\nA Passive Integrated Transponder (PIT)\n\n\n\n\nMarks give you recaptures, not tracks — two or more points separated by a long, unobserved interval. Cheap, long-lasting, and still the backbone of demographic work.",
+    "text": "Marking individuals: the cheap and enduring methods\n\n\n\n\n\nCyclura carinata with coloured bead tags\n\n\n\n\n\n\nA Passive Integrated Transponder (PIT)\n\n\n\nMarks give you recaptures, not tracks — two or more points separated by a long, unobserved interval. Cheap, long-lasting, and still the backbone of demographic work.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1342,7 +1342,7 @@
     "href": "classes/class-01/slides.html#marking-from-mutilation-to-photographs",
     "title": "Movement, and how we track animals",
     "section": "Marking: from mutilation to photographs",
-    "text": "Marking: from mutilation to photographs\n\n\n\n\n\nToe-clipping combinations (Waichman 1992)\n\n\n\nEffective, permanent — and now ethically contested. Increasingly replaced.\n\n\n\n\n\nBombina spot patterns are unique\n\n\n\nNatural markings cost the animal nothing. Photo-ID software now does the matching at scale.",
+    "text": "Marking: from mutilation to photographs\n\n\n\n\n\nToe-clipping combinations (Waichman 1992)\n\n\nEffective, permanent — and now ethically contested. Increasingly replaced.\n\n\n\n\nBombina spot patterns are unique\n\n\nNatural markings cost the animal nothing. Photo-ID software now does the matching at scale.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1368,7 +1368,7 @@
     "href": "classes/class-01/slides.html#genetic-tagging",
     "title": "Movement, and how we track animals",
     "section": "Genetic tagging",
-    "text": "Genetic tagging\n\nSpecies and locations where genetic tagging has delivered demographic insight (after Lamb et al. 2019)\nHair snags, scats, feathers: the animal is never handled. Biased towards mid-to-large mobile mammals, because that is where the money and the conflict are.",
+    "text": "Genetic tagging\n\nSpecies and locations where genetic tagging has delivered demographic insight (after Lamb et al. 2019)Hair snags, scats, feathers: the animal is never handled. Biased towards mid-to-large mobile mammals, because that is where the money and the conflict are.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1381,7 +1381,7 @@
     "href": "classes/class-01/slides.html#vhf-radio-telemetry",
     "title": "Movement, and how we track animals",
     "section": "VHF radio-telemetry",
-    "text": "VHF radio-telemetry\n\n\n\n\n\nImplanted transmitter, Chilabothrus chrysogaster\n\n\n\n\n\n\nTracking on foot with a Yagi antenna\n\n\n\n\nThe tag emits a pulse; you find it. A location comes from homing in or from triangulation of ≥2 bearings. Tags go down to 0.2 g — nothing else reaches insects and the smallest bats.",
+    "text": "VHF radio-telemetry\n\n\n\n\n\nImplanted transmitter, Chilabothrus chrysogaster\n\n\n\n\n\n\nTracking on foot with a Yagi antenna\n\n\n\nThe tag emits a pulse; you find it. A location comes from homing in or from triangulation of ≥2 bearings. Tags go down to 0.2 g — nothing else reaches insects and the smallest bats.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1550,7 +1550,7 @@
     "href": "classes/class-01/slides.html#bias-2-location-error-is-structured",
     "title": "Movement, and how we track animals",
     "section": "Bias 2 — Location error is structured",
-    "text": "Bias 2 — Location error is structured\n\nError is not independent white noise: it is correlated in time and correlated with habitat\nA bad fix can place an animal hundreds of metres away, producing an implausible step out and an implausible step back — a spike\nNaïvely, that spike inflates your speed distribution and your home range\nFiltering on speed is the standard fix, but a threshold that is too aggressive deletes real fast movement\n\n\n\nKeep the DOP / satellite-count columns. They are your evidence about which fixes to distrust. We use them in Class 3.",
+    "text": "Bias 2 — Location error is structured\n\nError is not independent white noise: it is correlated in time and correlated with habitat\nA bad fix can place an animal hundreds of metres away, producing an implausible step out and an implausible step back — a spike\nNaïvely, that spike inflates your speed distribution and your home range\nFiltering on speed is the standard fix, but a threshold that is too aggressive deletes real fast movement\n\n\nKeep the DOP / satellite-count columns. They are your evidence about which fixes to distrust. We use them in Class 3.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1628,7 +1628,7 @@
     "href": "classes/class-01/slides.html#section",
     "title": "Movement, and how we track animals",
     "section": "",
-    "text": "Questions?\n\ngiuliano.colosimo@uniroma2.it\nSlides, code and data: github.com/GiulianoColosimo/animtrack-2627",
+    "text": "Questions?\ngiuliano.colosimo@uniroma2.it\nSlides, code and data: github.com/GiulianoColosimo/animtrack-2627",
     "crumbs": [
       "Home",
       "Classes",
@@ -1667,7 +1667,7 @@
     "href": "classes/class-02/slides.html#choosing-the-model",
     "title": "Spatial data in R",
     "section": "Choosing the model",
-    "text": "Choosing the model\n\n\n\n\n\n\n\n\nQuestion\nModel\n\n\n\n\nWhere exactly was the animal at 08:00?\nVector (point)\n\n\nWhat is the NDVI there?\nRaster, sampled at that point\n\n\nWhat is the park boundary?\nVector (polygon)\n\n\nHow far is the nearest river?\nRaster (a distance surface) or vector + distance computation\n\n\nHow much forest within 500 m?\nRaster, summarised in a buffer\n\n\n\n\n\nThe same reality can be either. A river is a line if you care about its course, and a distance-to-river raster if you care about how far the animal is from it. Choose by the operation you need, not by what the thing “is”.",
+    "text": "Choosing the model\n\n\n\n\n\n\n\nQuestion\nModel\n\n\n\n\nWhere exactly was the animal at 08:00?\nVector (point)\n\n\nWhat is the NDVI there?\nRaster, sampled at that point\n\n\nWhat is the park boundary?\nVector (polygon)\n\n\nHow far is the nearest river?\nRaster (a distance surface) or vector + distance computation\n\n\nHow much forest within 500 m?\nRaster, summarised in a buffer\n\n\n\n\nThe same reality can be either. A river is a line if you care about its course, and a distance-to-river raster if you care about how far the animal is from it. Choose by the operation you need, not by what the thing “is”.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1693,7 +1693,7 @@
     "href": "classes/class-02/slides.html#geographic-coordinates",
     "title": "Spatial data in R",
     "section": "Geographic coordinates",
-    "text": "Geographic coordinates\n\nLongitude and latitude are angles, not distances\nLatitude: angle north/south of the equator. Longitude: angle east/west of Greenwich. Units are degrees. This is what every GPS and every Movebank file gives you — usually WGS84, EPSG:4326.",
+    "text": "Geographic coordinates\n\nLongitude and latitude are angles, not distancesLatitude: angle north/south of the equator. Longitude: angle east/west of Greenwich. Units are degrees. This is what every GPS and every Movebank file gives you — usually WGS84, EPSG:4326.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1719,7 +1719,7 @@
     "href": "classes/class-02/slides.html#projected-coordinates",
     "title": "Spatial data in R",
     "section": "Projected coordinates",
-    "text": "Projected coordinates\n\nEvery projection preserves some properties and destroys others\nConformal keeps angles/shape (Mercator, UTM). Equal-area keeps area (Albers, Mollweide). Equidistant keeps distances from a point. No projection keeps everything.",
+    "text": "Projected coordinates\n\nEvery projection preserves some properties and destroys othersConformal keeps angles/shape (Mercator, UTM). Equal-area keeps area (Albers, Mollweide). Equidistant keeps distances from a point. No projection keeps everything.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1745,7 +1745,7 @@
     "href": "classes/class-02/slides.html#epsg-codes-the-vocabulary-you-need",
     "title": "Spatial data in R",
     "section": "EPSG codes — the vocabulary you need",
-    "text": "EPSG codes — the vocabulary you need\n\n\n\n\n\n\n\n\n\nEPSG\nWhat\nUnits\n\n\n\n\n4326\nWGS84 geographic — GPS, Movebank\ndegrees\n\n\n3857\nWeb Mercator — Google/OSM basemaps. Never for analysis\nmetres\n\n\n32736\nUTM zone 36S — Kruger\nmetres\n\n\n32632\nUTM zone 32N — Switzerland, Italy\nmetres\n\n\n3035\nETRS89 / LAEA Europe — equal-area, continental\nmetres\n\n\n6933\nWGS84 / NSIDC EASE-Grid 2.0 Global — equal-area, global\nmetres\n\n\n\n\n\n\n\n\n\n\n\n3857 is a trap. It is conformal, wildly non-equal-area, and areas near the poles are inflated by orders of magnitude. Use it to display tiles, never to compute a home range.",
+    "text": "EPSG codes — the vocabulary you need\n\n\n\n\n\n\n\n\nEPSG\nWhat\nUnits\n\n\n\n\n4326\nWGS84 geographic — GPS, Movebank\ndegrees\n\n\n3857\nWeb Mercator — Google/OSM basemaps. Never for analysis\nmetres\n\n\n32736\nUTM zone 36S — Kruger\nmetres\n\n\n32632\nUTM zone 32N — Switzerland, Italy\nmetres\n\n\n3035\nETRS89 / LAEA Europe — equal-area, continental\nmetres\n\n\n6933\nWGS84 / NSIDC EASE-Grid 2.0 Global — equal-area, global\nmetres\n\n\n\n\n\n\n\n\n\n\n3857 is a trap. It is conformal, wildly non-equal-area, and areas near the poles are inflated by orders of magnitude. Use it to display tiles, never to compute a home range.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1784,7 +1784,7 @@
     "href": "classes/class-02/slides.html#everything-else-is-dplyr",
     "title": "Spatial data in R",
     "section": "Everything else is dplyr",
-    "text": "Everything else is dplyr\nBecause it is a data frame, all your usual verbs work, and the geometry comes along for the ride.\n\n```{r}\nlibrary(dplyr)\n\npts_sf |&gt;\n  mutate(label = toupper(id)) |&gt;\n  filter(lat &gt; -24.52) |&gt;\n  select(id, label)\n```\n\nSimple feature collection with 1 feature and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 31.8 ymin: -24.5 xmax: 31.8 ymax: -24.5\nGeodetic CRS:  WGS 84\n  id label           geometry\n1  b     B POINT (31.8 -24.5)\n\n\n\n\nNote the geometry column survives select() without being named — it is “sticky”. Use st_drop_geometry() when you genuinely want a plain data frame.",
+    "text": "Everything else is dplyr\nBecause it is a data frame, all your usual verbs work, and the geometry comes along for the ride.\n\n```{r}\nlibrary(dplyr)\n\npts_sf |&gt;\n  mutate(label = toupper(id)) |&gt;\n  filter(lat &gt; -24.52) |&gt;\n  select(id, label)\n```\n\nSimple feature collection with 1 feature and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 31.8 ymin: -24.5 xmax: 31.8 ymax: -24.5\nGeodetic CRS:  WGS 84\n  id label           geometry\n1  b     B POINT (31.8 -24.5)\n\n\n\nNote the geometry column survives select() without being named — it is “sticky”. Use st_drop_geometry() when you genuinely want a plain data frame.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1940,7 +1940,7 @@
     "href": "classes/class-03/slides.html#movebank-in-r",
     "title": "Tracking data in R",
     "section": "Movebank in R",
-    "text": "Movebank in R\nlibrary(move2)\n\n# Interactive login, stored in your keyring\nmovebank_store_credentials(\"your_username\")\n\n# What is available?\nmovebank_download_study_info(license_type = \"CC_0\")\n\n# Download a study\nbuff &lt;- movebank_download_study(\n  study_id  = 1764627,\n  sensor_type_id = \"gps\"\n)\n\n\nToday we read the CSVs from data/ instead — no accounts, no network, and everyone gets identical results. But this is how you get your own data.",
+    "text": "Movebank in R\nlibrary(move2)\n\n# Interactive login, stored in your keyring\nmovebank_store_credentials(\"your_username\")\n\n# What is available?\nmovebank_download_study_info(license_type = \"CC_0\")\n\n# Download a study\nbuff &lt;- movebank_download_study(\n  study_id  = 1764627,\n  sensor_type_id = \"gps\"\n)\n\nToday we read the CSVs from data/ instead — no accounts, no network, and everyone gets identical results. But this is how you get your own data.",
     "crumbs": [
       "Home",
       "Classes",
@@ -1966,7 +1966,7 @@
     "href": "classes/class-03/slides.html#making-a-track",
     "title": "Tracking data in R",
     "section": "Making a track",
-    "text": "Making a track\n\n```{r}\n#| eval: false\nlibrary(amt)\nlibrary(dplyr)\n\nbuffalo &lt;- read.csv(\"data/buffalo_kruger.csv.gz\") |&gt;\n  transmute(id  = individual.local.identifier,\n            t   = as.POSIXct(timestamp, tz = \"UTC\"),\n            x   = location.long,\n            y   = location.lat) |&gt;\n  filter(!is.na(x), !is.na(y)) |&gt;\n  distinct(id, t, .keep_all = TRUE)\n\ntrk &lt;- make_track(buffalo, x, y, t, id = id, crs = 4326) |&gt;\n  transform_coords(crs_to = 32736)\n```\n\n\n\nThe trailing underscores (x_, y_, t_) are amt’s way of guaranteeing its own columns never collide with yours.",
+    "text": "Making a track\n\n```{r}\n#| eval: false\nlibrary(amt)\nlibrary(dplyr)\n\nbuffalo &lt;- read.csv(\"data/buffalo_kruger.csv.gz\") |&gt;\n  transmute(id  = individual.local.identifier,\n            t   = as.POSIXct(timestamp, tz = \"UTC\"),\n            x   = location.long,\n            y   = location.lat) |&gt;\n  filter(!is.na(x), !is.na(y)) |&gt;\n  distinct(id, t, .keep_all = TRUE)\n\ntrk &lt;- make_track(buffalo, x, y, t, id = id, crs = 4326) |&gt;\n  transform_coords(crs_to = 32736)\n```\n\n\nThe trailing underscores (x_, y_, t_) are amt’s way of guaranteeing its own columns never collide with yours.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2070,7 +2070,7 @@
     "href": "classes/class-03/slides.html#the-trap-track_resample-ignores-group_by",
     "title": "Tracking data in R",
     "section": "The trap: track_resample() ignores group_by()",
-    "text": "The trap: track_resample() ignores group_by()\n# WRONG — one time grid laid across six interleaved animals\ntrk |&gt; group_by(id) |&gt; track_resample(rate = hours(1))\n\n\n\n\nid\nfixes before\ngrouped (wrong)\nper animal (right)\n\n\n\n\nCilla\n3528\n2731\n3518\n\n\nMvubu\n2572\n166\n2544\n\n\nQueen\n4545\n1741\n4354\n\n\n\n\n\n# RIGHT — each animal gets its own grid\ntrk |&gt;\n  nest(data = -id) |&gt;\n  mutate(data = lapply(data, \\(d) track_resample(d, rate = hours(1),\n                                                 tolerance = minutes(10)))) |&gt;\n  unnest(cols = data)\n\nNo error, no warning — just 58% of your data gone. Not every function respects dplyr grouping. When a step removes far more than you expected, check the per-group counts before you accept it.",
+    "text": "The trap: track_resample() ignores group_by()\n# WRONG — one time grid laid across six interleaved animals\ntrk |&gt; group_by(id) |&gt; track_resample(rate = hours(1))\n\n\n\nid\nfixes before\ngrouped (wrong)\nper animal (right)\n\n\n\n\nCilla\n3528\n2731\n3518\n\n\nMvubu\n2572\n166\n2544\n\n\nQueen\n4545\n1741\n4354\n\n\n\n\n# RIGHT — each animal gets its own grid\nresample_one &lt;- function(d) {\n  track_resample(d, rate = hours(1), tolerance = minutes(10))\n}\n\ntrk |&gt;\n  nest(data = -id) |&gt;\n  mutate(data = lapply(data, resample_one)) |&gt;\n  unnest(cols = data)\n\nNo error, no warning — just 58% of your data gone. Not every function respects dplyr grouping. When a step removes far more than you expected, check the per-group counts before you accept it.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2148,7 +2148,7 @@
     "href": "classes/class-04/slides.html#the-step",
     "title": "Movement metrics and home range",
     "section": "The step",
-    "text": "The step\nTwo consecutive fixes define a step.\n\n\n\nStep length \\(s_t = \\lVert \\mathbf{x}_{t+1} - \\mathbf{x}_t \\rVert\\)\nAbsolute direction \\(\\phi_t = \\operatorname{atan2}(\\Delta y, \\Delta x)\\)\nTurning angle \\(\\theta_t = \\phi_t - \\phi_{t-1}\\), wrapped to \\((-\\pi, \\pi]\\)\nSpeed \\(v_t = s_t / \\Delta t\\)\n\n\n\nA turning angle needs three fixes. A step needs two. That is why filter_min_n_burst(min_n = 3) exists.\n\n\n\n\nTurning angles are circular data: −179° and +179° are 2° apart, not 358°. Never take an arithmetic mean of angles.",
+    "text": "The step\nTwo consecutive fixes define a step.\n\n\n\nStep length \\(s_t = \\lVert \\mathbf{x}_{t+1} - \\mathbf{x}_t \\rVert\\)\nAbsolute direction \\(\\phi_t = \\operatorname{atan2}(\\Delta y, \\Delta x)\\)\nTurning angle \\(\\theta_t = \\phi_t - \\phi_{t-1}\\), wrapped to \\((-\\pi, \\pi]\\)\nSpeed \\(v_t = s_t / \\Delta t\\)\n\n\n\nA turning angle needs three fixes. A step needs two. That is why filter_min_n_burst(min_n = 3) exists.\n\n\n\nTurning angles are circular data: −179° and +179° are 2° apart, not 358°. Never take an arithmetic mean of angles.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2174,7 +2174,7 @@
     "href": "classes/class-04/slides.html#net-squared-displacement-nsd",
     "title": "Movement metrics and home range",
     "section": "Net squared displacement (NSD)",
-    "text": "Net squared displacement (NSD)\n\\[\\text{NSD}(t) = \\lVert \\mathbf{x}_t - \\mathbf{x}_0 \\rVert^2\\]\nThe squared distance from the starting point. A remarkably effective diagnostic:\n\nSedentary — NSD rises then plateaus at a low value\nMigratory — a sigmoid up, a plateau, a sigmoid back down\nDispersal — a single step up to a new plateau\nNomadic — rises roughly linearly, no plateau\n\n\n\nFitting these shapes as competing non-linear models (Bunnefeld et al. 2011) is a cheap and surprisingly effective way to classify movement strategies.",
+    "text": "Net squared displacement (NSD)\n\\[\\text{NSD}(t) = \\lVert \\mathbf{x}_t - \\mathbf{x}_0 \\rVert^2\\]\nThe squared distance from the starting point. A remarkably effective diagnostic:\n\nSedentary — NSD rises then plateaus at a low value\nMigratory — a sigmoid up, a plateau, a sigmoid back down\nDispersal — a single step up to a new plateau\nNomadic — rises roughly linearly, no plateau\n\n\nFitting these shapes as competing non-linear models (Bunnefeld et al. 2011) is a cheap and surprisingly effective way to classify movement strategies.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2213,7 +2213,7 @@
     "href": "classes/class-04/slides.html#biased-random-walk",
     "title": "Movement metrics and home range",
     "section": "Biased random walk",
-    "text": "Biased random walk\nAdd a preferred direction — towards a den, a water hole, a wintering ground — and you have a biased random walk. Combine with persistence and you get the BCRW, the workhorse null model for animals with both memory and a goal.\n\n\nClass 8’s integrated step selection analysis is, in effect, a biased correlated random walk whose bias is estimated from environmental covariates. Keep that connection in mind.",
+    "text": "Biased random walk\nAdd a preferred direction — towards a den, a water hole, a wintering ground — and you have a biased random walk. Combine with persistence and you get the BCRW, the workhorse null model for animals with both memory and a goal.\n\nClass 8’s integrated step selection analysis is, in effect, a biased correlated random walk whose bias is estimated from environmental covariates. Keep that connection in mind.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2239,7 +2239,7 @@
     "href": "classes/class-04/slides.html#mcp-minimum-convex-polygon",
     "title": "Movement metrics and home range",
     "section": "MCP — minimum convex polygon",
-    "text": "MCP — minimum convex polygon\nThe smallest convex polygon containing \\(x\\)% of the fixes.\n\n\nFor\n\nTrivial to compute and explain\nComparable with a century of literature\nNo smoothing parameter to argue about\n\n\nAgainst\n\nConvex — includes land the animal never used (lakes, cliffs, cities)\nExtremely sensitive to outliers and to sample size\nArea grows with the number of fixes; no asymptote\nNo density information — every point counts the same\n\n\n\n\nUse it for comparability with old studies. Do not use it as your only estimate.",
+    "text": "MCP — minimum convex polygon\nThe smallest convex polygon containing \\(x\\)% of the fixes.\n\n\nFor\n\nTrivial to compute and explain\nComparable with a century of literature\nNo smoothing parameter to argue about\n\n\nAgainst\n\nConvex — includes land the animal never used (lakes, cliffs, cities)\nExtremely sensitive to outliers and to sample size\nArea grows with the number of fixes; no asymptote\nNo density information — every point counts the same\n\n\n\nUse it for comparability with old studies. Do not use it as your only estimate.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2369,7 +2369,7 @@
     "href": "classes/class-05/slides.html#radiation-not-pictures",
     "title": "Remote sensing and environmental annotation",
     "section": "Radiation, not “pictures”",
-    "text": "Radiation, not “pictures”\n\nThe Sun emits across the electromagnetic spectrum; surfaces reflect some of it and absorb the rest\nA passive sensor records the radiance arriving at the detector in a set of wavelength bands\nThat raw signal is contaminated by the atmosphere, the Sun’s angle, the viewing angle and the terrain\nWhat you download is the result of a processing chain, and the level matters\n\n\n\nLevel 1 — top of atmosphere radiance/reflectance. Level 2 — surface reflectance, atmospherically corrected. Start here. Level 3+ — derived products: NDVI composites, land cover, LAI.",
+    "text": "Radiation, not “pictures”\n\nThe Sun emits across the electromagnetic spectrum; surfaces reflect some of it and absorb the rest\nA passive sensor records the radiance arriving at the detector in a set of wavelength bands\nThat raw signal is contaminated by the atmosphere, the Sun’s angle, the viewing angle and the terrain\nWhat you download is the result of a processing chain, and the level matters\n\n\nLevel 1 — top of atmosphere radiance/reflectance. Level 2 — surface reflectance, atmospherically corrected. Start here. Level 3+ — derived products: NDVI composites, land cover, LAI.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2395,7 +2395,7 @@
     "href": "classes/class-05/slides.html#active-sensors",
     "title": "Remote sensing and environmental annotation",
     "section": "Active sensors",
-    "text": "Active sensors\n\nRadar (SAR) — emits microwaves and measures the return. Sees through cloud and at night. Sentinel-1. Sensitive to structure and moisture, not to greenness.\nLiDAR — emits laser pulses, measures return time. Gives 3-D structure: canopy height, vertical complexity. GEDI (spaceborne), airborne for fine detail.\n\n\n\nFor a forest animal, canopy height and vertical structure from LiDAR are often far more informative than NDVI — greenness saturates in dense forest, but structure does not.",
+    "text": "Active sensors\n\nRadar (SAR) — emits microwaves and measures the return. Sees through cloud and at night. Sentinel-1. Sensitive to structure and moisture, not to greenness.\nLiDAR — emits laser pulses, measures return time. Gives 3-D structure: canopy height, vertical complexity. GEDI (spaceborne), airborne for fine detail.\n\n\nFor a forest animal, canopy height and vertical structure from LiDAR are often far more informative than NDVI — greenness saturates in dense forest, but structure does not.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2499,7 +2499,7 @@
     "href": "classes/class-05/slides.html#doing-it-in-time",
     "title": "Remote sensing and environmental annotation",
     "section": "Doing it in time",
-    "text": "Doing it in time\n# Which layer does each fix belong to?\nlayer_dates &lt;- as.Date(c(\"2005-01-01\", \"2005-01-17\", ...))\n\nidx &lt;- findInterval(as.Date(trk$t_), layer_dates)\n\n# Extract from the whole stack, then pick the right column per row\nvals &lt;- terra::extract(ndvi_stack, vect(trk))[, -1]\ntrk$ndvi &lt;- vals[cbind(seq_len(nrow(vals)), idx)]\n\n\nMovebank Env-DATA does this for you, including interpolation in time, for dozens of products. Use it for real projects — but understand what it is doing first, which is what today’s exercise is for.",
+    "text": "Doing it in time\n# Which layer does each fix belong to?\nlayer_dates &lt;- as.Date(c(\"2005-01-01\", \"2005-01-17\", ...))\n\nidx &lt;- findInterval(as.Date(trk$t_), layer_dates)\n\n# Extract from the whole stack, then pick the right column per row\nvals &lt;- terra::extract(ndvi_stack, vect(trk))[, -1]\ntrk$ndvi &lt;- vals[cbind(seq_len(nrow(vals)), idx)]\n\nMovebank Env-DATA does this for you, including interpolation in time, for dozens of products. Use it for real projects — but understand what it is doing first, which is what today’s exercise is for.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2616,7 +2616,7 @@
     "href": "classes/class-06/slides.html#two-questions-often-confused",
     "title": "Movement segmentation and hidden Markov models",
     "section": "Two questions, often confused",
-    "text": "Two questions, often confused\n\n\nChange-point detection\n“Where does the process change?”\nFinds breakpoints in a time series. Output: a set of segments.\nBCPA, segclust2d, penalised contrasts.\n\nState classification\n“Which of \\(N\\) recurring states is the animal in now?”\nAssigns every step to a state, and states can recur.\nHMM, EMbC, state-space models.\n\n\n\n“Migration started on 14 September” is a change-point question. “Was this step foraging or travelling?” is a state question. Choose the tool that matches the question.",
+    "text": "Two questions, often confused\n\n\nChange-point detection\n“Where does the process change?”\nFinds breakpoints in a time series. Output: a set of segments.\nBCPA, segclust2d, penalised contrasts.\n\nState classification\n“Which of \\(N\\) recurring states is the animal in now?”\nAssigns every step to a state, and states can recur.\nHMM, EMbC, state-space models.\n\n\n“Migration started on 14 September” is a change-point question. “Was this step foraging or travelling?” is a state question. Choose the tool that matches the question.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2668,7 +2668,7 @@
     "href": "classes/class-06/slides.html#why-the-markov-part-matters",
     "title": "Movement segmentation and hidden Markov models",
     "section": "Why the Markov part matters",
-    "text": "Why the Markov part matters\nA clustering method looks at each step in isolation. An HMM knows that behaviour persists: an animal that was resting is probably still resting.\n\nThis borrows strength across time and produces far less “flickering” between states\nThe transition matrix is itself biology: how long does a foraging bout last?\nTransitions can depend on covariates: is the animal more likely to start travelling when NDVI is low?\n\n\nfitHMM(data, nbStates = 2, formula = ~ ndvi + cosinor(hour, period = 24))\n\nThat formula is the bridge between Class 5 and this one.",
+    "text": "Why the Markov part matters\nA clustering method looks at each step in isolation. An HMM knows that behaviour persists: an animal that was resting is probably still resting.\n\nThis borrows strength across time and produces far less “flickering” between states\nThe transition matrix is itself biology: how long does a foraging bout last?\nTransitions can depend on covariates: is the animal more likely to start travelling when NDVI is low?\n\n\nfitHMM(data, nbStates = 2, formula = ~ ndvi + cosinor(hour, period = 24))\nThat formula is the bridge between Class 5 and this one.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2720,7 +2720,7 @@
     "href": "classes/class-06/slides.html#problem-3-naming-the-states",
     "title": "Movement segmentation and hidden Markov models",
     "section": "Problem 3 — naming the states",
-    "text": "Problem 3 — naming the states\nThe model returns state 1 and state 2. It does not return “foraging” and “travelling”.\n\nLabelling them is an interpretation, and it needs external evidence: accelerometer data, direct observation, known behaviours at known times\n“Short steps and random turns” is consistent with foraging — and with resting, with sheltering, and with the animal being dead\nPapers that name states from step lengths alone are making an assumption, not a measurement\n\n\n\nState the evidence for your labels, or call them “state 1” and “state 2” and describe them by their parameters.",
+    "text": "Problem 3 — naming the states\nThe model returns state 1 and state 2. It does not return “foraging” and “travelling”.\n\nLabelling them is an interpretation, and it needs external evidence: accelerometer data, direct observation, known behaviours at known times\n“Short steps and random turns” is consistent with foraging — and with resting, with sheltering, and with the animal being dead\nPapers that name states from step lengths alone are making an assumption, not a measurement\n\n\nState the evidence for your labels, or call them “state 1” and “state 2” and describe them by their parameters.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2902,7 +2902,7 @@
     "href": "classes/class-07/slides.html#the-functional-response",
     "title": "Resource selection functions",
     "section": "The functional response",
-    "text": "The functional response\nSelection is not a fixed property of an animal.\n\nAn animal in a forest-rich landscape may show weak selection for forest; the same animal in a forest-poor landscape shows strong selection\nSo \\(\\beta\\) depends on availability — the functional response in habitat use (Mysterud & Ims 1998)\nPooling individuals across different landscapes without modelling this averages away the very thing you are studying\n\n\n\nPractical consequence: report the availability each individual faced, and consider modelling \\(\\beta\\) as a function of it.",
+    "text": "The functional response\nSelection is not a fixed property of an animal.\n\nAn animal in a forest-rich landscape may show weak selection for forest; the same animal in a forest-poor landscape shows strong selection\nSo \\(\\beta\\) depends on availability — the functional response in habitat use (Mysterud & Ims 1998)\nPooling individuals across different landscapes without modelling this averages away the very thing you are studying\n\n\nPractical consequence: report the availability each individual faced, and consider modelling \\(\\beta\\) as a function of it.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2928,7 +2928,7 @@
     "href": "classes/class-07/slides.html#the-workflow-in-amt",
     "title": "Resource selection functions",
     "section": "The workflow in amt",
-    "text": "The workflow in amt\nlibrary(amt)\n\nrsf_data &lt;- trk |&gt;\n  filter(id == \"Cilla\") |&gt;\n  random_points(n = nrow(trk) * 20) |&gt;     # available within the MCP\n  extract_covariates(covs) |&gt;\n  mutate(w = ifelse(case_, 1, 5000))\n\nfit &lt;- glm(case_ ~ elevation + slope + grassland + trees,\n           data = rsf_data, family = binomial(), weights = w)\n\n\nrandom_points() on a track defaults to the MCP of that track — a third-order analysis. Pass an hr object to control the domain explicitly.",
+    "text": "The workflow in amt\nlibrary(amt)\n\nrsf_data &lt;- trk |&gt;\n  filter(id == \"Cilla\") |&gt;\n  random_points(n = nrow(trk) * 20) |&gt;     # available within the MCP\n  extract_covariates(covs) |&gt;\n  mutate(w = ifelse(case_, 1, 5000))\n\nfit &lt;- glm(case_ ~ elevation + slope + grassland + trees,\n           data = rsf_data, family = binomial(), weights = w)\n\nrandom_points() on a track defaults to the MCP of that track — a third-order analysis. Pass an hr object to control the domain explicitly.",
     "crumbs": [
       "Home",
       "Classes",
@@ -2954,7 +2954,7 @@
     "href": "classes/class-07/slides.html#more-than-one-animal",
     "title": "Resource selection functions",
     "section": "More than one animal",
-    "text": "More than one animal\nThe wrong way: pool all fixes and fit one model. Individuals differ, and the animal with most fixes dominates.\n\nTwo-stage: fit each animal separately, then summarise the coefficients across individuals (mean, SE, a t-test against zero). Transparent, robust, easy to explain\nMixed models: random intercept and random slopes per individual. Muff et al. (2020) show the random slopes are essential — without them you under-estimate the uncertainty badly\nA random intercept alone is not enough\n\n\n\nFor 6 buffalo, the two-stage approach is honest and adequate. For 60, use a mixed model.",
+    "text": "More than one animal\nThe wrong way: pool all fixes and fit one model. Individuals differ, and the animal with most fixes dominates.\n\nTwo-stage: fit each animal separately, then summarise the coefficients across individuals (mean, SE, a t-test against zero). Transparent, robust, easy to explain\nMixed models: random intercept and random slopes per individual. Muff et al. (2020) show the random slopes are essential — without them you under-estimate the uncertainty badly\nA random intercept alone is not enough\n\n\nFor 6 buffalo, the two-stage approach is honest and adequate. For 60, use a mixed model.",
     "crumbs": [
       "Home",
       "Classes",
@@ -3045,7 +3045,7 @@
     "href": "classes/class-08/slides.html#the-design",
     "title": "Step selection functions and iSSA",
     "section": "The design",
-    "text": "The design\nFor each observed step:\n\nTake the starting point \\(\\mathbf{x}_{t}\\)\nDraw \\(k\\) control steps from the animal’s own distributions of step length and turning angle\nThat gives one stratum: 1 used step + \\(k\\) available steps, all from the same starting point at the same time\nCompare them with conditional logistic regression\n\n\n\nBecause the comparison is within a stratum, everything constant at that moment — time of day, season, the animal’s internal state, its identity — cancels out. That is a remarkably clean piece of control.",
+    "text": "The design\nFor each observed step:\n\nTake the starting point \\(\\mathbf{x}_{t}\\)\nDraw \\(k\\) control steps from the animal’s own distributions of step length and turning angle\nThat gives one stratum: 1 used step + \\(k\\) available steps, all from the same starting point at the same time\nCompare them with conditional logistic regression\n\n\nBecause the comparison is within a stratum, everything constant at that moment — time of day, season, the animal’s internal state, its identity — cancels out. That is a remarkably clean piece of control.",
     "crumbs": [
       "Home",
       "Classes",
@@ -3058,7 +3058,7 @@
     "href": "classes/class-08/slides.html#conditional-logistic-regression",
     "title": "Step selection functions and iSSA",
     "section": "Conditional logistic regression",
-    "text": "Conditional logistic regression\n\\[\nP(\\text{step } j \\text{ chosen}) =\n\\frac{\\exp(\\boldsymbol{\\beta}^{\\top}\\mathbf{x}_j)}\n{\\sum_{i \\in \\text{stratum}} \\exp(\\boldsymbol{\\beta}^{\\top}\\mathbf{x}_i)}\n\\]\n\nIdentical machinery to a Cox proportional hazards model — which is why survival::clogit() and amt::fit_issf() both go through coxph()\nEach stratum contributes only the contrast between the used step and its controls\nNo intercept. Again, only relative statements\n\n\nfit_issf(case_ ~ elevation_end + sl_ + log(sl_) + strata(step_id_), data = d)",
+    "text": "Conditional logistic regression\n\\[\nP(\\text{step } j \\text{ chosen}) =\n\\frac{\\exp(\\boldsymbol{\\beta}^{\\top}\\mathbf{x}_j)}\n{\\sum_{i \\in \\text{stratum}} \\exp(\\boldsymbol{\\beta}^{\\top}\\mathbf{x}_i)}\n\\]\n\nIdentical machinery to a Cox proportional hazards model — which is why survival::clogit() and amt::fit_issf() both go through coxph()\nEach stratum contributes only the contrast between the used step and its controls\nNo intercept. Again, only relative statements\n\n\nfit_issf(case_ ~ elevation_end + sl_ + log(sl_) +\n                 strata(step_id_),\n         data = d)",
     "crumbs": [
       "Home",
       "Classes",
@@ -3123,7 +3123,7 @@
     "href": "classes/class-08/slides.html#interactions-where-it-gets-interesting",
     "title": "Step selection functions and iSSA",
     "section": "Interactions: where it gets interesting",
-    "text": "Interactions: where it gets interesting\nThe real power is asking whether movement depends on habitat:\ncase_ ~ grassland_end +\n        sl_ + log(sl_) + cos(ta_) +\n        sl_:grassland_start +           # does it move faster in grassland?\n        cos(ta_):grassland_start +      # more directionally?\n        strata(step_id_)\n\n_start covariates modify the movement kernel — how the animal moves from that habitat\n_end covariates capture selection — which habitat it moves into\nMixing them up is the single most common error in iSSA papers",
+    "text": "Interactions: where it gets interesting\nThe real power is asking whether movement depends on habitat:\ncase_ ~ grassland_end +\n        sl_ + log(sl_) + cos(ta_) +\n        sl_:grassland_start +        # faster in grassland?\n        cos(ta_):grassland_start +   # straighter?\n        strata(step_id_)\n\n_start covariates modify the movement kernel — how the animal moves from that habitat\n_end covariates capture selection — which habitat it moves into\nMixing them up is the single most common error in iSSA papers",
     "crumbs": [
       "Home",
       "Classes",
@@ -3266,7 +3266,7 @@
     "href": "classes/class-08/slides.html#section",
     "title": "Step selection functions and iSSA",
     "section": "",
-    "text": "Thank you\n\ngiuliano.colosimo@uniroma2.it\nAll material: github.com/GiulianoColosimo/animtrack-2627\nGo and track something.",
+    "text": "Thank you\ngiuliano.colosimo@uniroma2.it\nAll material: github.com/GiulianoColosimo/animtrack-2627\nGo and track something.",
     "crumbs": [
       "Home",
       "Classes",

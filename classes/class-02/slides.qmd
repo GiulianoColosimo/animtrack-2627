@@ -84,7 +84,6 @@ That one sentence describes Classes 5, 7 and 8.
 
 ## Choosing the model
 
-::: {.smaller}
 | Question | Model |
 |:--|:--|
 | Where exactly was the animal at 08:00? | Vector (point) |
@@ -92,7 +91,6 @@ That one sentence describes Classes 5, 7 and 8.
 | What is the park boundary? | Vector (polygon) |
 | How far is the nearest river? | Raster (a distance surface) or vector + distance computation |
 | How much forest within 500 m? | Raster, summarised in a buffer |
-:::
 
 . . .
 
@@ -126,11 +124,9 @@ A CRS answers three questions:
 
 ![Longitude and latitude are *angles*, not distances](../../assets/figures/geographic_coordinates.jpg){width="55%" fig-align="center"}
 
-::: {.smaller}
 Latitude: angle north/south of the equator. Longitude: angle east/west of
 Greenwich. Units are **degrees**. This is what every GPS and every Movebank
 file gives you — usually **WGS84, EPSG:4326**.
-:::
 
 ---
 
@@ -165,11 +161,9 @@ but slower, and does not fix your *plots*.
 
 ![Every projection preserves some properties and destroys others](../../assets/figures/projected_coordinates.jpg){width="62%" fig-align="center"}
 
-::: {.smaller}
 **Conformal** keeps angles/shape (Mercator, UTM). **Equal-area** keeps area
 (Albers, Mollweide). **Equidistant** keeps distances from a point.
 *No projection keeps everything.*
-:::
 
 ---
 
@@ -197,7 +191,6 @@ coordinates with geodesic distances.
 
 ## EPSG codes — the vocabulary you need
 
-::: {.smaller}
 | EPSG | What | Units |
 |:--|:--|:--|
 | **4326** | WGS84 geographic — GPS, Movebank | degrees |
@@ -206,7 +199,6 @@ coordinates with geodesic distances.
 | **32632** | UTM zone 32N — Switzerland, Italy | metres |
 | **3035** | ETRS89 / LAEA Europe — equal-area, continental | metres |
 | **6933** | WGS84 / NSIDC EASE-Grid 2.0 Global — equal-area, global | metres |
-:::
 
 . . .
 
@@ -284,15 +276,12 @@ pts_sf |>
 
 . . .
 
-::: {.smalltext}
 Note the geometry column survives `select()` without being named — it is
 "sticky". Use `st_drop_geometry()` when you genuinely want a plain data frame.
-:::
 
 ---
 
-## The functions you will actually use {.smaller}
-
+## The functions you will actually use
 | Function | What it does |
 |:--|:--|
 | `st_as_sf()` | data frame → spatial |
@@ -381,8 +370,7 @@ r
 
 ---
 
-## What defines a raster {.smaller}
-
+## What defines a raster
 ::: {.incremental}
 - **Extent** — xmin, xmax, ymin, ymax
 - **Resolution** — cell size in CRS units. `res(r)`
@@ -399,8 +387,7 @@ exactly what we need in Class 5.
 
 ---
 
-## The `terra` functions you will use {.smaller}
-
+## The `terra` functions you will use
 | Function | What it does |
 |:--|:--|
 | `rast()` | create or read a raster |
