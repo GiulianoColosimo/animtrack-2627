@@ -17,6 +17,13 @@ $code-block-font-size: 0.85em;        // ONE size for every code block in every 
 
 .reveal section img { border: none; box-shadow: none; }
 
+/* Footer text links back to the course website (set per deck in the
+   `footer:` option). Keep it quiet until hovered so it does not compete
+   with slide content. */
+.reveal .footer a { color: #1f6f78; text-decoration: none; }
+.reveal .footer a:hover,
+.reveal .footer a:focus { text-decoration: underline; }
+
 /* Title slide accent bar */
 .reveal .title-slide h1.title { border-bottom: 4px solid #1f6f78; padding-bottom: 0.2em; }
 

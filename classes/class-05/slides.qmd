@@ -16,7 +16,7 @@ format:
     history: false
     width: 1280
     height: 760
-    footer: "Animal Tracking 2026-2027 · Class 5"
+    footer: "[Animal Tracking 2026-2027 · Class 5](../../index.qmd)"
     logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
     highlight-style: github
 execute:
