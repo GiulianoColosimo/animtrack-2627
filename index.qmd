@@ -10,12 +10,12 @@ toc: false
 ---
 
 Welcome. These pages hold **everything** you need for *Animal Tracking in
-Conservation Biology*: slides, R exercises, datasets and further reading.
+Conservation Biology*: slides, R practicals, datasets and further reading.
 
 ::: {.callout-tip appearance="simple"}
 Everything here is public and permanent. Slides open in your browser — press
 `F` for fullscreen, `S` for speaker notes, `E` for print/PDF view, `?` for all
-shortcuts. Exercises are plain web pages you can work through at your own pace.
+shortcuts. Practicals are plain web pages you can work through at your own pace.
 :::
 
 ## What this course is about
@@ -26,85 +26,123 @@ of field naturalists could collect in a career. The bottleneck is no longer
 data — it is **asking a well-posed question and knowing which analysis answers
 it**.
 
-Over eight two-hour meetings we go from *how do you put a tag on an animal* to
-*how do you infer, from its trajectory, what the animal was doing and which
-parts of the landscape it chose*. Every concept is paired with code you run
-yourself, because tracking analysis is a craft you learn by doing.
+The spine of the course is the **movement-ecology paradigm** (Nathan et al.
+2008): every path is the joint outcome of an animal's internal state, its
+motion capacity, its navigation capacity, and the external factors around it.
+Tracking data record only the path. Every session is an attempt to reason back
+from the path to those four components — and to be honest about how far the
+data let us go.
+
+Every concept is paired with code you run yourself, and three sessions use
+**simulated animals whose true behaviour we know**, so you can see exactly how
+each method succeeds and fails.
 
 ## Course at a glance
 
 | | |
-|---|---|
+|:--|:--|
 | **Degree** | MSc Biologia Ambientale |
 | **Credits** | 2 CFU — 16 hours |
-| **Structure** | 8 classes × 2 hours |
+| **Structure** | 8 sessions × 2 hours: ~45 minutes of theory, ~75 minutes of R |
 | **When** | Fridays 11:00–13:00, 16 October – 4 December 2026 — see the [calendar](calendar.qmd) |
 | **Language** | English |
 | **Software** | R, RStudio, Quarto — all free and open source |
-| **Assessment** | See the [syllabus](syllabus.qmd) |
+| **Assessment** | Reproducible report, weekly practicals, participation — see the [syllabus](syllabus.qmd) |
 
-## The five themes
+## The eight sessions
 
 ::: {.class-card}
-[Theme 1]{.topic-badge}
+[Session 1]{.topic-badge}
 
-### Movement and movement analysis
-Why animals move, the movement-ecology framework, and the full toolbox for
-tracking them — from toe-clipping to Argos satellites. Then the quantitative
-description of a trajectory: steps, turning angles, speeds, home ranges.
+### Why animals move, and how we watch them
+The movement-ecology paradigm; the ecological drivers of movement and their
+trade-offs; tracking technologies and the 3–5% rule; how the fix interval
+shapes the path you see.
 
-→ [Class 1](classes/class-01/slides.qmd) · [Class 4](classes/class-04/slides.qmd)
+→ [Slides](classes/class-01/slides.qmd) · [Practical](classes/class-01/exercise.qmd)
 :::
 
 ::: {.class-card}
-[Theme 2]{.topic-badge}
+[Session 2]{.topic-badge}
 
-### Informatics tools: GIS in R
-Coordinate reference systems, vector and raster data, and the `sf` / `terra`
-stack. Then the specifics of tracking data: Movebank, `move2`, `amt`, cleaning
-duplicates and outliers, and making a map you would not be ashamed to publish.
+### Spatial data in R: the survival kit
+Vector and raster, coordinate reference systems, choosing a projection for the
+analysis, the `sf` and `terra` stack, and where environmental rasters come from.
+Ends with a publication-quality map.
 
-→ [Class 2](classes/class-02/slides.qmd) · [Class 3](classes/class-03/slides.qmd)
+→ [Slides](classes/class-02/slides.qmd) · [Practical](classes/class-02/exercise.qmd)
 :::
 
 ::: {.class-card}
-[Theme 3]{.topic-badge}
+[Session 3]{.topic-badge}
 
-### Remote sensing
-What a satellite actually measures, the four resolutions, the vegetation
-indices you will meet in every paper, and how to annotate a trajectory with
-environmental covariates in space *and* time.
+### From fixes to trajectories
+Positions are not paths. Location error, cleaning, bursts, gaps and
+resampling; which analyses tolerate irregular sampling; annotating a track
+with NDVI matched in time.
 
-→ [Class 5](classes/class-05/slides.qmd)
+→ [Slides](classes/class-03/slides.qmd) · [Practical](classes/class-03/exercise.qmd)
 :::
 
 ::: {.class-card}
-[Theme 4]{.topic-badge}
+[Session 4]{.topic-badge}
 
-### Movement segmentation
-An animal is not one thing all day. Behavioural states, change-point methods
-and hidden Markov models: how to cut a trajectory into behaviourally
-meaningful pieces, and how to avoid fooling yourself while doing it.
+### Quantifying movement
+Net squared displacement, straightness, first-passage time; classifying
+movement strategies; thresholds and behavioural change-point analysis — and
+whether their answers survive a change of fix rate.
 
-→ [Class 6](classes/class-06/slides.qmd)
+→ [Slides](classes/class-04/slides.qmd) · [Practical](classes/class-04/exercise.qmd)
 :::
 
 ::: {.class-card}
-[Theme 5]{.topic-badge}
+[Session 5]{.topic-badge}
 
-### Resource and step selection functions
-Use versus availability — the central idea of habitat selection. RSFs, then
-step selection functions and integrated SSA, which fold movement and selection
-into one model.
+### Movement models and simulation
+Random, correlated, biased and Lévy walks. You write a simulator from scratch,
+use it as a null model for real buffalo, and build the ground-truth animal for
+the next two sessions.
 
-→ [Class 7](classes/class-07/slides.qmd) · [Class 8](classes/class-08/slides.qmd)
+→ [Slides](classes/class-05/slides.qmd) · [Practical](classes/class-05/exercise.qmd)
 :::
 
-## Before the first class
+::: {.class-card}
+[Session 6]{.topic-badge}
+
+### Home ranges and space use
+MCP, KDE, Brownian bridges and autocorrelated KDE on the same animal; variograms
+and range residency; and a test of every estimator against a simulated animal
+whose true home range we know.
+
+→ [Slides](classes/class-06/slides.qmd) · [Practical](classes/class-06/exercise.qmd)
+:::
+
+::: {.class-card}
+[Session 7]{.topic-badge}
+
+### Habitat selection on the move
+Resource and step selection functions, integrated step selection, and relative
+selection strength — fitted to New York fishers, and checked against a
+simulated animal with a known selection coefficient.
+
+→ [Slides](classes/class-07/slides.qmd) · [Practical](classes/class-07/exercise.qmd)
+:::
+
+::: {.class-card}
+[Session 8]{.topic-badge}
+
+### Hidden Markov models and synthesis
+Behavioural states, covariates on switching, how many states to believe; a
+tour of the research frontier; and your mini-project pitches.
+
+→ [Slides](classes/class-08/slides.qmd) · [Practical](classes/class-08/exercise.qmd)
+:::
+
+## Before the first session
 
 1. Install R, RStudio and the course packages — see **[Software setup](setup.qmd)**.
-2. Download the **[datasets](data.qmd)**.
-3. Bring a laptop. Every class has hands-on time.
+2. Download the course project, which includes the **[datasets](data.qmd)**.
+3. Bring a laptop. Every session has hands-on time.
 
 ## Reusing this material
 

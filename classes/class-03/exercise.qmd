@@ -1,6 +1,6 @@
 ---
-title: "Exercise 3 — Clean, resample and map a track"
-subtitle: "Class 3 · Theme 2"
+title: "Practical 3 — From fixes to trajectories"
+subtitle: "Session 3 · Data cleaning, bursts, resampling"
 date-modified: last-modified
 ---
 
@@ -10,18 +10,23 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 ::: {.objectives}
-**Goals.** Build an `amt` track; quantify and remove duplicates; find speed
-outliers and *look at them* before deleting; resample to regular bursts;
-discover why the bat data resist all of this; make an interactive map.
+**Goals.** Build a trajectory in `amt` and in `adehabitatLT`; clean it and
+count what you remove; quantify and visualise sampling irregularity; resample
+by selection and by interpolation and see the difference; label day and
+night; attach NDVI matched to the time of each fix.
 
-**Time:** ~55 minutes. **Packages:** `amt`, `dplyr`, `lubridate`, `sf`, `mapview`.
+**Time:** ~75 minutes. **Packages:** `amt`, `adehabitatLT`, `terra`, `dplyr`,
+`tidyr`, `lubridate`, `ggplot2`.
 :::
 
 ```{r}
 library(amt)
+library(adehabitatLT)
+library(terra)
 library(dplyr)
+library(tidyr)
 library(lubridate)
-library(sf)
+library(ggplot2)
 ```
 
 ## Task 1 — Build a track
@@ -92,6 +97,67 @@ summary(trk$x_)
 `track_xyt` — a tibble with `x_`, `y_`, `t_` plus the columns you carried
 along. The coordinates are now six-figure eastings and seven-figure northings:
 UTM 36S metres.
+:::
+
+## Task 1b — The same trajectory as an `ltraj`
+
+`adehabitatLT` stores a trajectory as a list of bursts, with the step
+descriptors already computed.
+
+```{r}
+cilla <- trk |> filter(id == "Cilla")
+
+ltr <- as.ltraj(xy = as.data.frame(cilla[, c("x_", "y_")]),
+                date = cilla$t_, id = "Cilla")
+ltr
+
+head(ld(ltr)[, c("date", "dist", "dt", "R2n", "abs.angle", "rel.angle")])
+```
+
+`dist` is step length (m), `dt` the interval (s), `R2n` the squared distance
+from the first fix (we use it in Session 4), and `rel.angle` the turning angle.
+
+### Your turn
+
+**1c.** Compute step lengths and turning angles with `amt` and check they
+agree with the `ltraj` columns.
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+st_cilla <- cilla |> steps()
+c(amt_median_sl = median(st_cilla$sl_),
+  ltraj_median_dist = median(ld(ltr)$dist, na.rm = TRUE))
+
+# amt's ta_ and adehabitat's rel.angle are the same quantity
+a <- st_cilla$ta_[-1]
+b <- ld(ltr)$rel.angle[2:nrow(st_cilla)]
+both <- !is.na(a) & !is.na(b)
+
+naive    <- max(abs(a[both] - b[both]))                       # plain subtraction
+circular <- max(abs(atan2(sin(a[both] - b[both]),             # difference on
+                          cos(a[both] - b[both]))))           # the circle
+c(compared = sum(both), naive_max_diff = naive, circular_max_diff = circular,
+  NA_in_amt = sum(is.na(a)), NA_in_adehabitat = sum(is.na(b)))
+```
+
+Two lessons in one table.
+
+**Angles are circular.** Plain subtraction reports a maximum difference of
+exactly 2π — one package wrote a U-turn as +π, the other as −π, which are the
+same direction. Measured on the circle the difference is zero. Never compare,
+average or subtract angles as ordinary numbers.
+
+**Undefined angles.** The packages disagree on how many turns to leave
+undefined around **zero-length steps**: a step of 0 m has no direction, so the
+turn into or out of it cannot be computed. `amt` blanks more of them than
+`adehabitatLT` does. Worth knowing before you compare turning-angle
+distributions across packages.
+
+Otherwise: same numbers, different containers. Use whichever the next analysis needs:
+`ltraj` for first-passage time and Brownian bridges (Sessions 4 and 6), `amt`
+for resampling and step selection.
 :::
 
 ## Task 2 — Sampling rate
@@ -370,7 +436,7 @@ what is left. The 802 surviving fixes shatter into **165 bursts with a median
 length of 4**, i.e. three steps each. There is no programmed schedule to
 recover: fixes arrived whenever a field worker obtained a bearing.
 
-A hidden Markov model (Class 6) estimates *transition* probabilities between
+A hidden Markov model (Session 8) estimates *transition* probabilities between
 behavioural states. With bursts of three steps, there is almost nothing to
 transition — you would be asking the model to learn the dynamics of a process
 from fragments shorter than the process itself.
@@ -403,39 +469,143 @@ Recognising which of your datasets is a "buffalo" and which is a "bat" is one
 of the more valuable things you will take from this course.
 :::
 
-## Task 6 — An interactive map
+## Task 6 — Interpolation is not resampling
+
+`adehabitatLT::redisltraj()` also produces a regular hourly series — by
+inventing positions.
+
+```{r}
+cilla_ltr <- as.ltraj(xy = as.data.frame(cilla[, c("x_", "y_")]),
+                      date = cilla$t_, id = "Cilla")
+interp <- redisltraj(cilla_ltr, 3600, type = "time")
+
+selected <- trk_hr |> filter(id == "Cilla")
+
+c(original_fixes = nrow(cilla),
+  selected_by_track_resample = nrow(selected),
+  produced_by_redisltraj = nrow(ld(interp)))
+```
+
+### Your turn
+
+**6a.** How many of the interpolated positions coincide with a real fix?
+**6b.** What would interpolated positions do to a step-length distribution?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+real_times <- cilla$t_
+interp_times <- ld(interp)$date
+sum(interp_times %in% real_times)
+length(interp_times)
+```
+
+Almost none of the "hourly" positions is an observation: `redisltraj()` walks
+along the straight lines between fixes and places a point every 3,600 seconds.
+Every one of those points assumes the animal moved at constant speed in a
+straight line between fixes.
+
+Consequences: step lengths across a gap become artificially uniform, turning
+angles on interpolated stretches become exactly zero, and any model fitted to
+them sees a smooth, persistent animal that never existed. Use interpolation
+for **display**, never as data — or use a model that interpolates with
+uncertainty (`ctmm`, `crawl`), which is what Sessions 6 and 8 do.
+:::
+
+## Task 7 — Day or night?
+
+Many behaviours are diel. `time_of_day()` labels each fix from the sun's
+position at that place and time.
+
+```{r}
+cilla_tod <- selected |>
+  time_of_day()
+
+cilla_steps <- cilla_tod |>
+  steps_by_burst(keep_cols = "start")
+
+cilla_steps |>
+  group_by(tod_) |>
+  summarise(steps = n(), median_sl_m = round(median(sl_)),
+            mean_sl_m = round(mean(sl_)))
+```
+
+::: {.callout-note collapse="true"}
+## What this shows
+
+Buffalo move further per hour by day than by night — a diel pattern you must
+account for before interpreting anything else about their movement. In Session
+8 we let the probability of switching behavioural state depend on the time of
+day.
+:::
+
+## Task 8 — NDVI matched to the time of each fix
+
+The NDVI raster from Session 2 has two layers, a wet-season composite (2 Feb
+2005) and a dry-season one (14 Sep 2005). Tell `terra` when each was taken,
+then let `amt` give every fix the value of the composite closest in time.
+
+```{r}
+ndvi <- project(rast("data/kruger_ndvi_2005.tif"), "EPSG:32736")
+time(ndvi) <- as.POSIXct(c("2005-02-02", "2005-09-14"), tz = "UTC")
+ndvi
+
+queen <- trk |> filter(id == "Queen", year(t_) == 2005)
+
+queen_ndvi <- queen |>
+  extract_covariates_var_time(ndvi, when = "any", max_time = days(45),
+                              name_covar = "ndvi")
+
+queen_ndvi |>
+  mutate(month = month(t_, label = TRUE)) |>
+  group_by(month) |>
+  summarise(fixes = n(), with_ndvi = sum(!is.na(ndvi)),
+            mean_ndvi = round(mean(ndvi, na.rm = TRUE), 3))
+```
+
+### Your turn
+
+**8a.** Why are most months `NA`? **8b.** What would you need to annotate the
+whole year?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+With `max_time = days(45)`, a fix is annotated only if a composite exists
+within 45 days of it. We have two composites, so only February–March and
+September–October are covered. Everything else is honestly `NA` — far better than
+silently assigning February's greenness to a July fix.
+
+To annotate the whole year you need the full series: MOD13Q1 produces a
+composite every 16 days, 23 per year. The same `MODISTools` call that built
+this file fetches them all — it just takes longer:
 
 ```{r}
 #| eval: false
-library(mapview)
-
-queen_sf <- trk_hr |>
-  filter(id == "Queen") |>
-  st_as_sf(coords = c("x_", "y_"), crs = 32736)
-
-mapview(queen_sf, zcol = "burst_", legend = FALSE, cex = 3)
+library(MODISTools)
+ndvi_ts <- mt_subset(product = "MOD13Q1", band = "250m_16_days_NDVI",
+                     lat = -24.58, lon = 31.97, km_lr = 45, km_ab = 70,
+                     start = "2005-01-01", end = "2006-12-31")
+ndvi_ts <- mt_to_terra(ndvi_ts, reproject = TRUE)   # already scaled to NDVI units
 ```
 
-```{r}
-#| echo: false
-#| fig-width: 7
-#| fig-height: 6
-#| fig-align: center
-q <- trk_hr |> filter(id == "Queen")
-cols <- hcl.colors(n_distinct(q$burst_), "Dark 3")
-plot(q$x_, q$y_, type = "n", asp = 1,
-     xlab = "Easting (m, UTM 36S)", ylab = "Northing (m)",
-     main = "Buffalo 'Queen': hourly bursts after cleaning")
-for (i in seq_along(unique(q$burst_))) {
-  d <- q[q$burst_ == unique(q$burst_)[i], ]
-  lines(d$x_, d$y_, col = adjustcolor(cols[i], 0.8))
-}
-```
+Or upload the track to Movebank's **Env-DATA**, which does the matching and the
+temporal interpolation for you. Either way, check the result with `summary()`:
+NDVI must lie between −1 and 1. If you see values in the thousands, the scale
+factor was not applied; if you see values a thousand times too small, it was
+applied twice.
+:::
+
+## To hand in
 
 ::: {.callout-tip}
-`mapview()` needs a live browser, so the static version is shown here. Run the
-`mapview` chunk yourself — zoom in and you will see the collar's hourly
-rhythm, and the places where bursts break.
+## Weekly submission
+
+For **one** buffalo: (1) the cleaning table from Task 1; (2) a histogram of
+sampling intervals on a log scale; (3) two sentences stating which of the
+analyses in the slides' "who tolerates irregular sampling" table you could
+apply to this animal without resampling, and why.
 :::
 
 ## Self-check
@@ -484,7 +654,7 @@ you accept the result.
 :::
 :::
 
-## Before Class 4
+## Before Session 4
 
 - `vignette("p1_basics", package = "amt")`
 - Read Powell & Mitchell (2012), *What is a home range?* — it is short and it

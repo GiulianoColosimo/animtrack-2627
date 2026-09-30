@@ -11,7 +11,7 @@
 
   <meta name="author" content="Giuliano Colosimo">
   <meta name="dcterms.date" content="2026-09-30">
-  <title>Animal Tracking – Tracking data in R</title>
+  <title>Animal Tracking – From fixes to trajectories</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -96,7 +96,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-18657b062b3da6a166608c2ebc8d3bda.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-fd96417eda74ebb0be446d6413f2e761.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -191,8 +191,8 @@
       margin-right: 0; 
     }
   </style>
-<meta property="og:title" content="Tracking data in R – Animal Tracking">
-<meta property="og:description" content="Class 3 · Theme 2 — Informatics tools for movement">
+<meta property="og:title" content="From fixes to trajectories – Animal Tracking">
+<meta property="og:description" content="Session 3 — Data cleaning, bursts, resampling">
 <meta property="og:site_name" content="Animal Tracking">
 <meta property="og:locale" content="en_US">
 </head>
@@ -201,8 +201,8 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Tracking data in R</h1>
-  <p class="subtitle">Class 3 · Theme 2 — Informatics tools for movement</p>
+  <h1 class="title">From fixes to trajectories</h1>
+  <p class="subtitle">Session 3 — Data cleaning, bursts, resampling</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -219,14 +219,21 @@ Giuliano Colosimo
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
+<div class="paradigm">
+<p><span class="pbox">Internal state</span> <span class="pbox">Motion capacity</span> <span class="pbox">Navigation capacity</span> <span class="pbox on">External factors</span> <span class="pbox path on">Movement path</span></p>
+</div>
+<p>We turn a table of fixes into a <strong>path</strong> we can defend, and attach the environment to it — in space and in time.</p>
+</section>
+<section id="where-we-are-going" class="slide level2">
+<h2>Where we are going</h2>
 <div class="objectives">
 <ol type="1">
-<li>Movebank, and the <code>move2</code> package</li>
-<li>The <strong><code>amt</code> track</strong>: the object the rest of the course is built on</li>
+<li>Position data are not path data: what a step and a turning angle really are</li>
+<li>Location error, and why you cannot just connect the dots</li>
 <li><strong>Cleaning</strong>: duplicates, impossible locations, speed outliers</li>
-<li><strong>Sampling regularity</strong> — why it decides which methods you may use</li>
-<li><strong>Resampling and bursts</strong></li>
-<li>Interactive maps in one line</li>
+<li>Bursts, gaps and truncation; <strong>resampling</strong> to a regular grid</li>
+<li>Which analyses tolerate irregular sampling, and which do not</li>
+<li>Annotating a trajectory with environment <strong>matched in time</strong></li>
 </ol>
 </div>
 <div class="fragment">
@@ -236,8 +243,67 @@ Giuliano Colosimo
 </div>
 </section>
 <section>
+<section id="positions-are-not-paths" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>1 · Positions are not paths</h1>
+
+</section>
+<section id="what-a-gps-track-actually-is" class="slide level2">
+<h2>What a GPS track actually is</h2>
+<ul>
+<li class="fragment">A set of <strong>point estimates</strong>, each with an error, at irregular moments</li>
+<li class="fragment">Between two fixes the animal went <em>somewhere</em>; the straight line is an assumption, not an observation</li>
+<li class="fragment"><strong>Interpolating</strong> a position between fixes invents data — useful for plotting, dangerous for inference</li>
+<li class="fragment">Every derived quantity — step length, speed, turning angle — inherits both the sampling interval and the location error</li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p>A track is a <em>sample</em> of a continuous path. Treat every line you draw between fixes as a hypothesis.</p>
+</div>
+</div>
+</section>
+<section id="the-step" class="slide level2">
+<h2>The step</h2>
+<p>Two consecutive fixes define a <strong>step</strong>.</p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<ul>
+<li><strong>Step length</strong> <span class="math inline">\(s_t = \lVert \mathbf{x}_{t+1} - \mathbf{x}_t \rVert\)</span></li>
+<li><strong>Absolute direction</strong> <span class="math inline">\(\phi_t = \operatorname{atan2}(\Delta y, \Delta x)\)</span></li>
+<li><strong>Turning angle</strong> <span class="math inline">\(\theta_t = \phi_t - \phi_{t-1}\)</span>, wrapped to <span class="math inline">\((-\pi, \pi]\)</span></li>
+<li><strong>Speed</strong> <span class="math inline">\(v_t = s_t / \Delta t\)</span></li>
+</ul>
+</div><div class="column" style="width:45%;">
+<div class="keyidea">
+<p>A turning angle needs <strong>three</strong> fixes. A step needs two. That is why <code>filter_min_n_burst(min_n = 3)</code> exists.</p>
+</div>
+</div></div>
+<div class="fragment">
+<p>Turning angles are <strong>circular</strong> data: −179° and +179° are 2° apart, not 358°. Never take an arithmetic mean of angles.</p>
+</div>
+</section>
+<section class="slide level2">
+
+</section>
+<section id="location-error-why-you-cannot-connect-the-dots" class="slide level2">
+<h2>Location error: why you cannot connect the dots</h2>
+<ul>
+<li class="fragment">A 15 m error on each fix is negligible on a 1 km step, and <strong>dominates</strong> a 20 m step</li>
+<li class="fragment">For short steps the <em>direction</em> is mostly noise, so turning angles look random exactly when the animal is resting</li>
+<li class="fragment">A single bad fix creates a <strong>spike</strong>: an impossible step out and back</li>
+<li class="fragment">Error is not independent white noise: it is correlated in time and worse in closed habitat</li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p>Resting animals look like they are wandering at random, and spikes look like sprints. Neither is behaviour. Both reach your models unless you look first.</p>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
 <section id="getting-data" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>1 · Getting data</h1>
+<h1>2 · Getting data</h1>
 
 </section>
 <section id="movebank-in-r" class="slide level2">
@@ -305,7 +371,7 @@ Giuliano Colosimo
 </section></section>
 <section>
 <section id="cleaning" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>2 · Cleaning</h1>
+<h1>3 · Cleaning</h1>
 
 </section>
 <section id="the-four-things-that-are-always-wrong" class="slide level2">
@@ -369,16 +435,16 @@ Giuliano Colosimo
 </div>
 </section></section>
 <section>
-<section id="sampling-regularity" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>3 · Sampling regularity</h1>
+<section id="bursts-gaps-and-regularity" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>4 · Bursts, gaps and regularity</h1>
 
 </section>
 <section id="why-it-governs-everything" class="slide level2">
 <h2>Why it governs everything</h2>
 <ul>
 <li class="fragment"><strong>Step length and turning angle</strong> are only comparable across steps of the same duration</li>
-<li class="fragment"><strong>HMMs</strong> (Class 6) assume a regular interval; irregular data need a continuous-time model instead</li>
-<li class="fragment"><strong>SSFs</strong> (Class 8) compare each observed step to alternatives of the <em>same</em> duration</li>
+<li class="fragment"><strong>HMMs</strong> (Session 8) assume a regular interval; irregular data need a continuous-time model instead</li>
+<li class="fragment"><strong>SSFs</strong> (Session 7) compare each observed step to alternatives of the <em>same</em> duration</li>
 <li class="fragment"><strong>KDE home ranges</strong> assume roughly even coverage in time</li>
 </ul>
 <div class="fragment">
@@ -447,6 +513,37 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
+<section id="two-ways-to-hold-a-trajectory" class="slide level2">
+<h2>Two ways to hold a trajectory</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="adehabitatltltraj"><code>adehabitatLT::ltraj</code></h3>
+<p>The classic (Calenge 2006). One data frame per <strong>burst</strong>, with <code>dist</code>, <code>dt</code>, <code>R2n</code> (squared displacement), <code>abs.angle</code> and <code>rel.angle</code> precomputed.</p>
+<p><code>redisltraj()</code> regularises by <strong>interpolating</strong> new positions.</p>
+</div><div class="column" style="width:50%;">
+<h3 id="amttrack_xyt"><code>amt::track_xyt</code></h3>
+<p>A tidy tibble. Steps, angles and covariates are computed when you ask.</p>
+<p><code>track_resample()</code> regularises by <strong>selecting</strong> existing fixes.</p>
+</div></div>
+<div class="fragment">
+<div class="keyidea">
+<p>The two “regularise” functions do opposite things. One keeps only what you observed; the other manufactures positions you did not observe.</p>
+</div>
+</div>
+</section>
+<section id="truncation-the-start-and-the-end" class="slide level2">
+<h2>Truncation: the start and the end</h2>
+<ul>
+<li class="fragment"><strong>After capture</strong> — animals often behave abnormally for days (flight, restricted movement). Many studies discard a fixed post-capture window</li>
+<li class="fragment"><strong>Before the end</strong> — a collar that stops moving may mean a dead animal or a dropped collar, not a resting one</li>
+<li class="fragment"><strong>At gaps</strong> — a burst ends wherever fixes are missing; steps are never computed across a gap</li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p>Decide the truncation rules <strong>before</strong> you look at the results, write them down, and report how much data they removed.</p>
+</div>
+</div>
+</section>
 <section id="resampling-and-bursts" class="slide level2">
 <h2>Resampling and bursts</h2>
 <p><code>track_resample()</code> keeps fixes that fall on a regular grid within a tolerance, and labels contiguous runs as <strong>bursts</strong>.</p>
@@ -509,6 +606,55 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
+<section id="who-tolerates-irregular-sampling" class="slide level2">
+<h2>Who tolerates irregular sampling?</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Method</th>
+<th style="text-align: left;">Irregular sampling?</th>
+<th style="text-align: left;">Why</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">MCP, classical KDE</td>
+<td style="text-align: left;">tolerated, with care</td>
+<td style="text-align: left;">uneven sampling over-weights well-sampled periods</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Brownian bridge (Session 6)</td>
+<td style="text-align: left;"><strong>yes</strong></td>
+<td style="text-align: left;">the bridge’s variance grows with the time between fixes</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AKDE / <code>ctmm</code> (Session 6)</td>
+<td style="text-align: left;"><strong>yes</strong></td>
+<td style="text-align: left;">continuous-time models</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SSF (Session 7)</td>
+<td style="text-align: left;">per burst</td>
+<td style="text-align: left;">every step must span the same interval</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HMM (Session 8)</td>
+<td style="text-align: left;"><strong>no</strong>, not directly</td>
+<td style="text-align: left;">discrete time steps; impute a regular grid first (<code>momentuHMM::crawlWrap</code>)</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div class="keyidea">
+<p>Regularity is not a cosmetic property of your data. It decides which methods you are allowed to use.</p>
+</div>
+</div>
+</section>
 <section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
@@ -541,34 +687,97 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section id="todays-exercise" class="slide level2">
-<h2>Today’s exercise</h2>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="attaching-the-environment" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>5 · Attaching the environment</h1>
+
+</section>
+<section id="the-operation" class="slide level2">
+<h2>The operation</h2>
+<p>For every fix, look up the environment <strong>there</strong> and <strong>then</strong>.</p>
+<ul>
+<li class="fragment"><strong>Static</strong> covariates — elevation, slope, distance to river. One raster; <code>extract()</code> and done.</li>
+<li class="fragment"><strong>Dynamic</strong> covariates — NDVI, temperature, snow. A <strong>stack</strong> of rasters with timestamps. You must match each fix to the right layer.</li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p>A track that spans two years annotated with a <em>single</em> NDVI image is not annotated — it is decorated. If your covariate varies in time and your analysis does not, you have thrown away the mechanism.</p>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+</section>
+<section id="doing-it-in-time" class="slide level2">
+<h2>Doing it in time</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># Which layer does each fix belong to?</span></span>
+<span id="cb8-2"><a></a>layer_dates <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2005-01-01"</span>, <span class="st">"2005-01-17"</span>, ...))</span>
+<span id="cb8-3"><a></a></span>
+<span id="cb8-4"><a></a>idx <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(<span class="fu">as.Date</span>(trk<span class="sc">$</span>t_), layer_dates)</span>
+<span id="cb8-5"><a></a></span>
+<span id="cb8-6"><a></a><span class="co"># Extract from the whole stack, then pick the right column per row</span></span>
+<span id="cb8-7"><a></a>vals <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(ndvi_stack, <span class="fu">vect</span>(trk))[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb8-8"><a></a>trk<span class="sc">$</span>ndvi <span class="ot">&lt;-</span> vals[<span class="fu">cbind</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(vals)), idx)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="fragment">
+<p><code>Movebank Env-DATA</code> does this for you, including interpolation in time, for dozens of products. Use it for real projects — but understand what it is doing first, which is what today’s exercise is for.</p>
+</div>
+</section>
+<section class="slide level2">
+
+</section>
+<section id="quiz-3" class="slide level2">
+<h2>Quiz</h2>
+<div class="quiz">
+<p>You annotate two years of buffalo fixes with a single dry-season NDVI image and find a strong positive selection for high NDVI. What is the main problem?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">NDVI saturates in dense vegetation</label></li>
+<li><label><input type="checkbox" checked="">The covariate is static while both the animal and the vegetation varied seasonally</label></li>
+<li><label><input type="checkbox">The pixel size is too coarse</label></li>
+<li><label><input type="checkbox">NDVI cannot be used for savanna</label></li>
+</ul>
+<div class="quiz-feedback">
+<p>The image describes one moment. Over two years, vegetation in a savanna swings enormously between wet and dry season, and the buffalo’s needs swing with it. By holding NDVI fixed you have conflated “places that were green <strong>in that dry season</strong>” with “places that are green <strong>when the animal was there</strong>”.</p>
+<p>What you have measured is selection for <em>persistently</em> productive places — which may be interesting, but is not what the model claims.</p>
+<p>The result can even be the <em>opposite</em> sign from the time-matched analysis: an animal may select the greenest available patch at every moment while showing no preference for places that are green on average.</p>
+<p>Fix: use a time series and match each fix to the contemporaneous layer.</p>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+</section>
+<section id="todays-practical" class="slide level2">
+<h2>Today’s practical</h2>
 <div class="objectives">
-<p><strong><a href="../../classes/class-03/exercise.html">→ Class 3 exercise</a></strong></p>
+<p><strong><a href="../../classes/class-03/exercise.html">→ Session 3 practical</a></strong></p>
 <ol type="1">
-<li>Build an <code>amt</code> track and inspect the sampling rate</li>
-<li>Find and remove duplicates — and count them</li>
-<li>Hunt speed outliers, and look at them before deleting</li>
-<li>Resample to hourly bursts</li>
-<li>Try the same on the bat data and discover you cannot</li>
-<li>Make an interactive map</li>
+<li>Build the same trajectory in <code>adehabitatLT</code> and in <code>amt</code></li>
+<li>Clean it, counting what you remove</li>
+<li>Quantify and visualise sampling irregularity</li>
+<li>Resample: selection (<code>track_resample</code>) versus interpolation (<code>redisltraj</code>)</li>
+<li>Day or night? <code>time_of_day()</code></li>
+<li>Attach NDVI <strong>matched to the season of each fix</strong></li>
 </ol>
 </div>
 </section>
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li class="fragment"><code>move2</code> to organise, <code>amt</code> to analyse</li>
+<li class="fragment">A track is a <strong>sample</strong> of a path; every line between fixes is an assumption</li>
+<li class="fragment">Location error dominates short steps: resting looks random, spikes look like sprints</li>
 <li class="fragment">Clean in order: <strong>duplicates → missing → impossible → speed</strong>, counting as you go</li>
-<li class="fragment">Speed outliers are often <em>time</em> problems, not <em>distance</em> problems</li>
-<li class="fragment">Report <strong>median</strong> sampling interval and the <strong>maximum gap</strong></li>
-<li class="fragment"><code>track_resample()</code> selects; it does not invent</li>
+<li class="fragment"><code>track_resample()</code> <strong>selects</strong>; <code>redisltraj()</code> <strong>interpolates</strong>; <code>track_resample()</code> ignores <code>group_by()</code></li>
+<li class="fragment">Regularity decides which methods you may use later</li>
+<li class="fragment">Annotate in space <strong>and time</strong></li>
 </ul>
 <div class="fragment">
-<h3 id="before-class-4">Before Class 4</h3>
+<h3 id="before-session-4">Before Session 4</h3>
 <ul>
-<li>Re-read the <code>amt</code> vignette: <code>vignette("p1_basics", package = "amt")</code></li>
-<li>Skim Powell &amp; Mitchell (2012), <em>What is a home range?</em></li>
+<li><code>vignette("adehabitatLT", package = "adehabitatLT")</code>, sections on <code>ltraj</code></li>
+<li>Skim Fauchald &amp; Tveraa (2003), <em>Ecology</em> 84:282 — first-passage time</li>
 </ul>
 
 
@@ -578,7 +787,7 @@ Giuliano Colosimo
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../../assets/figures/Tor-Vergata_logo_cmyk.png" class="slide-logo"></p>
 <div class="footer footer-default">
-<p><a href="../../index.html">Animal Tracking 2026-2027 · Class 3</a></p>
+<p><a href="../../index.html">Animal Tracking 2026-2027 · Session 3</a></p>
 </div>
 </div></div>
 

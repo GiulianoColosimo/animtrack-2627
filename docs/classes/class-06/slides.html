@@ -11,7 +11,7 @@
 
   <meta name="author" content="Giuliano Colosimo">
   <meta name="dcterms.date" content="2026-09-30">
-  <title>Animal Tracking – Movement segmentation and hidden Markov models</title>
+  <title>Animal Tracking – Home ranges and space use</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -29,74 +29,8 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-      }
-    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-    div.sourceCode
-      { color: #24292e;  }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #24292e; } /* Normal */
-    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
-    code span.an { color: #6a737d; } /* Annotation */
-    code span.at { color: #d73a49; } /* Attribute */
-    code span.bn { color: #005cc5; } /* BaseN */
-    code span.bu { color: #d73a49; } /* BuiltIn */
-    code span.cf { color: #d73a49; } /* ControlFlow */
-    code span.ch { color: #032f62; } /* Char */
-    code span.cn { color: #005cc5; } /* Constant */
-    code span.co { color: #6a737d; } /* Comment */
-    code span.cv { color: #6a737d; } /* CommentVar */
-    code span.do { color: #6a737d; } /* Documentation */
-    code span.dt { color: #d73a49; } /* DataType */
-    code span.dv { color: #005cc5; } /* DecVal */
-    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
-    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
-    code span.fl { color: #005cc5; } /* Float */
-    code span.fu { color: #6f42c1; } /* Function */
-    code span.im { color: #032f62; } /* Import */
-    code span.in { color: #6a737d; } /* Information */
-    code span.kw { color: #d73a49; } /* Keyword */
-    code span.op { color: #24292e; } /* Operator */
-    code span.ot { color: #6f42c1; } /* Other */
-    code span.pp { color: #d73a49; } /* Preprocessor */
-    code span.re { color: #6a737d; } /* RegionMarker */
-    code span.sc { color: #005cc5; } /* SpecialChar */
-    code span.ss { color: #032f62; } /* SpecialString */
-    code span.st { color: #032f62; } /* String */
-    code span.va { color: #e36209; } /* Variable */
-    code span.vs { color: #032f62; } /* VerbatimString */
-    code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-18657b062b3da6a166608c2ebc8d3bda.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-fd96417eda74ebb0be446d6413f2e761.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -191,8 +125,8 @@
       margin-right: 0; 
     }
   </style>
-<meta property="og:title" content="Movement segmentation and hidden Markov models – Animal Tracking">
-<meta property="og:description" content="Class 6 · Theme 4 — Movement segmentation">
+<meta property="og:title" content="Home ranges and space use – Animal Tracking">
+<meta property="og:description" content="Session 6 — MCP → KDE → BBMM → AKDE">
 <meta property="og:site_name" content="Animal Tracking">
 <meta property="og:locale" content="en_US">
 </head>
@@ -201,8 +135,8 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Movement segmentation and hidden Markov models</h1>
-  <p class="subtitle">Class 6 · Theme 4 — Movement segmentation</p>
+  <h1 class="title">Home ranges and space use</h1>
+  <p class="subtitle">Session 6 — MCP → KDE → BBMM → AKDE</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -219,297 +153,367 @@ Giuliano Colosimo
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
+<div class="paradigm">
+<p><span class="pbox">Internal state</span> <span class="pbox">Motion capacity</span> <span class="pbox on">Navigation capacity</span> <span class="pbox on">External factors</span> <span class="pbox path on">Movement path</span></p>
+</div>
+<p>A home range is what a path looks like when <strong>memory</strong> (navigation) and the <strong>distribution of resources</strong> (external factors) keep an animal in one place. Today: how to estimate it — and when it does not exist.</p>
+</section>
+<section id="where-we-are-going" class="slide level2">
+<h2>Where we are going</h2>
 <div class="objectives">
 <ol type="1">
-<li>Why one trajectory is <strong>several</strong> processes</li>
-<li>The families of segmentation methods</li>
-<li><strong>Hidden Markov models</strong>: the generative story, in plain language</li>
-<li>Fitting one with <code>moveHMM</code> — and the two things that go wrong</li>
-<li>How to decide how many states, and how not to</li>
+<li>From territorial polygons to probabilistic <strong>utilisation distributions</strong></li>
+<li>MCP, and why it is still reported</li>
+<li>Kernel density estimation, and its sensitivity to bandwidth</li>
+<li>Autocorrelation: from nuisance (Brownian bridges) to information (AKDE)</li>
+<li>When a home range is a valid concept: stationarity and the occupation timescale</li>
 </ol>
 </div>
 <div class="fragment">
 <div class="keyidea">
-<p>Segmentation is where movement analysis stops describing and starts <strong>inferring</strong>. That is also where it gets easy to fool yourself.</p>
+<p>Today’s real learning objective is the comparison: four estimators, one animal, four different answers — and a simulated animal whose true answer we know.</p>
 </div>
 </div>
 </section>
 <section>
-<section id="one-track-many-processes" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>1 · One track, many processes</h1>
+<section id="what-is-a-home-range" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>1 · What is a home range?</h1>
 
 </section>
-<section id="the-problem" class="slide level2">
-<h2>The problem</h2>
-<p>An animal is not doing one thing all day.</p>
-<ul>
-<li class="fragment">Resting, foraging, travelling, migrating — each with its own <strong>step-length and turning-angle signature</strong></li>
-<li class="fragment">Pool them and every summary is a meaningless average: a “mean step length” that describes no actual behaviour</li>
-<li class="fragment">Leo’s six-year track contains residency <strong>and</strong> migration. A single home range spans two continents (Class 1)</li>
-</ul>
+<section id="burts-definition" class="slide level2">
+<h2>Burt’s definition</h2>
+<blockquote>
+<p>“That area traversed by the individual in its normal activities of food gathering, mating and caring for young.” — Burt (1943)</p>
+</blockquote>
 <div class="fragment">
-<div class="keyidea">
-<p><strong>Segment first, then analyse.</strong> Almost every method in this course assumes a homogeneous process. Segmentation is how you earn that assumption.</p>
-</div>
+<ul>
+<li class="fragment">Note what it <strong>excludes</strong>: exploratory forays, migration, dispersal</li>
+<li class="fragment">Note what it does <strong>not</strong> say: nothing about probability, nothing about 95%</li>
+<li class="fragment">Powell &amp; Mitchell (2012): a home range is the part of its <strong>cognitive map</strong> an animal chooses to keep up to date — our estimators are crude proxies</li>
+</ul>
 </div>
 </section>
-<section id="two-questions-often-confused" class="slide level2">
-<h2>Two questions, often confused</h2>
+<section id="from-polygons-to-distributions" class="slide level2">
+<h2>From polygons to distributions</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<h3 id="change-point-detection">Change-point detection</h3>
-<p><em>“Where does the process change?”</em></p>
-<p>Finds <strong>breakpoints</strong> in a time series. Output: a set of segments.</p>
-<p>BCPA, <code>segclust2d</code>, penalised contrasts.</p>
+<h3 id="territorial-polygon">Territorial polygon</h3>
+<p>A boundary: inside or outside.</p>
+<p>Every part of the area counts the same.</p>
+<p>MCP is this idea.</p>
 </div><div class="column" style="width:50%;">
-<h3 id="state-classification">State classification</h3>
-<p><em>“Which of <span class="math inline">\(N\)</span> recurring states is the animal in now?”</em></p>
-<p>Assigns <strong>every step</strong> to a state, and states can recur.</p>
-<p>HMM, EMbC, state-space models.</p>
+<h3 id="utilisation-distribution-ud">Utilisation distribution (UD)</h3>
+<p>A probability density: <em>how much</em> time is spent <em>where</em>.</p>
+<p>Core areas and rarely used edges are distinguished.</p>
+<p>The 95% contour is one summary of it.</p>
 </div></div>
 <div class="fragment">
-<p>“Migration started on 14 September” is a change-point question. “Was this step foraging or travelling?” is a state question. Choose the tool that matches the question.</p>
+<div class="keyidea">
+<p>The UD is the object; “the home range” is a contour you draw on it. Say which contour, and which estimator produced the UD.</p>
 </div>
+</div>
+</section></section>
+<section>
+<section id="minimum-convex-polygon" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>2 · Minimum convex polygon</h1>
+
 </section>
-<section id="the-families" class="slide level2">
-<h2>The families</h2>
+<section id="mcp" class="slide level2">
+<h2>MCP</h2>
+<p>The smallest convex polygon containing <span class="math inline">\(x\)</span>% of the fixes.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>For</strong></p>
+<ul>
+<li>Trivial to compute and explain</li>
+<li>Comparable with a century of literature</li>
+<li>No smoothing parameter to argue about</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Against</strong></p>
+<ul>
+<li><strong>Convex</strong> — includes land never used</li>
+<li>Sensitive to outliers and sample size</li>
+<li>Area grows with the number of fixes; no asymptote</li>
+<li>No density information</li>
+</ul>
+</div></div>
+<div class="fragment">
+<p>Report it for comparability with old studies. Never as your only estimate.</p>
+</div>
+</section></section>
+<section>
+<section id="kernel-density-estimation" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>3 · Kernel density estimation</h1>
+
+</section>
+<section id="kde" class="slide level2">
+<h2>KDE</h2>
+<p>Put a small bump (kernel) on each fix and sum them into a <strong>utilisation distribution</strong> (Worton 1989).</p>
+<ul>
+<li class="fragment">Gives a <strong>density</strong>: core areas, disjoint patches, used and unused parts</li>
+<li class="fragment">The answer is dominated by the <strong>bandwidth</strong> <span class="math inline">\(h\)</span>
+<ul>
+<li class="fragment"><span class="math inline">\(h_\text{ref}\)</span> — optimal if the UD were a single bivariate normal; usually <strong>over-smooths</strong> real, multi-modal ranges</li>
+<li class="fragment"><span class="math inline">\(h_\text{LSCV}\)</span> — least-squares cross-validation; often <strong>under-smooths</strong> into fragments, and frequently <strong>fails to converge</strong></li>
+</ul></li>
+</ul>
+</section>
+<section id="same-buffalo-two-bandwidths" class="slide level2">
+<h2>Same buffalo, two bandwidths</h2>
+<p>For the buffalo Cilla (hourly fixes, 5 months):</p>
 <table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Approach</th>
-<th style="text-align: left;">Idea</th>
-<th style="text-align: left;">Notes</th>
+<th style="text-align: left;">Bandwidth</th>
+<th style="text-align: right;"><span class="math inline">\(h\)</span></th>
+<th style="text-align: right;">95% KDE area</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><strong>Thresholding</strong></td>
-<td style="text-align: left;">“Speed &gt; 2 m/s = travelling”</td>
-<td style="text-align: left;">Transparent; arbitrary; no uncertainty</td>
+<td style="text-align: left;"><span class="math inline">\(h_\text{ref}\)</span></td>
+<td style="text-align: right;">~1.2 km</td>
+<td style="text-align: right;">~290 km²</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><strong>First-passage time</strong></td>
-<td style="text-align: left;">Time to leave a circle of radius <em>r</em></td>
-<td style="text-align: left;">Good for finding <em>scales</em> of area-restricted search</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>BCPA</strong></td>
-<td style="text-align: left;">Change points in persistence velocity</td>
-<td style="text-align: left;">Behavioural Change Point Analysis; needs a tuning choice</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>Clustering / EMbC</strong></td>
-<td style="text-align: left;">Cluster steps in (speed, turn) space</td>
-<td style="text-align: left;">No time dependence — ignores that behaviour persists</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>HMM</strong></td>
-<td style="text-align: left;">Latent state chain + state-specific distributions</td>
-<td style="text-align: left;"><strong>The standard.</strong> Uses time dependence</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>State-space models</strong></td>
-<td style="text-align: left;">HMM + explicit observation error</td>
-<td style="text-align: left;">Handles messy data; slower, harder</td>
+<td style="text-align: left;"><span class="math inline">\(h_\text{LSCV}\)</span></td>
+<td style="text-align: right;">~0.1 km</td>
+<td style="text-align: right;">~100 km² — <em>did not converge</em></td>
 </tr>
 </tbody>
 </table>
-</section></section>
-<section>
-<section id="hidden-markov-models" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>2 · Hidden Markov models</h1>
-
-</section>
-<section id="the-generative-story" class="slide level2">
-<h2>The generative story</h2>
-<p>Imagine the animal has a hidden label at each time step — say <strong>“encamped”</strong> or <strong>“travelling”</strong>.</p>
-<ol type="1">
-<li class="fragment">At each step the animal is in one of <span class="math inline">\(N\)</span> states, <span class="math inline">\(S_t\)</span></li>
-<li class="fragment">The state evolves as a <strong>Markov chain</strong>: <span class="math inline">\(P(S_t \mid S_{t-1})\)</span> — where you go next depends only on where you are now</li>
-<li class="fragment">Given the state, the observations are drawn from <strong>state-specific distributions</strong>: step length ~ gamma(<span class="math inline">\(\mu_i\)</span>, <span class="math inline">\(\sigma_i\)</span>), turning angle ~ von Mises(<span class="math inline">\(\mu_i\)</span>, <span class="math inline">\(\kappa_i\)</span>)</li>
-<li class="fragment">You never see <span class="math inline">\(S_t\)</span>. You see only the steps</li>
-</ol>
 <div class="fragment">
 <div class="keyidea">
-<p>The model asks: <em>what sequence of hidden states, and what state-specific distributions, would make the observed steps most likely?</em></p>
+<p>A factor of three from one analyst’s choice. Report the bandwidth selector — and check whether LSCV actually converged. <code>adehabitatHR</code> warns you; papers rarely do.</p>
 </div>
-</div>
-</section>
-<section id="what-you-get-out" class="slide level2">
-<h2>What you get out</h2>
-<ul>
-<li class="fragment"><strong>State-dependent parameters</strong> — e.g.&nbsp;state 1: mean step 40 m, turning angles ~uniform; state 2: mean step 600 m, angles concentrated at 0</li>
-<li class="fragment"><strong>Transition probability matrix</strong> <span class="math inline">\(\Gamma\)</span> — and from it the expected <strong>dwell time</strong> in each state, <span class="math inline">\(1/(1-\gamma_{ii})\)</span></li>
-<li class="fragment"><strong>The most likely state sequence</strong> (Viterbi) — one label per step</li>
-<li class="fragment"><strong>State probabilities</strong> per step — the honest version, with uncertainty</li>
-</ul>
-<div class="fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>m <span class="ot">&lt;-</span> moveHMM<span class="sc">::</span><span class="fu">fitHMM</span>(data, <span class="at">nbStates =</span> <span class="dv">2</span>,</span>
-<span id="cb1-2"><a></a>                     <span class="at">stepPar0 =</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">500</span>, <span class="dv">50</span>, <span class="dv">500</span>),   <span class="co"># mu1,mu2,sd1,sd2</span></span>
-<span id="cb1-3"><a></a>                     <span class="at">anglePar0 =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">5</span>))        <span class="co"># mean1,mean2,kappa1,kappa2</span></span>
-<span id="cb1-4"><a></a><span class="fu">viterbi</span>(m)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="why-the-markov-part-matters" class="slide level2">
-<h2>Why the Markov part matters</h2>
-<p>A clustering method looks at each step in isolation. An HMM knows that <strong>behaviour persists</strong>: an animal that was resting is probably still resting.</p>
-<ul>
-<li class="fragment">This borrows strength across time and produces far less “flickering” between states</li>
-<li class="fragment">The transition matrix is itself biology: how long does a foraging bout last?</li>
-<li class="fragment">Transitions can depend on covariates: <em>is the animal more likely to start travelling when NDVI is low?</em></li>
-</ul>
-<div class="fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">fitHMM</span>(data, <span class="at">nbStates =</span> <span class="dv">2</span>, <span class="at">formula =</span> <span class="sc">~</span> ndvi <span class="sc">+</span> <span class="fu">cosinor</span>(hour, <span class="at">period =</span> <span class="dv">24</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>That formula is the bridge between Class 5 and this one.</p>
 </div>
 </section>
 <section id="quiz" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
-<p>An HMM fitted to hourly buffalo data returns two states: state 1 with mean step 45 m, state 2 with mean step 780 m. The diagonal of the transition matrix is 0.93 and 0.86. What is the expected dwell time in state 2?</p>
+<p>You compute a 95% KDE with LSCV and get a range three times smaller than with <span class="math inline">\(h_\text{ref}\)</span>, made of dozens of small islands. <code>kernelUD()</code> printed “the algorithm did not converge”. What do you report?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">0.86 hours</label></li>
-<li><label><input type="checkbox" checked="">About 7 hours</label></li>
-<li><label><input type="checkbox">14 hours</label></li>
-<li><label><input type="checkbox">Cannot be determined from the transition matrix alone</label></li>
+<li><label><input type="checkbox">The LSCV result — it is data-driven and <span class="math inline">\(h_\text{ref}\)</span> is known to over-smooth</label></li>
+<li><label><input type="checkbox">The average of the two</label></li>
+<li><label><input type="checkbox" checked="">That the KDE area is not well determined by these data, and prefer an estimator that accounts for autocorrelation</label></li>
+<li><label><input type="checkbox">The <span class="math inline">\(h_\text{ref}\)</span> result, because it converged</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>For a Markov chain the expected number of consecutive steps in state <span class="math inline">\(i\)</span> is <span class="math inline">\(1/(1-\gamma_{ii})\)</span>. Here <span class="math inline">\(1/(1-0.86) \approx 7.1\)</span> steps, and since steps are hourly, <strong>about 7 hours</strong>.</p>
-<p>State 1 gives <span class="math inline">\(1/(1-0.93) \approx 14\)</span> steps, i.e.&nbsp;~14 hours — plausibly the resting/ruminating state.</p>
-<p>Note two things. First, the dwell time depends on the <strong>sampling interval</strong>: the same animal sampled every 2 hours would give a different <span class="math inline">\(\gamma_{ii}\)</span> but a similar dwell time in hours. Second, this is a real, checkable prediction — if the model says foraging bouts last 7 hours and you know from direct observation they last 45 minutes, the model is telling you your states are not what you think.</p>
+<p>LSCV fails in a characteristic way on GPS data: with many autocorrelated fixes it chooses a tiny bandwidth that treats every cluster of consecutive fixes as a separate hotspot. A non-converged bandwidth is not a result.</p>
+<p><span class="math inline">\(h_\text{ref}\)</span> “converges” only because it is a formula — it assumes a unimodal range and has no way to be wrong in public. Neither is trustworthy here. The disagreement itself is the finding: these data do not pin down a KDE area, which points to the autocorrelation-aware methods on the next slides.</p>
 </div>
 </div>
 </section></section>
 <section>
-<section id="where-it-goes-wrong" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>3 · Where it goes wrong</h1>
+<section id="autocorrelation" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>4 · Autocorrelation</h1>
 
 </section>
-<section id="problem-1-irregular-sampling" class="slide level2">
-<h2>Problem 1 — irregular sampling</h2>
-<p>HMMs as normally fitted assume a <strong>constant time step</strong>.</p>
+<section id="the-problem-classical-kde-has-with-gps" class="slide level2">
+<h2>The problem classical KDE has with GPS</h2>
+<p>Classical KDE assumes fixes are <strong>independent</strong> draws from the UD.</p>
+<div class="fragment">
+<p>Hourly GPS fixes are nothing of the sort — the animal was 300 m away an hour ago and will be 300 m away in an hour.</p>
 <ul>
-<li class="fragment">Feed them irregular data and the step-length distribution mixes intervals; the model interprets a long gap as fast movement</li>
-<li class="fragment">“Solutions” that are not solutions: interpolating to a regular grid invents data and biases the state distributions</li>
-<li class="fragment">Real solutions: resample and accept the data loss (Class 3); or use a <strong>continuous-time</strong> model (<code>ctmm</code>, <code>momentuHMM</code> with <code>crawlWrap</code>)</li>
+<li class="fragment">The <strong>effective</strong> sample size is far smaller than <span class="math inline">\(n\)</span></li>
+<li class="fragment">The UD comes out <strong>too narrow</strong> — the range is under-estimated</li>
+<li class="fragment">Collecting more fixes at a higher rate makes it <strong>worse</strong>, not better</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="keyidea">
+<p>This is why area estimates from 1990s VHF studies (a few dozen fixes, days apart) and modern GPS studies (thousands, an hour apart) are not comparable.</p>
+</div>
+</div>
+</section>
+<section id="brownian-bridges-use-the-path" class="slide level2">
+<h2>Brownian bridges: use the path</h2>
+<p>Horne et al.&nbsp;(2007): between two consecutive fixes the animal was <em>somewhere</em> on a random bridge connecting them.</p>
+<ul>
+<li class="fragment">The uncertainty of the bridge <strong>grows with the time gap</strong> and shrinks near each fix, scaled by a mobility parameter estimated from the data</li>
+<li class="fragment">Uses the order of the fixes, not just their positions</li>
+<li class="fragment">Handles <strong>irregular sampling</strong> naturally</li>
+<li class="fragment">Answers a specific question: <strong>where was the animal during the tracking period?</strong> — its <em>occurrence</em> distribution</li>
 </ul>
 <div class="fragment">
 <div class="keyidea">
-<p>This is why the bat dataset cannot be given an HMM. 165 bursts with a median of 4 fixes cannot inform a transition matrix.</p>
+<p>A Brownian bridge maps where the animal <strong>went</strong>, not where it <strong>could go</strong>. It shrinks around the observed path, so it is usually the smallest of the estimates — correctly so, for the question it answers.</p>
 </div>
 </div>
 </section>
-<section id="problem-2-how-many-states" class="slide level2">
-<h2>Problem 2 — how many states?</h2>
+<section id="autocorrelation-is-information" class="slide level2">
+<h2>Autocorrelation is information</h2>
+<p>Fleming et al.&nbsp;(2015): stop treating autocorrelation as a nuisance.</p>
+<ol type="1">
+<li class="fragment">Fit a <strong>continuous-time movement model</strong> to the track (<code>ctmm</code>)</li>
+<li class="fragment">The model tells you how long the animal takes to cross its range — the <strong>range-crossing time</strong> <span class="math inline">\(\tau_\text{position}\)</span></li>
+<li class="fragment">From that, the <strong>effective sample size</strong>: roughly how many times the animal crossed its range during tracking</li>
+<li class="fragment">Weight the kernel accordingly: <strong>AKDE</strong></li>
+</ol>
+<div class="fragment">
+<div class="keyidea">
+<p>AKDE estimates the <strong>range</strong> distribution — where the animal would be found in the long run — and gives it a <strong>confidence interval</strong>. If you track for three range-crossing times, you effectively have three observations, however many fixes you collected.</p>
+</div>
+</div>
+</section>
+<section id="the-variogram" class="slide level2">
+<h2>The variogram</h2>
+<p>The <strong>semi-variance</strong> as a function of time lag: how far apart, on average, two positions <span class="math inline">\(\Delta t\)</span> apart are.</p>
 <ul>
-<li class="fragment">AIC and BIC <strong>almost always prefer more states</strong>. They are answering “which model fits best”, not “which states are real behaviours”</li>
-<li class="fragment">With enough data, 4 and 5 states will beat 2 and 3 every time</li>
-<li class="fragment">Extra states often capture <strong>outliers</strong>, or the shape of the step-length distribution, not behaviour</li>
+<li class="fragment">Rises at short lags as the animal moves away</li>
+<li class="fragment"><strong>Levels off</strong> at an asymptote if the animal is range-resident: beyond the range-crossing time, positions are as far apart as they will ever be</li>
+<li class="fragment"><strong>Keeps rising</strong> if the animal is not range-resident — drifting, dispersing, nomadic</li>
+<li class="fragment">Proportional to the mean squared displacement of Session 5: the same curve, rescaled</li>
 </ul>
 <div class="fragment">
 <div class="keyidea">
-<p>Choose the number of states from <strong>biology and the question</strong>, then check the fit. Pseudo-residuals and state-dependent distribution plots tell you far more than a table of AICs. Two or three states are almost always enough for what a tracking dataset can actually resolve.</p>
+<p>Look at the variogram <strong>before</strong> estimating any home range. No asymptote, no home range.</p>
 </div>
 </div>
-</section>
-<section id="problem-3-naming-the-states" class="slide level2">
-<h2>Problem 3 — naming the states</h2>
-<p>The model returns <em>state 1</em> and <em>state 2</em>. It does <strong>not</strong> return “foraging” and “travelling”.</p>
-<ul>
-<li class="fragment">Labelling them is an <strong>interpretation</strong>, and it needs external evidence: accelerometer data, direct observation, known behaviours at known times</li>
-<li class="fragment">“Short steps and random turns” is consistent with foraging — and with resting, with sheltering, and with the animal being dead</li>
-<li class="fragment">Papers that name states from step lengths alone are making an assumption, not a measurement</li>
-</ul>
-<div class="fragment">
-<p>State the evidence for your labels, or call them “state 1” and “state 2” and describe them by their parameters.</p>
-</div>
-</section>
-<section id="practical-fitting-advice" class="slide level2">
-<h2>Practical fitting advice</h2>
-<ul>
-<li class="fragment"><strong>Starting values matter a lot.</strong> The likelihood is multimodal. Fit from many random starts and keep the best</li>
-<li class="fragment">Check for <strong>numerical zero step lengths</strong> — a gamma distribution cannot handle them. <code>moveHMM</code> will tell you; add a tiny constant or use a zero-inflated model</li>
-<li class="fragment">Always inspect <strong>pseudo-residuals</strong> (<code>plotPR</code>) — they are the residual plot of the HMM world</li>
-<li class="fragment">Plot the state-dependent densities over the histogram of your data. If they do not look like your data, nothing downstream is trustworthy</li>
-</ul>
 </section>
 <section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
-<p>You fit 2-, 3-, 4- and 5-state HMMs. AIC decreases every time. Which do you report?</p>
+<p>A Mongolian gazelle tracked for a year has an estimated range-crossing time of ~5 months (95% CI: 1 to 27 months), and its variogram shows no clear asymptote. What should you conclude?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">The 5-state model — lowest AIC</label></li>
-<li><label><input type="checkbox" checked="">The simplest model whose states are biologically interpretable and whose residuals are acceptable</label></li>
-<li><label><input type="checkbox">Always 2 states, for comparability</label></li>
-<li><label><input type="checkbox">Average the predictions across all four</label></li>
+<li><label><input type="checkbox">Its home range is about 300,000 km², as AKDE reports</label></li>
+<li><label><input type="checkbox">You need more fixes per day</label></li>
+<li><label><input type="checkbox" checked="">The animal is not demonstrably range-resident at the scale of the study; a home range is not a meaningful summary</label></li>
+<li><label><input type="checkbox">Switch to MCP, which does not need an asymptote</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>AIC will keep improving because extra states always fit the shape of the data better — they mop up outliers and the tails of the step-length distribution. That is a statement about the flexibility of mixture models, not about the animal’s ethogram.</p>
-<p>The defensible procedure: decide how many behavioural modes your data could plausibly <em>resolve</em> given the sampling interval, fit that model, and then <strong>check</strong> it — pseudo-residuals, state-dependent densities against the data, and dwell times against what you know about the species.</p>
-<p>If a 4-state model gives you two states with nearly identical parameters, that is the model telling you it has run out of behaviour to find. Report the simpler one, and say why.</p>
+<p>These are the real <code>ctmm</code> results for a gazelle in the package’s example data. A range-crossing time whose upper bound exceeds the whole tracking period means the animal crossed its “range” perhaps two or three times, or perhaps never: the effective sample size is tiny and the area’s confidence interval spans an order of magnitude.</p>
+<p>More fixes per day do not help: the constraint is <strong>duration</strong>, not frequency. And switching to MCP hides the problem without solving it. Mongolian gazelles are nomadic; for them, a home range may simply be the wrong concept.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="when-is-a-home-range-valid" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>5 · When is a home range valid?</h1>
+
+</section>
+<section id="stationarity-and-the-occupation-timescale" class="slide level2">
+<h2>Stationarity and the occupation timescale</h2>
+<ul>
+<li class="fragment">Every estimator assumes the UD is <strong>stationary</strong> over the tracking period: the animal’s space use is not systematically changing</li>
+<li class="fragment">Seasonal shifts, dispersal and migration all violate it — segment first (Session 4) and estimate one range per stationary period</li>
+<li class="fragment">The track must be much longer than the <strong>range-crossing time</strong>, or the animal has not yet shown you its range</li>
+<li class="fragment">In Session 5, a buffalo tracked for 36 days was indistinguishable from a random walker; one tracked for 157 days was clearly confined</li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p>“Must the time series be stationary?” Yes — over the timescale you summarise. A home range is always a home range <em>for a stated period</em>.</p>
+</div>
+</div>
+</section>
+<section id="choosing-an-estimator" class="slide level2">
+<h2>Choosing an estimator</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Answers</th>
+<th style="text-align: left;">Use when</th>
+<th style="text-align: left;">Watch out for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>MCP</strong></td>
+<td style="text-align: left;">outer boundary</td>
+<td style="text-align: left;">comparing to old literature</td>
+<td style="text-align: left;">convexity, outliers, sample size</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>KDE</strong></td>
+<td style="text-align: left;">density of fixes</td>
+<td style="text-align: left;">many roughly independent fixes</td>
+<td style="text-align: left;">bandwidth; autocorrelation</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>BBMM</strong></td>
+<td style="text-align: left;">where it <em>went</em></td>
+<td style="text-align: left;">the path matters; irregular data</td>
+<td style="text-align: left;">not a long-run range</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>AKDE</strong></td>
+<td style="text-align: left;">where it <em>lives</em></td>
+<td style="text-align: left;">modern GPS data: the default</td>
+<td style="text-align: left;">needs range residency</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div class="keyidea">
+<p>And before any of them: should you be estimating a home range at all? Check the variogram, and check that the track is stationary.</p>
 </div>
 </div>
 </section>
 <section id="quiz-2" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
-<p>Your 2-state HMM gives state 1 a mean step of 15 m with near-uniform turning angles. You want to call it “foraging”. What is the minimum you need?</p>
+<p>For one buffalo you get 95% areas of: MCP 274 km², KDE (<span class="math inline">\(h_\text{ref}\)</span>) 290 km², Brownian bridge 110 km², AKDE 400 km². Which statement is correct?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">Nothing — short steps with random turns is the standard definition of foraging</label></li>
-<li><label><input type="checkbox" checked="">External evidence, because resting, sheltering and a dead animal all produce the same signature</label></li>
-<li><label><input type="checkbox">A lower AIC than the 3-state model</label></li>
-<li><label><input type="checkbox">A larger sample of animals</label></li>
+<li><label><input type="checkbox">AKDE is wrong because it disagrees with the others</label></li>
+<li><label><input type="checkbox">The Brownian bridge is wrong because it is the smallest</label></li>
+<li><label><input type="checkbox" checked="">BBMM and AKDE answer different questions — where it went versus where it lives</label></li>
+<li><label><input type="checkbox">The average, 269 km², is the best estimate</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>The model returns <em>state 1</em>, not <em>foraging</em>. Short steps with unstructured turning angles are consistent with foraging — and equally with resting, ruminating, sheltering from heat, a collar that fell off, and an animal that has died. At 15 m, a good part of the apparent movement is GPS error.</p>
-<p>To turn the label into a measurement you need something outside the trajectory: accelerometer or activity data, direct observation, known diel patterns, or a validation subset with ground-truthed behaviour.</p>
-<p>Where you have none, the honest write-up describes states <strong>by their parameters</strong> — “a low-displacement state (mean step 15 m, dwell time ~14 h)” — and discusses the plausible behaviours without asserting one.</p>
+<p>These are the real values for the buffalo Cilla. The Brownian bridge estimates the <strong>occurrence</strong> distribution — the area around the path actually travelled during tracking — so it hugs the path. AKDE estimates the <strong>range</strong> distribution — where the animal would be found in the long run — and inflates the area to account for the parts of the range the animal would visit given more time.</p>
+<p>Averaging estimates of different quantities produces a number that answers no question. Choose the estimator from the question, and state the question.</p>
 </div>
 </div>
 </section>
-<section id="todays-exercise" class="slide level2">
-<h2>Today’s exercise</h2>
+<section id="todays-practical" class="slide level2">
+<h2>Today’s practical</h2>
 <div class="objectives">
-<p><strong><a href="../../classes/class-06/exercise.html">→ Class 6 exercise</a></strong></p>
+<p><strong><a href="../../classes/class-06/exercise.html">→ Session 6 practical</a></strong></p>
 <ol type="1">
-<li>Prepare buffalo data for <code>moveHMM</code></li>
-<li>Fit a 2-state model and read the output properly</li>
-<li>Decode states with Viterbi and map them</li>
-<li>Compare 2 vs 3 states — AIC against interpretability</li>
-<li>Check pseudo-residuals</li>
-<li>Segment Leo’s migration with a simple NSD-based approach</li>
+<li>MCP, KDE (<span class="math inline">\(h_\text{ref}\)</span> and LSCV), Brownian bridge and AKDE for one buffalo</li>
+<li>Map all four; write one paragraph on why they differ</li>
+<li>Variograms: a resident buffalo versus a nomadic gazelle</li>
+<li>Ground truth: estimate the home range of the simulated animal from Session 5, whose true range we know — and see how each estimator fails</li>
 </ol>
 </div>
 </section>
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li class="fragment">One trajectory contains several processes; <strong>segment before you analyse</strong></li>
-<li class="fragment">Change-point ≠ state classification. Match the tool to the question</li>
-<li class="fragment">An HMM is a hidden state chain plus state-specific step/angle distributions</li>
-<li class="fragment">It needs <strong>regular sampling</strong>; irregular data need continuous-time methods</li>
-<li class="fragment">AIC will over-state the number of states. Use biology, then check residuals</li>
-<li class="fragment">The model gives you states. <strong>You</strong> supply the names — with evidence</li>
+<li class="fragment">The UD is the object; a home range is a contour on it</li>
+<li class="fragment">MCP for comparability only; KDE depends on bandwidth and ignores autocorrelation</li>
+<li class="fragment">Brownian bridges map <strong>occurrence</strong>; AKDE estimates the <strong>range</strong> with a CI</li>
+<li class="fragment">Autocorrelation is information: effective sample size = range crossings</li>
+<li class="fragment">Check the variogram and stationarity <strong>first</strong></li>
 </ul>
 <div class="fragment">
-<h3 id="before-class-7">Before Class 7</h3>
+<h3 id="before-session-7">Before Session 7</h3>
 <ul>
-<li>Read Fieberg et al.&nbsp;(2021), <em>J Anim Ecol</em> 90:1027 — the “how-to” guide. It is the single most useful paper of the course</li>
+<li>Fieberg et al.&nbsp;(2021), <em>J Anim Ecol</em> 90:1027 — the “how-to” guide to habitat-selection parameters. The most useful paper of the course</li>
+<li>Fortin et al.&nbsp;(2005), <em>Ecology</em> 86:1320 — the first step selection function</li>
 </ul>
-
-
 </div>
+</section>
+<section id="section" class="slide level2 center">
+<h2></h2>
+<h3 id="questions">Questions?</h3>
+<p><a href="mailto:giuliano.colosimo@uniroma2.it">giuliano.colosimo@uniroma2.it</a></p>
+
+
 </section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../../assets/figures/Tor-Vergata_logo_cmyk.png" class="slide-logo"></p>
 <div class="footer footer-default">
-<p><a href="../../index.html">Animal Tracking 2026-2027 · Class 6</a></p>
+<p><a href="../../index.html">Animal Tracking 2026-2027 · Session 6</a></p>
 </div>
 </div></div>
 

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.8.21">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Exercise 2 — sf, terra and coordinate reference systems – Animal Tracking</title>
+<title>Practical 2 — The spatial survival kit – Animal Tracking</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -104,13 +104,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script><link rel="stylesheet" href="../../assets/quiz.css">
-<meta property="og:title" content="Exercise 2 — sf, terra and coordinate reference systems – Animal Tracking">
-<meta property="og:description" content="Class 2 · Theme 2">
+<meta property="og:title" content="Practical 2 — The spatial survival kit – Animal Tracking">
+<meta property="og:description" content="Session 2 · Spatial data in R">
 <meta property="og:image" content="https://giulianocolosimo.github.io/animtrack-2627/classes/class-02/exercise_files/figure-html/unnamed-chunk-11-1.png">
 <meta property="og:site_name" content="Animal Tracking">
 <meta property="og:locale" content="en_US">
-<meta property="og:image:height" content="768">
-<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="921">
+<meta property="og:image:width" content="1728">
 </head>
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
@@ -591,50 +591,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#your-turn" id="toc-your-turn" class="nav-link" data-scroll-target="#your-turn">Your turn</a></li>
   </ul>
 </li>
+  <li><a href="#task-2-reproject-and-measure-one-distance-three-ways" id="toc-task-2-reproject-and-measure-one-distance-three-ways" class="nav-link" data-scroll-target="#task-2-reproject-and-measure-one-distance-three-ways">Task 2 — Reproject, and measure one distance three ways</a></li>
   <li>
-<a href="#task-2-reproject-and-watch-the-numbers-change" id="toc-task-2-reproject-and-watch-the-numbers-change" class="nav-link" data-scroll-target="#task-2-reproject-and-watch-the-numbers-change">Task 2 — Reproject, and watch the numbers change</a>
+<a href="#task-3-vector-verbs-buffer-join-intersect" id="toc-task-3-vector-verbs-buffer-join-intersect" class="nav-link" data-scroll-target="#task-3-vector-verbs-buffer-join-intersect">Task 3 — Vector verbs: buffer, join, intersect</a>
   <ul class="collapse">
-<li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">Your turn</a></li>
+<li><a href="#st_join-which-polygon-is-each-fix-in" id="toc-st_join-which-polygon-is-each-fix-in" class="nav-link" data-scroll-target="#st_join-which-polygon-is-each-fix-in"><code>st_join()</code> — which polygon is each fix in?</a></li>
+  <li><a href="#st_buffer-and-st_intersection-what-is-around-the-animal" id="toc-st_buffer-and-st_intersection-what-is-around-the-animal" class="nav-link" data-scroll-target="#st_buffer-and-st_intersection-what-is-around-the-animal"><code>st_buffer()</code> and <code>st_intersection()</code> — what is around the animal?</a></li>
+  <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">Your turn</a></li>
   </ul>
 </li>
   <li>
-<a href="#task-3-three-ways-to-measure-one-distance" id="toc-task-3-three-ways-to-measure-one-distance" class="nav-link" data-scroll-target="#task-3-three-ways-to-measure-one-distance">Task 3 — Three ways to measure one distance</a>
+<a href="#task-4-rasters-with-terra-ndvi" id="toc-task-4-rasters-with-terra-ndvi" class="nav-link" data-scroll-target="#task-4-rasters-with-terra-ndvi">Task 4 — Rasters with <code>terra</code>: NDVI</a>
   <ul class="collapse">
 <li><a href="#your-turn-2" id="toc-your-turn-2" class="nav-link" data-scroll-target="#your-turn-2">Your turn</a></li>
   </ul>
 </li>
   <li>
-<a href="#task-4-scale-up-all-steps-for-all-animals" id="toc-task-4-scale-up-all-steps-for-all-animals" class="nav-link" data-scroll-target="#task-4-scale-up-all-steps-for-all-animals">Task 4 — Scale up: all steps for all animals</a>
+<a href="#task-5-break-it-on-purpose" id="toc-task-5-break-it-on-purpose" class="nav-link" data-scroll-target="#task-5-break-it-on-purpose">Task 5 — Break it on purpose</a>
   <ul class="collapse">
-<li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">Your turn</a></li>
+<li><a href="#a-bare-coordinate-matrix-has-no-crs" id="toc-a-bare-coordinate-matrix-has-no-crs" class="nav-link" data-scroll-target="#a-bare-coordinate-matrix-has-no-crs">A bare coordinate matrix has no CRS</a></li>
+  <li><a href="#extractbuffer-is-ignored-for-points" id="toc-extractbuffer-is-ignored-for-points" class="nav-link" data-scroll-target="#extractbuffer-is-ignored-for-points"><code>extract(buffer = )</code> is ignored for points</a></li>
   </ul>
 </li>
-  <li>
-<a href="#task-5-a-real-raster" id="toc-task-5-a-real-raster" class="nav-link" data-scroll-target="#task-5-a-real-raster">Task 5 — A real raster</a>
-  <ul class="collapse">
-<li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">Your turn</a></li>
-  </ul>
-</li>
-  <li>
-<a href="#task-6-deliberately-break-it" id="toc-task-6-deliberately-break-it" class="nav-link" data-scroll-target="#task-6-deliberately-break-it">Task 6 — Deliberately break it</a>
-  <ul class="collapse">
-<li><a href="#your-turn-5" id="toc-your-turn-5" class="nav-link" data-scroll-target="#your-turn-5">Your turn</a></li>
-  </ul>
-</li>
-  <li>
-<a href="#task-7-a-map-that-is-not-distorted" id="toc-task-7-a-map-that-is-not-distorted" class="nav-link" data-scroll-target="#task-7-a-map-that-is-not-distorted">Task 7 — A map that is not distorted</a>
-  <ul class="collapse">
-<li><a href="#your-turn-6" id="toc-your-turn-6" class="nav-link" data-scroll-target="#your-turn-6">Your turn</a></li>
-  </ul>
-</li>
+  <li><a href="#task-6-mini-challenge-a-map-worth-publishing" id="toc-task-6-mini-challenge-a-map-worth-publishing" class="nav-link" data-scroll-target="#task-6-mini-challenge-a-map-worth-publishing">Task 6 — Mini-challenge: a map worth publishing</a></li>
   <li><a href="#self-check" id="toc-self-check" class="nav-link" data-scroll-target="#self-check">Self-check</a></li>
-  <li><a href="#before-class-3" id="toc-before-class-3" class="nav-link" data-scroll-target="#before-class-3">Before Class 3</a></li>
+  <li><a href="#before-session-3" id="toc-before-session-3" class="nav-link" data-scroll-target="#before-session-3">Before Session 3</a></li>
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/GiulianoColosimo/animtrack-2627/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Classes</li><li class="breadcrumb-item"><a href="../../classes/class-02/slides.html">Class 2 — Spatial data in R</a></li><li class="breadcrumb-item"><a href="../../classes/class-02/exercise.html">Exercise · sf, terra and CRS</a></li></ol></nav><div class="quarto-title">
-<h1 class="title">Exercise 2 — sf, terra and coordinate reference systems</h1>
-<p class="subtitle lead">Class 2 · Theme 2</p>
+<h1 class="title">Practical 2 — The spatial survival kit</h1>
+<p class="subtitle lead">Session 2 · Spatial data in R</p>
 </div>
 
 
@@ -646,7 +633,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 24, 2026</p>
+      <p class="date-modified">September 30, 2026</p>
     </div>
   </div>
     
@@ -655,68 +642,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </header><div class="objectives">
-<p><strong>Goals.</strong> Build an <code>sf</code> object from a CSV; reproject it; measure distances correctly (and incorrectly, so you can see the difference); read a real raster and sample it at your fixes; make an undistorted map.</p>
-<p><strong>Time:</strong> ~50 minutes. <strong>Packages:</strong> <code>sf</code>, <code>terra</code>, <code>dplyr</code>.</p>
+<p><strong>Goals.</strong> Turn a CSV into an <code>sf</code> object; reproject it and measure distances correctly; use the vector verbs you will need all course (<code>st_buffer</code>, <code>st_join</code>, <code>st_intersection</code>); load real NDVI and land-cover rasters with <code>terra</code> and sample them at the fixes; break things on purpose; and finish with a publication-quality map.</p>
+<p><strong>Time:</strong> ~80 minutes. <strong>Packages:</strong> <code>sf</code>, <code>terra</code>, <code>dplyr</code>, <code>ggplot2</code>, <code>ggspatial</code>.</p>
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/">terra</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="task-1-from-data-frame-to-sf" class="level2"><h2 class="anchored" data-anchor-id="task-1-from-data-frame-to-sf">Task 1 — From data frame to <code>sf</code>
 </h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">buffalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/buffalo_kruger.csv.gz"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="va">individual.local.identifier</span>,</span>
-<span>    t  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="va">timestamp</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span>,</span>
-<span>    lon <span class="op">=</span> <span class="va">location.long</span>,</span>
-<span>    lat <span class="op">=</span> <span class="va">location.lat</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">track</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"data/buffalo_kruger.csv.gz"</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">`individual-local-identifier`</span>, t <span class="op">=</span> <span class="va">timestamp</span>,</span>
+<span>            lon <span class="op">=</span> <span class="va">`location-long`</span>, lat <span class="op">=</span> <span class="va">`location-lat`</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">lon</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">lat</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">t</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">t</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 24663</span></span>
-<span></span>
-<span><span class="va">buf_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">buffalo</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span>, remove <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">buf_sf</span></span>
+<span><span class="va">fixes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">track</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span>, remove <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">fixes</span></span>
 <span><span class="co">#&gt; Simple feature collection with 24663 features and 4 fields</span></span>
 <span><span class="co">#&gt; Geometry type: POINT</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
 <span><span class="co">#&gt; Bounding box:  xmin: 31.58639 ymin: -25.16421 xmax: 32.35671 ymax: -23.99802</span></span>
 <span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span><span class="co">#&gt; First 10 features:</span></span>
-<span><span class="co">#&gt;       id                   t      lon       lat                   geometry</span></span>
-<span><span class="co">#&gt; 1  Cilla 2005-07-14 04:35:00 31.80449 -25.06147 POINT (31.80449 -25.06147)</span></span>
-<span><span class="co">#&gt; 2  Cilla 2005-07-14 05:35:00 31.88776 -24.96738 POINT (31.88776 -24.96738)</span></span>
-<span><span class="co">#&gt; 3  Cilla 2005-07-14 07:35:00 31.85942 -24.94288 POINT (31.85942 -24.94288)</span></span>
-<span><span class="co">#&gt; 4  Cilla 2005-07-14 08:34:00 31.85512 -24.94914 POINT (31.85512 -24.94914)</span></span>
-<span><span class="co">#&gt; 5  Cilla 2005-07-14 09:35:00 31.85694 -24.95424 POINT (31.85694 -24.95424)</span></span>
-<span><span class="co">#&gt; 6  Cilla 2005-07-14 10:35:00 31.85977 -24.94735 POINT (31.85977 -24.94735)</span></span>
-<span><span class="co">#&gt; 7  Cilla 2005-07-14 11:34:00 31.84466 -24.93435 POINT (31.84466 -24.93435)</span></span>
-<span><span class="co">#&gt; 8  Cilla 2005-07-14 12:35:00 31.84410 -24.93400    POINT (31.8441 -24.934)</span></span>
-<span><span class="co">#&gt; 9  Cilla 2005-07-14 13:34:00 31.84463 -24.93442 POINT (31.84463 -24.93442)</span></span>
-<span><span class="co">#&gt; 10 Cilla 2005-07-14 14:35:00 31.85700 -24.93371   POINT (31.857 -24.93371)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><code>remove = FALSE</code> keeps the original <code>lon</code>/<code>lat</code> columns. Handy — you often want the plain numbers alongside the geometry.</p>
-</div>
+<span><span class="co">#&gt; # A tibble: 24,663 × 5</span></span>
+<span><span class="co">#&gt;    id    t                     lon   lat             geometry</span></span>
+<span><span class="co">#&gt;  * &lt;chr&gt; &lt;dttm&gt;              &lt;dbl&gt; &lt;dbl&gt;          &lt;POINT [°]&gt;</span></span>
+<span><span class="co">#&gt;  1 Cilla 2005-07-14 04:35:00  31.8 -25.1 (31.80449 -25.06147)</span></span>
+<span><span class="co">#&gt;  2 Cilla 2005-07-14 05:35:00  31.9 -25.0 (31.88776 -24.96738)</span></span>
+<span><span class="co">#&gt;  3 Cilla 2005-07-14 07:35:00  31.9 -24.9 (31.85942 -24.94288)</span></span>
+<span><span class="co">#&gt;  4 Cilla 2005-07-14 08:34:00  31.9 -24.9 (31.85512 -24.94914)</span></span>
+<span><span class="co">#&gt;  5 Cilla 2005-07-14 09:35:00  31.9 -25.0 (31.85694 -24.95424)</span></span>
+<span><span class="co">#&gt;  6 Cilla 2005-07-14 10:35:00  31.9 -24.9 (31.85977 -24.94735)</span></span>
+<span><span class="co">#&gt;  7 Cilla 2005-07-14 11:34:00  31.8 -24.9 (31.84466 -24.93435)</span></span>
+<span><span class="co">#&gt;  8 Cilla 2005-07-14 12:35:00  31.8 -24.9    (31.8441 -24.934)</span></span>
+<span><span class="co">#&gt;  9 Cilla 2005-07-14 13:34:00  31.8 -24.9 (31.84463 -24.93442)</span></span>
+<span><span class="co">#&gt; 10 Cilla 2005-07-14 14:35:00  31.9 -24.9   (31.857 -24.93371)</span></span>
+<span><span class="co">#&gt; # ℹ 24,653 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="your-turn" class="level3"><h3 class="anchored" data-anchor-id="your-turn">Your turn</h3>
-<p><strong>1a.</strong> What does <code>st_crs(buf_sf)</code> report? Find the EPSG code and the units. <strong>1b.</strong> What is the bounding box?</p>
+<p><strong>1a.</strong> What CRS is this, in what units? <strong>1b.</strong> What is the bounding box?</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -725,52 +695,173 @@ Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span><span class="op">$</span><span class="va">epsg</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span><span class="op">$</span><span class="va">epsg</span></span>
 <span><span class="co">#&gt; [1] 4326</span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span><span class="op">$</span><span class="va">units_gdal</span></span>
-<span><span class="co">#&gt; [1] "degree"</span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_is_longlat.html">st_is_longlat</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_is_longlat.html">st_is_longlat</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span>
-<span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      xmin      ymin      xmax      ymax </span></span>
 <span><span class="co">#&gt;  31.58639 -25.16421  32.35671 -23.99802</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Degrees, EPSG:4326, and <code><a href="https://r-spatial.github.io/sf/reference/st_is_longlat.html">st_is_longlat()</a></code> is <code>TRUE</code> — the flag that should make you stop before computing any distance or area.</p>
+<p>EPSG:4326, degrees — and <code><a href="https://r-spatial.github.io/sf/reference/st_is_longlat.html">st_is_longlat()</a></code> returning <code>TRUE</code> is the flag that should make you stop before computing any distance or area.</p>
 </div>
 </div>
 </div>
-</section></section><section id="task-2-reproject-and-watch-the-numbers-change" class="level2"><h2 class="anchored" data-anchor-id="task-2-reproject-and-watch-the-numbers-change">Task 2 — Reproject, and watch the numbers change</h2>
-<p>Kruger sits in UTM zone 36S, EPSG:32736.</p>
+</section></section><section id="task-2-reproject-and-measure-one-distance-three-ways" class="level2"><h2 class="anchored" data-anchor-id="task-2-reproject-and-measure-one-distance-three-ways">Task 2 — Reproject, and measure one distance three ways</h2>
+<p>Kruger is in UTM zone 36S, EPSG:32736.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">buf_utm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">buf_sf</span>, <span class="fl">32736</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fixes_utm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">fixes</span>, <span class="fl">32736</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Same animal, same fix, different numbers</span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt;         X         Y </span></span>
-<span><span class="co">#&gt;  31.80449 -25.06147</span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">buf_utm</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt;         X         Y </span></span>
-<span><span class="co">#&gt;  379415.9 7227712.7</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">queen</span> <span class="op">&lt;-</span> <span class="va">fixes</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op">==</span> <span class="st">"Queen"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">queen</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">wrong</span>     <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/diff.html">diff</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/diff.html">diff</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>          <span class="co"># "distance" in degrees</span></span>
+<span><span class="va">geodesic</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">queen</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">queen</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span>              <span class="co"># on the ellipsoid</span></span>
+<span><span class="va">projected</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">queen</span>, <span class="fl">32736</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>,</span>
+<span>                         <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">queen</span>, <span class="fl">32736</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span>     <span class="co"># in UTM metres</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>wrong_degrees <span class="op">=</span> <span class="va">wrong</span>, geodesic_m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">geodesic</span><span class="op">)</span>,</span>
+<span>  projected_m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">projected</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; wrong_degrees    geodesic_m   projected_m </span></span>
+<span><span class="co">#&gt;  2.835514e-03  3.014658e+02  3.009957e+02</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Which zone?
+<span class="screen-reader-only">Note</span>What the three numbers mean
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><code>zone = floor((longitude + 180) / 6) + 1</code>. Kruger is at ~31.8°E, so <code>floor(211.8 / 6) + 1 = 36</code>. Southern hemisphere → EPSG <code>327</code> + zone = <strong>32736</strong>. Northern would be <code>326</code> + zone.</p>
+<p>The first is not a distance at all: it mixes degrees of longitude and latitude, which are different lengths. The other two agree to a small fraction of a percent — UTM’s distortion inside a zone is under 0.1%.</p>
+<p>For distances either works. For kernel densities, buffers and anything involving <strong>area</strong>, project first: those methods assume a plane.</p>
 </div>
 </div>
-<section id="your-turn-1" class="level3"><h3 class="anchored" data-anchor-id="your-turn-1">Your turn</h3>
-<p><strong>2a.</strong> Confirm the round trip: transform back to 4326 and compare to the original.</p>
+</div>
+</section><section id="task-3-vector-verbs-buffer-join-intersect" class="level2"><h2 class="anchored" data-anchor-id="task-3-vector-verbs-buffer-join-intersect">Task 3 — Vector verbs: buffer, join, intersect</h2>
+<p>We need polygons to overlay. Build them from the land-cover raster: for each cell, which cover type dominates?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html">rast</a></span><span class="op">(</span><span class="st">"data/kruger_landcover.tif"</span><span class="op">)</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"trees"</span>, <span class="st">"grassland"</span>, <span class="st">"shrubs"</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">dominant</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">which.max</a></span><span class="op">(</span><span class="va">lc</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/factors.html">levels</a></span><span class="op">(</span><span class="va">dominant</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, cover <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"trees"</span>, <span class="st">"grassland"</span>, <span class="st">"shrubs"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">habitat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.polygons.html">as.polygons</a></span><span class="op">(</span><span class="va">dominant</span>, dissolve <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="fl">32736</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">habitat</span></span>
+<span><span class="co">#&gt; Simple feature collection with 3 features and 1 field</span></span>
+<span><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 337122.5 ymin: 7200872 xmax: 449667.9 ymax: 7356755</span></span>
+<span><span class="co">#&gt; Projected CRS: WGS 84 / UTM zone 36S</span></span>
+<span><span class="co">#&gt;       cover                       geometry</span></span>
+<span><span class="co">#&gt; 1     trees MULTIPOLYGON (((387178.5 73...</span></span>
+<span><span class="co">#&gt; 2 grassland MULTIPOLYGON (((411785.8 73...</span></span>
+<span><span class="co">#&gt; 3    shrubs MULTIPOLYGON (((405848 7355...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="st_join-which-polygon-is-each-fix-in" class="level3"><h3 class="anchored" data-anchor-id="st_join-which-polygon-is-each-fix-in">
+<code>st_join()</code> — which polygon is each fix in?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fixes_hab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_join</a></span><span class="op">(</span><span class="va">fixes_utm</span>, <span class="va">habitat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fixes_hab</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">cover</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>share <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span><span class="co">#&gt;   cover         n share</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 grassland 24090 0.977</span></span>
+<span><span class="co">#&gt; 2 shrubs      476 0.019</span></span>
+<span><span class="co">#&gt; 3 trees        97 0.004</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="st_buffer-and-st_intersection-what-is-around-the-animal" class="level3"><h3 class="anchored" data-anchor-id="st_buffer-and-st_intersection-what-is-around-the-animal">
+<code>st_buffer()</code> and <code>st_intersection()</code> — what is around the animal?</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cilla_area</span> <span class="op">&lt;-</span> <span class="va">fixes_utm</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op">==</span> <span class="st">"Cilla"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_buffer</a></span><span class="op">(</span>dist <span class="op">=</span> <span class="fl">500</span><span class="op">)</span> <span class="op">|&gt;</span>          <span class="co"># 500 m around every fix</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html">st_union</a></span><span class="op">(</span><span class="op">)</span>                        <span class="co"># one polygon: the area Cilla came near</span></span>
+<span></span>
+<span><span class="va">used_hab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">habitat</span>, <span class="va">cilla_area</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>km2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">geometry</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1e6</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">used_hab</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">cover</span>, <span class="va">km2</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       cover        km2</span></span>
+<span><span class="co">#&gt; 1     trees   2.424118</span></span>
+<span><span class="co">#&gt; 2 grassland 221.503730</span></span>
+<span><span class="co">#&gt; 3    shrubs   1.848077</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="your-turn-1" class="level3"><h3 class="anchored" data-anchor-id="your-turn-1">Your turn</h3>
+<p><strong>3a.</strong> Compare the habitat composition of Cilla’s area with that of the whole landscape. <strong>3b.</strong> Why must <code>habitat</code> and <code>cilla_area</code> be projected here?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">habitat</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">landscape</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">habitat</span>, <span class="va">study</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>km2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">geometry</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1e6</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span></span>
+<span>  <span class="va">landscape</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span><span class="va">cover</span>, landscape <span class="op">=</span> <span class="va">km2</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">km2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="va">used_hab</span>  <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span><span class="va">cover</span>, cilla <span class="op">=</span> <span class="va">km2</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">km2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"cover"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">landscape</span>, <span class="va">cilla</span><span class="op">)</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="va">z</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         ratio <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="va">cilla</span> <span class="op">/</span> <span class="va">landscape</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       cover landscape cilla ratio</span></span>
+<span><span class="co">#&gt; 1     trees     0.245 0.011  0.04</span></span>
+<span><span class="co">#&gt; 2 grassland     0.424 0.981  2.31</span></span>
+<span><span class="co">#&gt; 3    shrubs     0.331 0.008  0.02</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A ratio above 1 means Cilla’s surroundings contain more of that cover than the landscape does. This used-versus-available comparison is the seed of Session 7.</p>
+<p>Both layers must be projected because <code>st_buffer(dist = 500)</code> needs metres (in degrees, 500 would be absurd) and <code><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_area()</a></code> of a union of buffers assumes a plane. <code>sf</code> would compute geodesic areas on 4326, but buffering in degrees produces ellipses, not circles.</p>
+</div>
+</div>
+</div>
+</section></section><section id="task-4-rasters-with-terra-ndvi" class="level2"><h2 class="anchored" data-anchor-id="task-4-rasters-with-terra-ndvi">Task 4 — Rasters with <code>terra</code>: NDVI</h2>
+<p><code>data/kruger_ndvi_2005.tif</code> holds two <strong>MODIS</strong> 16-day NDVI composites (MOD13Q1, 250 m) over the buffalo range: one from the wet season and one from the dry season of 2005.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ndvi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html">rast</a></span><span class="op">(</span><span class="st">"data/kruger_ndvi_2005.tif"</span><span class="op">)</span></span>
+<span><span class="va">ndvi</span></span>
+<span><span class="co">#&gt; class       : SpatRaster</span></span>
+<span><span class="co">#&gt; size        : 481, 463, 2  (nrow, ncol, nlyr)</span></span>
+<span><span class="co">#&gt; resolution  : 0.002432149, 0.002432149  (x, y)</span></span>
+<span><span class="co">#&gt; extent      : 31.41276, 32.53885, -25.1657, -23.99583  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326)</span></span>
+<span><span class="co">#&gt; source      : kruger_ndvi_2005.tif</span></span>
+<span><span class="co">#&gt; names       : ndvi_2005_02_02, ndvi_2005_09_14</span></span>
+<span><span class="co">#&gt; min values  :       -0.198494,       -0.198628</span></span>
+<span><span class="co">#&gt; max values  :        0.852371,        0.599399</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">ndvi</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fl">50</span>, <span class="st">"Greens"</span>, rev <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="your-turn-2" class="level3"><h3 class="anchored" data-anchor-id="your-turn-2">Your turn</h3>
+<p><strong>4a.</strong> What is the resolution in metres? What CRS is it in? <strong>4b.</strong> Extract both NDVI layers at every buffalo fix.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -784,389 +875,173 @@ Tip
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">back</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">buf_utm</span>, <span class="fl">4326</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">back</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1.776357e-14</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/crs.html">crs</a></span><span class="op">(</span><span class="va">ndvi</span>, describe <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">code</span></span>
+<span><span class="co">#&gt; [1] "4326"</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">res</a></span><span class="op">(</span><span class="va">ndvi</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.002432149 0.002432149</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">res</a></span><span class="op">(</span><span class="va">ndvi</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">111320</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="fl">24.6</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">/</span> <span class="fl">180</span><span class="op">)</span>, <span class="fl">111320</span><span class="op">)</span><span class="op">)</span>   <span class="co"># approx metres</span></span>
+<span><span class="co">#&gt; [1] 246 271</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Agreement to ~1e-9 degrees — about 0.1 mm. Reprojection is lossless up to floating-point precision; it is not a source of error you need to worry about.</p>
-</div>
-</div>
-</div>
-</section></section><section id="task-3-three-ways-to-measure-one-distance" class="level2"><h2 class="anchored" data-anchor-id="task-3-three-ways-to-measure-one-distance">Task 3 — Three ways to measure one distance</h2>
-<p>Take the first two fixes of buffalo “Queen” and measure the step three ways.</p>
+<p>About 230 m east–west and 230 m north–south — MODIS’s 250 m product, delivered here in longitude/latitude.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">queen</span> <span class="op">&lt;-</span> <span class="va">buf_sf</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op">==</span> <span class="st">"Queen"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fixes</span><span class="op">$</span><span class="va">ndvi_wet</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">ndvi</span><span class="op">[[</span><span class="st">"ndvi_2005_02_02"</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
+<span><span class="va">fixes</span><span class="op">$</span><span class="va">ndvi_dry</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">ndvi</span><span class="op">[[</span><span class="st">"ndvi_2005_09_14"</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
 <span></span>
-<span><span class="co"># (1) WRONG — Euclidean on degrees, pretending they are metres</span></span>
-<span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">queen</span><span class="op">)</span></span>
-<span><span class="va">wrong</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/diff.html">diff</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/diff.html">diff</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">wrong</span></span>
-<span><span class="co">#&gt; [1] 0.002835514</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ndvi_wet"</span>, <span class="st">"ndvi_dry"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     ndvi_wet         ndvi_dry     </span></span>
+<span><span class="co">#&gt;  Min.   :0.2920   Min.   :0.1570  </span></span>
+<span><span class="co">#&gt;  1st Qu.:0.4985   1st Qu.:0.2108  </span></span>
+<span><span class="co">#&gt;  Median :0.5859   Median :0.2391  </span></span>
+<span><span class="co">#&gt;  Mean   :0.5674   Mean   :0.2401  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:0.6426   3rd Qu.:0.2656  </span></span>
+<span><span class="co">#&gt;  Max.   :0.7435   Max.   :0.3927  </span></span>
+<span><span class="co">#&gt;  NAs    :1        NAs    :1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The same places are far greener in February than in September. Which value belongs to which fix depends on <em>when</em> the fix was taken — Session 3 does that matching properly.</p>
+</div>
+</div>
+</div>
+</section></section><section id="task-5-break-it-on-purpose" class="level2"><h2 class="anchored" data-anchor-id="task-5-break-it-on-purpose">Task 5 — Break it on purpose</h2>
+<p>Two silent failures worth recognising for the rest of your career.</p>
+<section id="a-bare-coordinate-matrix-has-no-crs" class="level3"><h3 class="anchored" data-anchor-id="a-bare-coordinate-matrix-has-no-crs">A bare coordinate matrix has no CRS</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ndvi_utm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/project.html">project</a></span><span class="op">(</span><span class="va">ndvi</span>, <span class="st">"EPSG:32736"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># (2) Geodesic on the ellipsoid — sf does this automatically for 4326</span></span>
-<span><span class="va">geodesic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">queen</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">queen</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">geodesic</span></span>
-<span><span class="co">#&gt; Units: [m]</span></span>
-<span><span class="co">#&gt;          [,1]</span></span>
-<span><span class="co">#&gt; [1,] 301.4658</span></span>
-<span></span>
-<span><span class="co"># (3) Euclidean in projected metres</span></span>
-<span><span class="va">queen_utm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">queen</span>, <span class="fl">32736</span><span class="op">)</span></span>
-<span><span class="va">projected</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">queen_utm</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">queen_utm</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">projected</span></span>
-<span><span class="co">#&gt; Units: [m]</span></span>
-<span><span class="co">#&gt;          [,1]</span></span>
-<span><span class="co">#&gt; [1,] 300.9957</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<section id="your-turn-2" class="level3"><h3 class="anchored" data-anchor-id="your-turn-2">Your turn</h3>
-<p><strong>3a.</strong> Explain the three numbers. <strong>3b.</strong> How big is the disagreement between (2) and (3), in relative terms?</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>wrong_degrees <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">wrong</span><span class="op">)</span>,</span>
-<span>  geodesic_m    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">geodesic</span><span class="op">)</span>,</span>
-<span>  projected_m   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">projected</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; wrong_degrees    geodesic_m   projected_m </span></span>
-<span><span class="co">#&gt;  2.835514e-03  3.014658e+02  3.009957e+02</span></span>
-<span></span>
-<span><span class="co"># Relative difference between the two *correct* methods</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">geodesic</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">projected</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">geodesic</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.001559558</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Number (1) is in <strong>degrees</strong> and is not a distance at all — it is a dimensionless mix of two different angular units. It is small not because the animal barely moved, but because degrees are big.</p>
-<p>Numbers (2) and (3) are both in metres and agree to a small fraction of a percent. That is UTM doing its job: inside one zone, distortion is under 0.1%.</p>
-<p><strong>Practical rule.</strong> For distances, either is fine inside a zone. But for kernel density, step-length distributions, buffers and anything involving <em>area</em>, project first — those methods assume a plane.</p>
-</div>
-</div>
-</div>
-</section></section><section id="task-4-scale-up-all-steps-for-all-animals" class="level2"><h2 class="anchored" data-anchor-id="task-4-scale-up-all-steps-for-all-animals">Task 4 — Scale up: all steps for all animals</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">step_lengths</span> <span class="op">&lt;-</span> <span class="va">buf_utm</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">t</span>, .by_group <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
-<span>    sl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">geometry</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">geometry</span><span class="op">)</span>, by_element <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    dt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">t</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"hours"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">sl</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="va">step_lengths</span><span class="op">$</span><span class="va">sl</span><span class="op">)</span></span>
-<span><span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span></span>
-<span><span class="co">#&gt;     0.00    28.54   153.92   330.34   399.99 63102.52</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<section id="your-turn-3" class="level3"><h3 class="anchored" data-anchor-id="your-turn-3">Your turn</h3>
-<p><strong>4a.</strong> What is the median step length per individual? <strong>4b.</strong> Plot the distribution of step lengths. Why the long tail?</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">step_lengths</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>, median_sl <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">median</a></span><span class="op">(</span><span class="va">sl</span><span class="op">)</span>, max_sl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">sl</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 4</span></span>
-<span><span class="co">#&gt;   id         n median_sl max_sl</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt;     &lt;dbl&gt;  &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 Cilla   3527      149. 13386.</span></span>
-<span><span class="co">#&gt; 2 Gabs    3669      107.  6112.</span></span>
-<span><span class="co">#&gt; 3 Mvubu   2571      127.  6114.</span></span>
-<span><span class="co">#&gt; 4 Pepper  4570      181. 21244.</span></span>
-<span><span class="co">#&gt; 5 Queen   4544      171. 16082.</span></span>
-<span><span class="co">#&gt; 6 Toni    5776      174. 63103.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/hist.html">hist</a></span><span class="op">(</span><span class="va">step_lengths</span><span class="op">$</span><span class="va">sl</span>, breaks <span class="op">=</span> <span class="fl">60</span>, col <span class="op">=</span> <span class="st">"#1f6f78"</span>, border <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Step lengths"</span>, xlab <span class="op">=</span> <span class="st">"metres"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/hist.html">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">step_lengths</span><span class="op">$</span><span class="va">sl</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>, breaks <span class="op">=</span> <span class="fl">60</span>, col <span class="op">=</span> <span class="st">"#1f6f78"</span>, border <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"log10(step length + 1)"</span>, xlab <span class="op">=</span> <span class="st">"log10 metres"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Two things produce the tail. First, genuine long movements. Second — and this is the important one — <strong>steps separated by long time gaps</strong>. A “step” across a 12-hour gap is not comparable to a step across one hour.</p>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">step_lengths</span><span class="op">$</span><span class="va">dt</span>, <span class="va">step_lengths</span><span class="op">$</span><span class="va">sl</span>, pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.2</span>,</span>
-<span>     col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html">adjustcolor</a></span><span class="op">(</span><span class="st">"#1f6f78"</span>, <span class="fl">0.3</span><span class="op">)</span>, log <span class="op">=</span> <span class="st">"y"</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Time gap (hours)"</span>, ylab <span class="op">=</span> <span class="st">"Step length (m), log scale"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Step length is meaningless without its time interval. This is why Class 3 <strong>resamples</strong> tracks to a regular interval before computing anything.</p>
-</div>
-</div>
-</div>
-</section></section><section id="task-5-a-real-raster" class="level2"><h2 class="anchored" data-anchor-id="task-5-a-real-raster">Task 5 — A real raster</h2>
-<p>We use SRTM-derived elevation for the Kruger area, already cropped for you.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">elev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html">rast</a></span><span class="op">(</span><span class="st">"data/kruger_elevation.tif"</span><span class="op">)</span></span>
-<span><span class="va">elev</span></span>
-<span><span class="co">#&gt; class       : SpatRaster</span></span>
-<span><span class="co">#&gt; size        : 168, 132, 1  (nrow, ncol, nlyr)</span></span>
-<span><span class="co">#&gt; resolution  : 0.008333333, 0.008333333  (x, y)</span></span>
-<span><span class="co">#&gt; extent      : 31.4, 32.5, -25.3, -23.9  (xmin, xmax, ymin, ymax)</span></span>
-<span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326)</span></span>
-<span><span class="co">#&gt; source      : kruger_elevation.tif</span></span>
-<span><span class="co">#&gt; name        : elevation</span></span>
-<span><span class="co">#&gt; min value   :       117</span></span>
-<span><span class="co">#&gt; max value   :       572</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<section id="your-turn-4" class="level3"><h3 class="anchored" data-anchor-id="your-turn-4">Your turn</h3>
-<p><strong>5a.</strong> What is the resolution, in degrees and roughly in metres? <strong>5b.</strong> Extract elevation at every buffalo fix. What is the range?</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">res</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span>                       <span class="co"># degrees</span></span>
-<span><span class="co">#&gt; [1] 0.008333333 0.008333333</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">res</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">111320</span>           <span class="co"># metres, north-south</span></span>
-<span><span class="co">#&gt; [1] 927.6667</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">res</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="fl">111320</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="fl">24.5</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">/</span> <span class="fl">180</span><span class="op">)</span>   <span class="co"># metres, east-west</span></span>
-<span><span class="co">#&gt; [1] 844.1407</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/crs.html">crs</a></span><span class="op">(</span><span class="va">elev</span>, describe <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">code</span></span>
-<span><span class="co">#&gt; [1] "4326"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>30 arc-seconds ≈ 900 m. The raster is in EPSG:4326, the <em>same</em> CRS as <code>buf_sf</code> — so we extract with the geographic version, not the UTM one.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">buf_sf</span><span class="op">$</span><span class="va">elevation</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">elev</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="st">"elevation"</span><span class="op">]</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">$</span><span class="va">elevation</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.     NAs </span></span>
-<span><span class="co">#&gt;   148.0   239.0   265.0   260.5   287.0   422.0       1</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">$</span><span class="va">elevation</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">elevation</span> <span class="op">~</span> <span class="va">id</span>, data <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span>,</span>
-<span>        col <span class="op">=</span> <span class="st">"#1f6f78"</span>, border <span class="op">=</span> <span class="st">"grey30"</span>,</span>
-<span>        xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">"Elevation (m)"</span>,</span>
-<span>        main <span class="op">=</span> <span class="st">"Elevation used, by individual"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Individuals occupy noticeably different elevation bands — a first hint that they are not interchangeable, and a preview of Class 7.</p>
-</div>
-</div>
-</div>
-</section></section><section id="task-6-deliberately-break-it" class="level2"><h2 class="anchored" data-anchor-id="task-6-deliberately-break-it">Task 6 — Deliberately break it</h2>
-<p>Do this on purpose, once, so you recognise the symptom for the rest of your career.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">elev_utm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/project.html">project</a></span><span class="op">(</span><span class="va">elev</span>, <span class="st">"EPSG:32736"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><strong>First, the good news.</strong> Both objects carry a CRS, so <code>terra</code> sorts it out itself — note the warning it prints:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ok</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">elev_utm</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Both objects carry a CRS: terra reprojects for you, with a warning</span></span>
+<span><span class="va">ok</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">ndvi_utm</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">ok</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 4.054657e-05</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><strong>Now the bad news.</strong> Strip the coordinates down to a bare matrix and the CRS goes with them:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span>          <span class="co"># just numbers — no CRS attached</span></span>
-<span><span class="va">bad</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">elev_utm</span>, <span class="va">xy</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 4.054657e-05</span></span>
+<span></span>
+<span><span class="co"># A bare matrix carries none: degrees are read as metres</span></span>
+<span><span class="va">bad</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">ndvi_utm</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">bad</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Every value is <code>NA</code>. No error, no warning — just a column of missing data that would quietly propagate into your model.</p>
-<section id="your-turn-5" class="level3"><h3 class="anchored" data-anchor-id="your-turn-5">Your turn</h3>
-<p><strong>6a.</strong> Explain why. <strong>6b.</strong> Find the second way to produce the same failure.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>A matrix has no CRS, so <code>terra</code> can only assume the numbers are already in the raster’s coordinate system. It reads longitude 31.8 as <strong>31.8 metres</strong> east of the UTM 36S origin — a point in the Gulf of Guinea, far outside the extent:</p>
+<p>Every value <code>NA</code>, no error, no warning. <strong>Keep coordinates in objects that carry their CRS.</strong></p>
+</section><section id="extractbuffer-is-ignored-for-points" class="level3"><h3 class="anchored" data-anchor-id="extractbuffer-is-ignored-for-points">
+<code>extract(buffer = )</code> is ignored for points</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/ext.html">ext</a></span><span class="op">(</span><span class="va">elev_utm</span><span class="op">)</span></span>
-<span><span class="co">#&gt; SpatExtent : 337122.45809718, 449698.040805795, 7201293.28983987, 7356754.80881844 (xmin, xmax, ymin, ymax)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">xy</span>, <span class="fl">2</span>, <span class="va">range</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             X         Y</span></span>
-<span><span class="co">#&gt; [1,] 31.58639 -25.16421</span></span>
-<span><span class="co">#&gt; [2,] 32.35671 -23.99802</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">at_fix</span>   <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">ndvi</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
+<span><span class="va">buf_2000</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">ndvi</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span>, buffer <span class="op">=</span> <span class="fl">2000</span>,</span>
+<span>                           fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/identical.html">identical</a></span><span class="op">(</span><span class="va">at_fix</span>, <span class="va">buf_2000</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The second route to the same failure is an object whose CRS is <em>undefined</em>:</p>
+<p>The “2 km mean” is the at-fix value, unchanged. Build buffer polygons yourself:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">elev_nocrs</span> <span class="op">&lt;-</span> <span class="va">elev_utm</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/crs.html">crs</a></span><span class="op">(</span><span class="va">elev_nocrs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">""</span></span>
-<span><span class="va">worse</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">elev_nocrs</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">worse</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">buf_poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">fixes_utm</span>, <span class="fl">2000</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">buf_2000</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">ndvi</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">buf_poly</span>, fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>sd_at_fix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">at_fix</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, sd_2km_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">buf_2000</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   sd_at_fix sd_2km_mean </span></span>
+<span><span class="co">#&gt;  0.09203145  0.08682538</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Now <code>terra</code> has nothing to transform <em>to</em>, so it assumes agreement — and fails the same silent way.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>The habit to build
+<span class="screen-reader-only">Important</span>The habit
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<ul>
-<li>
-<strong>Keep coordinates inside objects that carry a CRS</strong> (<code>sf</code>, <code>SpatVector</code>). Do not pass bare matrices around.</li>
-<li>When <code>terra</code> prints <code>transforming vector data to the CRS of the raster</code>, that is not noise — it is telling you your inputs disagreed. Read it.</li>
-<li>Before every <code><a href="https://rspatial.github.io/terra/reference/extract.html">extract()</a></code>, ten seconds of checking:</li>
-</ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/crs.html">crs</a></span><span class="op">(</span><span class="va">r</span>, describe <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">code</span> ; <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">pts</span><span class="op">)</span><span class="op">$</span><span class="va">epsg</span>    <span class="co"># same code?</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/ext.html">ext</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span> ; <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">pts</span><span class="op">)</span>                              <span class="co"># overlapping numbers?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>When an argument is supposed to change the answer, <strong>check that it did</strong>. <code><a href="https://rspatial.github.io/terra/reference/identical.html">identical()</a></code> costs one line.</p>
+<p>Note also what smoothing does: the 2 km mean has less variance than the at-fix value. Here the reduction is modest, because savanna greenness varies mostly at scales larger than 2 km; for a patchier covariate it can be large. Either way, smoothing shrinks the contrast between used and available places. The buffer radius is a hypothesis about perception — choose it from biology, not from whichever radius gives the smallest p-value.</p>
 </div>
 </div>
-</section></section><section id="task-7-a-map-that-is-not-distorted" class="level2"><h2 class="anchored" data-anchor-id="task-7-a-map-that-is-not-distorted">Task 7 — A map that is not distorted</h2>
+</section></section><section id="task-6-mini-challenge-a-map-worth-publishing" class="level2"><h2 class="anchored" data-anchor-id="task-6-mini-challenge-a-map-worth-publishing">Task 6 — Mini-challenge: a map worth publishing</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">elev_crop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/crop.html">crop</a></span><span class="op">(</span><span class="va">elev</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/ext.html">ext</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://paleolimbot.github.io/ggspatial/">ggspatial</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">elev_crop</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fl">50</span>, <span class="st">"Terrain2"</span><span class="op">)</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Buffalo tracks over elevation, Kruger NP"</span>,</span>
-<span>     plg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"m a.s.l."</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">ndvi_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">ndvi_utm</span><span class="op">[[</span><span class="st">"ndvi_2005_02_02"</span><span class="op">]</span><span class="op">]</span>, xy <span class="op">=</span> <span class="cn">TRUE</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html">names</a></span><span class="op">(</span><span class="va">ndvi_df</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"ndvi"</span></span>
 <span></span>
-<span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html">unique</a></span><span class="op">(</span><span class="va">buf_sf</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
-<span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ids</span><span class="op">)</span>, <span class="st">"Dark 3"</span><span class="op">)</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">ids</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">buf_sf</span><span class="op">[</span><span class="va">buf_sf</span><span class="op">$</span><span class="va">id</span> <span class="op">==</span> <span class="va">ids</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">]</span></span>
-<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/lines.html">lines</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html">adjustcolor</a></span><span class="op">(</span><span class="va">cols</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="fl">0.8</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, legend <span class="op">=</span> <span class="va">ids</span>, col <span class="op">=</span> <span class="va">cols</span>, lwd <span class="op">=</span> <span class="fl">2</span>, bty <span class="op">=</span> <span class="st">"n"</span>, cex <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">paths</span> <span class="op">&lt;-</span> <span class="va">fixes_utm</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>do_union <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_cast.html">st_cast</a></span><span class="op">(</span><span class="st">"LINESTRING"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Frame the map on where the animals are (robust to a stray fix), plus a margin</span></span>
+<span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">fixes_utm</span><span class="op">)</span></span>
+<span><span class="va">lims_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/quantile.html">quantile</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.999</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4000</span>, <span class="fl">4000</span><span class="op">)</span></span>
+<span><span class="va">lims_y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/quantile.html">quantile</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.999</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4000</span>, <span class="fl">4000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_raster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">ndvi_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, fill <span class="op">=</span> <span class="va">ndvi</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html">scale_fill_gradientn</a></span><span class="op">(</span>colours <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fl">9</span>, <span class="st">"Greens"</span>, rev <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                       limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.9</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"NDVI\nFeb 2005"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">paths</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">id</span><span class="op">)</span>, linewidth <span class="op">=</span> <span class="fl">0.3</span>, alpha <span class="op">=</span> <span class="fl">0.85</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_colour_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/annotation_scale.html">annotation_scale</a></span><span class="op">(</span>location <span class="op">=</span> <span class="st">"bl"</span>, width_hint <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/annotation_north_arrow.html">annotation_north_arrow</a></span><span class="op">(</span>location <span class="op">=</span> <span class="st">"tr"</span>, style <span class="op">=</span> <span class="fu"><a href="https://paleolimbot.github.io/ggspatial/reference/north_arrow_orienteering.html">north_arrow_minimal</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">coord_sf</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="fl">32736</span>, xlim <span class="op">=</span> <span class="va">lims_x</span>, ylim <span class="op">=</span> <span class="va">lims_y</span>, expand <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"African buffalo in Kruger National Park"</span>,</span>
+<span>       subtitle <span class="op">=</span> <span class="st">"GPS tracks over wet-season greenness"</span>,</span>
+<span>       caption <span class="op">=</span> <span class="st">"Tracks: Movebank (Getz et al.). NDVI: MODIS MOD13Q1, 2 Feb 2005."</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>, legend.position <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Why this one is not distorted
+<span class="screen-reader-only">Important</span>Look at Toni’s track
 </div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><code><a href="https://rspatial.github.io/terra/reference/plot.html">terra::plot()</a></code> reads the CRS and, for geographic coordinates, sets the aspect ratio to <code>1/cos(latitude)</code> so that a kilometre east looks like a kilometre north. Compare with last week’s <code>plot(..., asp = 1)</code>, which did not.</p>
-<p>You can check what it used:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">elev_crop</span><span class="op">)</span>; <span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">25.3</span>, <span class="op">-</span><span class="fl">23.9</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">/</span> <span class="fl">180</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1.099824</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>One straight line leaves the frame towards the north-east. That is a single corrupt fix more than 60 km away — the buffalo did not go there and back in an hour. A good map shows you problems in the data before any model does; Session 3 removes this fix properly.</p>
 </div>
 </div>
-</div>
-</div>
-<section id="your-turn-6" class="level3"><h3 class="anchored" data-anchor-id="your-turn-6">Your turn</h3>
-<p><strong>7a.</strong> Save the buffalo points as a GeoPackage and read them back.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
+<span class="screen-reader-only">Tip</span>To hand in
 </div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"buffalo.gpkg"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">buf_sf</span>, <span class="va">f</span>, delete_dsn <span class="op">=</span> <span class="cn">TRUE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">again</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">f</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">again</span><span class="op">)</span><span class="op">$</span><span class="va">epsg</span></span>
-<span><span class="co">#&gt; [1] 4326</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">again</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 24663</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Use <strong>GeoPackage</strong> (<code>.gpkg</code>), not shapefile. Shapefiles truncate column names to 10 characters, cannot store <code>POSIXct</code> properly, are limited to 2 GB, and are actually 4+ files that people lose track of. GeoPackage is one file, one standard, no surprises.</p>
+<p>Your own version of this map, as a PNG at print resolution (<code>ggsave("map.png", width = 17, height = 15, units = "cm", dpi = 300)</code>), plus the <code>.qmd</code> that makes it. It must have: a projected CRS, a scale bar, a legend with units, a caption crediting the data, and colours that survive greyscale printing. Choose a different layer or animal from the one above.</p>
 </div>
 </div>
-</div>
-</section></section><section id="self-check" class="level2"><h2 class="anchored" data-anchor-id="self-check">Self-check</h2>
+</section><section id="self-check" class="level2"><h2 class="anchored" data-anchor-id="self-check">Self-check</h2>
 <div class="quiz">
 <p><code>st_crs(x) &lt;- 32736</code> on an object whose coordinates are longitude/latitude. What have you done?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">Reprojected the data to UTM 36S</label></li>
-<li><label><input type="checkbox" checked="">Mislabelled the data — the coordinates are unchanged but now claimed to be metres</label></li>
+<li><label><input type="checkbox" checked="">Mislabelled the data — the numbers are unchanged but now claimed to be metres</label></li>
 <li><label><input type="checkbox">Nothing; <code>sf</code> ignores invalid assignments</label></li>
 <li><label><input type="checkbox">Produced an error</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>Assigning a CRS only <strong>writes a label</strong>. The numbers 31.8 and −24.5 are now interpreted as 31.8 m east and 24.5 m south of the UTM 36S origin — a point in the Atlantic off West Africa.</p>
-<p>It fails silently, which is what makes it dangerous. <code><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform()</a></code> is the function that changes coordinates.</p>
+<p>Assigning a CRS only <strong>writes a label</strong>. 31.8 and −24.5 are now read as metres from the UTM 36S origin — a point off West Africa. It fails silently, which is what makes it dangerous. <code><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform()</a></code> changes coordinates.</p>
 </div>
 </div>
 <div class="quiz">
-<p>Which CRS would you use to compute home-range areas for Leo the vulture, whose track spans 7°N to 54°N and 108°W to 68°W?</p>
+<p>You <code><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_join()</a></code> 20,000 fixes to a habitat layer and get back 20,412 rows. Why?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">EPSG:32613 (UTM zone 13N), where he was tagged</label></li>
-<li><label><input type="checkbox">EPSG:3857 (Web Mercator)</label></li>
-<li><label><input type="checkbox" checked="">An equal-area projection appropriate to the Americas, or per-season UTM zones after segmenting</label></li>
-<li><label><input type="checkbox">EPSG:4326 — <code>sf</code> computes geodesic areas anyway</label></li>
+<li><label><input type="checkbox"><code><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_join()</a></code> duplicates the last row</label></li>
+<li><label><input type="checkbox" checked="">Some fixes fall in more than one polygon (overlaps, or exactly on a shared boundary)</label></li>
+<li><label><input type="checkbox">The CRSs differ</label></li>
+<li><label><input type="checkbox">It is a bug in <code>sf</code></label></li>
 </ul>
 <div class="quiz-feedback">
-<p>A single UTM zone is 6° wide; Leo spans about 40° of longitude, so distortion far from zone 13 is severe. Web Mercator is conformal and <em>not</em> equal-area — areas at 54°N are inflated by roughly a factor of three relative to the equator, so it is the worst possible choice for comparing areas.</p>
-<p>The right answers are an <strong>equal-area</strong> CRS covering the Americas, or — better — to <strong>segment first</strong> (Class 6) and estimate separate ranges for the breeding and wintering areas, each in its own local projection. A single range for this animal is not a meaningful quantity, whatever CRS you use.</p>
-<p><code>sf</code> does compute geodesic areas on 4326, but kernel density estimators need projected coordinates regardless.</p>
+<p><code><a href="https://r-spatial.github.io/sf/reference/st_join.html">st_join()</a></code> is a spatial <em>left join</em>: one output row for every match. A point on a shared boundary, or inside overlapping polygons, matches twice. Always compare row counts before and after a join, and use <code>largest = TRUE</code> (for polygons) or clean the polygon layer so it tiles without overlaps.</p>
 </div>
 </div>
-</section><section id="before-class-3" class="level2"><h2 class="anchored" data-anchor-id="before-class-3">Before Class 3</h2>
+</section><section id="before-session-3" class="level2"><h2 class="anchored" data-anchor-id="before-session-3">Before Session 3</h2>
 <ul>
-<li>Check <code><a href="https://bartk.gitlab.io/move2/">library(move2)</a></code>, <code><a href="https://github.com/jmsigner/amt">library(amt)</a></code> and <code><a href="https://github.com/r-spatial/mapview">library(mapview)</a></code> all load.</li>
-<li>Try <code>mapview::mapview(buf_sf)</code> — an interactive map in one line.</li>
+<li>Make sure <code><a href="https://github.com/jmsigner/amt">library(amt)</a></code> and <code><a href="https://rdrr.io/r/base/library.html">library(adehabitatLT)</a></code> both load.</li>
 </ul>
 
 

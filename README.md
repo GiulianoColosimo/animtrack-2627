@@ -1,12 +1,13 @@
 # Animal Tracking in Conservation Biology — 2026-2027
 
 Course material for **Animal Tracking in Conservation Biology**, MSc *Biologia
-Ambientale*, University of Rome Tor Vergata. 2 CFU, 8 classes × 2 hours.
+Ambientale*, University of Rome Tor Vergata. 2 CFU, 8 sessions × 2 hours
+(~45 minutes of theory, ~75 minutes of R each).
 
 📖 **Website: <https://giulianocolosimo.github.io/animtrack-2627/>**
 
 Built with [Quarto](https://quarto.org/): reveal.js slides with interactive
-pop-up quizzes, R exercises with collapsible solutions, and the datasets.
+pop-up quizzes, R practicals with collapsible solutions, and the datasets.
 
 ## Layout
 
@@ -14,7 +15,8 @@ pop-up quizzes, R exercises with collapsible solutions, and the datasets.
 .
 ├── _quarto.yml           # site config: navbar, sidebar, formats
 ├── index.qmd             # home
-├── syllabus.qmd          # outcomes, 5 themes → 8 classes, assessment
+├── calendar.qmd          # dates, in the calendR style of previous sites
+├── syllabus.qmd          # outcomes, the eight sessions, assessment
 ├── setup.qmd             # R / RStudio / package installation
 ├── data.qmd              # dataset documentation
 ├── resources.qmd         # reading list and links
@@ -26,10 +28,13 @@ pop-up quizzes, R exercises with collapsible solutions, and the datasets.
 │   ├── theme-slides.scss # reveal.js slide theme
 │   └── figures/
 ├── classes/
-│   └── class-01 … class-08/
-│       ├── slides.qmd    # reveal.js deck with embedded quizzes
-│       └── exercise.qmd  # R exercise with solutions
-├── data/                 # three Movebank datasets (gzipped CSV)
+│   └── class-01 … class-08/      # one folder per session
+│       ├── slides.qmd            # reveal.js deck with embedded quizzes
+│       └── exercise.qmd          # R practical with solutions
+├── R/
+│   ├── simulators.R              # random walks + the "ground-truth" animals (Sessions 5-7)
+│   └── hr_ground_truth.R         # replicate home-range study → data/hr_ground_truth.csv
+├── data/                 # tracks (gzipped CSV), Kruger rasters, simulation results
 ├── _freeze/              # cached chunk results — committed on purpose
 └── docs/                 # rendered site — committed, served by GitHub Pages
 ```
@@ -72,7 +77,7 @@ minute or two.
 
 ## Writing a pop-up quiz
 
-Anywhere in a slide deck or an exercise page:
+Anywhere in a slide deck or a practical page:
 
 ```markdown
 ::: {.quiz}
@@ -111,6 +116,9 @@ Three Movebank studies, redistributed for teaching — see
 - `data/buffalo_kruger.csv.gz` — 6 African buffalo, Kruger NP, GPS, 2005–2006
 - `data/bat_safi.csv.gz` — 17 parti-coloured bats, Switzerland, VHF, 2002–2003
 - `data/vulture_leo.csv.gz` — 1 turkey vulture, 6 years of migration, GPS
+- `data/kruger_*.tif` — MODIS NDVI (2005), elevation, land cover, precipitation
+- Package data used in the practicals: `amt::amt_fisher` (NY fishers) and
+  `ctmm::gazelle` (Mongolian gazelles)
 
 ## Licence
 

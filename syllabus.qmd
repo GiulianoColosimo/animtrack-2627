@@ -8,97 +8,125 @@ date-modified: last-modified
 
 By the end of the course you should be able to:
 
-1. **Choose a tracking technology** appropriate to a species, a question and a
-   budget, and state its biases and its ethical constraints.
-2. **Handle spatial and movement data in R** — import, reproject, clean,
-   visualise — without hand-waving about coordinate reference systems.
-3. **Quantify a trajectory**: step lengths, turning angles, speeds, net
-   displacement, and space use (MCP, KDE, AKDE).
-4. **Annotate a trajectory** with remotely sensed environmental covariates,
-   matched in space and in time.
-5. **Segment a trajectory** into behavioural states with a hidden Markov model
-   and interpret the output critically.
-6. **Fit and interpret** resource selection and step selection functions,
-   including the availability decisions that drive their conclusions.
-7. **Work reproducibly**: scripted analyses that another person — including
-   future you — can rerun.
+1. **Explain movement** through the movement-ecology paradigm, and name the
+   ecological drivers and trade-offs behind a path.
+2. **Choose a tracking design** — technology, fix interval, duration — for a
+   species and a question, and state its biases.
+3. **Handle spatial data in R** — import, reproject, overlay, map — without
+   hand-waving about coordinate reference systems.
+4. **Turn fixes into a defensible trajectory**: clean it, regularise it, and
+   annotate it with environmental data matched in space and time.
+5. **Quantify and classify movement** with path descriptors, first-passage
+   time and change-point methods, and test whether the result depends on the
+   sampling.
+6. **Simulate movement** with random-walk models and use simulations as null
+   models and as ground truth for estimators.
+7. **Estimate space use** with MCP, KDE, Brownian bridges and AKDE, and say
+   which question each estimate answers.
+8. **Fit and interpret** resource and step selection functions, including
+   integrated step selection analysis.
+9. **Infer behavioural states** with hidden Markov models, with covariates on
+   the switching between them.
+10. **Work reproducibly**: scripted analyses that another person — including
+    future you — can rerun.
 
-## How the five programme themes map onto eight classes
+## The spine: the movement-ecology paradigm
 
-The official programme lists five themes. They are unequal in size, so they
-are distributed over the eight meetings as follows.
+Nathan et al. (2008) proposed that every movement path is the joint outcome of
+four components: the animal's **internal state** (why move?), its **motion
+capacity** (how?), its **navigation capacity** (where to?), and the **external
+factors** acting on it. Tracking data record only the path. Every session opens
+by showing which of the four components its methods try to reach.
 
-| Class | Theme | Title | Core R packages |
-|:--|:--|:--|:--|
-| 1 | 1 | [Movement, and how we track animals](classes/class-01/slides.qmd) | — (R first contact) |
-| 2 | 2 | [Spatial data in R](classes/class-02/slides.qmd) | `sf`, `terra` |
-| 3 | 2 | [Tracking data in R](classes/class-03/slides.qmd) | `move2`, `amt`, `mapview` |
-| 4 | 1 | [Movement metrics and home range](classes/class-04/slides.qmd) | `amt`, `adehabitatHR`, `ctmm` |
-| 5 | 3 | [Remote sensing and environmental annotation](classes/class-05/slides.qmd) | `terra` |
-| 6 | 4 | [Movement segmentation and HMMs](classes/class-06/slides.qmd) | `moveHMM` |
-| 7 | 5 | [Resource selection functions](classes/class-07/slides.qmd) | `amt`, `stats::glm` |
-| 8 | 5 | [Step selection functions and iSSA](classes/class-08/slides.qmd) | `amt`, `survival` |
+## Eight sessions
 
-Theme 1 is split because the *how we track* material (Class 1) and the
-*quantitative description of a track* material (Class 4) need different
-prerequisites: the second only makes sense once you can manipulate spatial
-data. For the same reason the GIS theme comes early — it is the toolbox
-everything else is built on.
+| # | Session | Theory | Practical | Core packages |
+|:--|:--|:--|:--|:--|
+| 1 | [Foundations](classes/class-01/slides.qmd) | paradigm; drivers and trade-offs; technologies; fix interval | load a track; fixes per day, daily distance, gaps | `readr`, `ggplot2` |
+| 2 | [Spatial data in R](classes/class-02/slides.qmd) | vector/raster; CRS and projections; the R spatial stack; remote sensing | `sf` verbs; NDVI; a publication map | `sf`, `terra` |
+| 3 | [From fixes to trajectories](classes/class-03/slides.qmd) | location error; bursts, gaps, truncation; regularity | clean, resample, interpolate; NDVI matched in time | `amt`, `adehabitatLT` |
+| 4 | [Quantifying movement](classes/class-04/slides.qmd) | NSD, straightness, FPT, fractal dimension; behavioural modes | NSD classification; FPT; BCPA and fix rate | `adehabitatLT`, `bcpa` |
+| 5 | [Movement models](classes/class-05/slides.qmd) | RW, CRW, BCRW, Lévy walks; simulation as a test | write a simulator; MSD; homing; a null for buffalo | `circular` |
+| 6 | [Home ranges](classes/class-06/slides.qmd) | UD; KDE bandwidth; Brownian bridges; AKDE; stationarity | four estimators; variograms; ground truth | `adehabitatHR`, `ctmm` |
+| 7 | [Habitat selection](classes/class-07/slides.qmd) | RSF, RSPF, SSF, iSSA; relative selection strength | fisher RSF and iSSA; ground truth | `amt`, `survival` |
+| 8 | [Hidden Markov models](classes/class-08/slides.qmd) | HMMs; covariates on switching; the frontier | 2 vs 3 states; diel rhythm; pitches | `momentuHMM` |
 
-## Structure of a class
+Dates are on the [calendar](calendar.qmd).
 
-Each two-hour meeting follows the same rhythm:
+## Structure of a session
 
 | Minutes | What |
 |:--|:--|
-| 0–10 | Recap + a pop quiz on the previous class |
-| 10–50 | Concepts, with 2–3 pop quizzes embedded in the slides |
-| 50–60 | Break |
-| 60–110 | Guided R exercise — you type, I circulate |
-| 110–120 | Wrap-up, common errors, what to read before next time |
+| 0–5 | Recap, and where today sits on the paradigm |
+| 5–50 | Theory, with at least three pop quizzes |
+| 50–55 | Break |
+| 55–120 | Practical in R — you type, I circulate |
+
+Session 8 ends with **mini-project pitches**: its practical is shorter (~50
+minutes) to leave ~20 minutes for them.
 
 ### Pop quizzes
 
-Multiple-choice questions are embedded directly in the slides. Click an option
-and the deck reveals the correct answer(s) and a short explanation. They are
-**not graded** — they exist so that you, and I, find out in real time whether
-an idea landed. Answer honestly; a wrong answer in class is free, a wrong
-answer in the exam is not.
+Multiple-choice questions are embedded in the slides. Click an option and the
+deck reveals the correct answer and a short explanation. They are **not
+graded** — they exist so that you, and I, find out in real time whether an idea
+landed.
 
-### Exercises
+### Practicals
 
-Every class has a companion exercise page with the full R code. Solutions are
-in collapsible blocks: *try first, then unfold*. The exercises are cumulative —
-the object you build in Class 3 is the object you model in Class 8.
+Every session has a practical page with the full R code. Solutions are in
+collapsible blocks: *try first, then unfold*. The practicals are cumulative —
+the track you clean in Session 3 is the one you classify in Session 4 and model
+in Session 8, and the animal you simulate in Session 5 is the ground truth for
+Sessions 6 and 7.
+
+The worked examples are starting points. Extending them to another animal,
+another dataset or another parameter value is exactly what the weekly
+submissions ask you to do.
 
 ## Assessment
 
-The course is worth 2 CFU and is assessed on a **short reproducible project**
-rather than a written exam:
+| Component | Weight | What |
+|:--|--:|:--|
+| **Reproducible report** | 50% | Your mini-project, as a Quarto (or R Markdown) document |
+| **Weekly practical submissions** | 30% | The "To hand in" item at the end of each practical |
+| **Participation** | 20% | Quizzes, practicals, and your Session 8 pitch |
+
+### The report
 
 - Pick one of the course datasets (or bring your own, with my approval).
-- Pose one clear question that the data can answer.
-- Produce a Quarto document (~4–6 pages rendered) containing: the question,
-  the data-cleaning steps, one or two analyses drawn from the course, the
-  figures, and an honest paragraph on the limitations.
-- Submit the `.qmd` **and** the rendered HTML, so that the analysis can be
-  rerun.
+- Pose one clear question the data can answer, and pitch it in Session 8.
+- Produce a Quarto document (~4–6 pages rendered) with the question, the
+  cleaning steps, one or two analyses from the course, the figures, and an
+  honest paragraph on the limitations.
+- Submit the `.qmd` **and** the rendered HTML, so the analysis can be rerun.
 
-Assessment weights: correctness of the analysis (40%), justification of the
-methodological choices (30%), reproducibility and code clarity (20%),
-clarity of the figures and writing (10%).
+Within the report: correctness of the analysis (40%), justification of the
+methodological choices (30%), reproducibility and code clarity (20%), clarity
+of figures and writing (10%).
+
+Keeping your project in **Git** is strongly encouraged: a history of commits is
+the best evidence that your analysis is reproducible, and it is a skill worth
+having regardless of this course.
 
 ::: {.callout-note}
-The most common way to lose marks is to run an analysis whose assumptions the
-data violate — for example fitting an HMM to a track with wildly irregular
-sampling intervals without addressing it. Saying *"this is a limitation
-because X"* earns marks; silently ignoring it does not.
+The commonest way to lose marks is to run an analysis whose assumptions the
+data violate — fitting an HMM to wildly irregular data, or estimating a home
+range for an animal that is not range-resident. Saying *"this is a limitation
+because X"* earns marks; silently ignoring it does not. If you can, test your
+method on simulated data with a known answer first.
 :::
+
+### Weekly submissions
+
+Each practical ends with a short **To hand in** item: a figure, a table or a
+paragraph that extends the worked example. Submit it before the next session.
+They are marked for completion and understanding, not for polish.
 
 ## Prerequisites
 
 No prior R experience is assumed, but the pace is brisk. If you have never
-opened R, work through the [setup page](setup.qmd) **before** Class 1 and
+opened R, work through the [setup page](setup.qmd) **before** Session 1 and
 budget an evening for the linked introductory tutorial. Basic ecology and
 statistics (regression, likelihood, the idea of a probability distribution)
 are assumed.
@@ -109,5 +137,4 @@ By appointment — write to
 [giuliano.colosimo@uniroma2.it](mailto:giuliano.colosimo@uniroma2.it).
 For anything about the *material* itself (typos, broken code, a figure that
 does not render), please open an
-[issue on GitHub](https://github.com/GiulianoColosimo/animtrack-2627/issues):
-it helps everyone.
+[issue on GitHub](https://github.com/GiulianoColosimo/animtrack-2627/issues).

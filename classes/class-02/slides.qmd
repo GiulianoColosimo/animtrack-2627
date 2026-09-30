@@ -1,6 +1,6 @@
 ---
-title: "Spatial data in R"
-subtitle: "Class 2 · Theme 2 — Informatics tools for movement"
+title: "Spatial data in R: the survival kit"
+subtitle: "Session 2 — Introduction to spatial data in R (sf, terra, projections)"
 author: "Giuliano Colosimo"
 institute: "University of Rome Tor Vergata"
 date: last-modified
@@ -16,7 +16,7 @@ format:
     history: false
     width: 1280
     height: 760
-    footer: "[Animal Tracking 2026-2027 · Class 2](../../index.qmd)"
+    footer: "[Animal Tracking 2026-2027 · Session 2](../../index.qmd)"
     logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
     highlight-style: github
 execute:
@@ -25,20 +25,35 @@ execute:
 
 ## Today
 
+::: {.paradigm}
+[Internal state]{.pbox}
+[Motion capacity]{.pbox}
+[Navigation capacity]{.pbox}
+[External factors]{.pbox .on}
+[Movement path]{.pbox .path .on}
+:::
+
+Today is about the two boxes we can actually **measure**: where the animal was
+(the path) and what was there (the environment). Everything later joins them.
+
+---
+
+## Where we are going
+
 ::: {.objectives}
-1. The two data models: **vector** and **raster**
-2. What a **coordinate reference system** is, and why every bug you will have
-   this term is a CRS bug
-3. Geographic vs projected coordinates; UTM; EPSG codes
-4. The two packages: **`sf`** for vector, **`terra`** for raster
-5. Turn the buffalo CSV into a real spatial object and measure something in metres
+1. **Vector** vs **raster**, and when each is appropriate
+2. **Coordinate reference systems** — and why distances in lat/long are wrong
+3. Choosing a projection **for the analysis you are about to do**
+4. Why the R spatial stack changed, and what that means for old code
+5. `sf` for vectors, `terra` for rasters, and the verbs that join them
+6. Where environmental rasters come from: a remote-sensing primer
 :::
 
 . . .
 
 ::: {.keyidea}
-Last week's trajectory plot was distorted because we treated degrees as if
-they were metres. Today we fix that properly.
+This is the standalone "intro to spatial R" session. It is worth having even if
+you never analyse another track.
 :::
 
 # 1 · Two ways to represent the world {background-color="#14525a"}
@@ -77,7 +92,7 @@ Fast maths, no notion of individual objects.
 
 ::: {.keyidea}
 Movement analysis is nearly always **points (or steps) sampling rasters**.
-That one sentence describes Classes 5, 7 and 8.
+That one sentence describes Sessions 3 and 7.
 :::
 
 ---
@@ -189,6 +204,26 @@ coordinates with geodesic distances.
 
 ---
 
+## Choose the projection for the analysis
+
+No projection preserves everything, so pick the property your analysis needs:
+
+| You will compute… | Preserve… | Typical choice |
+|:--|:--|:--|
+| Step lengths, distances | distance | local **UTM** zone, or azimuthal equidistant centred on the study area |
+| Home-range areas, densities | **area** | Albers or Lambert equal-area (LAEA) |
+| Directions, turning angles | angles / shape | conformal: UTM (locally) |
+| A continent-scale migration | area, usually | LAEA centred on the flyway |
+
+. . .
+
+::: {.keyidea}
+Inside one UTM zone the distortions are under 0.1%, so UTM does all three well
+enough. The choice only becomes real when your animal leaves the zone.
+:::
+
+---
+
 ## EPSG codes — the vocabulary you need
 
 | EPSG | What | Units |
@@ -234,7 +269,35 @@ coordinates — they assume a plane.
 :::
 :::
 
-# 3 · `sf` — vector data {background-color="#14525a"}
+# 3 · A short, messy history {background-color="#14525a"}
+
+---
+
+## Why your old tutorial no longer runs
+
+| Era | Vector | Raster | Geometry engine |
+|:--|:--|:--|:--|
+| 2005–2023 | `sp` | `raster` | `rgdal`, `rgeos` |
+| 2016 → | **`sf`** | | `sf` (GDAL, GEOS, PROJ built in) |
+| 2020 → | | **`terra`** | `terra` |
+
+::: {.incremental}
+- `rgdal`, `rgeos` and `maptools` were **retired from CRAN in October 2023**;
+  `raster` now runs on top of `terra`
+- Most Stack Overflow answers and many published scripts still use `sp`/`raster`
+- Some movement packages — `adehabitatLT`, `adehabitatHR` — still expect `sp`
+  objects. You will convert with `as(x, "Spatial")` or `sf::as_Spatial()`
+:::
+
+. . .
+
+::: {.keyidea}
+Write new code in `sf` + `terra`. Recognise `sp` + `raster` when you read it.
+:::
+
+---
+
+# 4 · `sf` — vector data {background-color="#14525a"}
 
 ---
 
@@ -290,6 +353,7 @@ Note the geometry column survives `select()` without being named — it is
 | `st_coordinates()` | pull the coordinates back out as a matrix |
 | `st_distance()` | distances between features |
 | `st_buffer()` | a polygon at a fixed distance around features |
+| `st_join()` | attach attributes of the polygon each point falls in |
 | `st_bbox()` | bounding box |
 | `st_intersection()`, `st_union()` | overlay operations |
 | `st_write()` / `st_read()` | GeoPackage, shapefile, GeoJSON… |
@@ -351,7 +415,7 @@ roughly 31.8°E, 24.5°S.
 :::
 :::
 
-# 4 · `terra` — raster data {background-color="#14525a"}
+# 5 · `terra` — raster data {background-color="#14525a"}
 
 ---
 
@@ -383,7 +447,7 @@ r
 
 A multi-layer raster (`SpatRaster` with several layers) is how you store a
 **time series**: one NDVI layer per 16-day composite, stacked. That is
-exactly what we need in Class 5.
+exactly what we need in Session 3.
 
 ---
 
@@ -404,7 +468,7 @@ exactly what we need in Class 5.
 
 ::: {.keyidea}
 `extract()` is the bridge between the movement world and the environment
-world. Almost everything in Classes 5–8 passes through it.
+world. Almost everything from Session 3 onwards passes through it.
 :::
 
 ---
@@ -464,16 +528,143 @@ and never strip coordinates down to a bare matrix just to pass them along.
 
 ---
 
-## Today's exercise
+# 6 · Where rasters come from {background-color="#14525a"}
+
+---
+
+## Why vegetation looks the way it does
+
+::: {.columns}
+::: {.column width="55%"}
+Healthy green vegetation:
+
+- **absorbs** strongly in the **red** (~660 nm) — chlorophyll is doing
+  photosynthesis
+- **reflects** strongly in the **near infrared** (~850 nm) — the internal leaf
+  structure scatters it
+
+So the *contrast* between red and NIR is a measure of green biomass.
+:::
+::: {.column width="45%"}
+::: {.keyidea}
+That single fact is the basis of essentially every vegetation index ever
+published.
+:::
+:::
+:::
+
+---
+
+---
+
+## NDVI
+
+$$\text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}$$
+
+::: {.incremental}
+- Ranges −1 to +1. Water < 0; bare soil/rock ~0.1–0.2; sparse vegetation
+  ~0.2–0.4; dense green vegetation 0.6–0.9
+- A **proxy** for green biomass and primary productivity
+- Normalised, so it partly cancels illumination and viewing-angle effects
+:::
+
+. . .
+
+::: {.callout-warning appearance="simple"}
+**It saturates.** Above ~0.8 — closed canopy — NDVI stops responding to extra
+biomass. In rainforest it is nearly flat and nearly useless.
+:::
+
+---
+
+---
+
+## You cannot have all four
+
+::: {.incremental}
+- **Spatial** — pixel size. 10 m (Sentinel-2) … 500 m (MODIS) … 25 km (some
+  climate products)
+- **Temporal** — revisit time. 5 days (Sentinel-2) vs **daily** (MODIS) vs
+  16 days (Landsat)
+- **Spectral** — number and width of bands. 4 broad bands vs 200 narrow
+  (hyperspectral)
+- **Radiometric** — bit depth; how finely brightness is quantised
+:::
+
+. . .
+
+::: {.keyidea}
+They trade off against each other: a detector collecting light from a small
+patch, in a narrow band, gets few photons — so it needs a longer dwell time,
+which means a narrower swath and a longer revisit.
+:::
+
+---
+
+---
+
+## The missions you will actually use
+| Mission | Spatial | Temporal | Since | Good for |
+|:--|:--|:--|:--|:--|
+| **MODIS** (Terra/Aqua) | 250–500 m | Daily | 2000 | Long consistent NDVI series |
+| **VIIRS** | 375–750 m | Daily | 2012 | MODIS successor |
+| **Landsat 5/7/8/9** | 30 m | 16 days | **1984** | Long-term landscape change |
+| **Sentinel-2** | 10–20 m | 5 days | 2015 | Fine-grained habitat |
+| **Sentinel-1** (SAR) | 10 m | 6–12 days | 2014 | Cloud-free, structure, water |
+| **GEDI** (LiDAR) | 25 m footprint | sampled | 2019 | Canopy height |
+
+. . .
+
+::: {.keyidea}
+**Match the pixel to the animal and to your positional error.** A 10 m
+Sentinel pixel is wasted on an Argos fix with 5 km error — and a 500 m MODIS
+pixel is useless for a dormouse.
+:::
+
+---
+
+---
+
+## Quiz
+
+::: {.quiz}
+You study habitat selection by a forest ungulate using GPS collars (error
+~15 m, hourly fixes) in a landscape with small forest patches of 1–5 ha. Which
+product for vegetation cover?
+
+- [ ] MODIS NDVI, 250 m, daily
+- [x] Sentinel-2, 10–20 m, every 5 days
+- [ ] A 1 km global land-cover map
+- [ ] Sentinel-1 SAR, 10 m
+
+::: {.quiz-feedback}
+A 1–5 ha patch is roughly 100–220 m across. A **250 m MODIS pixel is larger
+than the patch**, so every fix would get a mixed value averaging forest and
+open land — the very contrast you are trying to measure would be erased. A
+1 km product is hopeless for the same reason.
+
+Sentinel-2 at 10–20 m resolves those patches comfortably, and its 5-day
+revisit captures the growing season. Its resolution is also well matched to
+15 m GPS error: finer would just add noise.
+
+Sentinel-1 is excellent for structure and for cloudy regions, but it does not
+measure greenness — it is the right answer to a different question.
+:::
+:::
+
+---
+
+## Today's practical
 
 ::: {.objectives}
-**[→ Class 2 exercise](exercise.qmd)**
+**[→ Session 2 practical](exercise.qmd)**
 
-1. Turn the buffalo CSV into an `sf` object
-2. Reproject to UTM 36S and see the numbers change
-3. Measure the same distance three ways — and get three answers
-4. Build a raster, extract values at the fixes
-5. Make a map that is not distorted
+1. `sf`: build points from a CSV, `st_transform`, `st_buffer`, `st_join`,
+   `st_intersection`
+2. Measure one distance three ways — and get three answers
+3. `terra`: load NDVI and land cover, `crop`, `project`, `extract`
+4. Break it on purpose: the silent `NA` and the ignored buffer
+5. **Mini-challenge:** a publication-quality map with `geom_sf`
 :::
 
 ---
@@ -482,15 +673,18 @@ and never strip coordinates down to a bare matrix just to pass them along.
 
 ::: {.incremental}
 - **Vector** = objects with coordinates; **raster** = a grid of values
-- A **CRS** = ellipsoid + datum + projection. EPSG codes name them
-- Degrees are **angles**: no Euclidean arithmetic, no KDE, no plotting with `asp = 1`
-- `st_crs()` **labels**; `st_transform()` **converts**. Know which you need
-- `sf` for vector, `terra` for raster, `extract()` to join them
+- A **CRS** = ellipsoid + datum + projection. Degrees are **angles**
+- Choose the projection for the analysis: equidistant for steps, **equal-area**
+  for home ranges
+- `sf` + `terra` today; `sp` + `raster` in old code
+- `st_crs()` **labels**; `st_transform()` **converts**
+- Satellites measure bands; NDVI is a red/NIR contrast. **Match the pixel to
+  your positional error**
 :::
 
 . . .
 
-### Before Class 3
+### Before Session 3
 
 - Read [Geocomputation with R, ch. 2 and 7](https://r.geocompx.org/)
-- Make sure `library(move2)`, `library(amt)` and `library(mapview)` all load
+- Make sure `library(amt)` and `library(adehabitatLT)` both load

@@ -1,6 +1,6 @@
 ---
-title: "Step selection functions and iSSA"
-subtitle: "Class 8 · Theme 5 — Selection functions"
+title: "Hidden Markov models and synthesis"
+subtitle: "Session 8 — Behavioural states, the research frontier, mini-project pitches"
 author: "Giuliano Colosimo"
 institute: "University of Rome Tor Vergata"
 date: last-modified
@@ -16,7 +16,7 @@ format:
     history: false
     width: 1280
     height: 760
-    footer: "[Animal Tracking 2026-2027 · Class 8](../../index.qmd)"
+    footer: "[Animal Tracking 2026-2027 · Session 8](../../index.qmd)"
     logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
     highlight-style: github
 execute:
@@ -25,344 +25,452 @@ execute:
 
 ## Today
 
-::: {.objectives}
-1. Why the RSF's notion of "available" is wrong for a moving animal
-2. The **step selection function**: availability defined by the animal's own
-   movement
-3. Conditional logistic regression and **strata**
-4. **iSSA** — estimating movement and selection together
-5. Interpretation: what the movement coefficients actually mean
-6. Where the course has taken you
+::: {.paradigm}
+[Internal state]{.pbox .on}
+[Motion capacity]{.pbox .on}
+[Navigation capacity]{.pbox}
+[External factors]{.pbox .on}
+[Movement path]{.pbox .path .on}
 :::
 
-# 1 · The problem with RSF availability {background-color="#14525a"}
+A hidden Markov model is the most direct attempt in the course to infer the
+**internal state** from the path — and to let external factors drive it.
 
 ---
 
-## An animal cannot be anywhere
-
-::: {.incremental}
-- An RSF treats every point in the home range as equally available at every
-  moment
-- But a buffalo at 08:00 cannot be 20 km away at 09:00. It can reach perhaps a
-  kilometre
-- So most of the "available" set was never a real alternative
-- Availability is **local**, and it **moves with the animal**
-:::
-
-. . .
-
-::: {.keyidea}
-A step selection function fixes this by defining availability from the
-animal's own movement capacity: from where it *was*, where could it plausibly
-have gone?
-:::
-
----
-
-## The design
-
-For each observed step:
-
-::: {.incremental}
-1. Take the starting point $\mathbf{x}_{t}$
-2. Draw $k$ **control steps** from the animal's own distributions of step
-   length and turning angle
-3. That gives one **stratum**: 1 used step + $k$ available steps, all from the
-   same starting point at the same time
-4. Compare them with **conditional logistic regression**
-:::
-
-. . .
-
-Because the comparison is *within* a stratum, everything constant at that
-moment — time of day, season, the animal's internal state, its identity —
-cancels out. That is a remarkably clean piece of control.
-
----
-
-## Conditional logistic regression
-
-$$
-P(\text{step } j \text{ chosen}) =
-\frac{\exp(\boldsymbol{\beta}^{\top}\mathbf{x}_j)}
-{\sum_{i \in \text{stratum}} \exp(\boldsymbol{\beta}^{\top}\mathbf{x}_i)}
-$$
-
-::: {.incremental}
-- Identical machinery to a **Cox proportional hazards** model — which is why
-  `survival::clogit()` and `amt::fit_issf()` both go through `coxph()`
-- Each stratum contributes only the *contrast* between the used step and its
-  controls
-- No intercept. Again, only **relative** statements
-:::
-
-. . .
-
-```r
-fit_issf(case_ ~ elevation_end + sl_ + log(sl_) +
-                 strata(step_id_),
-         data = d)
-```
-
----
-
-## Quiz
-
-::: {.quiz}
-Why does a step selection function include `strata(step_id_)`?
-
-- [ ] To account for repeated measures on the same animal
-- [x] Because each used step is compared only with the control steps drawn from its own starting point and time
-- [ ] To weight the available points correctly
-- [ ] It is optional; it only speeds up fitting
-
-::: {.quiz-feedback}
-The stratum **is** the design. Each observed step is matched to the controls
-generated from the same location at the same moment, and the likelihood only
-ever compares within that matched set.
-
-This is what makes availability local and time-specific — and it means
-anything constant within the stratum (hour of day, season, weather, the
-animal's identity and internal state) is automatically controlled for, without
-you having to model it.
-
-Individual-level repeated measures are a *separate* issue, handled by fitting
-per animal or by a mixed conditional model (Muff et al. 2020). Dropping
-`strata()` does not merely change the standard errors — it fits an entirely
-different, and wrong, model.
-:::
-:::
-
-# 2 · From SSF to iSSA {background-color="#14525a"}
-
----
-
-## The circularity problem
-
-To generate control steps you need the animal's step-length and turning-angle
-distributions. But those distributions are **themselves affected by habitat** —
-an animal moves slowly in good habitat and fast through bad.
-
-::: {.incremental}
-- Estimate them from the raw data, and they are already contaminated by
-  selection
-- Use them to define availability, and you bake the contamination in
-- The estimated selection coefficients are then biased
-:::
-
-. . .
-
-::: {.keyidea}
-**Integrated step selection analysis** (Avgar et al. 2016) solves this by
-estimating the movement kernel and the selection coefficients
-**simultaneously**, from the same model.
-:::
-
----
-
-## How iSSA does it
-
-Include the movement variables as covariates in the conditional model:
-
-::: {.incremental}
-- `sl_` and `log(sl_)` — together these correct the **gamma** step-length
-  distribution used to generate the controls
-- `cos(ta_)` — corrects the **von Mises** turning-angle concentration
-- The fitted coefficients on these terms tell you how the *realised* movement
-  kernel differs from the *tentative* one you sampled from
-:::
-
-. . .
-
-```r
-fit_issf(case_ ~ elevation_end + grassland_end +
-                 sl_ + log(sl_) + cos(ta_) +
-                 strata(step_id_), data = d)
-```
-
----
-
-## Reading the movement coefficients
-If controls were drawn from a gamma with shape $k$ and scale $\theta$:
-
-| Term | Effect on the realised kernel |
-|:--|:--|
-| $\beta_{\log(sl)}$ | adjusts **shape**: $k_{\text{real}} = k + \beta_{\log(sl)}$ |
-| $\beta_{sl}$ | adjusts **scale**: $1/\theta_{\text{real}} = 1/\theta - \beta_{sl}$ |
-| $\beta_{\cos(ta)}$ | adjusts **concentration**: $\kappa_{\text{real}} = \kappa + \beta_{\cos(ta)}$ |
-
-. . .
-
-::: {.keyidea}
-A positive $\beta_{\cos(ta)}$ means the animal moves **more directionally**
-than your tentative distribution assumed. `amt::update_gamma()` and
-`update_vonmises()` do this arithmetic for you — use them rather than doing it
-by hand.
-:::
-
----
-
-## Interactions: where it gets interesting
-
-The real power is asking whether **movement depends on habitat**:
-
-```r
-case_ ~ grassland_end +
-        sl_ + log(sl_) + cos(ta_) +
-        sl_:grassland_start +        # faster in grassland?
-        cos(ta_):grassland_start +   # straighter?
-        strata(step_id_)
-```
-
-::: {.incremental}
-- `_start` covariates modify the **movement kernel** — how the animal moves
-  *from* that habitat
-- `_end` covariates capture **selection** — which habitat it moves *into*
-- Mixing them up is the single most common error in iSSA papers
-:::
-
----
-
-## Quiz
-
-::: {.quiz}
-In an iSSA you find a **positive** coefficient on `sl_:forest_start`. What does
-it mean?
-
-- [ ] The animal selects forest
-- [x] The animal takes longer steps when starting from forest — it moves through forest faster
-- [ ] Forest patches are larger than other patches
-- [ ] Steps ending in forest are longer
-
-::: {.quiz-feedback}
-An interaction with `sl_` modifies the **movement kernel**, not the selection
-term, and `_start` means the covariate is measured at the step's origin. So
-this says: *given that the animal is in forest, its steps are longer*.
-
-Ecologically that usually means the animal is **transiting**, not using, the
-forest — it crosses quickly rather than lingering.
-
-Note how this can coexist with positive *selection* for forest
-(`forest_end` > 0): an animal may head into forest and then move through it
-rapidly. Separating "where does it go" from "how does it move once there" is
-exactly what iSSA buys you, and it is invisible to an RSF.
-:::
-:::
-
-# 3 · Doing it well {background-color="#14525a"}
-
----
-
-## Practical decisions
-::: {.incremental}
-- **How many control steps?** 10 is a common default; check that coefficients
-  stabilise as you increase it, exactly as for RSF availability
-- **Sampling interval.** All steps in the analysis must share one duration.
-  Resample first (Class 3)
-- **Where to measure covariates.** At the end point, along the step, or
-  averaged over it? Measuring *along* the step is more defensible for barriers
-  such as roads and rivers
-- **Zero-length steps** break the gamma distribution — `amt` warns and
-  replaces them
-:::
-
----
-
-## Multiple animals, again
-
-::: {.incremental}
-- **Two-stage**: fit each animal, then summarise the coefficients. Simple,
-  transparent, and adequate for small samples
-- **Mixed conditional models**: Muff et al. (2020) show how to fit these in
-  `glmmTMB` with random slopes and a fixed large variance on the stratum
-  intercepts
-- A random intercept alone is **not** enough — it does not let individuals
-  differ in selection, which is usually the biology you care about
-:::
-
----
-
-## Validation
-
-::: {.incremental}
-- **Used–habitat calibration** plots (Fieberg et al. 2018)
-- Withhold **whole individuals**, or whole time blocks — never random steps,
-  because autocorrelation leaks the answer into the test set
-- **Simulate** from the fitted model and compare the simulated space use with
-  the observed. If your model cannot regenerate something resembling the real
-  track, it has not captured the process
-:::
-
-. . .
-
-```r
-amt::simulate_path(...)   # redistribution kernel from the fitted iSSA
-```
-
----
-
-## Quiz
-
-::: {.quiz}
-You fit an iSSA with 10 control steps per stratum, then refit with 100. The
-coefficients barely move but all the standard errors halve. What do you report?
-
-- [ ] The 100-control model — smaller standard errors are better
-- [x] Either set of coefficients, but do not treat the smaller SEs as stronger evidence about the animal
-- [ ] The 10-control model, because 100 is overfitting
-- [ ] Neither; the discrepancy means the model is misspecified
-
-::: {.quiz-feedback}
-Stable coefficients are exactly what you want to see — it means 10 controls
-already characterised availability well, and that is the check worth
-reporting.
-
-The shrinking standard errors are the same trap as in Class 7. Control steps
-describe **what was available**, which you can sample as finely as you like.
-More of them sharpen your description of availability; they do not constitute
-additional observations of the animal's choices. Your real sample size is the
-number of **steps** — and, for population inference, the number of **animals**.
-
-Report the effect sizes, state how many controls you used, and show that the
-estimates were stable with respect to that choice.
-:::
-:::
-
----
-
-## RSF or SSF?
-| | RSF | SSF / iSSA |
-|:--|:--|:--|
-| Availability | Whole domain, fixed | Local, moves with the animal |
-| Order | Usually 2nd or 3rd | Effectively 3rd, step-scale |
-| Needs regular sampling | No | **Yes** |
-| Models movement | No | **Yes** |
-| Time-varying covariates | Awkward | Natural |
-| Best for | Broad-scale range placement | Fine-scale decisions, corridors, barriers |
-
-. . .
-
-::: {.keyidea}
-If your data are regularly sampled and you care about *how* the animal moves
-through the landscape, use iSSA. If your sampling is sparse or irregular, and
-your question is about broad-scale range placement, an RSF is the honest
-choice.
-:::
-
----
-
-## Today's exercise
+## Where we are going
 
 ::: {.objectives}
-**[→ Class 8 exercise](exercise.qmd)**
+1. HMM structure: hidden states and state-dependent observations
+2. Why HMMs beat thresholds: uncertainty, persistence, covariates
+3. What goes wrong: sampling, the number of states, naming the states
+4. A tour of the frontier
+5. Synthesis — and your mini-project pitches (last 20 minutes)
+:::
 
-1. Generate random steps and inspect a stratum
-2. Fit a basic SSF
-3. Add movement terms — a full iSSA
-4. Update the movement kernel and interpret it
-5. Add a habitat × movement interaction
-6. Fit all six animals two-stage
+# 1 · Hidden Markov models {background-color="#14525a"}
+
+---
+
+## The generative story
+
+Imagine the animal has a hidden label at each time step — say
+**"encamped"** or **"travelling"**.
+
+::: {.incremental}
+1. At each step the animal is in one of $N$ states, $S_t$
+2. The state evolves as a **Markov chain**: $P(S_t \mid S_{t-1})$ — where you
+   go next depends only on where you are now
+3. Given the state, the observations are drawn from **state-specific
+   distributions**: step length ~ gamma($\mu_i$, $\sigma_i$), turning angle ~
+   von Mises($\mu_i$, $\kappa_i$)
+4. You never see $S_t$. You see only the steps
+:::
+
+. . .
+
+::: {.keyidea}
+The model asks: *what sequence of hidden states, and what state-specific
+distributions, would make the observed steps most likely?*
+:::
+
+---
+
+---
+
+## What you get out
+
+::: {.incremental}
+- **State-dependent parameters** — e.g. state 1: mean step 40 m, turning
+  angles ~uniform; state 2: mean step 600 m, angles concentrated at 0
+- **Transition probability matrix** $\Gamma$ — and from it the expected
+  **dwell time** in each state, $1/(1-\gamma_{ii})$
+- **The most likely state sequence** (Viterbi) — one label per step
+- **State probabilities** per step — the honest version, with uncertainty
+:::
+
+. . .
+
+```r
+m <- momentuHMM::fitHMM(data, nbStates = 2,
+        dist = list(step = "gamma", angle = "vm"),
+        Par0 = list(step  = c(20, 400, 20, 400),   # means, then sds
+                    angle = c(0.5, 2)))            # concentrations
+viterbi(m)
+```
+
+---
+
+---
+
+## Why the Markov part matters
+
+A clustering method looks at each step in isolation. An HMM knows that
+**behaviour persists**: an animal that was resting is probably still resting.
+
+::: {.incremental}
+- This borrows strength across time and produces far less "flickering" between
+  states
+- The transition matrix is itself biology: how long does a foraging bout last?
+- Transitions can depend on covariates: *is the animal more likely to start
+  travelling when NDVI is low?*
+:::
+
+. . .
+
+```r
+fitHMM(data, nbStates = 2, ..., formula = ~ ndvi + cosinor(hour, period = 24))
+```
+
+That formula is the bridge between Session 3's environmental annotation and this one.
+
+---
+
+---
+
+## Quiz
+
+::: {.quiz}
+An HMM fitted to hourly buffalo data returns two states: state 1 with mean
+step 45 m, state 2 with mean step 780 m. The diagonal of the transition matrix
+is 0.93 and 0.86. What is the expected dwell time in state 2?
+
+- [ ] 0.86 hours
+- [x] About 7 hours
+- [ ] 14 hours
+- [ ] Cannot be determined from the transition matrix alone
+
+::: {.quiz-feedback}
+For a Markov chain the expected number of consecutive steps in state $i$ is
+$1/(1-\gamma_{ii})$. Here $1/(1-0.86) \approx 7.1$ steps, and since steps are
+hourly, **about 7 hours**.
+
+State 1 gives $1/(1-0.93) \approx 14$ steps, i.e. ~14 hours — plausibly the
+resting/ruminating state.
+
+Note two things. First, the dwell time depends on the **sampling interval**:
+the same animal sampled every 2 hours would give a different $\gamma_{ii}$
+but a similar dwell time in hours. Second, this is a real, checkable
+prediction — if the model says foraging bouts last 7 hours and you know from
+direct observation they last 45 minutes, the model is telling you your states
+are not what you think.
+:::
+:::
+
+# 2 · Why not just a threshold? {background-color="#14525a"}
+
+---
+
+## Three things a threshold cannot do
+
+::: {.incremental}
+1. **Quantify uncertainty** — an HMM gives every step a *probability* of being
+   in each state, not a hard label. Steps near the boundary are honestly
+   ambiguous
+2. **Use persistence** — behaviour lasts; the transition matrix lets
+   neighbouring steps inform each other, so a single slow step in the middle
+   of a journey is not labelled "resting"
+3. **Explain switching** — covariates on the transition probabilities ask
+   *when* and *where* animals change behaviour
+:::
+
+. . .
+
+::: {.keyidea}
+In Session 4 the buffalo's hourly speeds had no valley to cut at. That is
+exactly the situation an HMM was built for.
+:::
+
+---
+
+## A diel rhythm, estimated
+
+For two Kruger buffalo, a 2-state HMM with a daily cosinor on the
+transitions (hourly fixes, local time):
+
+| Local time | P(moving state) |
+|:--|--:|
+| 05:00 | ~0.69 |
+| 11:00 | ~0.80 |
+| 15:00–18:00 | ~0.86 |
+| 23:00 | ~0.78 |
+
+. . .
+
+::: {.keyidea}
+The covariate is on the **switching**, not on the step lengths: the buffalo do
+not walk differently in the afternoon, they are more likely to *be* walking.
+You fit this model in today's practical.
+:::
+
+# 3 · Where it goes wrong {background-color="#14525a"}
+
+---
+
+## Problem 1 — irregular sampling
+
+HMMs as normally fitted assume a **constant time step**.
+
+::: {.incremental}
+- Feed them irregular data and the step-length distribution mixes intervals;
+  the model interprets a long gap as fast movement
+- "Solutions" that are not solutions: interpolating to a regular grid invents
+  data and biases the state distributions
+- Real solutions: resample and accept the data loss (Session 3); or use a
+  **continuous-time** model (`ctmm`, `momentuHMM` with `crawlWrap`)
+:::
+
+. . .
+
+::: {.keyidea}
+This is why the bat dataset cannot be given an HMM: 165 bursts with a median
+of 4 fixes cannot inform a transition matrix (Session 3).
+:::
+
+---
+
+---
+
+## Problem 2 — how many states?
+
+::: {.incremental}
+- AIC and BIC **almost always prefer more states**. They are answering "which
+  model fits best", not "which states are real behaviours"
+- With enough data, 4 and 5 states will beat 2 and 3 every time
+- Extra states often capture **outliers**, or the shape of the step-length
+  distribution, not behaviour
+:::
+
+. . .
+
+::: {.keyidea}
+Choose the number of states from **biology and the question**, then check the
+fit. Pseudo-residuals and state-dependent distribution plots tell you far more
+than a table of AICs. Two or three states are almost always enough for what a
+tracking dataset can actually resolve.
+:::
+
+---
+
+---
+
+## Quiz
+
+::: {.quiz}
+You fit 2-, 3-, 4- and 5-state HMMs. AIC decreases every time. Which do you
+report?
+
+- [ ] The 5-state model — lowest AIC
+- [x] The simplest model whose states are biologically interpretable and whose residuals are acceptable
+- [ ] Always 2 states, for comparability
+- [ ] Average the predictions across all four
+
+::: {.quiz-feedback}
+AIC will keep improving because extra states always fit the shape of the data
+better — they mop up outliers and the tails of the step-length distribution.
+That is a statement about the flexibility of mixture models, not about the
+animal's ethogram.
+
+The defensible procedure: decide how many behavioural modes your data could
+plausibly *resolve* given the sampling interval, fit that model, and then
+**check** it — pseudo-residuals, state-dependent densities against the data,
+and dwell times against what you know about the species.
+
+If a 4-state model gives you two states with nearly identical parameters,
+that is the model telling you it has run out of behaviour to find. Report the
+simpler one, and say why.
+:::
+:::
+
+---
+
+## Problem 3 — naming the states
+
+The model returns *state 1* and *state 2*. It does **not** return "foraging"
+and "travelling".
+
+::: {.incremental}
+- Labelling them is an **interpretation**, and it needs external evidence:
+  accelerometer data, direct observation, known behaviours at known times
+- "Short steps and random turns" is consistent with foraging — and with
+  resting, with sheltering, and with the animal being dead
+- Papers that name states from step lengths alone are making an assumption,
+  not a measurement
+:::
+
+. . .
+
+State the evidence for your labels, or call them "state 1" and "state 2" and
+describe them by their parameters.
+
+---
+
+---
+
+## Quiz
+
+::: {.quiz}
+Your 2-state HMM gives state 1 a mean step of 15 m with near-uniform turning
+angles. You want to call it "foraging". What is the minimum you need?
+
+- [ ] Nothing — short steps with random turns is the standard definition of foraging
+- [x] External evidence, because resting, sheltering and a dead animal all produce the same signature
+- [ ] A lower AIC than the 3-state model
+- [ ] A larger sample of animals
+
+::: {.quiz-feedback}
+The model returns *state 1*, not *foraging*. Short steps with unstructured
+turning angles are consistent with foraging — and equally with resting,
+ruminating, sheltering from heat, a collar that fell off, and an animal that
+has died. At 15 m, a good part of the apparent movement is GPS error.
+
+To turn the label into a measurement you need something outside the
+trajectory: accelerometer or activity data, direct observation, known
+diel patterns, or a validation subset with ground-truthed behaviour.
+
+Where you have none, the honest write-up describes states **by their
+parameters** — "a low-displacement state (mean step 15 m, dwell time ~14 h)" —
+and discusses the plausible behaviours without asserting one.
+:::
+:::
+
+---
+
+## Practical fitting advice
+
+::: {.incremental}
+- **Starting values matter a lot.** The likelihood is multimodal. Fit from
+  many random starts and keep the best
+- Check for **zero step lengths** — a gamma distribution cannot handle
+  them. Give `momentuHMM` one zero-mass parameter per state: a zero-inflated
+  gamma
+- Always inspect **pseudo-residuals** (`plotPR`) — they are the residual plot
+  of the HMM world
+- Plot the state-dependent densities over the histogram of your data. If they
+  do not look like your data, nothing downstream is trustworthy
+:::
+
+---
+
+# 4 · The frontier {background-color="#14525a"}
+
+---
+
+## Location error, modelled
+
+::: {.incremental}
+- An HMM assumes the positions are exact. **State-space models** add an
+  explicit observation layer: a true, unobserved path, and noisy fixes of it
+  (Jonsen et al. 2005)
+- Essential for Argos and light-level geolocation, where error is as large as
+  the movement
+- Continuous-time versions (`crawl`: Johnson et al. 2008) handle irregular
+  sampling and predict positions *with uncertainty* — the honest version of
+  interpolation from Session 3
+:::
+
+---
+
+## Energy landscapes
+
+::: {.incremental}
+- The cost of moving is not the same everywhere: slope, wind, currents,
+  thermals, substrate
+- An **energy landscape** maps that cost (Wilson et al. 2012; Shepard et al.
+  2013)
+- Animals often choose the *cheap* path, not the short one: soaring birds
+  follow thermals and ridges; ungulates avoid steep ground
+- With accelerometers you can estimate energy expenditure directly and ask
+  whether routes minimise it
+:::
+
+. . .
+
+::: {.keyidea}
+Motion capacity becomes a map — and a covariate you can put in an SSF.
+:::
+
+---
+
+## Collective movement
+
+::: {.incremental}
+- Animals rarely move independently: herds, flocks, schools, family groups
+- Simple local rules — attraction, alignment, repulsion — produce coordinated
+  groups; a few informed individuals can steer many (Couzin et al. 2005)
+- Tracking several group members at once reveals who leads, who follows, and
+  how decisions are made
+- Statistically: your "independent" animals may not be. Six buffalo from one
+  herd are not six replicates
+:::
+
+---
+
+## Learning behaviour from sensors
+
+::: {.incremental}
+- Tri-axial accelerometers at 10–50 Hz record *what the body is doing*
+- Supervised **machine learning** — random forests, support vector machines,
+  and now deep neural networks — classify behaviours from acceleration signatures
+  (Nathan et al. 2012; Wang 2019)
+- Training data come from observed or captive animals with known behaviour
+- The answer to "how do I name my HMM states?" — an independent sensor that
+  measures behaviour
+:::
+
+. . .
+
+::: {.keyidea}
+A classifier is only as good as its labelled training data, and it transfers
+poorly between individuals, seasons and populations. Validate on animals it
+has not seen.
+:::
+
+---
+
+## The big-data era
+
+::: {.incremental}
+- **Movebank** holds billions of locations from thousands of studies; the
+  **ICARUS** initiative put tracking receivers in orbit
+- Collaborative networks (e.g. **EUROMAMMALS**) pool data across studies,
+  countries and decades
+- Questions no single study could answer: how movement responds to human
+  footprint across continents; how migration changes with climate (Nathan et
+  al. 2022)
+- New problems: data standards, sharing, credit, and the security of
+  sensitive species
+:::
+
+. . .
+
+::: {.keyidea}
+The skills of this course — cleaning, regularising, honest uncertainty — are
+what make pooled data trustworthy. At scale, errors compound too.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You classify foraging behaviour of a seabird from accelerometer data with a
+random forest trained on birds filmed at one colony, and it scores 94%
+accuracy on held-out segments from those same birds. What should you worry
+about before applying it to a different colony?
+
+- [ ] Nothing — 94% is excellent
+- [x] Accuracy measured on the training individuals overstates how well it transfers to new birds and places
+- [ ] Random forests cannot classify behaviour
+- [ ] The sampling frequency is too high
+
+::: {.quiz-feedback}
+Held-out *segments* from the *same* birds share each bird's idiosyncrasies —
+tag placement, body size, local conditions — so the test is not independent.
+Performance typically drops, sometimes sharply, on new individuals, seasons or
+colonies. Validate with whole individuals (and ideally whole sites) left out,
+exactly as for the habitat-selection models of Session 7.
+:::
 :::
 
 # The course, in one slide {background-color="#14525a"}
@@ -372,13 +480,14 @@ choice.
 ## What you have learned to do
 
 ::: {.incremental}
-1. **Choose** a tracking technology, and name its biases *(Class 1)*
-2. **Handle** spatial data without lying about coordinate systems *(Class 2)*
-3. **Clean** tracking data, and count what you removed *(Class 3)*
-4. **Quantify** a trajectory, and know what your sampling interval did to it *(Class 4)*
-5. **Annotate** it with environment matched in space and time *(Class 5)*
-6. **Segment** it into behavioural states, and doubt the state count *(Class 6)*
-7. **Model** selection against availability you constructed *(Classes 7–8)*
+1. **Choose** a technology and a fix interval, and name their biases *(1)*
+2. **Handle** spatial data without lying about coordinate systems *(2)*
+3. **Clean** a track, count what you removed, annotate it in space and time *(3)*
+4. **Quantify** a path, and doubt your classifications *(4)*
+5. **Simulate** a null, and a ground truth *(5)*
+6. **Estimate** space use, and say which question the estimate answers *(6)*
+7. **Model** selection and movement together *(7)*
+8. **Infer** behavioural states, and supply the evidence for their names *(8)*
 :::
 
 ---
@@ -392,6 +501,7 @@ choice.
 - **Count what you remove**, at every step, and put the table in the paper.
 - **Check that an argument did what you think.** `buffer=` was silently
   ignored; `group_by()` was silently ignored. Both cost us most of a dataset.
+- **Test your method on a truth you know.** Simulate it first.
 - **State your availability domain.** Half of habitat-selection disagreements
   are definitional.
 - **Report effect sizes, not p-values.** You chose the sample size.
@@ -399,12 +509,13 @@ choice.
 
 ---
 
-## Your project
+## Your mini-project
 
 ::: {.objectives}
 - One dataset, one clear question
-- A Quarto document: question → cleaning → analysis → figures → limitations
-- Submit the `.qmd` **and** the rendered HTML
+- Today: a **3–5 minute pitch** — question, data, method, the pitfall you expect
+- Then a reproducible Quarto report: question → cleaning → analysis →
+  figures → limitations. Submit the `.qmd` **and** the rendered HTML
 - See the [syllabus](../../syllabus.qmd) for the marking criteria
 :::
 
@@ -413,6 +524,29 @@ choice.
 ::: {.keyidea}
 The paragraph on limitations is worth more marks than the analysis. Anyone can
 run `fit_issf()`. Knowing what it cannot tell you is the skill.
+:::
+
+---
+
+---
+
+## Mini-project pitches
+
+::: {.objectives}
+**3–5 minutes each, no more than three slides**
+
+1. **The question** — one sentence, answerable with the data
+2. **The data** — which dataset, which animals, what sampling interval
+3. **The method** — which session's tools, and why they fit the question
+4. **The pitfall** — what could make your answer wrong, and how you will check
+:::
+
+. . .
+
+::: {.keyidea}
+Examples: *"compare home-range estimates under two fix rates using simulated
+data"*; *"SSF for a second fisher — does forest selection hold?"*; *"do the
+buffalo's HMM states match day and night?"*
 :::
 
 ---

@@ -11,7 +11,7 @@
 
   <meta name="author" content="Giuliano Colosimo">
   <meta name="dcterms.date" content="2026-09-30">
-  <title>Animal Tracking – Movement, and how we track animals</title>
+  <title>Animal Tracking – Why animals move, and how we watch them</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -30,7 +30,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-18657b062b3da6a166608c2ebc8d3bda.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-fd96417eda74ebb0be446d6413f2e761.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -125,8 +125,8 @@
       margin-right: 0; 
     }
   </style>
-<meta property="og:title" content="Movement, and how we track animals – Animal Tracking">
-<meta property="og:description" content="Class 1 · Theme 1 — Movement and movement analysis">
+<meta property="og:title" content="Why animals move, and how we watch them – Animal Tracking">
+<meta property="og:description" content="Session 1 — Foundations: why animals move, tracking technologies, data types">
 <meta property="og:site_name" content="Animal Tracking">
 <meta property="og:locale" content="en_US">
 </head>
@@ -135,8 +135,8 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Movement, and how we track animals</h1>
-  <p class="subtitle">Class 1 · Theme 1 — Movement and movement analysis</p>
+  <h1 class="title">Why animals move, and how we watch them</h1>
+  <p class="subtitle">Session 1 — Foundations: why animals move, tracking technologies, data types</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -156,40 +156,37 @@ Giuliano Colosimo
 <div class="objectives">
 <p><strong>By the end of today you will be able to</strong></p>
 <ol type="1">
-<li>State the four questions of the movement-ecology paradigm</li>
-<li>Name the main tracking technologies and pick one for a given species</li>
-<li>Explain what a <em>fix</em> is, and what its error structure looks like</li>
-<li>Recognise the three biases that ruin tracking datasets</li>
-<li>Have R running on your laptop</li>
+<li>State the four components of the movement-ecology paradigm</li>
+<li>Name the ecological drivers of movement and the trade-offs between them</li>
+<li>Pick a tracking technology for a given species, question and budget</li>
+<li>Explain what a <em>fix</em> is, and how the fix interval shapes the path you see</li>
+<li>Load a real GPS track in R and find its gaps</li>
 </ol>
 </div>
-<div class="fragment">
-<p><strong>The plan for the eight classes</strong></p>
+</section>
+<section id="eight-sessions-one-framework" class="slide level2">
+<h2>Eight sessions, one framework</h2>
 <table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">1 · Movement &amp; tracking</td>
-<td style="text-align: left;">2 · Spatial data in R</td>
-<td style="text-align: left;">3 · Tracking data in R</td>
+<td style="text-align: left;">1 · Foundations</td>
+<td style="text-align: left;">5 · Movement models &amp; simulation</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">4 · Metrics &amp; home range</td>
-<td style="text-align: left;">5 · Remote sensing</td>
-<td style="text-align: left;">6 · Segmentation</td>
+<td style="text-align: left;">2 · Spatial data in R</td>
+<td style="text-align: left;">6 · Home ranges &amp; space use</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">7 · RSF</td>
-<td style="text-align: left;">8 · SSF / iSSA</td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">3 · From fixes to trajectories</td>
+<td style="text-align: left;">7 · Habitat selection: RSF &amp; SSF</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4 · Quantifying movement</td>
+<td style="text-align: left;">8 · Hidden Markov models &amp; synthesis</td>
 </tr>
 </tbody>
 </table>
-</div>
+<p>Every session: <strong>~45 minutes of theory, ~75 minutes of R.</strong></p>
 </section>
 <section id="how-the-quizzes-work" class="slide level2">
 <h2>How the quizzes work</h2>
@@ -245,6 +242,59 @@ Giuliano Colosimo
 <div class="fragment">
 <div class="keyidea">
 <p><span class="math inline">\(U_t = f(\Omega, \Phi, r_t, w_t)\)</span> — the observed path is the <em>joint outcome</em> of all four. This is why a track is hard to interpret: many different combinations produce similar-looking paths.</p>
+</div>
+</div>
+</section>
+<section id="our-spine-for-eight-weeks" class="slide level2">
+<h2>Our spine for eight weeks</h2>
+<div class="paradigm">
+<p><span class="pbox on">Internal state</span> <span class="pbox on">Motion capacity</span> <span class="pbox on">Navigation capacity</span> <span class="pbox on">External factors</span> <span class="pbox path on">Movement path</span></p>
+</div>
+<p>Each session opens with this diagram, lit up where that session’s methods speak. Tracking data record only the <strong>bottom box</strong>. Every method in this course is an attempt to reason <em>upwards</em> from the path to the boxes above it.</p>
+</section>
+<section id="why-move-the-ecological-drivers" class="slide level2">
+<h2>Why move? The ecological drivers</h2>
+<ul>
+<li class="fragment"><strong>Foraging</strong> — resources are patchy and deplete; staying costs as much as leaving</li>
+<li class="fragment"><strong>Dispersal</strong> — leaving the natal area: avoids inbreeding and competition with kin</li>
+<li class="fragment"><strong>Migration</strong> — seasonal, round-trip tracking of resources across large distances</li>
+<li class="fragment"><strong>Predator avoidance</strong> — moving away from risk, or towards refuges</li>
+<li class="fragment"><strong>Reproduction</strong> — finding mates, defending territories, provisioning young</li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p>These map onto different <em>scales</em> of movement: foraging steps in minutes, dispersal once in a lifetime, migration once a year. The same animal does all of them — which is why one trajectory usually hides several processes.</p>
+</div>
+</div>
+</section>
+<section id="movement-is-a-trade-off" class="slide level2">
+<h2>Movement is a trade-off</h2>
+<p>Every movement decision balances <strong>gain</strong> against <strong>cost</strong>:</p>
+<ul>
+<li class="fragment"><strong>Energy</strong> — travelling costs calories; a richer patch further away may not pay</li>
+<li class="fragment"><strong>Risk</strong> — the best food is often where predators are; the <em>landscape of fear</em> (Laundré et al.&nbsp;2001) can matter as much as the landscape of food</li>
+<li class="fragment"><strong>Information</strong> — exploring costs now but may pay later</li>
+<li class="fragment"><strong>Time</strong> — a day spent travelling is a day not spent feeding or breeding</li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p>When a model says an animal “selects” a habitat, it is summarising the net outcome of all these trade-offs. Sessions 7 and 8 are about disentangling them.</p>
+</div>
+</div>
+</section>
+<section id="quiz" class="slide level2">
+<h2>Quiz</h2>
+<div class="quiz">
+<p>After wolves returned to Yellowstone, elk in wolf-rich areas made less use of aspen stands, a key forage (Fortin et al.&nbsp;2005). Assuming the forage itself did not change, which component of the paradigm explains the shift?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">Motion capacity</label></li>
+<li><label><input type="checkbox">Navigation capacity</label></li>
+<li><label><input type="checkbox" checked="">External factors — acting through the animals’ internal state (fear)</label></li>
+<li><label><input type="checkbox">None; this is a habitat-quality effect</label></li>
+</ul>
+<div class="quiz-feedback">
+<p>Forage did not change, so the habitat itself did not change. What changed was <strong>predation risk</strong> — an external factor — which altered the elk’s internal state and therefore the trade-off between food and safety. This is the <em>landscape of fear</em> idea.</p>
+<p>It also shows why the four components cannot be read separately: the same external change works through the animal’s internal state. It is also why a habitat-selection model fitted before and after wolf reintroduction would give different coefficients for the same, unchanged vegetation.</p>
 </div>
 </div>
 </section>
@@ -326,7 +376,7 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section id="quiz" class="slide level2">
+<section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
 <p>A GPS collar is set to attempt a fix every hour. Over one day it produces 18 locations. The straight-line distances between consecutive fixes sum to 4.1 km. Which statements are true?</p>
@@ -496,7 +546,7 @@ Giuliano Colosimo
 </ul>
 <div class="fragment">
 <div class="keyidea">
-<p>The bat dataset we will use in Class 3 is exactly this: 17 individuals, 1,740 fixes <em>in total</em>, wildly irregular. Most methods in this course assume regular sampling. Part of your training is learning to say <strong>“not with these data”</strong>.</p>
+<p>The bat dataset we will use in Session 3 is exactly this: 17 individuals, 1,740 fixes <em>in total</em>, wildly irregular. Most methods in this course assume regular sampling. Part of your training is learning to say <strong>“not with these data”</strong>.</p>
 </div>
 </div>
 </section>
@@ -580,11 +630,24 @@ Giuliano Colosimo
 </ul>
 <div class="fragment">
 <div class="keyidea">
-<p>The frontier is not more locations. It is <strong>locations plus sensors</strong>: knowing <em>where</em> <strong>and</strong> <em>what the animal was doing there</em>. Class 6 is the statistical version of this question when all you have is the trajectory.</p>
+<p>The frontier is not more locations. It is <strong>locations plus sensors</strong>: knowing <em>where</em> <strong>and</strong> <em>what the animal was doing there</em>. Session 8 is the statistical version of this question when all you have is the trajectory.</p>
 </div>
 </div>
 </section>
-<section id="quiz-1" class="slide level2">
+<section id="archival-tags-and-camera-traps" class="slide level2">
+<h2>Archival tags and camera traps</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="archival-tags">Archival tags</h3>
+<p>Store everything on board — depth, temperature, light, acceleration — for months or years. No transmission, so tiny and long-lived.</p>
+<p>The catch: <strong>you only get the data if you get the tag back</strong>. Pop-up archival tags on fish detach and float to the surface to transmit a summary.</p>
+</div><div class="column" style="width:50%;">
+<h3 id="camera-traps">Camera traps</h3>
+<p>Eulerian, not Lagrangian: they watch a place, not an animal.</p>
+<p>But they are the natural <strong>complement</strong> to tracking — who else uses the places your collared animals use, when, and how often? Occupancy and spatial capture–recapture models connect the two worlds.</p>
+</div></div>
+</section>
+<section id="quiz-2" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
 <p>You must study the migratory route of a 22 g passerine that breeds in Italy and winters somewhere in sub-Saharan Africa. Individuals return to the same nest box each spring. Which technology?</p>
@@ -684,7 +747,7 @@ Giuliano Colosimo
 <section id="tag-effects-are-real" class="slide level2">
 <h2>Tag effects are real</h2>
 <ul>
-<li class="fragment">The <strong>5% rule</strong> (tag ≤ 5% of body mass) is a <em>convention</em>, not a finding. Portugal &amp; White (2018) showed miniaturisation has not actually made published studies lighter relative to body mass.</li>
+<li class="fragment">The <strong>3–5% rule</strong> (tag ≤ 3% of body mass for flying animals, ≤ 5% for terrestrial ones) is a <em>convention</em>, not a finding. Portugal &amp; White (2018) showed miniaturisation has not made published studies lighter relative to body mass — researchers just tag smaller animals.</li>
 <li class="fragment">For flying and diving animals, <strong>drag and shape matter more than mass</strong>. A streamlined 3% package can beat a bluff 1.5% one.</li>
 <li class="fragment">Documented effects: reduced breeding success, higher energy expenditure, altered diving, changed social status, injury at the attachment site.</li>
 <li class="fragment">Effects are often <strong>delayed</strong> — and studies are rarely designed to detect them.</li>
@@ -707,7 +770,7 @@ Giuliano Colosimo
 <li class="fragment"><strong>Report the effects you observed</strong>, including the animals you lost.</li>
 </ol>
 </section>
-<section id="quiz-2" class="slide level2">
+<section id="quiz-3" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
 <p>Which of these is the <em>strongest</em> argument for choosing a 30-minute fix interval over a 5-minute one, for a study of buffalo habitat selection?</p>
@@ -720,13 +783,70 @@ Giuliano Colosimo
 <div class="quiz-feedback">
 <p>Fix interval is a <strong>battery</strong> decision, and therefore a decision about <em>how long</em> you observe. 5-minute data over six weeks and 30-minute data over a year answer different questions — and for seasonal habitat selection, the year wins.</p>
 <p>Accuracy per fix does not change with rate. Software is not the constraint. And “it’s the standard” is never a reason — it is a description of what other people’s batteries could manage.</p>
-<p>The real cost: coarse sampling <strong>truncates</strong> the step-length distribution. You will see this bite in Classes 4 and 8.</p>
+<p>The real cost: coarse sampling <strong>truncates</strong> the step-length distribution. You will see this bite in Sessions 4 and 7.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="sampling-design" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>4 · Sampling design</h1>
+
+</section>
+<section id="the-fix-interval-decides-what-path-you-see" class="slide level2">
+<h2>The fix interval decides what path you see</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-1-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The <strong>same</strong> two days of simulated movement (grey), sampled at three rates.</p>
+</section>
+<section id="the-modifiable-temporal-unit-problem" class="slide level2">
+<h2>The modifiable temporal unit problem</h2>
+<p>The spatial version is famous in geography (Openshaw 1984): results change with the size of the spatial units you aggregate into. Tracking has its own temporal version.</p>
+<ul>
+<li class="fragment"><strong>Path length</strong> shrinks as the interval grows — every straight segment cuts corners the animal actually walked</li>
+<li class="fragment"><strong>Speed</strong> is really <em>distance per interval</em>: the same animal is “slower” when sampled more coarsely</li>
+<li class="fragment"><strong>Tortuosity</strong> and <strong>turning angles</strong> change — fine sampling shows wiggles, coarse sampling shows randomness</li>
+<li class="fragment"><strong>Behaviours shorter than the interval become invisible</strong></li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p>There is no “true” speed or step length independent of the fix interval. Choose the interval from the <strong>question</strong>, and never compare metrics across studies sampled at different rates.</p>
+</div>
+</div>
+</section>
+<section id="designing-a-deployment" class="slide level2">
+<h2>Designing a deployment</h2>
+<p>Four numbers you fix before the first capture:</p>
+<ol type="1">
+<li class="fragment"><strong>Fix interval</strong> — set by the fastest behaviour you need to resolve</li>
+<li class="fragment"><strong>Duration</strong> — set by the slowest process (seasonal selection needs a year)</li>
+<li class="fragment"><strong>Number of animals</strong> — set by the <em>population</em> question; individuals vary</li>
+<li class="fragment"><strong>Battery</strong> — the budget that forces 1 × 2 × 3 into a compromise</li>
+</ol>
+<div class="fragment">
+<div class="keyidea">
+<p>Interval × duration × number of animals ≈ constant for a given budget. A study of foraging decisions and a study of seasonal range shifts need different collars, or at least different schedules.</p>
+</div>
+</div>
+</section>
+<section id="quiz-4" class="slide level2">
+<h2>Quiz</h2>
+<div class="quiz">
+<p>You compute a buffalo’s daily travel distance from hourly fixes and get 4 km. A colleague using the same collars set to fix every 5 minutes reports 9 km for the same population. What is the most likely explanation?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">The colleague’s collars were less accurate</label></li>
+<li><label><input type="checkbox" checked="">Finer sampling captures more of the path’s tortuosity, so summed distance grows</label></li>
+<li><label><input type="checkbox">The populations behave differently</label></li>
+<li><label><input type="checkbox">Hourly fixes over-estimate distance</label></li>
+</ul>
+<div class="quiz-feedback">
+<p>Summed step length is a <strong>lower bound</strong> on the distance travelled, and the bound tightens as sampling gets finer: every hourly step cuts across the wiggles that 5-minute fixes capture. More than doubling is entirely normal.</p>
+<p>There is a second, smaller effect working the other way: at very fine intervals GPS error adds spurious zig-zag, inflating distance. That is why the “right” interval is not simply “as fine as possible”.</p>
+<p>Neither 4 km nor 9 km is <em>the</em> daily distance. Each is a daily distance <strong>at a given sampling interval</strong>, and must be reported that way.</p>
 </div>
 </div>
 </section></section>
 <section>
 <section id="the-three-biases" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>4 · The three biases</h1>
+<h1>5 · The three biases</h1>
 
 </section>
 <section id="bias-1-fix-success-is-not-random" class="slide level2">
@@ -752,7 +872,7 @@ Giuliano Colosimo
 <li class="fragment">Filtering on speed is the standard fix, but a threshold that is too aggressive deletes real fast movement</li>
 </ul>
 <div class="fragment">
-<p>Keep the DOP / satellite-count columns. They are your evidence about which fixes to distrust. We use them in Class 3.</p>
+<p>Keep the DOP / satellite-count columns. They are your evidence about which fixes to distrust. We use them in Session 3.</p>
 </div>
 </section>
 <section id="bias-3-the-sample-of-animals" class="slide level2">
@@ -769,7 +889,7 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section id="quiz-3" class="slide level2">
+<section id="quiz-5" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
 <p>A study reports that collared deer “avoid dense forest”, based on GPS collars with an overall fix success of 62%. What is the first thing you should check?</p>
@@ -787,7 +907,7 @@ Giuliano Colosimo
 </section></section>
 <section>
 <section id="where-the-data-live" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>5 · Where the data live</h1>
+<h1>6 · Where the data live</h1>
 
 </section>
 <section id="movebank" class="slide level2">
@@ -796,45 +916,44 @@ Giuliano Colosimo
 <ul>
 <li class="fragment">Thousands of studies, billions of locations; many openly licensed</li>
 <li class="fragment">A <strong>controlled vocabulary</strong>: <code>timestamp</code>, <code>location-long</code>, <code>location-lat</code>, <code>individual-local-identifier</code> — always the same names, always UTC, always WGS84</li>
-<li class="fragment"><strong>Env-DATA</strong>: upload a track, get it annotated with weather, NDVI, land cover, elevation. We do this by hand in Class 5 so you understand what it does.</li>
+<li class="fragment"><strong>Env-DATA</strong>: upload a track, get it annotated with weather, NDVI, land cover, elevation. We do this by hand in Sessions 2–3 so you understand what it does.</li>
 <li class="fragment">R access through the <code>move2</code> package</li>
 </ul>
 <div class="fragment">
 <p>Our three datasets all come from there — see the <a href="../../data.html">Datasets page</a>.</p>
 </div>
 </section>
-<section id="todays-exercise" class="slide level2">
-<h2>Today’s exercise</h2>
+<section id="todays-practical" class="slide level2">
+<h2>Today’s practical</h2>
 <div class="objectives">
-<p><strong><a href="../../classes/class-01/exercise.html">→ Class 1 exercise</a></strong></p>
+<p><strong><a href="../../classes/class-01/exercise.html">→ Session 1 practical</a></strong></p>
 <ol type="1">
-<li>Check that R, RStudio and the course packages work</li>
-<li>Read a real Movebank file and look at what is actually in it</li>
-<li>Compute a first fix rate and a first fix success rate</li>
-<li>Plot your first trajectory — with no spatial packages at all</li>
+<li>Orientation: the course project, RStudio, and where everything lives</li>
+<li>Load a real GPS track with <code>readr</code> and <code>lubridate</code></li>
+<li>Plot it with <code>ggplot2</code> — and see why the plot is subtly wrong</li>
+<li>Count fixes per day, compute daily distances, and find the gaps</li>
 </ol>
 </div>
 <div class="fragment">
 <div class="keyidea">
-<p>Today’s plot will be <em>wrong</em> in an instructive way: it treats longitude and latitude as if they were plane coordinates. Fixing that is Class 2.</p>
+<p>Today’s plot treats longitude and latitude as plane coordinates. Fixing that properly is Session 2.</p>
 </div>
 </div>
 </section>
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li class="fragment">Movement links the individual to the landscape; four questions (Nathan et al.)</li>
-<li class="fragment">A <strong>fix</strong> is a timestamped location estimate; a <strong>track</strong> is a <em>sample</em> of a path</li>
-<li class="fragment">Technology choice is driven by <strong>body mass</strong> and <strong>data recovery</strong>, not by desired accuracy</li>
-<li class="fragment">Tags affect animals; the 5% rule is a convention, not a guarantee</li>
+<li class="fragment">The <strong>paradigm</strong>: internal state, motion capacity, navigation, external factors → path. We only ever observe the path</li>
+<li class="fragment">Animals move to forage, disperse, migrate, avoid predators and breed — each a trade-off between gain and cost</li>
+<li class="fragment">Technology choice is driven by <strong>body mass</strong> and <strong>data recovery</strong>; the 3–5% rule is a convention, not a guarantee</li>
+<li class="fragment">The <strong>fix interval</strong> shapes the path you see — the modifiable temporal unit problem</li>
 <li class="fragment">Three biases: <strong>fix success</strong>, <strong>location error</strong>, <strong>which animals you caught</strong></li>
 </ul>
 <div class="fragment">
-<h3 id="before-class-2">Before Class 2</h3>
+<h3 id="before-session-2">Before Session 2</h3>
 <ul>
 <li>Finish the <a href="../../setup.html">setup page</a> — <code>sf</code> and <code>terra</code> must install cleanly</li>
 <li>Read Nathan et al.&nbsp;(2008), PNAS 105:19052 — it is 8 pages</li>
-<li>Skim the <a href="../../data.html">Datasets page</a></li>
 </ul>
 </div>
 </section>
@@ -850,7 +969,7 @@ Giuliano Colosimo
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../../assets/figures/Tor-Vergata_logo_cmyk.png" class="slide-logo"></p>
 <div class="footer footer-default">
-<p><a href="../../index.html">Animal Tracking 2026-2027 · Class 1</a></p>
+<p><a href="../../index.html">Animal Tracking 2026-2027 · Session 1</a></p>
 </div>
 </div></div>
 
@@ -1159,6 +1278,44 @@ Giuliano Colosimo
       if (window.Reveal && window.Reveal.on) window.Reveal.on("slidechanged", initAll);
     })();
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

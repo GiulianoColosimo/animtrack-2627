@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.8.21">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Exercise 1 — First contact with a track – Animal Tracking</title>
+<title>Practical 1 — First contact with a GPS track – Animal Tracking</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -104,12 +104,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script><link rel="stylesheet" href="../../assets/quiz.css">
-<meta property="og:title" content="Exercise 1 — First contact with a track – Animal Tracking">
-<meta property="og:description" content="Class 1 · Theme 1">
-<meta property="og:image" content="https://giulianocolosimo.github.io/animtrack-2627/classes/class-01/exercise_files/figure-html/unnamed-chunk-14-1.png">
+<meta property="og:title" content="Practical 1 — First contact with a GPS track – Animal Tracking">
+<meta property="og:description" content="Session 1 · Foundations">
+<meta property="og:image" content="https://giulianocolosimo.github.io/animtrack-2627/classes/class-01/exercise_files/figure-html/unnamed-chunk-7-1.png">
 <meta property="og:site_name" content="Animal Tracking">
 <meta property="og:locale" content="en_US">
-<meta property="og:image:height" content="1152">
+<meta property="og:image:height" content="1248">
 <meta property="og:image:width" content="1344">
 </head>
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -585,51 +585,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
    
   <ul>
-<li><a href="#task-0-does-your-installation-work" id="toc-task-0-does-your-installation-work" class="nav-link active" data-scroll-target="#task-0-does-your-installation-work">Task 0 — Does your installation work?</a></li>
+<li><a href="#task-0-orientation" id="toc-task-0-orientation" class="nav-link active" data-scroll-target="#task-0-orientation">Task 0 — Orientation</a></li>
   <li>
-<a href="#task-1-read-the-data" id="toc-task-1-read-the-data" class="nav-link" data-scroll-target="#task-1-read-the-data">Task 1 — Read the data</a>
+<a href="#task-1-load-the-track" id="toc-task-1-load-the-track" class="nav-link" data-scroll-target="#task-1-load-the-track">Task 1 — Load the track</a>
   <ul class="collapse">
 <li><a href="#your-turn" id="toc-your-turn" class="nav-link" data-scroll-target="#your-turn">Your turn</a></li>
   </ul>
 </li>
+  <li><a href="#task-2-plot-it" id="toc-task-2-plot-it" class="nav-link" data-scroll-target="#task-2-plot-it">Task 2 — Plot it</a></li>
   <li>
-<a href="#task-2-timestamps-are-not-text" id="toc-task-2-timestamps-are-not-text" class="nav-link" data-scroll-target="#task-2-timestamps-are-not-text">Task 2 — Timestamps are not text</a>
+<a href="#task-3-fixes-per-day" id="toc-task-3-fixes-per-day" class="nav-link" data-scroll-target="#task-3-fixes-per-day">Task 3 — Fixes per day</a>
   <ul class="collapse">
 <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">Your turn</a></li>
   </ul>
 </li>
   <li>
-<a href="#task-3-subset-one-animal-and-sort-it" id="toc-task-3-subset-one-animal-and-sort-it" class="nav-link" data-scroll-target="#task-3-subset-one-animal-and-sort-it">Task 3 — Subset one animal and sort it</a>
+<a href="#task-4-daily-distance" id="toc-task-4-daily-distance" class="nav-link" data-scroll-target="#task-4-daily-distance">Task 4 — Daily distance</a>
   <ul class="collapse">
 <li><a href="#your-turn-2" id="toc-your-turn-2" class="nav-link" data-scroll-target="#your-turn-2">Your turn</a></li>
   </ul>
 </li>
   <li>
-<a href="#task-4-fix-interval-and-fix-success" id="toc-task-4-fix-interval-and-fix-success" class="nav-link" data-scroll-target="#task-4-fix-interval-and-fix-success">Task 4 — Fix interval and fix success</a>
+<a href="#task-5-find-the-gaps" id="toc-task-5-find-the-gaps" class="nav-link" data-scroll-target="#task-5-find-the-gaps">Task 5 — Find the gaps</a>
   <ul class="collapse">
 <li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">Your turn</a></li>
   </ul>
 </li>
-  <li>
-<a href="#task-5-your-first-trajectory-plot" id="toc-task-5-your-first-trajectory-plot" class="nav-link" data-scroll-target="#task-5-your-first-trajectory-plot">Task 5 — Your first trajectory plot</a>
-  <ul class="collapse">
-<li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">Your turn</a></li>
-  </ul>
-</li>
-  <li>
-<a href="#task-6-a-different-animal-a-different-problem" id="toc-task-6-a-different-animal-a-different-problem" class="nav-link" data-scroll-target="#task-6-a-different-animal-a-different-problem">Task 6 — A different animal, a different problem</a>
-  <ul class="collapse">
-<li><a href="#your-turn-5" id="toc-your-turn-5" class="nav-link" data-scroll-target="#your-turn-5">Your turn</a></li>
-  </ul>
-</li>
+  <li><a href="#to-hand-in" id="toc-to-hand-in" class="nav-link" data-scroll-target="#to-hand-in">To hand in</a></li>
   <li><a href="#self-check" id="toc-self-check" class="nav-link" data-scroll-target="#self-check">Self-check</a></li>
-  <li><a href="#before-class-2" id="toc-before-class-2" class="nav-link" data-scroll-target="#before-class-2">Before Class 2</a></li>
+  <li><a href="#before-session-2" id="toc-before-session-2" class="nav-link" data-scroll-target="#before-session-2">Before Session 2</a></li>
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/GiulianoColosimo/animtrack-2627/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Classes</li><li class="breadcrumb-item"><a href="../../classes/class-01/slides.html">Class 1 — Movement &amp; tracking technologies</a></li><li class="breadcrumb-item"><a href="../../classes/class-01/exercise.html">Exercise · First contact with a track</a></li></ol></nav><div class="quarto-title">
-<h1 class="title">Exercise 1 — First contact with a track</h1>
-<p class="subtitle lead">Class 1 · Theme 1</p>
+<h1 class="title">Practical 1 — First contact with a GPS track</h1>
+<p class="subtitle lead">Session 1 · Foundations</p>
 </div>
 
 
@@ -641,7 +631,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 24, 2026</p>
+      <p class="date-modified">September 30, 2026</p>
     </div>
   </div>
     
@@ -650,72 +640,94 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </header><div class="objectives">
-<p><strong>Goals.</strong> Confirm your installation works; read a real Movebank file; find out what is actually in it; compute a fix rate and a fix success rate; plot a trajectory using nothing but base R.</p>
-<p><strong>Time:</strong> ~50 minutes. <strong>Packages:</strong> none — base R only, on purpose.</p>
+<p><strong>Goals.</strong> Find your way around the course project; load a real Movebank GPS track; plot it; count fixes per day; compute daily distances; find the gaps.</p>
+<p><strong>Time:</strong> ~60 minutes. <strong>Packages:</strong> <code>readr</code>, <code>dplyr</code>, <code>lubridate</code>, <code>ggplot2</code>.</p>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled">
+<section id="task-0-orientation" class="level2"><h2 class="anchored" data-anchor-id="task-0-orientation">Task 0 — Orientation</h2>
+<p>Open <code>animtrack-2627.Rproj</code> in RStudio. Everything in the course assumes you work <em>inside</em> this project, so that paths like <code>data/buffalo_kruger.csv.gz</code> resolve without editing anything.</p>
+<pre><code>animtrack-2627/
+├── data/        ← the tracks and rasters we use all course
+├── classes/     ← one folder per session: slides.qmd + exercise.qmd
+├── R/           ← small helper scripts (simulators, Session 5 onwards)
+└── docs/        ← the rendered website — do not edit by hand</code></pre>
+<p>Check that your installation works:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">need</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sf"</span>, <span class="st">"terra"</span>, <span class="st">"amt"</span>, <span class="st">"adehabitatLT"</span>, <span class="st">"adehabitatHR"</span>, <span class="st">"ctmm"</span>,</span>
+<span>          <span class="st">"momentuHMM"</span>, <span class="st">"bcpa"</span>, <span class="st">"circular"</span>, <span class="st">"tidyverse"</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="va">need</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">ok</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="va">p</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"%-13s %s\n"</span>, <span class="va">p</span>, <span class="kw">if</span> <span class="op">(</span><span class="va">ok</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span> <span class="kw">else</span> <span class="st">"** MISSING **"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Anything <code>MISSING</code>? Go back to the <a href="../../setup.html">setup page</a> now.</p>
+</section><section id="task-1-load-the-track" class="level2"><h2 class="anchored" data-anchor-id="task-1-load-the-track">Task 1 — Load the track</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"data/buffalo_kruger.csv.gz"</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">raw</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 28410    18</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">raw</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] "event-id"                   "visible"                   </span></span>
+<span><span class="co">#&gt; [3] "timestamp"                  "location-long"             </span></span>
+<span><span class="co">#&gt; [5] "location-lat"               "behavioural-classification"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Two things to notice. <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code> keeps Movebank’s hyphenated column names, so you need backticks to refer to them. And it has already parsed <code>timestamp</code> as a date-time:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">raw</span><span class="op">$</span><span class="va">timestamp</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "POSIXct" "POSIXt"</span></span>
+<span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/tz.html">tz</a></span><span class="op">(</span><span class="va">raw</span><span class="op">$</span><span class="va">timestamp</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "UTC"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Tidy it into the four columns every movement analysis needs:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">track</span> <span class="op">&lt;-</span> <span class="va">raw</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span></span>
+<span>    id  <span class="op">=</span> <span class="va">`individual-local-identifier`</span>,</span>
+<span>    t   <span class="op">=</span> <span class="va">timestamp</span>,</span>
+<span>    lon <span class="op">=</span> <span class="va">`location-long`</span>,</span>
+<span>    lat <span class="op">=</span> <span class="va">`location-lat`</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">lon</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">lat</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">t</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">track</span></span>
+<span><span class="co">#&gt; # A tibble: 28,410 × 4</span></span>
+<span><span class="co">#&gt;    id    t                     lon   lat</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt; &lt;dttm&gt;              &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 Cilla 2005-07-14 04:35:00  31.8 -25.1</span></span>
+<span><span class="co">#&gt;  2 Cilla 2005-07-14 05:35:00  31.9 -25.0</span></span>
+<span><span class="co">#&gt;  3 Cilla 2005-07-14 07:35:00  31.9 -24.9</span></span>
+<span><span class="co">#&gt;  4 Cilla 2005-07-14 08:34:00  31.9 -24.9</span></span>
+<span><span class="co">#&gt;  5 Cilla 2005-07-14 09:35:00  31.9 -25.0</span></span>
+<span><span class="co">#&gt;  6 Cilla 2005-07-14 10:35:00  31.9 -24.9</span></span>
+<span><span class="co">#&gt;  7 Cilla 2005-07-14 11:34:00  31.8 -24.9</span></span>
+<span><span class="co">#&gt;  8 Cilla 2005-07-14 12:35:00  31.8 -24.9</span></span>
+<span><span class="co">#&gt;  9 Cilla 2005-07-14 13:34:00  31.8 -24.9</span></span>
+<span><span class="co">#&gt; 10 Cilla 2005-07-14 14:35:00  31.9 -24.9</span></span>
+<span><span class="co">#&gt; # ℹ 28,400 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+<span class="screen-reader-only">Warning</span>Always know your time zone
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Work inside the course RStudio project (<code>animtrack-2627.Rproj</code>). Then the path <code>data/buffalo_kruger.csv.gz</code> resolves without you editing anything.</p>
-</div>
-</div>
-<section id="task-0-does-your-installation-work" class="level2"><h2 class="anchored" data-anchor-id="task-0-does-your-installation-work">Task 0 — Does your installation work?</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">need</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sf"</span>, <span class="st">"terra"</span>, <span class="st">"move2"</span>, <span class="st">"amt"</span>, <span class="st">"adehabitatHR"</span>, <span class="st">"ctmm"</span>,</span>
-<span>          <span class="st">"moveHMM"</span>, <span class="st">"survival"</span>, <span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span>, <span class="st">"mapview"</span><span class="op">)</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">p</span> <span class="kw">in</span> <span class="va">need</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">ok</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="va">p</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"%-14s %s\n"</span>, <span class="va">p</span>, <span class="kw">if</span> <span class="op">(</span><span class="va">ok</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span> <span class="kw">else</span> <span class="st">"** MISSING **"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>If anything says <code>MISSING</code>, go back to the <a href="../../setup.html">setup page</a> now — you will need all of these by Class 3.</p>
-</section><section id="task-1-read-the-data" class="level2"><h2 class="anchored" data-anchor-id="task-1-read-the-data">Task 1 — Read the data</h2>
-<p>R reads gzipped CSV directly. No need to decompress anything.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">buffalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/buffalo_kruger.csv.gz"</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 28410    18</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "event.id"                        "visible"                        </span></span>
-<span><span class="co">#&gt;  [3] "timestamp"                       "location.long"                  </span></span>
-<span><span class="co">#&gt;  [5] "location.lat"                    "behavioural.classification"     </span></span>
-<span><span class="co">#&gt;  [7] "comments"                        "manually.marked.outlier"        </span></span>
-<span><span class="co">#&gt;  [9] "sensor.type"                     "individual.taxon.canonical.name"</span></span>
-<span><span class="co">#&gt; [11] "tag.local.identifier"            "individual.local.identifier"    </span></span>
-<span><span class="co">#&gt; [13] "study.name"                      "utm.easting"                    </span></span>
-<span><span class="co">#&gt; [15] "utm.northing"                    "utm.zone"                       </span></span>
-<span><span class="co">#&gt; [17] "study.timezone"                  "study.local.timestamp"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Why did the column names change?
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Movebank uses hyphens: <code>location-long</code>. R identifiers cannot contain hyphens, so <code><a href="https://rdrr.io/r/utils/read.table.html">read.csv()</a></code> converts them to dots by default: <code>location.long</code>. You can keep the originals with <code>check.names = FALSE</code>, but then you need backticks everywhere — not worth it.</p>
-</div>
+<p><code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code> assumed <strong>UTC</strong>, which is right for Movebank. A CSV from another source may be in local time; parse it explicitly with <code>ymd_hms(x, tz = "Africa/Johannesburg")</code>, and convert to UTC with <code><a href="https://lubridate.tidyverse.org/reference/with_tz.html">with_tz()</a></code>. Mixing the two is the commonest silent error in movement analysis.</p>
 </div>
 </div>
 <section id="your-turn" class="level3"><h3 class="anchored" data-anchor-id="your-turn">Your turn</h3>
-<p><strong>1a.</strong> How many rows? How many columns? <strong>1b.</strong> How many individual animals, and what are they called? <strong>1c.</strong> What species, and what sensor type?</p>
+<p><strong>1a.</strong> How many animals, and how many fixes each? <strong>1b.</strong> Over what period?</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -724,60 +736,158 @@ Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 28410</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 18</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.local.identifier</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Queen"  "Gabs"   "Cilla"  "Mvubu"  "Toni"   "Pepper"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.local.identifier</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 6</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.taxon.canonical.name</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Syncerus caffer"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">sensor.type</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "gps"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">track</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>fixes <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>, from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span>,</span>
+<span>            days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"days"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>            .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span><span class="co">#&gt;   id     fixes from                to                   days</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt; &lt;dttm&gt;              &lt;dttm&gt;              &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Cilla   3556 2005-07-14 04:35:00 2005-12-07 22:16:00   147</span></span>
+<span><span class="co">#&gt; 2 Gabs    4831 2005-04-05 05:56:00 2005-10-08 03:57:00   186</span></span>
+<span><span class="co">#&gt; 3 Mvubu   3491 2005-07-15 05:02:00 2005-10-29 18:49:00   107</span></span>
+<span><span class="co">#&gt; 4 Pepper  5163 2005-09-16 15:18:00 2006-12-31 14:34:00   471</span></span>
+<span><span class="co">#&gt; 5 Queen   4997 2005-02-17 05:05:00 2006-05-26 04:16:00   463</span></span>
+<span><span class="co">#&gt; 6 Toni    6372 2005-08-23 06:35:00 2006-04-23 13:09:00   243</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Six buffalo, GPS-collared. Note that <code><a href="https://rdrr.io/r/base/table.html">table()</a></code> is more informative than <code><a href="https://rdrr.io/r/base/unique.html">unique()</a></code> when you also want the number of fixes per animal:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.local.identifier</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Cilla   Gabs  Mvubu Pepper  Queen   Toni </span></span>
-<span><span class="co">#&gt;   3556   4831   3491   5163   4997   6372</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Already a lesson: the animals are <strong>not</strong> equally sampled. Any summary that pools them without accounting for that is dominated by whichever individual contributed most fixes.</p>
+<p>Six buffalo, followed for very different lengths of time. Any summary that pools them is dominated by whoever contributed most fixes.</p>
 </div>
 </div>
 </div>
-</section></section><section id="task-2-timestamps-are-not-text" class="level2"><h2 class="anchored" data-anchor-id="task-2-timestamps-are-not-text">Task 2 — Timestamps are not text</h2>
-<p>This is the single most important line of code in the whole course.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">timestamp</span>, format <span class="op">=</span> <span class="st">"%Y-%m-%d %H:%M:%S"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "POSIXct" "POSIXt"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2005-02-17 05:05:00 UTC" "2006-12-31 14:34:00 UTC"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section></section><section id="task-2-plot-it" class="level2"><h2 class="anchored" data-anchor-id="task-2-plot-it">Task 2 — Plot it</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">track</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">lon</span>, <span class="va">lat</span>, colour <span class="op">=</span> <span class="va">id</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_path</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">0.25</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Longitude (°)"</span>, y <span class="op">=</span> <span class="st">"Latitude (°)"</span>, colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>       title <span class="op">=</span> <span class="st">"Six buffalo, Kruger National Park"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
 </div>
-<div class="callout callout-style-default callout-warning callout-titled">
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Always set <code>tz</code>
+<span class="screen-reader-only">Important</span>This plot is subtly wrong
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you omit <code>tz</code>, R silently uses <strong>your computer’s</strong> time zone. Your analysis then gives different answers on a laptop in Rome and a server in California. Movebank timestamps are UTC. Say so.</p>
+<p><code><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal()</a></code> makes one degree of longitude as long as one degree of latitude. At 24.5°S a degree of longitude is only 101 km, against ~111 km for latitude, so the map is stretched east–west by about 10%. At Kruger’s latitude that is tolerable; for a track spanning 7°N to 54°N it is not. Session 2 fixes this properly with coordinate reference systems.</p>
 </div>
+</div>
+</section><section id="task-3-fixes-per-day" class="level2"><h2 class="anchored" data-anchor-id="task-3-fixes-per-day">Task 3 — Fixes per day</h2>
+<p>A collar is programmed to attempt a fix on a schedule. Counting fixes per day tells you how well it kept to it.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">per_day</span> <span class="op">&lt;-</span> <span class="va">track</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>day <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_date</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">day</span>, name <span class="op">=</span> <span class="st">"fixes"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">per_day</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>median_per_day <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span>, max_per_day <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">fixes</span><span class="op">)</span>,</span>
+<span>            .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 3</span></span>
+<span><span class="co">#&gt;   id     median_per_day max_per_day</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;           &lt;dbl&gt;       &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 Cilla              24          27</span></span>
+<span><span class="co">#&gt; 2 Gabs               29          54</span></span>
+<span><span class="co">#&gt; 3 Mvubu              27          56</span></span>
+<span><span class="co">#&gt; 4 Pepper              9          66</span></span>
+<span><span class="co">#&gt; 5 Queen              24          51</span></span>
+<span><span class="co">#&gt; 6 Toni               24          69</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="your-turn-1" class="level3"><h3 class="anchored" data-anchor-id="your-turn-1">Your turn</h3>
-<p><strong>2a.</strong> Over how many days does the study run? <strong>2b.</strong> In which months are there most fixes?</p>
+<p><strong>3a.</strong> Plot fixes per day over time for each animal. <strong>3b.</strong> Some days have <em>more</em> fixes than the schedule allows. Why?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">per_day</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">day</span>, <span class="va">fixes</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#1f6f78"</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">id</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Fixes per day"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The programmed schedule is roughly 24 per day. Days far above it are <strong>duplicates</strong>: the collar re-transmitted fixes it had already sent.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">track</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">t</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>duplicated_timestamps <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>, extra_rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 2</span></span>
+<span><span class="co">#&gt;   duplicated_timestamps extra_rows</span></span>
+<span><span class="co">#&gt;                   &lt;int&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1                  2932       3747</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Thousands of repeated timestamps. We remove them properly in Session 3; for now note that <strong>you only find this by looking</strong>.</p>
+</div>
+</div>
+</div>
+</section></section><section id="task-4-daily-distance" class="level2"><h2 class="anchored" data-anchor-id="task-4-daily-distance">Task 4 — Daily distance</h2>
+<p>Straight-line distance between consecutive fixes, summed per day. Because our coordinates are in degrees we need a <strong>great-circle</strong> distance. Here is the haversine formula written out — Session 2 replaces it with <code>sf</code>, which does this properly on the ellipsoid.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">haversine_m</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">lon1</span>, <span class="va">lat1</span>, <span class="va">lon2</span>, <span class="va">lat2</span>, <span class="va">r</span> <span class="op">=</span> <span class="fl">6371008.8</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">to_rad</span> <span class="op">&lt;-</span> <span class="va">pi</span> <span class="op">/</span> <span class="fl">180</span></span>
+<span>  <span class="va">dlat</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">lat2</span> <span class="op">-</span> <span class="va">lat1</span><span class="op">)</span> <span class="op">*</span> <span class="va">to_rad</span></span>
+<span>  <span class="va">dlon</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">lon2</span> <span class="op">-</span> <span class="va">lon1</span><span class="op">)</span> <span class="op">*</span> <span class="va">to_rad</span></span>
+<span>  <span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">sin</a></span><span class="op">(</span><span class="va">dlat</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="va">lat1</span> <span class="op">*</span> <span class="va">to_rad</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="va">lat2</span> <span class="op">*</span> <span class="va">to_rad</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">sin</a></span><span class="op">(</span><span class="va">dlon</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span></span>
+<span>  <span class="fl">2</span> <span class="op">*</span> <span class="va">r</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">asin</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">steps</span> <span class="op">&lt;-</span> <span class="va">track</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">t</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span>          <span class="co"># drop duplicates first</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>dist_m <span class="op">=</span> <span class="fu">haversine_m</span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">lon</span><span class="op">)</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">lat</span><span class="op">)</span>, <span class="va">lon</span>, <span class="va">lat</span><span class="op">)</span>,</span>
+<span>         dt_h   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="va">t</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">lag</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"hours"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">dist_m</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">daily</span> <span class="op">&lt;-</span> <span class="va">steps</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>day <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html">as_date</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">day</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>km <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">dist_m</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1000</span>, steps <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">daily</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>median_km_per_day <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">km</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 2</span></span>
+<span><span class="co">#&gt;   id     median_km_per_day</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;              &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Cilla                5.9</span></span>
+<span><span class="co">#&gt; 2 Gabs                 5.3</span></span>
+<span><span class="co">#&gt; 3 Mvubu                5.6</span></span>
+<span><span class="co">#&gt; 4 Pepper               4.6</span></span>
+<span><span class="co">#&gt; 5 Queen                7.3</span></span>
+<span><span class="co">#&gt; 6 Toni                 5.9</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="your-turn-2" class="level3"><h3 class="anchored" data-anchor-id="your-turn-2">Your turn</h3>
+<p><strong>4a.</strong> Plot daily distance over time for one animal. <strong>4b.</strong> Is a day with 6 fixes comparable to a day with 24?</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -790,42 +900,78 @@ Tip
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<p>Queen’s collar was patchy, which makes her the instructive case:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">daily</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op">==</span> <span class="st">"Queen"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">day</span>, <span class="va">km</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">steps</span> <span class="op">&gt;=</span> <span class="fl">22</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1.6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_colour_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`TRUE` <span class="op">=</span> <span class="st">"#1f6f78"</span>, `FALSE` <span class="op">=</span> <span class="st">"firebrick"</span><span class="op">)</span>,</span>
+<span>                      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>`TRUE` <span class="op">=</span> <span class="st">"complete day (22+ steps)"</span>,</span>
+<span>                                 `FALSE` <span class="op">=</span> <span class="st">"incomplete day"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Distance per day (km)"</span>, colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>       title <span class="op">=</span> <span class="st">"Queen: daily distance"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>No, they are not comparable. Summed distance is a <strong>lower bound</strong> that depends on how many fixes you had — the modifiable temporal unit problem from the slides:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/difftime.html">difftime</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"days"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Time difference of 682.3951 days</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">$</span><span class="va">t</span>, <span class="st">"%Y-%m"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 2005-02 2005-03 2005-04 2005-05 2005-06 2005-07 2005-08 2005-09 2005-10 2005-11 </span></span>
-<span><span class="co">#&gt;     289     752    1290     887     889    1190    3220    4186    4192    3704 </span></span>
-<span><span class="co">#&gt; 2005-12 2006-01 2006-02 2006-03 2006-04 2006-05 2006-06 2006-07 2006-08 2006-09 </span></span>
-<span><span class="co">#&gt;    2574    1425     841     737     626     582     235     197     147     138 </span></span>
-<span><span class="co">#&gt; 2006-10 2006-11 2006-12 </span></span>
-<span><span class="co">#&gt;     108     140      61</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">daily</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op">==</span> <span class="st">"Queen"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>steps_that_day <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">steps</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span>, <span class="fl">12</span>, <span class="fl">21</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>                              labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1–6"</span>, <span class="st">"7–12"</span>, <span class="st">"13–21"</span>, <span class="st">"22+"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">steps_that_day</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>days <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>, median_km <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">km</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 3</span></span>
+<span><span class="co">#&gt;   steps_that_day  days median_km</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;          &lt;int&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 1–6               21       2.5</span></span>
+<span><span class="co">#&gt; 2 7–12               7       3.7</span></span>
+<span><span class="co">#&gt; 3 13–21             12       7.3</span></span>
+<span><span class="co">#&gt; 4 22+              175       7.5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The monthly counts are very uneven — collars were deployed and failed at different times. This matters: a “seasonal” pattern can easily be a deployment pattern in disguise.</p>
+<p>Days with only a handful of fixes come out at a third of the distance of complete days — for a reason that has nothing to do with the buffalo. Before comparing days, keep only complete ones or, better, resample to a regular interval (Session 3).</p>
 </div>
 </div>
 </div>
-</section></section><section id="task-3-subset-one-animal-and-sort-it" class="level2"><h2 class="anchored" data-anchor-id="task-3-subset-one-animal-and-sort-it">Task 3 — Subset one animal and sort it</h2>
-<p>Almost every movement calculation assumes the rows are <strong>one individual, in time order</strong>. Never assume a file arrives sorted.</p>
+</section></section><section id="task-5-find-the-gaps" class="level2"><h2 class="anchored" data-anchor-id="task-5-find-the-gaps">Task 5 — Find the gaps</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">queen</span> <span class="op">&lt;-</span> <span class="va">buffalo</span><span class="op">[</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.local.identifier</span> <span class="op">==</span> <span class="st">"Queen"</span>, <span class="op">]</span></span>
-<span><span class="va">queen</span> <span class="op">&lt;-</span> <span class="va">queen</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">queen</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, <span class="op">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gaps</span> <span class="op">&lt;-</span> <span class="va">steps</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">dt_h</span> <span class="op">&gt;</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">dt_h</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span><span class="va">id</span>, from <span class="op">=</span> <span class="va">t</span> <span class="op">-</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/duration.html">dhours</a></span><span class="op">(</span><span class="va">dt_h</span><span class="op">)</span>, to <span class="op">=</span> <span class="va">t</span>, gap_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">dt_h</span> <span class="op">/</span> <span class="fl">24</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">queen</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 4997</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">queen</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"t"</span>, <span class="st">"location.long"</span>, <span class="st">"location.lat"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                     t location.long location.lat</span></span>
-<span><span class="co">#&gt; 1 2005-02-17 05:05:00      31.76642    -24.53730</span></span>
-<span><span class="co">#&gt; 2 2005-02-17 05:05:00      31.76642    -24.53730</span></span>
-<span><span class="co">#&gt; 3 2005-02-17 06:08:00      31.76442    -24.53931</span></span>
-<span><span class="co">#&gt; 4 2005-02-17 06:08:00      31.76442    -24.53931</span></span>
-<span><span class="co">#&gt; 5 2005-02-17 07:05:00      31.76114    -24.54799</span></span>
-<span><span class="co">#&gt; 6 2005-02-17 08:05:00      31.76080    -24.54703</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">gaps</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 8 × 4</span></span>
+<span><span class="co">#&gt;   id     from                to                  gap_days</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;dttm&gt;                 &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Queen  2005-06-02 03:43:00 2005-09-15 06:31:00    105. </span></span>
+<span><span class="co">#&gt; 2 Queen  2006-01-29 06:05:00 2006-04-28 18:52:00     89.5</span></span>
+<span><span class="co">#&gt; 3 Pepper 2006-02-17 10:08:00 2006-04-25 05:09:00     66.8</span></span>
+<span><span class="co">#&gt; 4 Gabs   2005-06-27 03:45:00 2005-07-27 07:06:00     30.1</span></span>
+<span><span class="co">#&gt; 5 Queen  2006-04-28 18:52:00 2006-05-26 02:16:00     27.3</span></span>
+<span><span class="co">#&gt; 6 Pepper 2005-12-27 02:23:00 2006-01-07 13:45:00     11.5</span></span>
+<span><span class="co">#&gt; 7 Queen  2005-05-11 14:53:00 2005-05-23 01:50:00     11.5</span></span>
+<span><span class="co">#&gt; 8 Queen  2006-01-14 07:16:00 2006-01-24 15:25:00     10.3</span></span>
+<span></span>
+<span><span class="va">gaps</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">id</span>, name <span class="op">=</span> <span class="st">"gaps_over_3h"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 2</span></span>
+<span><span class="co">#&gt;   id     gaps_over_3h</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;         &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 Gabs             15</span></span>
+<span><span class="co">#&gt; 2 Mvubu             2</span></span>
+<span><span class="co">#&gt; 3 Pepper          391</span></span>
+<span><span class="co">#&gt; 4 Queen            51</span></span>
+<span><span class="co">#&gt; 5 Toni              5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="your-turn-2" class="level3"><h3 class="anchored" data-anchor-id="your-turn-2">Your turn</h3>
-<p><strong>3a.</strong> Were the rows already in time order? <strong>3b.</strong> Are there repeated timestamps?</p>
+<section id="your-turn-3" class="level3"><h3 class="anchored" data-anchor-id="your-turn-3">Your turn</h3>
+<p><strong>5a.</strong> Visualise the gaps as a timeline for all animals. <strong>5b.</strong> Name three biological or technical reasons for a long gap.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -838,213 +984,53 @@ Tip
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Was the original order already sorted in time?</span></span>
-<span><span class="va">queen_raw</span> <span class="op">&lt;-</span> <span class="va">buffalo</span><span class="op">[</span><span class="va">buffalo</span><span class="op">$</span><span class="va">individual.local.identifier</span> <span class="op">==</span> <span class="st">"Queen"</span>, <span class="op">]</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/is.unsorted.html">is.unsorted</a></span><span class="op">(</span><span class="va">queen_raw</span><span class="op">$</span><span class="va">t</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] FALSE</span></span>
-<span></span>
-<span><span class="co"># Repeated timestamps?</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span><span class="op">(</span><span class="va">queen</span><span class="op">$</span><span class="va">t</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 452</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>There are duplicated timestamps — the collar transmitted the same fix more than once. Across the whole file:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"individual.local.identifier"</span>, <span class="st">"timestamp"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 3747</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Roughly 13% of the file. We will remove these properly in Class 3; today just register that <strong>real data arrive dirty</strong>, and that you only find out by looking.</p>
-</div>
-</div>
-</div>
-</section></section><section id="task-4-fix-interval-and-fix-success" class="level2"><h2 class="anchored" data-anchor-id="task-4-fix-interval-and-fix-success">Task 4 — Fix interval and fix success</h2>
-<p>The collar was <em>programmed</em> to attempt a fix on a schedule. What did it actually deliver?</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Drop duplicated timestamps first, or every duplicate creates a zero-length interval</span></span>
-<span><span class="va">queen_u</span> <span class="op">&lt;-</span> <span class="va">queen</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span><span class="op">(</span><span class="va">queen</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, <span class="op">]</span></span>
-<span></span>
-<span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, units <span class="op">=</span> <span class="st">"hours"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. </span></span>
-<span><span class="co">#&gt; 3.333e-02 1.000e+00 1.000e+00 2.445e+00 1.000e+00 2.523e+03</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<section id="your-turn-3" class="level3"><h3 class="anchored" data-anchor-id="your-turn-3">Your turn</h3>
-<p><strong>4a.</strong> What is the <em>modal</em> (most common) interval? That is the programmed fix rate. <strong>4b.</strong> What fraction of intervals are exactly that? This is your fix success rate. <strong>4c.</strong> What is the longest gap, and what might explain it?</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Round to the nearest 0.1 h so near-identical intervals group together</span></span>
-<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">dt</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">tab</span>, <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    1  0.9    0    2  0.1 </span></span>
-<span><span class="co">#&gt; 4203  120   55   42   35</span></span>
-<span></span>
-<span><span class="va">modal_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">modal_dt</span></span>
-<span><span class="co">#&gt; [1] 1</span></span>
-<span></span>
-<span><span class="co"># Proportion of intervals at the programmed rate</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">dt</span> <span class="op">-</span> <span class="va">modal_dt</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.9515845</span></span>
-<span></span>
-<span><span class="co"># The worst gap, in days</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">dt</span><span class="op">)</span> <span class="op">/</span> <span class="fl">24</span></span>
-<span><span class="co">#&gt; [1] 105.1167</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>The modal interval is the programmed schedule. Everything longer is a <strong>missed fix</strong> — the collar tried and failed, or was off.</p>
-<p>Long gaps have mundane explanations that matter enormously: battery saving schedules, the animal under dense canopy or in a gorge, the collar temporarily upside-down, or the animal dead and the collar lying face-down.</p>
-<p>A cleaner way to count missed fixes — how many scheduled attempts fit in each observed gap:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">missed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">dt</span> <span class="op">/</span> <span class="va">modal_dt</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">missed</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 6563</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">missed</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">missed</span><span class="op">)</span><span class="op">)</span>   <span class="co"># overall failure rate</span></span>
-<span><span class="co">#&gt; [1] 0.5908354</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</div>
-</section></section><section id="task-5-your-first-trajectory-plot" class="level2"><h2 class="anchored" data-anchor-id="task-5-your-first-trajectory-plot">Task 5 — Your first trajectory plot</h2>
-<p>No spatial packages. Just points and lines.</p>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">queen_u</span><span class="op">$</span><span class="va">location.lat</span>,</span>
-<span>     type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"grey60"</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Longitude (°)"</span>, ylab <span class="op">=</span> <span class="st">"Latitude (°)"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Buffalo 'Queen', Kruger NP"</span>,</span>
-<span>     asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">queen_u</span><span class="op">$</span><span class="va">location.lat</span>,</span>
-<span>       pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.3</span>, col <span class="op">=</span> <span class="st">"#1f6f78"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">location.long</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">queen_u</span><span class="op">$</span><span class="va">location.lat</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>       pch <span class="op">=</span> <span class="fl">17</span>, cex <span class="op">=</span> <span class="fl">1.6</span>, col <span class="op">=</span> <span class="st">"forestgreen"</span><span class="op">)</span>     <span class="co"># start</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">location.long</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="va">queen_u</span><span class="op">$</span><span class="va">location.lat</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>       pch <span class="op">=</span> <span class="fl">15</span>, cex <span class="op">=</span> <span class="fl">1.6</span>, col <span class="op">=</span> <span class="st">"firebrick"</span><span class="op">)</span>       <span class="co"># end</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="fl">15</span><span class="op">)</span>,</span>
-<span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"forestgreen"</span>, <span class="st">"firebrick"</span><span class="op">)</span>, bty <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">steps</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">t</span>, <span class="va">id</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="st">"|"</span>, size <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.15</span>, colour <span class="op">=</span> <span class="st">"#1f6f78"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">gaps</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">gap_days</span> <span class="op">&gt;=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">from</span>, xend <span class="op">=</span> <span class="va">to</span>, y <span class="op">=</span> <span class="va">id</span>, yend <span class="op">=</span> <span class="va">id</span><span class="op">)</span>,</span>
+<span>               colour <span class="op">=</span> <span class="st">"firebrick"</span>, linewidth <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span>, title <span class="op">=</span> <span class="st">"Fixes (teal) and gaps longer than a day (red)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
 </figure>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled">
+<p>Common causes of long gaps:</p>
+<ul>
+<li>
+<strong>Battery</strong> — schedules that deliberately pause, or a collar running flat</li>
+<li>
+<strong>Habitat</strong> — dense canopy, gorges and burrows block the satellites</li>
+<li>
+<strong>Collar orientation</strong> — an animal lying on the antenna</li>
+<li>
+<strong>Data transfer</strong> — the data exist on the collar but were never downloaded</li>
+<li>
+<strong>Mortality or drop-off</strong> — the collar keeps reporting the same place, or stops</li>
+</ul>
+<p>The first three are the ones that bias analyses: they are not random, they depend on where the animal is and what it is doing.</p>
+</div>
+</div>
+</div>
+</section></section><section id="to-hand-in" class="level2"><h2 class="anchored" data-anchor-id="to-hand-in">To hand in</h2>
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>This plot is wrong, and knowing why is the point
+<span class="screen-reader-only">Tip</span>Weekly submission
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>asp = 1</code> forces one degree of longitude to occupy the same screen distance as one degree of latitude. On the ground at 24°S, one degree of latitude is about 111 km, but one degree of longitude is only about 101 km — the map is stretched east–west by roughly a factor of 1.1.</p>
-<p>At 24° the distortion is modest. Try the same plot for the vulture, which ranges from 7°N to 54°N, and it becomes severe.</p>
-<p>Distances computed from raw degrees are meaningless. Fixing this — properly, with coordinate reference systems — is <a href="../../classes/class-02/slides.html">Class 2</a>.</p>
+<p>A single figure: daily distance over time for <strong>one</strong> buffalo other than Queen, with incomplete days visibly distinguished. One sentence under it explaining why incomplete days had to be distinguished. Submit the <code>.qmd</code> that produces it.</p>
 </div>
 </div>
-<section id="your-turn-4" class="level3"><h3 class="anchored" data-anchor-id="your-turn-4">Your turn</h3>
-<p><strong>5a.</strong> Plot all six buffalo on one figure, one colour each.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">buffalo</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span><span class="op">(</span><span class="va">buffalo</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"individual.local.identifier"</span>, <span class="st">"timestamp"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>, <span class="op">]</span></span>
-<span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">individual.local.identifier</span><span class="op">)</span></span>
-<span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ids</span><span class="op">)</span>, <span class="st">"Dark 3"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">b</span><span class="op">$</span><span class="va">location.lat</span>, type <span class="op">=</span> <span class="st">"n"</span>, asp <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Longitude (°)"</span>, ylab <span class="op">=</span> <span class="st">"Latitude (°)"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Six buffalo, Kruger National Park"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">ids</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">b</span><span class="op">[</span><span class="va">b</span><span class="op">$</span><span class="va">individual.local.identifier</span> <span class="op">==</span> <span class="va">ids</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">]</span></span>
-<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, <span class="op">]</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">d</span><span class="op">$</span><span class="va">location.lat</span>, col <span class="op">=</span> <span class="va">cols</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, legend <span class="op">=</span> <span class="va">ids</span>, col <span class="op">=</span> <span class="va">cols</span>, lwd <span class="op">=</span> <span class="fl">2</span>, bty <span class="op">=</span> <span class="st">"n"</span>, cex <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="720"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The individuals overlap heavily but are not identical — the raw material of every question in this course. Do they use the same areas at the same <em>times</em>? Do they avoid each other? Do they respond to the same rivers?</p>
-</div>
-</div>
-</div>
-</section></section><section id="task-6-a-different-animal-a-different-problem" class="level2"><h2 class="anchored" data-anchor-id="task-6-a-different-animal-a-different-problem">Task 6 — A different animal, a different problem</h2>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">vulture</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/vulture_leo.csv.gz"</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">vulture</span><span class="op">$</span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="va">vulture</span><span class="op">$</span><span class="va">timestamp</span>, format <span class="op">=</span> <span class="st">"%Y-%m-%d %H:%M:%S"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span></span>
-<span><span class="va">vulture</span> <span class="op">&lt;-</span> <span class="va">vulture</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">vulture</span><span class="op">$</span><span class="va">t</span><span class="op">)</span>, <span class="op">]</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">vulture</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">vulture</span><span class="op">$</span><span class="va">location.lat</span>, type <span class="op">=</span> <span class="st">"l"</span>,</span>
-<span>     col <span class="op">=</span> <span class="st">"grey50"</span>, asp <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Longitude (°)"</span>, ylab <span class="op">=</span> <span class="st">"Latitude (°)"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Turkey vulture 'Leo', 2007-2013"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">vulture</span><span class="op">$</span><span class="va">location.long</span>, <span class="va">vulture</span><span class="op">$</span><span class="va">location.lat</span>,</span>
-<span>       pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.15</span>, col <span class="op">=</span> <span class="st">"#c1440e"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="your-turn-5" class="level3"><h3 class="anchored" data-anchor-id="your-turn-5">Your turn</h3>
-<p><strong>6a.</strong> Why would a single home-range estimate for this animal be meaningless? <strong>6b.</strong> Plot latitude against time. What do you see?</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">vulture</span><span class="op">$</span><span class="va">t</span>, <span class="va">vulture</span><span class="op">$</span><span class="va">location.lat</span>, type <span class="op">=</span> <span class="st">"l"</span>,</span>
-<span>     col <span class="op">=</span> <span class="st">"#c1440e"</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">"Latitude (°)"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Latitude over time — six annual migrations"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>A clean sawtooth. Leo is not doing one thing: he alternates between two residency phases (Canada, South America) and two directed migrations, and repeats that six times.</p>
-<p>A home range computed over the whole track would describe an “area of use” spanning two continents — an area the animal essentially never occupies. It would be arithmetically correct and biologically meaningless.</p>
-<p>This is exactly the motivation for <a href="../../classes/class-06/slides.html">Class 6</a>: <strong>segment first, then analyse</strong>. Note also that latitude-over-time is a remarkably effective diagnostic plot — always look at your coordinates against time before you model anything.</p>
-</div>
-</div>
-</div>
-</section></section><section id="self-check" class="level2"><h2 class="anchored" data-anchor-id="self-check">Self-check</h2>
+</section><section id="self-check" class="level2"><h2 class="anchored" data-anchor-id="self-check">Self-check</h2>
 <div class="quiz">
 <p>You compute <code>diff(t)</code> on a data frame you forgot to sort by time. What do you get?</p>
 <ul class="task-list">
@@ -1054,8 +1040,7 @@ Tip
 <li><label><input type="checkbox">All zeros</label></li>
 </ul>
 <div class="quiz-feedback">
-<p><code><a href="https://rdrr.io/r/base/diff.html">diff()</a></code> does exactly what you asked: it subtracts each element from the next, in the order given. Out of order, you get negative time differences, and any speed you compute from them is garbage — often silently, because <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> still returns numbers.</p>
-<p><strong>Always <code>order(t)</code> within individual before any step calculation.</strong> This is the most common error in beginner movement code.</p>
+<p><code><a href="https://rdrr.io/r/base/diff.html">diff()</a></code> subtracts each element from the next, in the order given. Out of order, you get negative time differences, and any speed computed from them is garbage — often silently, because <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> still returns numbers. <strong>Always <code>arrange(id, t)</code> before any step calculation.</strong></p>
 </div>
 </div>
 <div class="quiz">
@@ -1067,15 +1052,13 @@ Tip
 <li><label><input type="checkbox">Impossible to say without the DOP values</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>Two years of hourly attempts is 2 × 365 × 24 ≈ 17,520. So 14,000 / 17,520 ≈ <strong>80%</strong>, which is a fairly typical figure for a GPS collar on a large mammal in mixed habitat.</p>
-<p>The 20% that failed is not noise: if failures concentrate in closed habitat, your data under-represent exactly the places the animal may prefer.</p>
+<p>Two years of hourly attempts is 2 × 365 × 24 ≈ 17,520. 14,000 / 17,520 ≈ <strong>80%</strong>, a fairly typical figure for a large mammal in mixed habitat. And the 20% that failed is not noise if failures concentrate in closed habitat.</p>
 </div>
 </div>
-</section><section id="before-class-2" class="level2"><h2 class="anchored" data-anchor-id="before-class-2">Before Class 2</h2>
+</section><section id="before-session-2" class="level2"><h2 class="anchored" data-anchor-id="before-session-2">Before Session 2</h2>
 <ul>
-<li>Make sure <code><a href="https://r-spatial.github.io/sf/">library(sf)</a></code> and <code><a href="https://rspatial.org/">library(terra)</a></code> both load without errors.</li>
-<li>Look at the <a href="../../data.html">Datasets page</a> so the three files are familiar.</li>
-<li>Optional but useful: skim <a href="https://r.geocompx.org/spatial-class">Geocomputation with R, chapter 2</a>.</li>
+<li>Make sure <code><a href="https://r-spatial.github.io/sf/">library(sf)</a></code> and <code><a href="https://rspatial.org/">library(terra)</a></code> both load.</li>
+<li>Skim <a href="https://r.geocompx.org/spatial-class">Geocomputation with R, chapter 2</a>.</li>
 </ul>
 
 

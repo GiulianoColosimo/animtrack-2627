@@ -11,7 +11,7 @@
 
   <meta name="author" content="Giuliano Colosimo">
   <meta name="dcterms.date" content="2026-09-30">
-  <title>Animal Tracking – Movement metrics and home range</title>
+  <title>Animal Tracking – Quantifying movement</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -30,7 +30,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-18657b062b3da6a166608c2ebc8d3bda.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-fd96417eda74ebb0be446d6413f2e761.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -125,8 +125,8 @@
       margin-right: 0; 
     }
   </style>
-<meta property="og:title" content="Movement metrics and home range – Animal Tracking">
-<meta property="og:description" content="Class 4 · Theme 1 — Movement and movement analysis">
+<meta property="og:title" content="Quantifying movement – Animal Tracking">
+<meta property="og:description" content="Session 4 — Path descriptors and behavioural classification">
 <meta property="og:site_name" content="Animal Tracking">
 <meta property="og:locale" content="en_US">
 </head>
@@ -135,8 +135,8 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Movement metrics and home range</h1>
-  <p class="subtitle">Class 4 · Theme 1 — Movement and movement analysis</p>
+  <h1 class="title">Quantifying movement</h1>
+  <p class="subtitle">Session 4 — Path descriptors and behavioural classification</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -153,40 +153,32 @@ Giuliano Colosimo
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
+<div class="paradigm">
+<p><span class="pbox on">Internal state</span> <span class="pbox on">Motion capacity</span> <span class="pbox">Navigation capacity</span> <span class="pbox">External factors</span> <span class="pbox path on">Movement path</span></p>
+</div>
+<p>From numbers describing a <strong>path</strong> to inferences about <strong>behaviour</strong> — the first time we try to climb from the bottom box to the ones above it.</p>
+</section>
+<section id="where-we-are-going" class="slide level2">
+<h2>Where we are going</h2>
 <div class="objectives">
 <ol type="1">
-<li>Describe a trajectory with numbers: <strong>step length, turning angle, speed, net displacement</strong></li>
-<li>Why these numbers are <strong>scale-dependent</strong></li>
-<li>Random walks: BRW, CRW, Lévy — the null models</li>
-<li><strong>Home range</strong>: what it is, and what the estimators actually estimate</li>
-<li>MCP, KDE and why autocorrelation broke them — <strong>AKDE</strong></li>
+<li>Path-level descriptors: net squared displacement, straightness, sinuosity, fractal dimension</li>
+<li>Classifying movement strategies from NSD curves (Bunnefeld et al.&nbsp;2011)</li>
+<li>First-passage time and the scale of area-restricted search</li>
+<li>Behavioural modes along a path: encamped versus transit</li>
+<li>Simple segmentation: thresholds, expert rules, behavioural change-point analysis</li>
 </ol>
+</div>
+<div class="fragment">
+<div class="keyidea">
+<p>Every method today returns a confident-looking answer. The skill is asking whether it describes the animal or the sampling.</p>
+</div>
 </div>
 </section>
 <section>
-<section id="describing-a-trajectory" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>1 · Describing a trajectory</h1>
+<section id="describing-a-whole-path" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>1 · Describing a whole path</h1>
 
-</section>
-<section id="the-step" class="slide level2">
-<h2>The step</h2>
-<p>Two consecutive fixes define a <strong>step</strong>.</p>
-<div class="columns">
-<div class="column" style="width:55%;">
-<ul>
-<li><strong>Step length</strong> <span class="math inline">\(s_t = \lVert \mathbf{x}_{t+1} - \mathbf{x}_t \rVert\)</span></li>
-<li><strong>Absolute direction</strong> <span class="math inline">\(\phi_t = \operatorname{atan2}(\Delta y, \Delta x)\)</span></li>
-<li><strong>Turning angle</strong> <span class="math inline">\(\theta_t = \phi_t - \phi_{t-1}\)</span>, wrapped to <span class="math inline">\((-\pi, \pi]\)</span></li>
-<li><strong>Speed</strong> <span class="math inline">\(v_t = s_t / \Delta t\)</span></li>
-</ul>
-</div><div class="column" style="width:45%;">
-<div class="keyidea">
-<p>A turning angle needs <strong>three</strong> fixes. A step needs two. That is why <code>filter_min_n_burst(min_n = 3)</code> exists.</p>
-</div>
-</div></div>
-<div class="fragment">
-<p>Turning angles are <strong>circular</strong> data: −179° and +179° are 2° apart, not 358°. Never take an arithmetic mean of angles.</p>
-</div>
 </section>
 <section id="everything-here-is-scale-dependent" class="slide level2">
 <h2>Everything here is scale-dependent</h2>
@@ -200,6 +192,41 @@ Giuliano Colosimo
 <div class="keyidea">
 <p>“Mean step length” is not a property of the animal. It is a property of the animal <strong>and your sampling interval</strong>. Always report the interval alongside it, and never compare step lengths measured at different rates.</p>
 <p>There is a sweet spot: fine enough to resolve the behaviour, coarse enough that a typical step is much longer than your GPS error.</p>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+</section>
+<section id="straightness-and-sinuosity" class="slide level2">
+<h2>Straightness and sinuosity</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="straightness-index">Straightness index</h3>
+<p><span class="math display">\[\text{ST} = \frac{D}{L}\]</span> Net displacement over path length, between 0 and 1.</p>
+<p>Intuitive, but it depends on the length of the window you compute it over.</p>
+</div><div class="column" style="width:50%;">
+<h3 id="sinuosity-benhamou-2004">Sinuosity (Benhamou 2004)</h3>
+<p>Built from the step length and the concentration of turning angles.</p>
+<p>Describes the <em>local</em> tortuosity of a random search path, and is far less sensitive to the window.</p>
+</div></div>
+<div class="fragment">
+<div class="keyidea">
+<p>Use straightness for <strong>oriented</strong> movement (how directly did it get there?) and sinuosity for <strong>searching</strong> movement (how much does it wiggle?).</p>
+</div>
+</div>
+</section>
+<section id="fractal-dimension" class="slide level2">
+<h2>Fractal dimension</h2>
+<ul>
+<li class="fragment">Measure path length with a “ruler” of length <span class="math inline">\(r\)</span>; on a fractal path <span class="math inline">\(L(r) \propto r^{1-D}\)</span>, so <span class="math inline">\(D\)</span> comes from the slope of log L on log r</li>
+<li class="fragment"><span class="math inline">\(D = 1\)</span>: straight line; <span class="math inline">\(D \to 2\)</span>: a path that fills the plane</li>
+<li class="fragment">Appealing because it claims to be <strong>scale-free</strong></li>
+<li class="fragment">The catch (Benhamou 2004; Turchin 1996): real animal paths are rarely fractal across more than a narrow range of scales, and <span class="math inline">\(D\)</span> estimated from a correlated random walk varies with <span class="math inline">\(r\)</span></li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p>If <span class="math inline">\(D\)</span> changes with the ruler, the path is not fractal — and the change itself tells you the scale at which the behaviour changes.</p>
 </div>
 </div>
 </section>
@@ -217,7 +244,71 @@ Giuliano Colosimo
 <p>Fitting these shapes as competing non-linear models (Bunnefeld et al.&nbsp;2011) is a cheap and surprisingly effective way to classify movement strategies.</p>
 </div>
 </section>
+<section class="slide level2">
+
+</section>
+<section id="classifying-strategies-from-nsd" class="slide level2">
+<h2>Classifying strategies from NSD</h2>
+<p>Bunnefeld et al.&nbsp;(2011) fit competing <strong>non-linear models</strong> to each NSD curve and let the data choose:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Strategy</th>
+<th style="text-align: left;">NSD shape</th>
+<th style="text-align: left;">Model</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Nomad</td>
+<td style="text-align: left;">keeps rising</td>
+<td style="text-align: left;"><span class="math inline">\(\beta t\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Resident</td>
+<td style="text-align: left;">rises, then plateaus</td>
+<td style="text-align: left;"><span class="math inline">\(c\,(1 - e^{-kt})\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Disperser</td>
+<td style="text-align: left;">one sigmoid step</td>
+<td style="text-align: left;"><span class="math inline">\(\delta / (1 + e^{(\theta - t)/\phi})\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Migrant</td>
+<td style="text-align: left;">up, plateau, back down</td>
+<td style="text-align: left;">difference of two sigmoids</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div class="keyidea">
+<p>The fitted <strong>parameters</strong> are the biology: <span class="math inline">\(\sqrt{\delta}\)</span> is the migration distance, <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span> the departure and return dates. Never report the winning model without looking at them.</p>
+</div>
+</div>
+</section>
 <section id="quiz" class="slide level2">
+<h2>Quiz</h2>
+<div class="quiz">
+<p>You fit the four NSD models to a year of data for a savanna buffalo, and the <strong>migrant</strong> model wins by ΔAIC = 60. The fitted displacement is 12 km. What do you conclude?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">The buffalo is a migrant</label></li>
+<li><label><input type="checkbox" checked="">It shifted within its range; AIC picked the most flexible curve, and the parameters say it is not a migration</label></li>
+<li><label><input type="checkbox">The resident model must have failed to converge</label></li>
+<li><label><input type="checkbox">Buffalo cannot be classified with NSD</label></li>
+</ul>
+<div class="quiz-feedback">
+<p>The double-sigmoid “migrant” curve is the most flexible of the four: it also fits an animal that drifts to one side of its home range for a few months and comes back. AIC rewards that fit — and with hundreds of autocorrelated daily points, AIC differences are grossly inflated.</p>
+<p>The parameters settle it: 12 km is a home-range-scale shift. A real migrant such as Leo the vulture gives a displacement of thousands of kilometres. <strong>Read the parameters, not just the winner.</strong></p>
+</div>
+</div>
+</section>
+<section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
 <p>Two studies report mean step length for the same population of roe deer. Study A reports 180 m, study B reports 640 m. Both are competent. What is the most likely explanation?</p>
@@ -230,160 +321,112 @@ Giuliano Colosimo
 <div class="quiz-feedback">
 <p>Step length scales with the sampling interval. An animal sampled hourly produces shorter steps than the same animal sampled every four hours, because the straight line between fixes cuts across all the wiggles in between.</p>
 <p>This is why <strong>step length is not comparable across studies</strong> unless the interval matches, and why you must state the interval in every methods section.</p>
-<p>It is also why Class 8’s step selection functions always compare an observed step with alternatives of <em>exactly the same duration</em>.</p>
+<p>It is also why Session 7’s step selection functions always compare an observed step with alternatives of <em>exactly the same duration</em>.</p>
 </div>
 </div>
 </section></section>
 <section>
-<section id="random-walks-as-null-models" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>2 · Random walks as null models</h1>
+<section id="first-passage-time" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>2 · First-passage time</h1>
 
 </section>
-<section id="three-canonical-walks" class="slide level2">
-<h2>Three canonical walks</h2>
-<div class="columns">
-<div class="column" style="width:33%;">
-<h3 id="simple-brw">Simple / BRW</h3>
-<p>Turning angles <strong>uniform</strong>; direction has no memory.</p>
-<p>Diffusive: displacement grows as <span class="math inline">\(\sqrt{t}\)</span>.</p>
-</div><div class="column" style="width:33%;">
-<h3 id="correlated-crw">Correlated (CRW)</h3>
-<p>Turning angles <strong>concentrated near 0</strong>; direction persists.</p>
-<p>Locally directed, diffusive at long range.</p>
-</div><div class="column" style="width:33%;">
-<h3 id="lévy-walk">Lévy walk</h3>
-<p>Step lengths from a <strong>heavy-tailed</strong> distribution.</p>
-<p>Rare very long steps; super-diffusive. Much argued over.</p>
-</div></div>
-<div class="fragment">
-<div class="keyidea">
-<p>These are <strong>null models</strong>. They tell you what a trajectory would look like if the animal responded to nothing. Departures from them are where the biology is.</p>
-</div>
-</div>
-</section>
-<section id="biased-random-walk" class="slide level2">
-<h2>Biased random walk</h2>
-<p>Add a preferred direction — towards a den, a water hole, a wintering ground — and you have a <strong>biased</strong> random walk. Combine with persistence and you get the BCRW, the workhorse null model for animals with both memory and a goal.</p>
-<div class="fragment">
-<p>Class 8’s integrated step selection analysis is, in effect, a biased correlated random walk whose bias is estimated from environmental covariates. Keep that connection in mind.</p>
-</div>
-</section></section>
-<section>
-<section id="home-range" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>3 · Home range</h1>
-
-</section>
-<section id="what-is-a-home-range" class="slide level2">
-<h2>What is a home range?</h2>
-<blockquote>
-<p>“That area traversed by the individual in its normal activities of food gathering, mating and caring for young.” — Burt (1943)</p>
-</blockquote>
-<div class="fragment">
+<section id="how-long-to-leave-a-circle" class="slide level2">
+<h2>How long to leave a circle?</h2>
+<p>Fauchald &amp; Tveraa (2003): around each fix, draw a circle of radius <span class="math inline">\(r\)</span> and measure the <strong>time</strong> the animal takes to leave it.</p>
 <ul>
-<li class="fragment">Note what it <strong>excludes</strong>: exploratory forays, migration, dispersal</li>
-<li class="fragment">Note what it does <strong>not</strong> say: nothing about a probability distribution, nothing about a percentage</li>
-<li class="fragment">Powell &amp; Mitchell (2012): a home range is a <strong>cognitive map</strong> the animal uses — and our estimators are crude proxies for it</li>
-</ul>
-</div>
-<div class="fragment">
-<div class="keyidea">
-<p>Every estimator answers a slightly different question. “95% home range” is not a fact about the animal; it is a number produced by a method with assumptions. Say which method, and why.</p>
-</div>
-</div>
-</section>
-<section id="mcp-minimum-convex-polygon" class="slide level2">
-<h2>MCP — minimum convex polygon</h2>
-<p>The smallest convex polygon containing <span class="math inline">\(x\)</span>% of the fixes.</p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><strong>For</strong></p>
-<ul>
-<li>Trivial to compute and explain</li>
-<li>Comparable with a century of literature</li>
-<li>No smoothing parameter to argue about</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<p><strong>Against</strong></p>
-<ul>
-<li><strong>Convex</strong> — includes land the animal never used (lakes, cliffs, cities)</li>
-<li>Extremely sensitive to outliers and to sample size</li>
-<li>Area grows with the number of fixes; no asymptote</li>
-<li>No density information — every point counts the same</li>
-</ul>
-</div></div>
-<div class="fragment">
-<p>Use it for comparability with old studies. Do not use it as your only estimate.</p>
-</div>
-</section>
-<section id="kde-kernel-density-estimation" class="slide level2">
-<h2>KDE — kernel density estimation</h2>
-<p>Put a small “bump” (kernel) on each fix, sum them into a <strong>utilisation distribution</strong> (UD), then draw the contour containing 95% of the volume.</p>
-<ul>
-<li class="fragment">Gives a <strong>density</strong>, not just a boundary — you can have disjoint core areas</li>
-<li class="fragment">The answer is dominated by the <strong>bandwidth</strong> <span class="math inline">\(h\)</span>
-<ul>
-<li class="fragment"><code>href</code> (reference) — assumes bivariate normal; usually over-smooths</li>
-<li class="fragment"><code>hlscv</code> (least-squares cross-validation) — often fails to converge, or fragments the UD into confetti</li>
-<li class="fragment"><code>hpi</code> (plug-in) — generally the most reliable default</li>
-</ul></li>
+<li class="fragment">Where the animal searches intensively, first-passage time (FPT) is long; where it travels, FPT is short</li>
+<li class="fragment">Repeat for many radii and compute the <strong>variance of log FPT</strong> along the path</li>
+<li class="fragment">The radius at which that variance <strong>peaks</strong> is the spatial scale of area-restricted search</li>
 </ul>
 <div class="fragment">
 <div class="keyidea">
-<p>Report your bandwidth selector. Two papers using “95% KDE” with different bandwidths are not comparable.</p>
+<p>FPT turns “where does the animal slow down?” into a scale: <em>how big</em> are the patches it responds to?</p>
 </div>
 </div>
 </section>
-<section id="the-problem-kde-has-with-tracking-data" class="slide level2">
-<h2>The problem KDE has with tracking data</h2>
-<p>Classical KDE assumes fixes are <strong>independent</strong> samples from the UD.</p>
-<div class="fragment">
-<p>GPS fixes an hour apart are nothing of the sort — the animal was 300 m away an hour ago and will be 300 m away in an hour.</p>
-<ul>
-<li class="fragment">Effective sample size is far smaller than <span class="math inline">\(n\)</span></li>
-<li class="fragment">So the UD is <strong>under-estimated</strong> — the home range comes out too small</li>
-<li class="fragment">And collecting more fixes at a higher rate makes it <strong>worse</strong>, not better</li>
-</ul>
-</div>
-<div class="fragment">
-<div class="keyidea">
-<p>This is why area estimates from the 1990s (a few dozen VHF fixes) and from today (50,000 GPS fixes) are not comparable. It is not that the animals changed.</p>
-</div>
-</div>
-</section>
-<section id="akde-autocorrelated-kde" class="slide level2">
-<h2>AKDE — autocorrelated KDE</h2>
-<p>Fleming et al.&nbsp;(2015): first fit a <strong>continuous-time movement model</strong> to the track, estimate the autocorrelation structure, and use it to derive the <em>effective</em> sample size. Then do the kernel estimate.</p>
-<ul>
-<li class="fragment">Gives <strong>confidence intervals</strong> on the area — almost nothing else does</li>
-<li class="fragment">Handles irregular sampling gracefully</li>
-<li class="fragment">Tells you when your data are inadequate, instead of returning a confident-looking number</li>
-<li class="fragment"><code>ctmm</code> package; also a point-and-click web app</li>
-</ul>
-<div class="fragment">
-<div class="keyidea">
-<p>If you report one home-range estimate in a modern paper, make it AKDE, and report the confidence interval. If your CI spans an order of magnitude, that is the honest answer.</p>
-</div>
-</div>
-</section>
-<section id="quiz-1" class="slide level2">
+<section id="quiz-2" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
-<p>You estimate a 95% KDE home range from hourly GPS data (n = 8,000) and get 12 km². A 1995 study of the same population using VHF (n = 60) reported 31 km². What is the most likely explanation?</p>
+<p>You compute var(log FPT) for radii from 25 m to 8 km for an hourly buffalo track. It is highest at 25 m, falls to a minimum at 1.5 km, then rises to a second peak near 4 km. Which peak is the scale of area-restricted search?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">The population’s range has genuinely shrunk by 60%</label></li>
-<li><label><input type="checkbox" checked="">Autocorrelation in the GPS data biases classical KDE downwards</label></li>
-<li><label><input type="checkbox">The VHF study had larger location errors, inflating the area</label></li>
-<li><label><input type="checkbox">The two studies used different percentage contours</label></li>
+<li><label><input type="checkbox">25 m — it is the highest</label></li>
+<li><label><input type="checkbox" checked="">~4 km — the small-radius values are inflated by resting and GPS error</label></li>
+<li><label><input type="checkbox">1.5 km — the minimum</label></li>
+<li><label><input type="checkbox">Neither; FPT only works for seabirds</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>Classical KDE assumes independent fixes. Hourly GPS locations are strongly autocorrelated, so 8,000 fixes carry the information of perhaps a few hundred independent ones — and the estimator systematically <strong>under-estimates</strong> the range. The sparse VHF fixes, days apart, were much closer to independent.</p>
-<p>Location error does inflate areas, but it is a far smaller effect than this.</p>
-<p>The way to settle it is <strong>AKDE</strong>: fit the movement model, get the effective sample size, and produce an area with a confidence interval. Very often the modern estimate then agrees with the old one — and you have learned that the population did not change, your method did.</p>
+<p>At radii comparable to GPS error and to the distance a resting animal shuffles, FPT is dominated by noise and by long bouts of doing nothing: its variance is high for reasons that have nothing to do with searching.</p>
+<p>The meaningful signal is the peak at a scale well above the positional error — here about 4 km, the scale at which this buffalo concentrates its use. Always interpret FPT only for radii several times larger than your location error and typical resting movement.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="behavioural-modes" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>3 · Behavioural modes</h1>
+
+</section>
+<section id="the-problem" class="slide level2">
+<h2>The problem</h2>
+<p>An animal is not doing one thing all day.</p>
+<ul>
+<li class="fragment">Resting, foraging, travelling, migrating — each with its own <strong>step-length and turning-angle signature</strong></li>
+<li class="fragment">Pool them and every summary is a meaningless average: a “mean step length” that describes no actual behaviour</li>
+<li class="fragment">Leo’s six-year track contains residency <strong>and</strong> migration. A single home range spans two continents (Session 1)</li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p><strong>Segment first, then analyse.</strong> Almost every method in this course assumes a homogeneous process. Segmentation is how you earn that assumption.</p>
 </div>
 </div>
 </section>
-<section id="choosing-an-estimator" class="slide level2">
-<h2>Choosing an estimator</h2>
+<section class="slide level2">
+
+</section>
+<section id="encamped-versus-transit" class="slide level2">
+<h2>Encamped versus transit</h2>
+<p>The simplest useful classification has two modes:</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="encamped">Encamped</h3>
+<p>Short steps, frequent reversals, low net displacement.</p>
+<p>Resting, ruminating, foraging within a patch.</p>
+</div><div class="column" style="width:50%;">
+<h3 id="transit">Transit</h3>
+<p>Long steps, turning angles near zero, high net displacement.</p>
+<p>Travelling between patches, to water, away from danger.</p>
+</div></div>
+<div class="fragment">
+<p>Finer schemes — resting / foraging / travelling — need either finer sampling or extra sensors (accelerometers). With hourly GPS, two or three modes is usually all the data can resolve.</p>
+</div>
+</section>
+<section id="two-questions-often-confused" class="slide level2">
+<h2>Two questions, often confused</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="change-point-detection">Change-point detection</h3>
+<p><em>“Where does the process change?”</em></p>
+<p>Finds <strong>breakpoints</strong> in a time series. Output: a set of segments.</p>
+<p>BCPA, <code>segclust2d</code>, penalised contrasts.</p>
+</div><div class="column" style="width:50%;">
+<h3 id="state-classification">State classification</h3>
+<p><em>“Which of <span class="math inline">\(N\)</span> recurring states is the animal in now?”</em></p>
+<p>Assigns <strong>every step</strong> to a state, and states can recur.</p>
+<p>HMM, EMbC, state-space models.</p>
+</div></div>
+<div class="fragment">
+<p>“Migration started on 14 September” is a change-point question. “Was this step foraging or travelling?” is a state question. Choose the tool that matches the question.</p>
+</div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="simple-segmentation" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>4 · Simple segmentation</h1>
+
+</section>
+<section id="the-families" class="slide level2">
+<h2>The families</h2>
 <table class="caption-top">
 <colgroup>
 <col style="width: 33%">
@@ -392,99 +435,128 @@ Giuliano Colosimo
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: left;">Use when</th>
-<th style="text-align: left;">Watch out for</th>
+<th style="text-align: left;">Approach</th>
+<th style="text-align: left;">Idea</th>
+<th style="text-align: left;">Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><strong>MCP</strong></td>
-<td style="text-align: left;">Comparing to historical literature</td>
-<td style="text-align: left;">Convexity, outliers, no asymptote</td>
+<td style="text-align: left;"><strong>Thresholding</strong></td>
+<td style="text-align: left;">“Speed &gt; 2 m/s = travelling”</td>
+<td style="text-align: left;">Transparent; arbitrary; no uncertainty</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><strong>KDE</strong></td>
-<td style="text-align: left;">Many roughly independent fixes</td>
-<td style="text-align: left;">Bandwidth choice, autocorrelation</td>
+<td style="text-align: left;"><strong>First-passage time</strong></td>
+<td style="text-align: left;">Time to leave a circle of radius <em>r</em></td>
+<td style="text-align: left;">Good for finding <em>scales</em> of area-restricted search</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><strong>AKDE</strong></td>
-<td style="text-align: left;">Modern GPS data — the default</td>
-<td style="text-align: left;">Needs enough data to fit the model</td>
+<td style="text-align: left;"><strong>BCPA</strong></td>
+<td style="text-align: left;">Change points in persistence velocity</td>
+<td style="text-align: left;">Behavioural Change Point Analysis; needs a tuning choice</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><strong>LoCoH</strong></td>
-<td style="text-align: left;">Hard boundaries (coast, cliffs)</td>
-<td style="text-align: left;">Parameter choice</td>
+<td style="text-align: left;"><strong>Clustering / EMbC</strong></td>
+<td style="text-align: left;">Cluster steps in (speed, turn) space</td>
+<td style="text-align: left;">No time dependence — ignores that behaviour persists</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><strong>dBBMM</strong></td>
-<td style="text-align: left;">You care about the <em>path</em>, not the points</td>
-<td style="text-align: left;">Assumes Brownian motion</td>
+<td style="text-align: left;"><strong>HMM</strong></td>
+<td style="text-align: left;">Latent state chain + state-specific distributions</td>
+<td style="text-align: left;"><strong>The standard.</strong> Uses time dependence</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>State-space models</strong></td>
+<td style="text-align: left;">HMM + explicit observation error</td>
+<td style="text-align: left;">Handles messy data; slower, harder</td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="thresholds-and-expert-rules" class="slide level2">
+<h2>Thresholds and expert rules</h2>
+<ul>
+<li class="fragment"><strong>Speed threshold</strong> — “steps faster than <span class="math inline">\(v^*\)</span> are travelling”. Transparent and reproducible</li>
+<li class="fragment"><strong>Expert rules</strong> — combine several: speed <em>and</em> turning angle <em>and</em> time of day, chosen from knowledge of the species</li>
+<li class="fragment">Both are defensible <strong>only when the metric is clearly bimodal</strong> — a histogram with an empty valley between modes</li>
+<li class="fragment">Without that valley, the threshold is an arbitrary decision dressed up as a result</li>
+</ul>
+</section>
+<section id="behavioural-change-point-analysis" class="slide level2">
+<h2>Behavioural change-point analysis</h2>
+<p>BCPA (Gurarie et al.&nbsp;2009) looks for places where the <strong>statistical properties</strong> of the movement change.</p>
+<ul>
+<li class="fragment">Works on a single variable, typically <strong>persistence velocity</strong> <span class="math inline">\(V\cos\theta\)</span>: fast <em>and</em> straight gives high values</li>
+<li class="fragment">Slides a window along the track; within each window finds the most likely break in mean, variance or autocorrelation</li>
+<li class="fragment">Collects breaks that recur across windows into <strong>change points</strong></li>
+<li class="fragment">Works with irregular sampling, which is its great practical strength</li>
+</ul>
 <div class="fragment">
 <div class="keyidea">
-<p>And before any of them: <strong>should you be estimating a home range at all?</strong> For Leo the vulture the answer is no — not until you have segmented the track.</p>
+<p>BCPA tells you <strong>where</strong> the process changes. It does not tell you what the animal was doing, and it cannot know whether a change is behavioural or a change in your collar’s schedule.</p>
 </div>
 </div>
 </section>
-<section id="quiz-2" class="slide level2">
+<section id="quiz-3" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
-<p>You compute a 100% MCP for an animal after 3 months, then again after 12 months. The area has tripled. What can you conclude?</p>
+<p>BCPA on 25 days of hourly buffalo data, window of 50 fixes: <strong>29</strong> phases. Window of 30 fixes: <strong>38</strong>. Same 50-fix window on the track resampled to 3-hourly: <strong>19</strong>. How many behavioural phases did the buffalo go through?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">The animal expanded its home range over the year</label></li>
-<li><label><input type="checkbox" checked="">Very little — MCP area grows with the number of fixes and has no asymptote</label></li>
-<li><label><input type="checkbox">The collar’s accuracy degraded</label></li>
-<li><label><input type="checkbox">The 100% contour is invalid; use 95%</label></li>
+<li><label><input type="checkbox">29 — the default settings</label></li>
+<li><label><input type="checkbox">19 — hourly data are too noisy</label></li>
+<li><label><input type="checkbox">38 — more resolution finds more behaviour</label></li>
+<li><label><input type="checkbox" checked="">The question has no single answer: phase counts depend on window size and fix rate</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>The MCP is the convex hull of your points, so <strong>every</strong> new fix can only enlarge it or leave it unchanged — never shrink it. Its area therefore increases with sample size and duration without converging, which makes comparisons across different tracking durations meaningless.</p>
-<p>This is the single biggest problem with MCP, and it is why area-vs-sample-size curves used to be standard practice.</p>
-<p>Dropping to 95% removes the most extreme points and helps a little, but it does not fix the underlying behaviour. A genuine expansion would need to be demonstrated with an estimator that converges — AKDE, with confidence intervals, on comparable time windows.</p>
+<p>These are real results for the buffalo Cilla. The window size is an analyst’s tuning choice, and the fix rate sets what a “window of 50 fixes” means in time: 50 hours at hourly sampling, 150 hours at 3-hourly. Match the window in <em>duration</em> (17 fixes at 3-hourly ≈ 50 hours) and the 3-hourly count rises back to 29.</p>
+<p>A phase count is a property of the analysis, not of the animal. What you can interpret biologically are the change points that <strong>persist</strong> across reasonable windows and fix rates — which is the robustness check you run in today’s practical.</p>
 </div>
 </div>
 </section>
-<section id="todays-exercise" class="slide level2">
-<h2>Today’s exercise</h2>
+<section id="todays-practical" class="slide level2">
+<h2>Today’s practical</h2>
 <div class="objectives">
-<p><strong><a href="../../classes/class-04/exercise.html">→ Class 4 exercise</a></strong></p>
+<p><strong><a href="../../classes/class-04/exercise.html">→ Session 4 practical</a></strong></p>
 <ol type="1">
-<li>Step lengths, turning angles, speeds — and their distributions</li>
-<li>Show that step length depends on sampling interval</li>
-<li>NSD for the buffalo and for the vulture</li>
-<li>MCP, KDE and AKDE for one buffalo, compared</li>
-<li>Demonstrate the autocorrelation problem by thinning your own data</li>
+<li>Net squared displacement with <code>adehabitatLT</code> — buffalo and vulture</li>
+<li>Classify strategies: fit the four NSD models, then read the parameters</li>
+<li>Straightness across scales</li>
+<li>First-passage time and the scale of area-restricted search</li>
+<li>A threshold that is honest (the vulture) and one that is not (the buffalo)</li>
+<li>BCPA — and whether its answer survives a change of fix rate</li>
 </ol>
 </div>
 </section>
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li class="fragment">Step length, turning angle and speed are <strong>scale-dependent</strong> — always report the interval</li>
-<li class="fragment">Turning angles are circular data</li>
-<li class="fragment">NSD is a cheap, powerful diagnostic of movement strategy</li>
-<li class="fragment">Random walks are null models; biology lives in the departures</li>
-<li class="fragment">MCP is comparable but crude; KDE is biased by autocorrelation; <strong>AKDE</strong> addresses it and gives you a CI</li>
+<li class="fragment">Path descriptors — NSD, straightness, sinuosity, fractal dimension — all depend on the sampling interval and the window</li>
+<li class="fragment">NSD model classification is powerful; <strong>read the parameters</strong>, not just AIC</li>
+<li class="fragment">FPT finds the scale of area-restricted search — above the noise floor</li>
+<li class="fragment">Encamped versus transit is usually all hourly GPS can resolve</li>
+<li class="fragment">Thresholds are honest only across an empty valley; BCPA finds changes, not behaviours, and its answer depends on the fix rate</li>
 </ul>
 <div class="fragment">
-<h3 id="before-class-5">Before Class 5</h3>
+<h3 id="before-session-5">Before Session 5</h3>
 <ul>
-<li>Fleming et al.&nbsp;(2015), <em>Ecology</em> 96:1182 — the AKDE paper</li>
-<li>Check <code>library(terra)</code> still works; Class 5 is raster-heavy</li>
+<li>Codling, Plank &amp; Benhamou (2008), <em>Random walk models in biology</em>, J R Soc Interface 5:813 — sections 1–3</li>
+<li>Make sure <code>library(circular)</code> loads</li>
 </ul>
-
-
 </div>
+</section>
+<section id="section" class="slide level2 center">
+<h2></h2>
+<h3 id="questions">Questions?</h3>
+<p><a href="mailto:giuliano.colosimo@uniroma2.it">giuliano.colosimo@uniroma2.it</a></p>
+
+
 </section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../../assets/figures/Tor-Vergata_logo_cmyk.png" class="slide-logo"></p>
 <div class="footer footer-default">
-<p><a href="../../index.html">Animal Tracking 2026-2027 · Class 4</a></p>
+<p><a href="../../index.html">Animal Tracking 2026-2027 · Session 4</a></p>
 </div>
 </div></div>
 

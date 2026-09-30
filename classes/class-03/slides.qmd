@@ -1,6 +1,6 @@
 ---
-title: "Tracking data in R"
-subtitle: "Class 3 · Theme 2 — Informatics tools for movement"
+title: "From fixes to trajectories"
+subtitle: "Session 3 — Data cleaning, bursts, resampling"
 author: "Giuliano Colosimo"
 institute: "University of Rome Tor Vergata"
 date: last-modified
@@ -16,7 +16,7 @@ format:
     history: false
     width: 1280
     height: 760
-    footer: "[Animal Tracking 2026-2027 · Class 3](../../index.qmd)"
+    footer: "[Animal Tracking 2026-2027 · Session 3](../../index.qmd)"
     logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
     highlight-style: github
 execute:
@@ -25,13 +25,28 @@ execute:
 
 ## Today
 
+::: {.paradigm}
+[Internal state]{.pbox}
+[Motion capacity]{.pbox}
+[Navigation capacity]{.pbox}
+[External factors]{.pbox .on}
+[Movement path]{.pbox .path .on}
+:::
+
+We turn a table of fixes into a **path** we can defend, and attach the
+environment to it — in space and in time.
+
+---
+
+## Where we are going
+
 ::: {.objectives}
-1. Movebank, and the `move2` package
-2. The **`amt` track**: the object the rest of the course is built on
+1. Position data are not path data: what a step and a turning angle really are
+2. Location error, and why you cannot just connect the dots
 3. **Cleaning**: duplicates, impossible locations, speed outliers
-4. **Sampling regularity** — why it decides which methods you may use
-5. **Resampling and bursts**
-6. Interactive maps in one line
+4. Bursts, gaps and truncation; **resampling** to a regular grid
+5. Which analyses tolerate irregular sampling, and which do not
+6. Annotating a trajectory with environment **matched in time**
 :::
 
 . . .
@@ -41,7 +56,81 @@ execute:
 Today is that 80%.
 :::
 
-# 1 · Getting data {background-color="#14525a"}
+# 1 · Positions are not paths {background-color="#14525a"}
+
+---
+
+## What a GPS track actually is
+
+::: {.incremental}
+- A set of **point estimates**, each with an error, at irregular moments
+- Between two fixes the animal went *somewhere*; the straight line is an
+  assumption, not an observation
+- **Interpolating** a position between fixes invents data — useful for
+  plotting, dangerous for inference
+- Every derived quantity — step length, speed, turning angle — inherits both
+  the sampling interval and the location error
+:::
+
+. . .
+
+::: {.keyidea}
+A track is a *sample* of a continuous path. Treat every line you draw between
+fixes as a hypothesis.
+:::
+
+---
+
+## The step
+
+Two consecutive fixes define a **step**.
+
+::: {.columns}
+::: {.column width="55%"}
+- **Step length** $s_t = \lVert \mathbf{x}_{t+1} - \mathbf{x}_t \rVert$
+- **Absolute direction** $\phi_t = \operatorname{atan2}(\Delta y, \Delta x)$
+- **Turning angle** $\theta_t = \phi_t - \phi_{t-1}$, wrapped to $(-\pi, \pi]$
+- **Speed** $v_t = s_t / \Delta t$
+:::
+::: {.column width="45%"}
+::: {.keyidea}
+A turning angle needs **three** fixes. A step needs two. That is why
+`filter_min_n_burst(min_n = 3)` exists.
+:::
+:::
+:::
+
+. . .
+
+Turning angles are **circular** data: −179° and +179° are 2° apart, not 358°.
+Never take an arithmetic mean of angles.
+
+---
+
+---
+
+## Location error: why you cannot connect the dots
+
+::: {.incremental}
+- A 15 m error on each fix is negligible on a 1 km step, and **dominates** a
+  20 m step
+- For short steps the *direction* is mostly noise, so turning angles look
+  random exactly when the animal is resting
+- A single bad fix creates a **spike**: an impossible step out and back
+- Error is not independent white noise: it is correlated in time and worse in
+  closed habitat
+:::
+
+. . .
+
+::: {.keyidea}
+Resting animals look like they are wandering at random, and spikes look like
+sprints. Neither is behaviour. Both reach your models unless you look first.
+:::
+
+---
+
+# 2 · Getting data {background-color="#14525a"}
 
 ---
 
@@ -127,7 +216,7 @@ trk <- make_track(buffalo, x, y, t, id = id, crs = 4326) |>
 The trailing underscores (`x_`, `y_`, `t_`) are `amt`'s way of guaranteeing
 its own columns never collide with yours.
 
-# 2 · Cleaning {background-color="#14525a"}
+# 3 · Cleaning {background-color="#14525a"}
 
 ---
 
@@ -224,7 +313,7 @@ that share a common `dt`.
 :::
 :::
 
-# 3 · Sampling regularity {background-color="#14525a"}
+# 4 · Bursts, gaps and regularity {background-color="#14525a"}
 
 ---
 
@@ -233,9 +322,9 @@ that share a common `dt`.
 ::: {.incremental}
 - **Step length and turning angle** are only comparable across steps of the
   same duration
-- **HMMs** (Class 6) assume a regular interval; irregular data need a
+- **HMMs** (Session 8) assume a regular interval; irregular data need a
   continuous-time model instead
-- **SSFs** (Class 8) compare each observed step to alternatives of the *same*
+- **SSFs** (Session 7) compare each observed step to alternatives of the *same*
   duration
 - **KDE home ranges** assume roughly even coverage in time
 :::
@@ -269,6 +358,53 @@ trk |> summarize_sampling_rate_many(cols = "id", time_unit = "hour")
 ::: {.keyidea}
 Report the **median**, not the mean, for sampling intervals. And always look
 at the maximum.
+:::
+
+---
+
+## Two ways to hold a trajectory
+
+::: {.columns}
+::: {.column width="50%"}
+### `adehabitatLT::ltraj`
+The classic (Calenge 2006). One data frame per **burst**, with `dist`, `dt`,
+`R2n` (squared displacement), `abs.angle` and `rel.angle` precomputed.
+
+`redisltraj()` regularises by **interpolating** new positions.
+:::
+::: {.column width="50%"}
+### `amt::track_xyt`
+A tidy tibble. Steps, angles and covariates are computed when you ask.
+
+`track_resample()` regularises by **selecting** existing fixes.
+:::
+:::
+
+. . .
+
+::: {.keyidea}
+The two "regularise" functions do opposite things. One keeps only what you
+observed; the other manufactures positions you did not observe.
+:::
+
+---
+
+## Truncation: the start and the end
+
+::: {.incremental}
+- **After capture** — animals often behave abnormally for days (flight,
+  restricted movement). Many studies discard a fixed post-capture window
+- **Before the end** — a collar that stops moving may mean a dead animal or a
+  dropped collar, not a resting one
+- **At gaps** — a burst ends wherever fixes are missing; steps are never
+  computed across a gap
+:::
+
+. . .
+
+::: {.keyidea}
+Decide the truncation rules **before** you look at the results, write them
+down, and report how much data they removed.
 :::
 
 ---
@@ -330,6 +466,25 @@ check the per-group counts before you accept it.
 
 ---
 
+## Who tolerates irregular sampling?
+
+| Method | Irregular sampling? | Why |
+|:--|:--|:--|
+| MCP, classical KDE | tolerated, with care | uneven sampling over-weights well-sampled periods |
+| Brownian bridge (Session 6) | **yes** | the bridge's variance grows with the time between fixes |
+| AKDE / `ctmm` (Session 6) | **yes** | continuous-time models |
+| SSF (Session 7) | per burst | every step must span the same interval |
+| HMM (Session 8) | **no**, not directly | discrete time steps; impute a regular grid first (`momentuHMM::crawlWrap`) |
+
+. . .
+
+::: {.keyidea}
+Regularity is not a cosmetic property of your data. It decides which methods
+you are allowed to use.
+:::
+
+---
+
 ## Quiz
 
 ::: {.quiz}
@@ -385,17 +540,99 @@ dividing each gap by the modal interval and counting the misses.
 
 ---
 
-## Today's exercise
+# 5 · Attaching the environment {background-color="#14525a"}
+
+---
+
+## The operation
+
+For every fix, look up the environment **there** and **then**.
+
+::: {.incremental}
+- **Static** covariates — elevation, slope, distance to river. One raster;
+  `extract()` and done.
+- **Dynamic** covariates — NDVI, temperature, snow. A **stack** of rasters
+  with timestamps. You must match each fix to the right layer.
+:::
+
+. . .
+
+::: {.keyidea}
+A track that spans two years annotated with a *single* NDVI image is not
+annotated — it is decorated. If your covariate varies in time and your
+analysis does not, you have thrown away the mechanism.
+:::
+
+---
+
+---
+
+## Doing it in time
+
+```r
+# Which layer does each fix belong to?
+layer_dates <- as.Date(c("2005-01-01", "2005-01-17", ...))
+
+idx <- findInterval(as.Date(trk$t_), layer_dates)
+
+# Extract from the whole stack, then pick the right column per row
+vals <- terra::extract(ndvi_stack, vect(trk))[, -1]
+trk$ndvi <- vals[cbind(seq_len(nrow(vals)), idx)]
+```
+
+. . .
+
+`Movebank Env-DATA` does this for you, including interpolation in time, for
+dozens of products. Use it for real projects — but understand what it is doing
+first, which is what today's exercise is for.
+
+---
+
+---
+
+## Quiz
+
+::: {.quiz}
+You annotate two years of buffalo fixes with a single dry-season NDVI image
+and find a strong positive selection for high NDVI. What is the main problem?
+
+- [ ] NDVI saturates in dense vegetation
+- [x] The covariate is static while both the animal and the vegetation varied seasonally
+- [ ] The pixel size is too coarse
+- [ ] NDVI cannot be used for savanna
+
+::: {.quiz-feedback}
+The image describes one moment. Over two years, vegetation in a savanna swings
+enormously between wet and dry season, and the buffalo's needs swing with it.
+By holding NDVI fixed you have conflated "places that were green **in that dry
+season**" with "places that are green **when the animal was there**".
+
+What you have measured is selection for *persistently* productive places —
+which may be interesting, but is not what the model claims.
+
+The result can even be the *opposite* sign from the time-matched analysis: an
+animal may select the greenest available patch at every moment while showing
+no preference for places that are green on average.
+
+Fix: use a time series and match each fix to the contemporaneous layer.
+:::
+:::
+
+---
+
+---
+
+## Today's practical
 
 ::: {.objectives}
-**[→ Class 3 exercise](exercise.qmd)**
+**[→ Session 3 practical](exercise.qmd)**
 
-1. Build an `amt` track and inspect the sampling rate
-2. Find and remove duplicates — and count them
-3. Hunt speed outliers, and look at them before deleting
-4. Resample to hourly bursts
-5. Try the same on the bat data and discover you cannot
-6. Make an interactive map
+1. Build the same trajectory in `adehabitatLT` and in `amt`
+2. Clean it, counting what you remove
+3. Quantify and visualise sampling irregularity
+4. Resample: selection (`track_resample`) versus interpolation (`redisltraj`)
+5. Day or night? `time_of_day()`
+6. Attach NDVI **matched to the season of each fix**
 :::
 
 ---
@@ -403,16 +640,18 @@ dividing each gap by the modal interval and counting the misses.
 ## Recap
 
 ::: {.incremental}
-- `move2` to organise, `amt` to analyse
+- A track is a **sample** of a path; every line between fixes is an assumption
+- Location error dominates short steps: resting looks random, spikes look like sprints
 - Clean in order: **duplicates → missing → impossible → speed**, counting as you go
-- Speed outliers are often *time* problems, not *distance* problems
-- Report **median** sampling interval and the **maximum gap**
-- `track_resample()` selects; it does not invent
+- `track_resample()` **selects**; `redisltraj()` **interpolates**; `track_resample()`
+  ignores `group_by()`
+- Regularity decides which methods you may use later
+- Annotate in space **and time**
 :::
 
 . . .
 
-### Before Class 4
+### Before Session 4
 
-- Re-read the `amt` vignette: `vignette("p1_basics", package = "amt")`
-- Skim Powell & Mitchell (2012), *What is a home range?*
+- `vignette("adehabitatLT", package = "adehabitatLT")`, sections on `ltraj`
+- Skim Fauchald & Tveraa (2003), *Ecology* 84:282 — first-passage time

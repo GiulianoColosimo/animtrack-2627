@@ -11,7 +11,7 @@
 
   <meta name="author" content="Giuliano Colosimo">
   <meta name="dcterms.date" content="2026-09-30">
-  <title>Animal Tracking – Remote sensing and environmental annotation</title>
+  <title>Animal Tracking – Movement models and simulation</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -29,74 +29,8 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-      }
-    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-    div.sourceCode
-      { color: #24292e;  }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #24292e; } /* Normal */
-    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
-    code span.an { color: #6a737d; } /* Annotation */
-    code span.at { color: #d73a49; } /* Attribute */
-    code span.bn { color: #005cc5; } /* BaseN */
-    code span.bu { color: #d73a49; } /* BuiltIn */
-    code span.cf { color: #d73a49; } /* ControlFlow */
-    code span.ch { color: #032f62; } /* Char */
-    code span.cn { color: #005cc5; } /* Constant */
-    code span.co { color: #6a737d; } /* Comment */
-    code span.cv { color: #6a737d; } /* CommentVar */
-    code span.do { color: #6a737d; } /* Documentation */
-    code span.dt { color: #d73a49; } /* DataType */
-    code span.dv { color: #005cc5; } /* DecVal */
-    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
-    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
-    code span.fl { color: #005cc5; } /* Float */
-    code span.fu { color: #6f42c1; } /* Function */
-    code span.im { color: #032f62; } /* Import */
-    code span.in { color: #6a737d; } /* Information */
-    code span.kw { color: #d73a49; } /* Keyword */
-    code span.op { color: #24292e; } /* Operator */
-    code span.ot { color: #6f42c1; } /* Other */
-    code span.pp { color: #d73a49; } /* Preprocessor */
-    code span.re { color: #6a737d; } /* RegionMarker */
-    code span.sc { color: #005cc5; } /* SpecialChar */
-    code span.ss { color: #032f62; } /* SpecialString */
-    code span.st { color: #032f62; } /* String */
-    code span.va { color: #e36209; } /* Variable */
-    code span.vs { color: #032f62; } /* VerbatimString */
-    code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-18657b062b3da6a166608c2ebc8d3bda.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-fd96417eda74ebb0be446d6413f2e761.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -191,8 +125,8 @@
       margin-right: 0; 
     }
   </style>
-<meta property="og:title" content="Remote sensing and environmental annotation – Animal Tracking">
-<meta property="og:description" content="Class 5 · Theme 3 — Remote sensing">
+<meta property="og:title" content="Movement models and simulation – Animal Tracking">
+<meta property="og:description" content="Session 5 — Random walks, correlated and biased random walks, Lévy walks">
 <meta property="og:site_name" content="Animal Tracking">
 <meta property="og:locale" content="en_US">
 </head>
@@ -201,8 +135,8 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Remote sensing and environmental annotation</h1>
-  <p class="subtitle">Class 5 · Theme 3 — Remote sensing</p>
+  <h1 class="title">Movement models and simulation</h1>
+  <p class="subtitle">Session 5 — Random walks, correlated and biased random walks, Lévy walks</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -219,386 +153,281 @@ Giuliano Colosimo
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
+<div class="paradigm">
+<p><span class="pbox">Internal state</span> <span class="pbox on">Motion capacity</span> <span class="pbox on">Navigation capacity</span> <span class="pbox">External factors</span> <span class="pbox path on">Movement path</span></p>
+</div>
+<p>Random walks are the simplest possible answers to <em>how</em> an animal moves and <em>where</em> it is heading. Their value is not realism — it is that they tell you what to expect <strong>if nothing else were going on</strong>.</p>
+</section>
+<section id="where-we-are-going" class="slide level2">
+<h2>Where we are going</h2>
 <div class="objectives">
 <ol type="1">
-<li>What a satellite sensor actually measures</li>
-<li>The <strong>four resolutions</strong>, and the trade-offs between them</li>
-<li>Spectral indices: <strong>NDVI</strong>, EVI, NDWI — what they mean and where they fail</li>
-<li>The main missions and where to get the data</li>
-<li><strong>Environmental annotation</strong>: attaching covariates to a trajectory in space <em>and</em> time</li>
+<li>Why simulate: you cannot rewind an animal, but you can simulate a null</li>
+<li>The uncorrelated random walk and mean squared displacement</li>
+<li>Correlated random walks: persistence, and the scales of movement</li>
+<li>Biased random walks: advection versus diffusion</li>
+<li>Lévy walks — and an honest account of the controversy</li>
+<li>Using simulations as hypothesis tests</li>
 </ol>
 </div>
 <div class="fragment">
 <div class="keyidea">
-<p>A tracking dataset on its own tells you <em>where</em>. Remote sensing tells you <em>what was there</em> — and that is what turns a map into ecology.</p>
+<p>Today’s practical builds a simulator from scratch. The same simulated animal becomes the <strong>ground truth</strong> you test estimators against in Sessions 6 and 7.</p>
 </div>
 </div>
 </section>
 <section>
-<section id="what-a-sensor-measures" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>1 · What a sensor measures</h1>
+<section id="why-model-movement" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>1 · Why model movement?</h1>
 
 </section>
-<section id="radiation-not-pictures" class="slide level2">
-<h2>Radiation, not “pictures”</h2>
+<section id="you-cannot-rewind-an-animal" class="slide level2">
+<h2>You cannot rewind an animal</h2>
 <ul>
-<li class="fragment">The Sun emits across the electromagnetic spectrum; surfaces <strong>reflect</strong> some of it and <strong>absorb</strong> the rest</li>
-<li class="fragment">A passive sensor records the <strong>radiance</strong> arriving at the detector in a set of wavelength <strong>bands</strong></li>
-<li class="fragment">That raw signal is contaminated by the atmosphere, the Sun’s angle, the viewing angle and the terrain</li>
-<li class="fragment">What you download is the result of a <strong>processing chain</strong>, and the level matters</li>
+<li class="fragment">A tracking study observes <strong>one realisation</strong> of a random process</li>
+<li class="fragment">To ask “is this unusual?” you need the distribution of what <em>could</em> have happened — and nature will not rerun the experiment</li>
+<li class="fragment">A movement model is a recipe that <strong>generates</strong> tracks. Run it a thousand times and you have that distribution</li>
+<li class="fragment">Compare the real track with the simulated ones: where does it fall?</li>
 </ul>
 <div class="fragment">
-<p><strong>Level 1</strong> — top of atmosphere radiance/reflectance. <strong>Level 2</strong> — surface reflectance, atmospherically corrected. <em>Start here.</em> <strong>Level 3+</strong> — derived products: NDVI composites, land cover, LAI.</p>
-</div>
-</section>
-<section id="why-vegetation-looks-the-way-it-does" class="slide level2">
-<h2>Why vegetation looks the way it does</h2>
-<div class="columns">
-<div class="column" style="width:55%;">
-<p>Healthy green vegetation:</p>
-<ul>
-<li><strong>absorbs</strong> strongly in the <strong>red</strong> (~660 nm) — chlorophyll is doing photosynthesis</li>
-<li><strong>reflects</strong> strongly in the <strong>near infrared</strong> (~850 nm) — the internal leaf structure scatters it</li>
-</ul>
-<p>So the <em>contrast</em> between red and NIR is a measure of green biomass.</p>
-</div><div class="column" style="width:45%;">
 <div class="keyidea">
-<p>That single fact is the basis of essentially every vegetation index ever published.</p>
+<p>A random walk is a <strong>null model</strong>. When the animal departs from it, the departure is the biology: memory, attraction, avoidance, a home range.</p>
 </div>
-</div></div>
+</div>
 </section>
-<section id="active-sensors" class="slide level2">
-<h2>Active sensors</h2>
+<section id="four-canonical-walks" class="slide level2">
+<h2>Four canonical walks</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-1-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1248"><p>Same number of steps. Red triangle: start. Cross: the goal of the biased walk.</p>
+</section></section>
+<section>
+<section id="the-uncorrelated-random-walk" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>2 · The uncorrelated random walk</h1>
+
+</section>
+<section id="the-brownian-baseline" class="slide level2">
+<h2>The Brownian baseline</h2>
 <ul>
-<li class="fragment"><strong>Radar (SAR)</strong> — emits microwaves and measures the return. Sees <strong>through cloud and at night</strong>. Sentinel-1. Sensitive to structure and moisture, not to greenness.</li>
-<li class="fragment"><strong>LiDAR</strong> — emits laser pulses, measures return time. Gives <strong>3-D structure</strong>: canopy height, vertical complexity. GEDI (spaceborne), airborne for fine detail.</li>
+<li class="fragment">Each step has a random length and a <strong>uniformly random</strong> direction, independent of the previous one</li>
+<li class="fragment">The animal has no memory and no goal</li>
+<li class="fragment">After <span class="math inline">\(n\)</span> steps the expected squared distance from the start — the <strong>mean squared displacement</strong> — is <span class="math display">\[\text{MSD}(n) = n\,\mathrm{E}[l^2]\]</span></li>
+<li class="fragment">MSD grows <strong>linearly</strong> with time: <span class="math inline">\(\text{MSD} = 4Dt\)</span> in two dimensions, with <span class="math inline">\(D\)</span> the diffusion coefficient</li>
 </ul>
 <div class="fragment">
-<p>For a forest animal, canopy height and vertical structure from LiDAR are often far more informative than NDVI — greenness saturates in dense forest, but structure does not.</p>
+<div class="keyidea">
+<p>Linear MSD means the typical distance from the start grows only as <span class="math inline">\(\sqrt{t}\)</span>. A random walker four times as long gets only twice as far.</p>
+</div>
 </div>
 </section></section>
 <section>
-<section id="the-four-resolutions" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>2 · The four resolutions</h1>
+<section id="correlated-random-walks" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>3 · Correlated random walks</h1>
 
 </section>
-<section id="you-cannot-have-all-four" class="slide level2">
-<h2>You cannot have all four</h2>
+<section id="persistence" class="slide level2">
+<h2>Persistence</h2>
+<p>A <strong>correlated random walk</strong> (CRW) draws each new heading close to the last:</p>
+<p><span class="math display">\[\phi_t = \phi_{t-1} + \theta_t, \qquad \theta_t \sim \text{von Mises}(0, \kappa)\]</span></p>
 <ul>
-<li class="fragment"><strong>Spatial</strong> — pixel size. 10 m (Sentinel-2) … 500 m (MODIS) … 25 km (some climate products)</li>
-<li class="fragment"><strong>Temporal</strong> — revisit time. 5 days (Sentinel-2) vs <strong>daily</strong> (MODIS) vs 16 days (Landsat)</li>
-<li class="fragment"><strong>Spectral</strong> — number and width of bands. 4 broad bands vs 200 narrow (hyperspectral)</li>
-<li class="fragment"><strong>Radiometric</strong> — bit depth; how finely brightness is quantised</li>
+<li class="fragment"><span class="math inline">\(\kappa = 0\)</span>: turning angles uniform — the uncorrelated walk</li>
+<li class="fragment">large <span class="math inline">\(\kappa\)</span>: turning angles near zero — nearly straight lines</li>
+<li class="fragment">Step lengths from a gamma, Weibull or log-normal distribution</li>
+<li class="fragment">Two parameters for steps, one for turns: the same ingredients as the step selection functions of Session 7 and the hidden Markov models of Session 8</li>
 </ul>
-<div class="fragment">
-<div class="keyidea">
-<p>They trade off against each other: a detector collecting light from a small patch, in a narrow band, gets few photons — so it needs a longer dwell time, which means a narrower swath and a longer revisit.</p>
-</div>
-</div>
 </section>
-<section id="the-missions-you-will-actually-use" class="slide level2">
-<h2>The missions you will actually use</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Mission</th>
-<th style="text-align: left;">Spatial</th>
-<th style="text-align: left;">Temporal</th>
-<th style="text-align: left;">Since</th>
-<th style="text-align: left;">Good for</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><strong>MODIS</strong> (Terra/Aqua)</td>
-<td style="text-align: left;">250–500 m</td>
-<td style="text-align: left;">Daily</td>
-<td style="text-align: left;">2000</td>
-<td style="text-align: left;">Long consistent NDVI series</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>VIIRS</strong></td>
-<td style="text-align: left;">375–750 m</td>
-<td style="text-align: left;">Daily</td>
-<td style="text-align: left;">2012</td>
-<td style="text-align: left;">MODIS successor</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>Landsat 5/7/8/9</strong></td>
-<td style="text-align: left;">30 m</td>
-<td style="text-align: left;">16 days</td>
-<td style="text-align: left;"><strong>1984</strong></td>
-<td style="text-align: left;">Long-term landscape change</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>Sentinel-2</strong></td>
-<td style="text-align: left;">10–20 m</td>
-<td style="text-align: left;">5 days</td>
-<td style="text-align: left;">2015</td>
-<td style="text-align: left;">Fine-grained habitat</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>Sentinel-1</strong> (SAR)</td>
-<td style="text-align: left;">10 m</td>
-<td style="text-align: left;">6–12 days</td>
-<td style="text-align: left;">2014</td>
-<td style="text-align: left;">Cloud-free, structure, water</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>GEDI</strong> (LiDAR)</td>
-<td style="text-align: left;">25 m footprint</td>
-<td style="text-align: left;">sampled</td>
-<td style="text-align: left;">2019</td>
-<td style="text-align: left;">Canopy height</td>
-</tr>
-</tbody>
-</table>
-<div class="fragment">
-<div class="keyidea">
-<p><strong>Match the pixel to the animal and to your positional error.</strong> A 10 m Sentinel pixel is wasted on an Argos fix with 5 km error — and a 500 m MODIS pixel is useless for a dormouse.</p>
-</div>
-</div>
+<section id="the-scales-of-movement" class="slide level2">
+<h2>The scales of movement</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1056"><p>Short lags: persistence makes a CRW <strong>ballistic</strong> (MSD ∝ t²). Long lags: it forgets its direction and becomes <strong>diffusive</strong> (MSD ∝ t). The crossover is the scale of the animal’s directional memory.</p>
 </section>
 <section id="quiz" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
-<p>You study habitat selection by a forest ungulate using GPS collars (error ~15 m, hourly fixes) in a landscape with small forest patches of 1–5 ha. Which product for vegetation cover?</p>
+<p>You plot MSD against lag on log–log axes for a real track. The slope is ~1.8 at lags up to 3 hours, then ~1.0 up to 10 days, then <strong>flattens to ~0</strong>. What does each regime suggest?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">MODIS NDVI, 250 m, daily</label></li>
-<li><label><input type="checkbox" checked="">Sentinel-2, 10–20 m, every 5 days</label></li>
-<li><label><input type="checkbox">A 1 km global land-cover map</label></li>
-<li><label><input type="checkbox">Sentinel-1 SAR, 10 m</label></li>
+<li><label><input type="checkbox">Nothing — MSD is always linear for real animals</label></li>
+<li><label><input type="checkbox" checked="">Directed movement at short scales, random-walk-like at intermediate scales, and confinement to a home range at long scales</label></li>
+<li><label><input type="checkbox">GPS error at short scales, directed movement at long scales</label></li>
+<li><label><input type="checkbox">The track needs resampling</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>A 1–5 ha patch is roughly 100–220 m across. A <strong>250 m MODIS pixel is larger than the patch</strong>, so every fix would get a mixed value averaging forest and open land — the very contrast you are trying to measure would be erased. A 1 km product is hopeless for the same reason.</p>
-<p>Sentinel-2 at 10–20 m resolves those patches comfortably, and its 5-day revisit captures the growing season. Its resolution is also well matched to 15 m GPS error: finer would just add noise.</p>
-<p>Sentinel-1 is excellent for structure and for cloudy regions, but it does not measure greenness — it is the right answer to a different question.</p>
+<p>Slope near 2: ballistic, persistent movement — the animal keeps its heading for a few hours. Slope near 1: diffusive, a correlated random walk has forgotten its direction. Slope near 0: MSD stops growing because the animal cannot get any further from where it was — a <strong>home range</strong>.</p>
+<p>That last regime is what an unbiased random walk can never produce, and it is the starting point of Session 6. One caution: very short lags can also look flat because GPS error sets a floor on the smallest measurable displacement.</p>
 </div>
 </div>
 </section></section>
 <section>
-<section id="spectral-indices" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>3 · Spectral indices</h1>
+<section id="biased-random-walks" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>4 · Biased random walks</h1>
 
 </section>
-<section id="ndvi" class="slide level2">
-<h2>NDVI</h2>
-<p><span class="math display">\[\text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}\]</span></p>
+<section id="advection-and-diffusion" class="slide level2">
+<h2>Advection and diffusion</h2>
+<p>Add a preferred direction — towards a den, a water hole, a breeding ground:</p>
 <ul>
-<li class="fragment">Ranges −1 to +1. Water &lt; 0; bare soil/rock ~0.1–0.2; sparse vegetation ~0.2–0.4; dense green vegetation 0.6–0.9</li>
-<li class="fragment">A <strong>proxy</strong> for green biomass and primary productivity</li>
-<li class="fragment">Normalised, so it partly cancels illumination and viewing-angle effects</li>
-</ul>
-<div class="fragment">
-<div class="callout callout-warning callout-style-simple">
-<div class="callout-body">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-content">
-<p><strong>It saturates.</strong> Above ~0.8 — closed canopy — NDVI stops responding to extra biomass. In rainforest it is nearly flat and nearly useless.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="the-other-indices-worth-knowing" class="slide level2">
-<h2>The other indices worth knowing</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Index</th>
-<th style="text-align: left;">Formula</th>
-<th style="text-align: left;">Use</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><strong>EVI</strong></td>
-<td style="text-align: left;"><span class="math inline">\(2.5\frac{\text{NIR}-\text{Red}}{\text{NIR}+6\text{Red}-7.5\text{Blue}+1}\)</span></td>
-<td style="text-align: left;">Like NDVI but resists saturation and soil background</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>NDWI</strong></td>
-<td style="text-align: left;"><span class="math inline">\(\frac{\text{Green}-\text{NIR}}{\text{Green}+\text{NIR}}\)</span></td>
-<td style="text-align: left;">Open water — very useful for waterholes</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>NDSI</strong></td>
-<td style="text-align: left;"><span class="math inline">\(\frac{\text{Green}-\text{SWIR}}{\text{Green}+\text{SWIR}}\)</span></td>
-<td style="text-align: left;">Snow cover</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>LAI / fPAR</strong></td>
-<td style="text-align: left;">modelled</td>
-<td style="text-align: left;">Leaf area, absorbed radiation</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="beyond-greenness-derived-metrics" class="slide level2">
-<h2>Beyond greenness: derived metrics</h2>
-<ul>
-<li class="fragment"><strong>Rate of green-up</strong> (the derivative of NDVI in time) — this, not NDVI itself, is what drives the <em>green wave surfing</em> of migratory ungulates</li>
-<li class="fragment"><strong>Phenology metrics</strong> — start of season, peak, length</li>
-<li class="fragment"><strong>Terrain</strong> from a DEM: slope, aspect, ruggedness, topographic position</li>
-<li class="fragment"><strong>Distance to</strong> — water, roads, forest edge. Often the strongest predictor in the whole model</li>
+<li class="fragment"><strong>Biased random walk (BRW)</strong>: each heading drawn around the bearing to the goal, with no memory of the last heading</li>
+<li class="fragment"><strong>Biased correlated random walk (BCRW)</strong>: a compromise between the previous heading (persistence) and the bearing to the goal (bias)</li>
+<li class="fragment">Two processes act at once: <strong>advection</strong> (drift towards the goal, distance ∝ <span class="math inline">\(t\)</span>) and <strong>diffusion</strong> (random spread, distance ∝ <span class="math inline">\(\sqrt{t}\)</span>)</li>
+<li class="fragment">Over long enough times, advection always wins</li>
 </ul>
 <div class="fragment">
 <div class="keyidea">
-<p>The best covariate is rarely the raw band. It is a transformation that corresponds to something the animal could plausibly perceive or care about.</p>
+<p>Weak bias is invisible over a few steps and decisive over many. That is why orientation mechanisms are so hard to detect in short tracks and so obvious in migrations.</p>
 </div>
 </div>
-</section></section>
-<section>
-<section id="annotation" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>4 · Annotation</h1>
-
 </section>
-<section id="the-operation" class="slide level2">
-<h2>The operation</h2>
-<p>For every fix, look up the environment <strong>there</strong> and <strong>then</strong>.</p>
+<section id="central-places" class="slide level2">
+<h2>Central places</h2>
+<p>A BCRW whose goal is its own <strong>home</strong> produces something new: the animal wanders, drifts back, wanders again. It never escapes.</p>
 <ul>
-<li class="fragment"><strong>Static</strong> covariates — elevation, slope, distance to river. One raster; <code>extract()</code> and done.</li>
-<li class="fragment"><strong>Dynamic</strong> covariates — NDVI, temperature, snow. A <strong>stack</strong> of rasters with timestamps. You must match each fix to the right layer.</li>
+<li class="fragment">The track stays within a bounded area: a <strong>home range</strong> emerges from a simple movement rule</li>
+<li class="fragment">The long-run spread of positions is a stationary <strong>utilisation distribution</strong></li>
+<li class="fragment">Mechanistic home-range models (Moorcroft &amp; Lewis 2006) build on exactly this idea</li>
 </ul>
 <div class="fragment">
 <div class="keyidea">
-<p>A track that spans two years annotated with a <em>single</em> NDVI image is not annotated — it is decorated. If your covariate varies in time and your analysis does not, you have thrown away the mechanism.</p>
-</div>
-</div>
-</section>
-<section id="doing-it-in-time" class="slide level2">
-<h2>Doing it in time</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co"># Which layer does each fix belong to?</span></span>
-<span id="cb1-2"><a></a>layer_dates <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2005-01-01"</span>, <span class="st">"2005-01-17"</span>, ...))</span>
-<span id="cb1-3"><a></a></span>
-<span id="cb1-4"><a></a>idx <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(<span class="fu">as.Date</span>(trk<span class="sc">$</span>t_), layer_dates)</span>
-<span id="cb1-5"><a></a></span>
-<span id="cb1-6"><a></a><span class="co"># Extract from the whole stack, then pick the right column per row</span></span>
-<span id="cb1-7"><a></a>vals <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(ndvi_stack, <span class="fu">vect</span>(trk))[, <span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb1-8"><a></a>trk<span class="sc">$</span>ndvi <span class="ot">&lt;-</span> vals[<span class="fu">cbind</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(vals)), idx)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="fragment">
-<p><code>Movebank Env-DATA</code> does this for you, including interpolation in time, for dozens of products. Use it for real projects — but understand what it is doing first, which is what today’s exercise is for.</p>
-</div>
-</section>
-<section id="scale-is-a-decision-not-a-detail" class="slide level2">
-<h2>Scale is a decision, not a detail</h2>
-<ul>
-<li class="fragment">Do you want the value <strong>at the fix</strong>, or the <strong>mean within a buffer</strong>?</li>
-<li class="fragment">A buffer radius is a hypothesis about <strong>perceptual range</strong> — how far the animal can assess its surroundings</li>
-<li class="fragment">Different radii can reverse the sign of an effect</li>
-</ul>
-<div class="fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>terra<span class="sc">::</span><span class="fu">extract</span>(ndvi, <span class="fu">vect</span>(trk), <span class="at">buffer =</span> <span class="dv">500</span>, <span class="at">fun =</span> mean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="keyidea">
-<p>Choose the radius from biology, before you look at the results. Fitting at ten radii and reporting the best one is a garden of forking paths.</p>
+<p>In the practical this central-place walker becomes our <strong>ground-truth animal</strong>: we know its true home range, so in Session 6 we can check which estimator gets it right.</p>
 </div>
 </div>
 </section>
 <section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
-<p>You annotate two years of buffalo fixes with a single dry-season NDVI image and find a strong positive selection for high NDVI. What is the main problem?</p>
+<p>A homing pigeon is simulated as a BCRW with a weak bias towards its loft. Over the first 10 steps its track is indistinguishable from an unbiased CRW. Over 500 steps it heads unmistakably home. Why?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">NDVI saturates in dense vegetation</label></li>
-<li><label><input type="checkbox" checked="">The covariate is static while both the animal and the vegetation varied seasonally</label></li>
-<li><label><input type="checkbox">The pixel size is too coarse</label></li>
-<li><label><input type="checkbox">NDVI cannot be used for savanna</label></li>
+<li><label><input type="checkbox">The bias strength increases with time</label></li>
+<li><label><input type="checkbox" checked="">Drift accumulates linearly with time while random spread grows only with its square root</label></li>
+<li><label><input type="checkbox">The CRW component weakens over time</label></li>
+<li><label><input type="checkbox">Simulation error</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>The image describes one moment. Over two years, vegetation in a savanna swings enormously between wet and dry season, and the buffalo’s needs swing with it. By holding NDVI fixed you have conflated “places that were green <strong>in that dry season</strong>” with “places that are green <strong>when the animal was there</strong>”.</p>
-<p>What you have measured is selection for <em>persistently</em> productive places — which may be interesting, but is not what the model claims.</p>
-<p>The result can even be the <em>opposite</em> sign from the time-matched analysis: an animal may select the greenest available patch at every moment while showing no preference for places that are green on average.</p>
-<p>Fix: use a time series and match each fix to the contemporaneous layer.</p>
+<p>The bias adds a small, consistent component to every step: after <span class="math inline">\(n\)</span> steps the drift has accumulated in proportion to <span class="math inline">\(n\)</span>. The random component partly cancels itself out, growing only as <span class="math inline">\(\sqrt{n}\)</span>. Eventually the drift must dominate.</p>
+<p>Detecting orientation in real animals is hard for exactly this reason: over a short track, even a genuine bias is swamped by noise.</p>
 </div>
 </div>
+</section></section>
+<section>
+<section id="lévy-walks" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>5 · Lévy walks</h1>
+
 </section>
-<section id="common-failures" class="slide level2">
-<h2>Common failures</h2>
+<section id="the-lévy-hypothesis" class="slide level2">
+<h2>The Lévy hypothesis</h2>
 <ul>
-<li class="fragment"><strong>CRS mismatch</strong> — or worse, passing a bare coordinate matrix (Class 2)</li>
-<li class="fragment"><strong>Cloud contamination</strong> — an uncomposited optical image over the tropics is mostly cloud. Use quality flags; use composites.</li>
-<li class="fragment"><strong>Fill values</strong> — <code>-3000</code> or <code>32767</code> read as real numbers will destroy your model. Check the product’s documentation for the scale factor and no-data value.</li>
-<li class="fragment"><strong>Scale factors</strong> — MODIS NDVI is stored as integers; multiply by 0.0001</li>
-<li class="fragment"><strong>Time zones</strong> — your fixes are UTC; is the product local solar time?</li>
+<li class="fragment">Step lengths drawn from a <strong>power law</strong>: <span class="math inline">\(P(l) \propto l^{-\mu}\)</span>, with <span class="math inline">\(1 &lt; \mu \le 3\)</span></li>
+<li class="fragment">No characteristic scale: many short steps, occasional enormous ones</li>
+<li class="fragment">Viswanathan et al.&nbsp;(1996) reported Lévy flights in wandering albatrosses; Viswanathan et al.&nbsp;(1999) showed that <span class="math inline">\(\mu \approx 2\)</span> is an <strong>optimal search</strong> strategy for sparse, randomly placed targets</li>
+<li class="fragment">A seductive idea: a universal, scale-free rule for foraging</li>
+</ul>
+</section>
+<section id="the-reversal" class="slide level2">
+<h2>The reversal</h2>
+<ul>
+<li class="fragment">Edwards et al.&nbsp;(2007) reanalysed the albatross data with better records: the long “flights” included time sitting on the water. <strong>The Lévy pattern disappeared</strong></li>
+<li class="fragment">They also showed that log–log regression of histograms, the standard method at the time, is biased; power laws must be fitted by <strong>maximum likelihood</strong> and compared with alternatives (Clauset et al.&nbsp;2009)</li>
+<li class="fragment">Benhamou (2007): an animal <strong>switching between two behaviours</strong>, each a simple random walk, produces a step-length distribution that a power law fits beautifully</li>
+<li class="fragment">Lévy-like patterns do appear in some marine predators, but depend on environmental context (Sims et al.&nbsp;2008; Humphries et al.&nbsp;2010)</li>
 </ul>
 <div class="fragment">
 <div class="keyidea">
-<p>After every annotation: <code>summary()</code> the new column. If the range is <code>-3000</code> to <code>10000</code>, you have raw integers, not NDVI.</p>
+<p>The honest position: a power-law fit is not evidence of a Lévy <em>strategy</em>. Different mechanisms produce indistinguishable step-length distributions.</p>
 </div>
 </div>
 </section>
 <section id="quiz-2" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
-<p>Your GPS fixes have ~15 m error. You have both a 10 m Sentinel-2 product and a 500 m MODIS product. You take the 10 m one because finer is better. When is that reasoning wrong?</p>
+<p>You fit an exponential and a power law to 2,000 step lengths by maximum likelihood. The power law wins by more than 2,000 AIC units. What have you shown?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">Never — finer resolution is always preferable</label></li>
-<li><label><input type="checkbox" checked="">When the process you are modelling operates at a coarser scale than the pixel</label></li>
-<li><label><input type="checkbox">When the file is too large to process</label></li>
-<li><label><input type="checkbox">Only for aquatic species</label></li>
+<li><label><input type="checkbox">The animal performs a Lévy walk</label></li>
+<li><label><input type="checkbox">The animal optimises its search</label></li>
+<li><label><input type="checkbox" checked="">The step lengths are heavy-tailed — which a mixture of two behaviours can produce just as well</label></li>
+<li><label><input type="checkbox">The exponential model failed to converge</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>Resolution should match <strong>the scale of the process</strong>, not simply be as fine as available. If an animal responds to the overall productivity of a valley, a 10 m pixel measures the individual bush it happened to stand next to — real variation, but not the variation driving the behaviour. You add noise and lose power.</p>
-<p>The two constraints are:</p>
-<ul>
-<li>the pixel should not be much <strong>finer</strong> than your positional error (you cannot tell which pixel the animal was in);</li>
-<li>the pixel should not be much <strong>coarser</strong> than the animal’s typical displacement (Class 8 shows exactly what breaks when it is).</li>
-</ul>
-<p>Between those bounds, the choice is a hypothesis about the animal’s perceptual scale — and you should state it.</p>
+<p>In the practical you will generate exactly this result from a mixture of two <em>exponential</em> distributions — a short-step mode and a long-step mode, and no power law anywhere. The power law wins decisively anyway.</p>
+<p>A fit tells you about the <strong>shape</strong> of a distribution. It cannot tell you which <strong>process</strong> generated it. To argue for a Lévy strategy you would need to rule out composite walks — for instance by showing that the long steps do not belong to a distinct behavioural state (Session 8).</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="simulation-as-a-hypothesis-test" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>6 · Simulation as a hypothesis test</h1>
+
+</section>
+<section id="the-recipe" class="slide level2">
+<h2>The recipe</h2>
+<ol type="1">
+<li class="fragment">Choose a <strong>statistic</strong> that captures your question — net displacement, radius of gyration, time to reach water</li>
+<li class="fragment">Choose a <strong>null process</strong> that lacks the mechanism you are testing — a CRW with the animal’s own step and turn distributions, but no memory</li>
+<li class="fragment"><strong>Simulate</strong> it many times; compute the statistic each time</li>
+<li class="fragment">Locate the observed value in the simulated distribution</li>
+</ol>
+<div class="fragment">
+<div class="keyidea">
+<p>The null must match the animal in everything <strong>except</strong> the mechanism. A null with the wrong step lengths is a straw man, and rejecting it proves nothing.</p>
 </div>
 </div>
 </section>
-<section id="todays-exercise" class="slide level2">
-<h2>Today’s exercise</h2>
+<section id="quiz-3" class="slide level2">
+<h2>Quiz</h2>
+<div class="quiz">
+<p>You test whether a buffalo is range-resident by comparing its radius of gyration with 300 CRWs built from its own steps and turns. For a 36-day track it sits at the 73rd percentile; for a 157-day track of another buffalo, the 1st. What is the most important lesson?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">Only the second buffalo is range-resident</label></li>
+<li><label><input type="checkbox">The test is broken</label></li>
+<li><label><input type="checkbox" checked="">Confinement is detectable only when the track is much longer than the time needed to cross the range</label></li>
+<li><label><input type="checkbox">More simulations would make the first test significant</label></li>
+</ul>
+<div class="quiz-feedback">
+<p>These are real results for the Kruger buffalo. Over a month, a resident and a random walker cover similar ground: the resident has not yet had time to hit the edges of its range. Only over months does the random walker keep spreading while the resident stays put.</p>
+<p>More simulations only sharpen the null distribution; they do not add information about the animal. This is the <strong>tracking duration versus occupation timescale</strong> problem — and exactly what the variogram in Session 6 diagnoses.</p>
+</div>
+</div>
+</section>
+<section id="todays-practical" class="slide level2">
+<h2>Today’s practical</h2>
 <div class="objectives">
-<p><strong><a href="../../classes/class-05/exercise.html">→ Class 5 exercise</a></strong></p>
+<p><strong><a href="../../classes/class-05/exercise.html">→ Session 5 practical</a></strong></p>
 <ol type="1">
-<li>Read real elevation and land-cover rasters for Kruger</li>
-<li>Derive slope and terrain ruggedness</li>
-<li>Annotate the buffalo fixes, and compare used vs available</li>
-<li>Extract at a point vs in a buffer — and see the answer change</li>
-<li>Build a <strong>time-varying</strong> covariate and do a time-matched annotation</li>
+<li>Write a correlated random walk simulator from scratch</li>
+<li>Vary κ and watch straightness emerge</li>
+<li>Mean squared displacement: find the ballistic–diffusive crossover</li>
+<li>Add a bias: simulate homing, and a central-place animal</li>
+<li>Exponential versus power law — discover the identifiability problem</li>
+<li>Is a real buffalo range-resident? Test it against a simulated null</li>
 </ol>
 </div>
 </section>
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li class="fragment">Sensors record <strong>radiance in bands</strong>; products are processed, and the processing level matters</li>
-<li class="fragment">Four resolutions, all trading off. <strong>Match the pixel to the animal and to your positional error</strong></li>
-<li class="fragment">NDVI is red/NIR contrast: useful, and it <strong>saturates</strong></li>
-<li class="fragment">Annotation must match in <strong>space and in time</strong>; a static covariate for a dynamic process is a modelling error, not a shortcut</li>
-<li class="fragment">Buffer radius encodes a hypothesis about perception. Choose it first</li>
+<li class="fragment">Simulation replaces the replication nature will not give you</li>
+<li class="fragment">Uncorrelated walk: MSD ∝ t. CRW: ballistic at short scales, diffusive at long</li>
+<li class="fragment">Bias adds drift, which always wins eventually; a bias towards home <strong>creates</strong> a home range</li>
+<li class="fragment">Power-law step lengths are not evidence of a Lévy strategy</li>
+<li class="fragment">A simulation null must match the animal in everything but the mechanism — and has power only if the track is long enough</li>
 </ul>
 <div class="fragment">
-<h3 id="before-class-6">Before Class 6</h3>
+<h3 id="before-session-6">Before Session 6</h3>
 <ul>
-<li>Pettorelli et al.&nbsp;(2005) on NDVI in ecology</li>
-<li>Skim the <code>moveHMM</code> vignette — we fit our first state model next week</li>
+<li>Fleming et al.&nbsp;(2015), <em>Ecology</em> 96:1182 — autocorrelated KDE</li>
+<li>Make sure <code>library(ctmm)</code> and <code>library(adehabitatHR)</code> both load</li>
 </ul>
-
-
 </div>
+</section>
+<section id="section" class="slide level2 center">
+<h2></h2>
+<h3 id="questions">Questions?</h3>
+<p><a href="mailto:giuliano.colosimo@uniroma2.it">giuliano.colosimo@uniroma2.it</a></p>
+
+
 </section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../../assets/figures/Tor-Vergata_logo_cmyk.png" class="slide-logo"></p>
 <div class="footer footer-default">
-<p><a href="../../index.html">Animal Tracking 2026-2027 · Class 5</a></p>
+<p><a href="../../index.html">Animal Tracking 2026-2027 · Session 5</a></p>
 </div>
 </div></div>
 
@@ -907,6 +736,44 @@ Giuliano Colosimo
       if (window.Reveal && window.Reveal.on) window.Reveal.on("slidechanged", initAll);
     })();
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

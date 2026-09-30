@@ -11,7 +11,7 @@
 
   <meta name="author" content="Giuliano Colosimo">
   <meta name="dcterms.date" content="2026-09-30">
-  <title>Animal Tracking – Spatial data in R</title>
+  <title>Animal Tracking – Spatial data in R: the survival kit</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -96,7 +96,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-18657b062b3da6a166608c2ebc8d3bda.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-fd96417eda74ebb0be446d6413f2e761.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -191,8 +191,8 @@
       margin-right: 0; 
     }
   </style>
-<meta property="og:title" content="Spatial data in R – Animal Tracking">
-<meta property="og:description" content="Class 2 · Theme 2 — Informatics tools for movement">
+<meta property="og:title" content="Spatial data in R: the survival kit – Animal Tracking">
+<meta property="og:description" content="Session 2 — Introduction to spatial data in R (sf, terra, projections)">
 <meta property="og:site_name" content="Animal Tracking">
 <meta property="og:locale" content="en_US">
 </head>
@@ -201,8 +201,8 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Spatial data in R</h1>
-  <p class="subtitle">Class 2 · Theme 2 — Informatics tools for movement</p>
+  <h1 class="title">Spatial data in R: the survival kit</h1>
+  <p class="subtitle">Session 2 — Introduction to spatial data in R (sf, terra, projections)</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -219,18 +219,26 @@ Giuliano Colosimo
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
+<div class="paradigm">
+<p><span class="pbox">Internal state</span> <span class="pbox">Motion capacity</span> <span class="pbox">Navigation capacity</span> <span class="pbox on">External factors</span> <span class="pbox path on">Movement path</span></p>
+</div>
+<p>Today is about the two boxes we can actually <strong>measure</strong>: where the animal was (the path) and what was there (the environment). Everything later joins them.</p>
+</section>
+<section id="where-we-are-going" class="slide level2">
+<h2>Where we are going</h2>
 <div class="objectives">
 <ol type="1">
-<li>The two data models: <strong>vector</strong> and <strong>raster</strong></li>
-<li>What a <strong>coordinate reference system</strong> is, and why every bug you will have this term is a CRS bug</li>
-<li>Geographic vs projected coordinates; UTM; EPSG codes</li>
-<li>The two packages: <strong><code>sf</code></strong> for vector, <strong><code>terra</code></strong> for raster</li>
-<li>Turn the buffalo CSV into a real spatial object and measure something in metres</li>
+<li><strong>Vector</strong> vs <strong>raster</strong>, and when each is appropriate</li>
+<li><strong>Coordinate reference systems</strong> — and why distances in lat/long are wrong</li>
+<li>Choosing a projection <strong>for the analysis you are about to do</strong></li>
+<li>Why the R spatial stack changed, and what that means for old code</li>
+<li><code>sf</code> for vectors, <code>terra</code> for rasters, and the verbs that join them</li>
+<li>Where environmental rasters come from: a remote-sensing primer</li>
 </ol>
 </div>
 <div class="fragment">
 <div class="keyidea">
-<p>Last week’s trajectory plot was distorted because we treated degrees as if they were metres. Today we fix that properly.</p>
+<p>This is the standalone “intro to spatial R” session. It is worth having even if you never analyse another track.</p>
 </div>
 </div>
 </section>
@@ -264,7 +272,7 @@ Giuliano Colosimo
 </div></div>
 <div class="fragment">
 <div class="keyidea">
-<p>Movement analysis is nearly always <strong>points (or steps) sampling rasters</strong>. That one sentence describes Classes 5, 7 and 8.</p>
+<p>Movement analysis is nearly always <strong>points (or steps) sampling rasters</strong>. That one sentence describes Sessions 3 and 7.</p>
 </div>
 </div>
 </section>
@@ -370,6 +378,51 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
+<section id="choose-the-projection-for-the-analysis" class="slide level2">
+<h2>Choose the projection for the analysis</h2>
+<p>No projection preserves everything, so pick the property your analysis needs:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">You will compute…</th>
+<th style="text-align: left;">Preserve…</th>
+<th style="text-align: left;">Typical choice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Step lengths, distances</td>
+<td style="text-align: left;">distance</td>
+<td style="text-align: left;">local <strong>UTM</strong> zone, or azimuthal equidistant centred on the study area</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Home-range areas, densities</td>
+<td style="text-align: left;"><strong>area</strong></td>
+<td style="text-align: left;">Albers or Lambert equal-area (LAEA)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Directions, turning angles</td>
+<td style="text-align: left;">angles / shape</td>
+<td style="text-align: left;">conformal: UTM (locally)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A continent-scale migration</td>
+<td style="text-align: left;">area, usually</td>
+<td style="text-align: left;">LAEA centred on the flyway</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div class="keyidea">
+<p>Inside one UTM zone the distortions are under 0.1%, so UTM does all three well enough. The choice only becomes real when your animal leaves the zone.</p>
+</div>
+</div>
+</section>
 <section id="epsg-codes-the-vocabulary-you-need" class="slide level2">
 <h2>EPSG codes — the vocabulary you need</h2>
 <table class="caption-top">
@@ -448,8 +501,59 @@ Giuliano Colosimo
 </div>
 </section></section>
 <section>
+<section id="a-short-messy-history" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>3 · A short, messy history</h1>
+
+</section>
+<section id="why-your-old-tutorial-no-longer-runs" class="slide level2">
+<h2>Why your old tutorial no longer runs</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Era</th>
+<th style="text-align: left;">Vector</th>
+<th style="text-align: left;">Raster</th>
+<th style="text-align: left;">Geometry engine</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2005–2023</td>
+<td style="text-align: left;"><code>sp</code></td>
+<td style="text-align: left;"><code>raster</code></td>
+<td style="text-align: left;"><code>rgdal</code>, <code>rgeos</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2016 →</td>
+<td style="text-align: left;"><strong><code>sf</code></strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>sf</code> (GDAL, GEOS, PROJ built in)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2020 →</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><strong><code>terra</code></strong></td>
+<td style="text-align: left;"><code>terra</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li class="fragment"><code>rgdal</code>, <code>rgeos</code> and <code>maptools</code> were <strong>retired from CRAN in October 2023</strong>; <code>raster</code> now runs on top of <code>terra</code></li>
+<li class="fragment">Most Stack Overflow answers and many published scripts still use <code>sp</code>/<code>raster</code></li>
+<li class="fragment">Some movement packages — <code>adehabitatLT</code>, <code>adehabitatHR</code> — still expect <code>sp</code> objects. You will convert with <code>as(x, "Spatial")</code> or <code>sf::as_Spatial()</code></li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p>Write new code in <code>sf</code> + <code>terra</code>. Recognise <code>sp</code> + <code>raster</code> when you read it.</p>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+</section></section>
+<section>
 <section id="sf-vector-data" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>3 · <code>sf</code> — vector data</h1>
+<h1>4 · <code>sf</code> — vector data</h1>
 
 </section>
 <section id="the-idea-behind-sf" class="slide level2">
@@ -541,14 +645,18 @@ Geodetic CRS:  WGS 84
 <td style="text-align: left;">a polygon at a fixed distance around features</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;"><code>st_join()</code></td>
+<td style="text-align: left;">attach attributes of the polygon each point falls in</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;"><code>st_bbox()</code></td>
 <td style="text-align: left;">bounding box</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><code>st_intersection()</code>, <code>st_union()</code></td>
 <td style="text-align: left;">overlay operations</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><code>st_write()</code> / <code>st_read()</code></td>
 <td style="text-align: left;">GeoPackage, shapefile, GeoJSON…</td>
 </tr>
@@ -592,7 +700,7 @@ Geodetic CRS:  WGS 84
 </section></section>
 <section>
 <section id="terra-raster-data" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>4 · <code>terra</code> — raster data</h1>
+<h1>5 · <code>terra</code> — raster data</h1>
 
 </section>
 <section id="a-raster-is-a-grid-plus-metadata" class="slide level2">
@@ -630,7 +738,7 @@ max value   :    24</code></pre>
 <li class="fragment"><strong>Values</strong> — one per cell per layer, possibly <code>NA</code></li>
 </ul>
 <div class="fragment">
-<p>A multi-layer raster (<code>SpatRaster</code> with several layers) is how you store a <strong>time series</strong>: one NDVI layer per 16-day composite, stacked. That is exactly what we need in Class 5.</p>
+<p>A multi-layer raster (<code>SpatRaster</code> with several layers) is how you store a <strong>time series</strong>: one NDVI layer per 16-day composite, stacked. That is exactly what we need in Session 3.</p>
 </div>
 </section>
 <section id="the-terra-functions-you-will-use" class="slide level2">
@@ -683,7 +791,7 @@ max value   :    24</code></pre>
 </table>
 <div class="fragment">
 <div class="keyidea">
-<p><code>extract()</code> is the bridge between the movement world and the environment world. Almost everything in Classes 5–8 passes through it.</p>
+<p><code>extract()</code> is the bridge between the movement world and the environment world. Almost everything from Session 3 onwards passes through it.</p>
 </div>
 </div>
 </section>
@@ -719,16 +827,174 @@ max value   :    24</code></pre>
 </div>
 </div>
 </section>
-<section id="todays-exercise" class="slide level2">
-<h2>Today’s exercise</h2>
+<section class="slide level2">
+
+</section></section>
+<section>
+<section id="where-rasters-come-from" class="title-slide slide level1 center" data-background-color="#14525a">
+<h1>6 · Where rasters come from</h1>
+
+</section>
+<section id="why-vegetation-looks-the-way-it-does" class="slide level2">
+<h2>Why vegetation looks the way it does</h2>
+<div class="columns">
+<div class="column" style="width:55%;">
+<p>Healthy green vegetation:</p>
+<ul>
+<li><strong>absorbs</strong> strongly in the <strong>red</strong> (~660 nm) — chlorophyll is doing photosynthesis</li>
+<li><strong>reflects</strong> strongly in the <strong>near infrared</strong> (~850 nm) — the internal leaf structure scatters it</li>
+</ul>
+<p>So the <em>contrast</em> between red and NIR is a measure of green biomass.</p>
+</div><div class="column" style="width:45%;">
+<div class="keyidea">
+<p>That single fact is the basis of essentially every vegetation index ever published.</p>
+</div>
+</div></div>
+</section>
+<section class="slide level2">
+
+</section>
+<section id="ndvi" class="slide level2">
+<h2>NDVI</h2>
+<p><span class="math display">\[\text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}\]</span></p>
+<ul>
+<li class="fragment">Ranges −1 to +1. Water &lt; 0; bare soil/rock ~0.1–0.2; sparse vegetation ~0.2–0.4; dense green vegetation 0.6–0.9</li>
+<li class="fragment">A <strong>proxy</strong> for green biomass and primary productivity</li>
+<li class="fragment">Normalised, so it partly cancels illumination and viewing-angle effects</li>
+</ul>
+<div class="fragment">
+<div class="callout callout-warning callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<p><strong>It saturates.</strong> Above ~0.8 — closed canopy — NDVI stops responding to extra biomass. In rainforest it is nearly flat and nearly useless.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+</section>
+<section id="you-cannot-have-all-four" class="slide level2">
+<h2>You cannot have all four</h2>
+<ul>
+<li class="fragment"><strong>Spatial</strong> — pixel size. 10 m (Sentinel-2) … 500 m (MODIS) … 25 km (some climate products)</li>
+<li class="fragment"><strong>Temporal</strong> — revisit time. 5 days (Sentinel-2) vs <strong>daily</strong> (MODIS) vs 16 days (Landsat)</li>
+<li class="fragment"><strong>Spectral</strong> — number and width of bands. 4 broad bands vs 200 narrow (hyperspectral)</li>
+<li class="fragment"><strong>Radiometric</strong> — bit depth; how finely brightness is quantised</li>
+</ul>
+<div class="fragment">
+<div class="keyidea">
+<p>They trade off against each other: a detector collecting light from a small patch, in a narrow band, gets few photons — so it needs a longer dwell time, which means a narrower swath and a longer revisit.</p>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+</section>
+<section id="the-missions-you-will-actually-use" class="slide level2">
+<h2>The missions you will actually use</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Mission</th>
+<th style="text-align: left;">Spatial</th>
+<th style="text-align: left;">Temporal</th>
+<th style="text-align: left;">Since</th>
+<th style="text-align: left;">Good for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>MODIS</strong> (Terra/Aqua)</td>
+<td style="text-align: left;">250–500 m</td>
+<td style="text-align: left;">Daily</td>
+<td style="text-align: left;">2000</td>
+<td style="text-align: left;">Long consistent NDVI series</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>VIIRS</strong></td>
+<td style="text-align: left;">375–750 m</td>
+<td style="text-align: left;">Daily</td>
+<td style="text-align: left;">2012</td>
+<td style="text-align: left;">MODIS successor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Landsat 5/7/8/9</strong></td>
+<td style="text-align: left;">30 m</td>
+<td style="text-align: left;">16 days</td>
+<td style="text-align: left;"><strong>1984</strong></td>
+<td style="text-align: left;">Long-term landscape change</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Sentinel-2</strong></td>
+<td style="text-align: left;">10–20 m</td>
+<td style="text-align: left;">5 days</td>
+<td style="text-align: left;">2015</td>
+<td style="text-align: left;">Fine-grained habitat</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Sentinel-1</strong> (SAR)</td>
+<td style="text-align: left;">10 m</td>
+<td style="text-align: left;">6–12 days</td>
+<td style="text-align: left;">2014</td>
+<td style="text-align: left;">Cloud-free, structure, water</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>GEDI</strong> (LiDAR)</td>
+<td style="text-align: left;">25 m footprint</td>
+<td style="text-align: left;">sampled</td>
+<td style="text-align: left;">2019</td>
+<td style="text-align: left;">Canopy height</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<div class="keyidea">
+<p><strong>Match the pixel to the animal and to your positional error.</strong> A 10 m Sentinel pixel is wasted on an Argos fix with 5 km error — and a 500 m MODIS pixel is useless for a dormouse.</p>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+</section>
+<section id="quiz-3" class="slide level2">
+<h2>Quiz</h2>
+<div class="quiz">
+<p>You study habitat selection by a forest ungulate using GPS collars (error ~15 m, hourly fixes) in a landscape with small forest patches of 1–5 ha. Which product for vegetation cover?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">MODIS NDVI, 250 m, daily</label></li>
+<li><label><input type="checkbox" checked="">Sentinel-2, 10–20 m, every 5 days</label></li>
+<li><label><input type="checkbox">A 1 km global land-cover map</label></li>
+<li><label><input type="checkbox">Sentinel-1 SAR, 10 m</label></li>
+</ul>
+<div class="quiz-feedback">
+<p>A 1–5 ha patch is roughly 100–220 m across. A <strong>250 m MODIS pixel is larger than the patch</strong>, so every fix would get a mixed value averaging forest and open land — the very contrast you are trying to measure would be erased. A 1 km product is hopeless for the same reason.</p>
+<p>Sentinel-2 at 10–20 m resolves those patches comfortably, and its 5-day revisit captures the growing season. Its resolution is also well matched to 15 m GPS error: finer would just add noise.</p>
+<p>Sentinel-1 is excellent for structure and for cloudy regions, but it does not measure greenness — it is the right answer to a different question.</p>
+</div>
+</div>
+</section>
+<section id="todays-practical" class="slide level2">
+<h2>Today’s practical</h2>
 <div class="objectives">
-<p><strong><a href="../../classes/class-02/exercise.html">→ Class 2 exercise</a></strong></p>
+<p><strong><a href="../../classes/class-02/exercise.html">→ Session 2 practical</a></strong></p>
 <ol type="1">
-<li>Turn the buffalo CSV into an <code>sf</code> object</li>
-<li>Reproject to UTM 36S and see the numbers change</li>
-<li>Measure the same distance three ways — and get three answers</li>
-<li>Build a raster, extract values at the fixes</li>
-<li>Make a map that is not distorted</li>
+<li><code>sf</code>: build points from a CSV, <code>st_transform</code>, <code>st_buffer</code>, <code>st_join</code>, <code>st_intersection</code></li>
+<li>Measure one distance three ways — and get three answers</li>
+<li><code>terra</code>: load NDVI and land cover, <code>crop</code>, <code>project</code>, <code>extract</code></li>
+<li>Break it on purpose: the silent <code>NA</code> and the ignored buffer</li>
+<li><strong>Mini-challenge:</strong> a publication-quality map with <code>geom_sf</code></li>
 </ol>
 </div>
 </section>
@@ -736,16 +1002,17 @@ max value   :    24</code></pre>
 <h2>Recap</h2>
 <ul>
 <li class="fragment"><strong>Vector</strong> = objects with coordinates; <strong>raster</strong> = a grid of values</li>
-<li class="fragment">A <strong>CRS</strong> = ellipsoid + datum + projection. EPSG codes name them</li>
-<li class="fragment">Degrees are <strong>angles</strong>: no Euclidean arithmetic, no KDE, no plotting with <code>asp = 1</code></li>
-<li class="fragment"><code>st_crs()</code> <strong>labels</strong>; <code>st_transform()</code> <strong>converts</strong>. Know which you need</li>
-<li class="fragment"><code>sf</code> for vector, <code>terra</code> for raster, <code>extract()</code> to join them</li>
+<li class="fragment">A <strong>CRS</strong> = ellipsoid + datum + projection. Degrees are <strong>angles</strong></li>
+<li class="fragment">Choose the projection for the analysis: equidistant for steps, <strong>equal-area</strong> for home ranges</li>
+<li class="fragment"><code>sf</code> + <code>terra</code> today; <code>sp</code> + <code>raster</code> in old code</li>
+<li class="fragment"><code>st_crs()</code> <strong>labels</strong>; <code>st_transform()</code> <strong>converts</strong></li>
+<li class="fragment">Satellites measure bands; NDVI is a red/NIR contrast. <strong>Match the pixel to your positional error</strong></li>
 </ul>
 <div class="fragment">
-<h3 id="before-class-3">Before Class 3</h3>
+<h3 id="before-session-3">Before Session 3</h3>
 <ul>
 <li>Read <a href="https://r.geocompx.org/">Geocomputation with R, ch.&nbsp;2 and 7</a></li>
-<li>Make sure <code>library(move2)</code>, <code>library(amt)</code> and <code>library(mapview)</code> all load</li>
+<li>Make sure <code>library(amt)</code> and <code>library(adehabitatLT)</code> both load</li>
 </ul>
 
 
@@ -755,7 +1022,7 @@ max value   :    24</code></pre>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../../assets/figures/Tor-Vergata_logo_cmyk.png" class="slide-logo"></p>
 <div class="footer footer-default">
-<p><a href="../../index.html">Animal Tracking 2026-2027 · Class 2</a></p>
+<p><a href="../../index.html">Animal Tracking 2026-2027 · Session 2</a></p>
 </div>
 </div></div>
 

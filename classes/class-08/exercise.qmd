@@ -1,6 +1,6 @@
 ---
-title: "Exercise 8 — Step selection and iSSA"
-subtitle: "Class 8 · Theme 5"
+title: "Practical 8 — Hidden Markov models"
+subtitle: "Session 8 · Behavioural states and synthesis"
 date-modified: last-modified
 ---
 
@@ -10,520 +10,332 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 ::: {.objectives}
-**Goals.** Generate random steps and look inside a stratum; fit an SSF; add
-movement terms for a full iSSA; update and interpret the movement kernel; add
-a habitat × movement interaction; discover why covariate resolution decides
-whether any of this works; and fit all six animals.
+**Goals.** Prepare a track for `momentuHMM`; fit a 2-state model and read it
+properly; decode and map the states; let time of day drive the switching;
+compare 2 and 3 states; check pseudo-residuals. Then prepare your
+mini-project pitch.
 
-**Time:** ~55 minutes. **Packages:** `amt`, `terra`, `survival`, `dplyr`,
-`tidyr`, `lubridate`.
+**Time:** ~50 minutes, then ~20 minutes of pitches. **Packages:**
+`momentuHMM`, `amt`, `dplyr`, `tidyr`, `lubridate`, `ggplot2`.
 :::
 
 ```{r}
+library(momentuHMM)
 library(amt)
-library(terra)
 library(dplyr)
 library(tidyr)
 library(lubridate)
+library(ggplot2)
 ```
 
-## Setup
+## Task 1 — Prepare the data
+
+An HMM needs **regular** time steps and **contiguous** sequences. The hourly
+bursts from Session 3 are exactly that; each burst becomes one sequence
+(`ID`). We keep the local hour as a covariate for Task 4.
 
 ```{r}
-clean <- read.csv("data/buffalo_kruger.csv.gz") |>
-  transmute(id = individual.local.identifier,
-            t  = as.POSIXct(timestamp, tz = "UTC"),
-            x  = location.long, y = location.lat) |>
+buffalo <- read.csv("data/buffalo_kruger.csv.gz") |>
+  transmute(id = individual.local.identifier, t = as.POSIXct(timestamp, tz = "UTC"),
+            x = location.long, y = location.lat) |>
   filter(!is.na(x), !is.na(y)) |>
   distinct(id, t, .keep_all = TRUE)
 
-trk <- make_track(clean, x, y, t, id = id, crs = 4326) |>
-  transform_coords(crs_to = 32736)
+hourly <- make_track(buffalo, x, y, t, id = id, crs = 4326) |>
+  transform_coords(crs_to = 32736) |>
+  filter(id %in% c("Cilla", "Toni")) |>
+  nest(data = -id) |>
+  mutate(data = lapply(data, \(d) d |>
+    track_resample(rate = hours(1), tolerance = minutes(10)) |>
+    filter_min_n_burst(min_n = 3))) |>
+  unnest(cols = data)
 
-covs <- project(
-  c(rast("data/kruger_elevation.tif"), rast("data/kruger_landcover.tif")),
-  "EPSG:32736"
-)
-names(covs)
-round(res(covs))
-```
+hmm_in <- hourly |>
+  transmute(ID = paste(id, burst_, sep = "_"), x = x_, y = y_,
+            hour = as.numeric(format(t_, "%H", tz = "Africa/Johannesburg"))) |>
+  as.data.frame()
 
-::: {.callout-note}
-Note the pixel size: **893 m**. Remember that number — it decides the outcome
-of this entire exercise.
-:::
-
-## Task 1 — Build the strata
-
-```{r}
-steps_for <- function(animal, rate = hours(1), tolerance = minutes(15)) {
-  trk |>
-    filter(id == animal) |>
-    track_resample(rate = rate, tolerance = tolerance) |>
-    filter_min_n_burst(min_n = 3) |>
-    steps_by_burst() |>
-    filter(sl_ < 10000)          # drop the spatial outliers found in Class 3
-}
-
-set.seed(2026)
-obs <- steps_for("Cilla")
-
-ssf_dat <- obs |>
-  random_steps(n_control = 15) |>
-  extract_covariates(covs, where = "both")
-
-c(strata = n_distinct(ssf_dat$step_id_), rows = nrow(ssf_dat))
-names(ssf_dat)
-```
-
-### Your turn
-
-**1a.** Look inside a single stratum. What varies within it, and what does not?
-**1b.** Why does `where = "both"` give you `_start` and `_end` columns?
-
-::: {.callout-note collapse="true"}
-## Solution
-
-```{r}
-ssf_dat |>
-  filter(step_id_ == ssf_dat$step_id_[1]) |>
-  transmute(case_, sl_ = round(sl_), ta_ = round(ta_, 2),
-            elevation_start = round(elevation_start),
-            elevation_end = round(elevation_end),
-            grassland_end = round(grassland_end, 2)) |>
-  head(16)
-```
-
-Within a stratum: **one** row with `case_ = TRUE` (the step the animal took)
-and 15 with `case_ = FALSE` (steps it could have taken). The start point, the
-time, the animal and everything else about that moment are **identical** —
-only the destination, and hence the `_end` covariates, vary.
-
-That is the whole design. Because the likelihood compares only within strata,
-every time-constant confounder cancels: hour of day, season, weather, the
-animal's identity, its internal state. You get that control for free.
-
-`where = "both"` extracts covariates at the start **and** end of each step.
-You need both: `_end` covariates express **selection** (where did it go),
-`_start` covariates modify the **movement kernel** (how does it move when
-starting from here). Task 5 uses that distinction.
-:::
-
-## Task 2 — A basic SSF
-
-```{r}
-m_ssf <- fit_issf(
-  ssf_dat,
-  case_ ~ elevation_end + grassland_end + strata(step_id_),
-  model = TRUE
-)
-
-round(summary(m_ssf$model)$coefficients, 4)
-```
-
-### Your turn
-
-**2a.** Interpret the coefficients.
-
-::: {.callout-note collapse="true"}
-## Solution
-
-Coefficients are on the log scale, exactly as for an RSF, and there is no
-intercept. `exp(coef)` is the **relative selection strength**: the factor by
-which the relative probability of choosing a step multiplies per unit increase
-in the covariate, compared with the other steps *available at that moment*.
-
-Elevation is measured in metres, so its coefficient is per metre — small by
-construction. Standardise if you want comparable effect sizes:
-
-```{r}
-zs <- ssf_dat |>
-  mutate(across(c(elevation_end, grassland_end), \(z) as.numeric(scale(z))))
-
-m_z <- fit_issf(zs, case_ ~ elevation_end + grassland_end + strata(step_id_),
-                model = TRUE)
-round(summary(m_z$model)$coefficients, 4)
-```
-
-Elevation is strongly and clearly negative. Grassland — the covariate that
-mattered most in Class 7 — is indistinguishable from zero. Hold that thought.
-:::
-
-## Task 3 — A full iSSA
-
-Add the movement terms so that the movement kernel is estimated jointly with
-selection.
-
-```{r}
-m_issa <- fit_issf(
-  ssf_dat,
-  case_ ~ elevation_end + grassland_end +
-          sl_ + log(sl_) + cos(ta_) +
-          strata(step_id_),
-  model = TRUE
-)
-
-round(summary(m_issa$model)$coefficients, 4)
-```
-
-### Your turn
-
-**3a.** Recover the realised movement kernel and compare it with the tentative one.
-
-::: {.callout-note collapse="true"}
-## Solution
-
-```{r}
-tent_sl <- sl_distr(ssf_dat)
-tent_ta <- ta_distr(ssf_dat)
-
-upd_sl <- update_gamma(
-  tent_sl,
-  beta_sl     = coef(m_issa)[["sl_"]],
-  beta_log_sl = coef(m_issa)[["log(sl_)"]]
-)
-upd_ta <- update_vonmises(tent_ta, beta_cos_ta = coef(m_issa)[["cos(ta_)"]])
-
-data.frame(
-  quantity = c("gamma shape", "gamma scale", "mean step (m)", "vonMises kappa"),
-  tentative = round(c(tent_sl$params$shape, tent_sl$params$scale,
-                      tent_sl$params$shape * tent_sl$params$scale,
-                      tent_ta$params$kappa), 3),
-  realised  = round(c(upd_sl$params$shape, upd_sl$params$scale,
-                      upd_sl$params$shape * upd_sl$params$scale,
-                      upd_ta$params$kappa), 3)
-)
-```
-
-The **tentative** distribution is the one `random_steps()` fitted to the
-observed steps and sampled the controls from. The **realised** kernel is what
-the animal actually does once selection is accounted for.
-
-Here they are almost identical, and the movement coefficients are
-non-significant — meaning that for this animal, at this interval, habitat is
-not detectably distorting the movement kernel.
-
-::: {.callout-tip}
-Do this arithmetic with `update_gamma()` / `update_vonmises()`, never by hand.
-The relationship between the coefficients and the distribution parameters
-depends on the parameterisation, and getting it wrong is easy and silent.
-:::
-:::
-
-## Task 4 — Why grassland vanished
-
-Class 7 found grassland to be the strongest covariate. Here it is nothing.
-Something is wrong — and it is not the biology.
-
-```{r}
-# How often does a control step land in the SAME raster cell as the start?
-mean(ssf_dat$grassland_end == ssf_dat$grassland_start, na.rm = TRUE)
-median(obs$sl_)
-round(res(covs)[1])
+prep <- prepData(hmm_in, type = "UTM", coordNames = c("x", "y"), covNames = "hour")
+summary(prep$step)
 ```
 
 ::: {.callout-important}
-## The step is smaller than the pixel
+## Two things to fix before fitting
 
-The median hourly step is about 150 m. The land-cover cells are **893 m**
-across. So roughly **69% of control steps land in the very same cell as the
-step's origin** — the used step and its alternatives are assigned *identical*
-covariate values, and the stratum contains no contrast for the model to
-exploit.
+**Zero step lengths.** A gamma density is zero at zero, so exact zeros break
+the likelihood. `momentuHMM` handles them with a **zero-mass** parameter per
+state — but only if you give it starting values for it.
 
-An SSF can only detect selection for a covariate that **varies within the
-animal's reach in one time step**. If your pixels are bigger than your steps,
-you will find nothing, no matter how strong the real preference is.
+**Outlier steps.** The 63 km spike from Session 3 is still here. An HMM will
+happily invent a "teleporting" state for it. Drop the affected bursts.
+:::
+
+```{r}
+sum(prep$step == 0, na.rm = TRUE)
+
+bad <- unique(prep$ID[which(prep$step > 5000)])
+prep <- prep[!(prep$ID %in% bad), ]
+round(max(prep$step, na.rm = TRUE))
+```
+
+## Task 2 — A 2-state model
+
+```{r}
+#| cache: true
+m2 <- fitHMM(prep, nbStates = 2,
+             dist = list(step = "gamma", angle = "vm"),
+             Par0 = list(step  = c(20, 400,       # means: state 1, state 2
+                                   20, 400,       # sds
+                                   0.01, 0.001),  # zero-masses
+                         angle = c(0.5, 2)))      # von Mises concentrations
+m2
+```
+
+::: {.callout-note}
+## Starting values
+
+`Par0` are initial guesses for the optimiser, grouped **by parameter, then by
+state**: both means, then both sds, then both zero-masses. The likelihood of an
+HMM has several peaks, so bad starting values can land you on the wrong one.
+For a real analysis, refit from many random starts (`retryFits` in
+`fitHMM()`) and keep the best.
 :::
 
 ### Your turn
 
-**4a.** Refit at 3- and 6-hourly intervals and watch the effect appear.
+**2a.** Describe the two states. **2b.** What is the expected dwell time in
+each?
 
 ::: {.callout-note collapse="true"}
 ## Solution
 
 ```{r}
-#| cache: true
-compare_rates <- lapply(c(1, 3, 6), function(h) {
-  o <- steps_for("Cilla", rate = hours(h), tolerance = minutes(15))
-  set.seed(1)
-  d <- o |> random_steps(n_control = 15) |> extract_covariates(covs, where = "both")
-  f <- fit_issf(d, case_ ~ elevation_end + grassland_end +
-                  sl_ + log(sl_) + cos(ta_) + strata(step_id_), model = TRUE)
-  cc <- summary(f$model)$coefficients
-  data.frame(
-    interval_h  = h,
-    strata      = n_distinct(d$step_id_),
-    median_sl_m = round(median(o$sl_)),
-    same_cell   = round(mean(d$grassland_end == d$grassland_start, na.rm = TRUE), 2),
-    grass_beta  = round(cc["grassland_end", "coef"], 3),
-    grass_p     = round(cc["grassland_end", "Pr(>|z|)"], 4)
-  )
-}) |> bind_rows()
+round(m2$mle$step, 2)
+round(m2$mle$angle, 3)
 
-compare_rates
+gam <- m2$mle$gamma
+round(gam, 3)
+round(1 / (1 - diag(gam)), 1)     # expected consecutive hours in each state
 ```
 
+**State 1**: steps of a few tens of metres and turning angles close to uniform
+— the animal barely moves and its direction is noise. An *encamped* state.
+
+**State 2**: steps of several hundred metres with some directional
+persistence — *moving*.
+
+Expected dwell times: about 2 hours encamped and about 8 hours moving, in
+units of the sampling interval (here, hours).
+
+The labels are **interpretations**: "encamped" is consistent with resting,
+ruminating, or foraging in one spot. Only an independent sensor or direct
+observation could tell those apart.
+:::
+
+## Task 3 — Decode and map
+
 ```{r}
-#| fig-width: 8.5
+#| fig-width: 9
+#| fig-height: 4.5
+#| fig-align: center
+prep$state <- factor(viterbi(m2), labels = c("encamped", "moving"))
+prep$p_moving <- stateProbs(m2)[, 2]
+
+one <- prep[prep$ID == names(sort(table(prep$ID), decreasing = TRUE))[1], ]
+one <- one[1:300, ]
+
+p1 <- ggplot(one, aes(x, y)) +
+  geom_path(colour = "grey75") +
+  geom_point(aes(colour = state), size = 1) +
+  scale_colour_manual(values = c(encamped = "#1f6f78", moving = "#c1440e")) +
+  coord_equal() + labs(x = NULL, y = NULL, colour = NULL) +
+  theme_minimal() + theme(legend.position = "bottom")
+
+p2 <- ggplot(one, aes(seq_along(p_moving), p_moving)) +
+  geom_line(colour = "#c1440e") +
+  labs(x = "Hour", y = "P(moving)") + theme_minimal()
+
+patchwork::wrap_plots(p1, p2, widths = c(1, 1.4))
+```
+
+::: {.callout-note collapse="true"}
+## Why the probabilities matter
+
+`viterbi()` gives the single most likely sequence of labels. `stateProbs()`
+gives, for every step, the probability of each state. Most steps are near 0 or
+1; the ones in between are **genuinely ambiguous**, and a threshold would have
+hidden that. Report the probabilities, or at least how many steps are
+uncertain.
+:::
+
+## Task 4 — Does time of day drive switching?
+
+Let the transition probabilities depend on the hour, with a 24-hour cosinor.
+`getPar0()` builds starting values for the bigger model from the fitted
+smaller one.
+
+```{r}
+#| cache: true
+p0 <- getPar0(m2, formula = ~ cosinor(hour, period = 24))
+m2_diel <- fitHMM(prep, nbStates = 2,
+                  dist = list(step = "gamma", angle = "vm"),
+                  Par0 = p0$Par, beta0 = p0$beta,
+                  formula = ~ cosinor(hour, period = 24))
+
+AIC(m2, m2_diel)
+```
+
+### Your turn
+
+**4a.** Plot the probability of being in the moving state across the day.
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+#| fig-width: 6.5
+#| fig-height: 3.8
+#| fig-align: center
+diel <- stationary(m2_diel, covs = data.frame(hour = 0:23))[[1]]
+diel_df <- data.frame(hour = 0:23, p_moving = diel[, 2])
+round(diel_df$p_moving[c(1, 6, 12, 16, 19, 24)], 2)   # 00, 05, 11, 15, 18, 23 h
+
+ggplot(diel_df, aes(hour, p_moving)) +
+  geom_line(colour = "#c1440e", linewidth = 1) + geom_point(colour = "#c1440e") +
+  scale_x_continuous(breaks = seq(0, 24, 3)) +
+  labs(x = "Local hour", y = "Stationary P(moving)",
+       title = "Buffalo move most in the afternoon") +
+  theme_minimal()
+```
+
+The diel model is strongly preferred by AIC. The buffalo are least likely to
+be moving before dawn and most likely in the late afternoon and evening. The
+covariate acts on the **switching** between states: the steps within each
+state have not changed, only how much time is spent in each.
+
+This is the bridge between Sessions 3 and 8: any covariate you can attach to a
+fix — time of day, NDVI, distance to water — can drive the transitions.
+:::
+
+## Task 5 — Two states or three?
+
+```{r}
+#| cache: true
+m3 <- fitHMM(prep, nbStates = 3,
+             dist = list(step = "gamma", angle = "vm"),
+             Par0 = list(step  = c(15, 150, 600, 15, 150, 600, 0.01, 0.001, 0.001),
+                         angle = c(0.3, 1, 2)))
+AIC(m2, m3)
+round(m3$mle$step, 1)
+```
+
+### Your turn
+
+**5a.** AIC prefers 3 states. Should you report 3?
+**5b.** Check the pseudo-residuals of the 2-state model.
+
+::: {.callout-note collapse="true"}
+## Solution
+
+AIC will usually keep falling as you add states: extra components always fit
+the shape of the data better. The question is whether the third state is a
+**behaviour**:
+
+```{r}
+round(1 / (1 - diag(m3$mle$gamma)), 1)
+round(table(viterbi(m3)) / nrow(prep), 3)
+```
+
+Here the third state sits between the other two — resting, grazing, travelling
+is a biologically plausible triplet for a large grazer. If you report three
+states, say that you chose three for *that* reason and checked it, not because
+AIC said so.
+
+```{r}
+#| fig-width: 8
 #| fig-height: 4
 #| fig-align: center
+pr <- pseudoRes(m2)
 par(mfrow = c(1, 2))
-plot(compare_rates$interval_h, compare_rates$same_cell, type = "b", pch = 16,
-     col = "#1f6f78", lwd = 2, ylim = c(0, 1),
-     xlab = "Sampling interval (h)", ylab = "Fraction of controls in the start cell",
-     main = "Contrast available to the model")
-plot(compare_rates$interval_h, compare_rates$grass_beta, type = "b", pch = 16,
-     col = "#c1440e", lwd = 2,
-     xlab = "Sampling interval (h)", ylab = "Grassland coefficient",
-     main = "...and the effect it can detect")
-abline(h = 0, lty = 2, col = "grey50")
+qqnorm(pr$stepRes, main = "Step pseudo-residuals", pch = 16, cex = 0.3,
+       col = adjustcolor("#1f6f78", 0.4)); qqline(pr$stepRes, col = "firebrick", lwd = 2)
+qqnorm(pr$angleRes, main = "Angle pseudo-residuals", pch = 16, cex = 0.3,
+       col = adjustcolor("#1f6f78", 0.4)); qqline(pr$angleRes, col = "firebrick", lwd = 2)
 par(mfrow = c(1, 1))
 ```
 
-As the interval lengthens, steps get longer, controls reach further, fewer
-land in the origin cell — and the grassland coefficient climbs from
-essentially zero to a substantial positive value, recovering the selection
-Class 7 detected.
-
-::: {.callout-warning}
-## Do not read this as "longer intervals are better"
-
-You are trading one bias for another. Longer steps give more spatial contrast,
-but they also **coarsen the behavioural question**: a 6-hour "step" is a
-straight line drawn across six hours of real movement, and it no longer
-represents a single movement decision.
-
-The honest conclusion is that **893 m land cover is the wrong resolution for
-hourly buffalo data**. The fix is finer covariates — Sentinel-2 at 10–20 m
-would resolve this comfortably — not a coarser animal.
-
-**The general rule:** your covariate resolution must be finer than your
-typical step length, or the step selection design has nothing to compare.
-:::
+If the model described the data, the points would lie on the line. Systematic
+departures in the tails say the step-length distribution or the number of
+states is not capturing the data — useful evidence when deciding between 2 and
+3 states, and far more informative than a table of AICs.
 :::
 
-## Task 5 — Habitat × movement interactions
-
-Does the animal move *differently* depending on where it starts? Use the
-6-hourly data, where there is contrast to work with.
-
-```{r}
-#| cache: true
-obs6 <- steps_for("Cilla", rate = hours(6), tolerance = minutes(30))
-set.seed(7)
-d6 <- obs6 |> random_steps(n_control = 20) |> extract_covariates(covs, where = "both")
-
-m_int <- fit_issf(
-  d6,
-  case_ ~ grassland_end + elevation_end +
-          sl_ + log(sl_) + cos(ta_) +
-          sl_:grassland_start +
-          cos(ta_):grassland_start +
-          strata(step_id_),
-  model = TRUE
-)
-
-round(summary(m_int$model)$coefficients, 4)
-```
-
-### Your turn
-
-**5a.** Interpret the two interaction terms.
-
-::: {.callout-note collapse="true"}
-## Solution
-
-The two interactions answer different questions from the selection terms:
-
-- **`sl_:grassland_start`** — does the animal take **longer steps** when it
-  starts in grassland? A positive coefficient means it moves *faster through*
-  grassland; a negative one means it slows down and lingers, which is what you
-  would expect where it feeds.
-- **`cos(ta_):grassland_start`** — does it move **more directionally** from
-  grassland? Positive means straighter paths; negative means more tortuous,
-  the signature of area-restricted search.
-
-Note carefully that these use `grassland_**start**`, the habitat at the
-*origin* of the step. A common and serious error is to interact `sl_` with
-`grassland_end`, which is not a movement statement at all — it conditions on
-the destination and mangles the interpretation of both terms.
-
-The combination is what makes iSSA worth the trouble: an RSF has no movement
-component, so "goes there" and "behaves differently there" collapse into a
-single undifferentiated measure of use.
-
-### What these particular numbers say
-
-Both interactions come out **positive**, and `cos(ta_)` has a large negative
-main effect. Read them together:
-
-- **Turning.** The main effect (`cos(ta_)` ≈ −1.9) applies where
-  `grassland_start = 0`: away from grassland the animal's movement is strongly
-  *anti-persistent* — it reverses direction, staying in a small area. Adding
-  the interaction (≈ +2.2) gives roughly +0.3 in pure grassland: from
-  grassland, movement is mildly **directional**.
-- **Step length.** `sl_:grassland_start` is positive: steps starting in
-  grassland are **longer**.
-
-So at this six-hour scale the picture is the opposite of a foraging-patch
-story: buffalo tend to move *into* grassland (`grassland_end` positive, though
-imprecise) but cross it in long, straight steps, while their movement off
-grassland is short and tortuous — consistent with grassland acting as a
-travel matrix and the wooded/riverine areas as places to settle.
-
-::: {.callout-warning}
-Do not over-read this. `grassland_end` here is not statistically distinguishable
-from zero for a single animal, and a six-hour step is a coarse summary of
-movement. It is an interpretation to take to Task 6 and test across
-individuals, not a conclusion.
-:::
-:::
-
-## Task 6 — All six animals
-
-```{r}
-#| cache: true
-fit_animal <- function(animal) {
-  o <- steps_for(animal, rate = hours(6), tolerance = minutes(30))
-  if (nrow(o) < 100) return(NULL)
-  set.seed(11)
-  d <- o |> random_steps(n_control = 15) |> extract_covariates(covs, where = "both")
-  f <- try(fit_issf(d, case_ ~ elevation_end + grassland_end +
-                      sl_ + log(sl_) + cos(ta_) + strata(step_id_),
-                    model = TRUE), silent = TRUE)
-  if (inherits(f, "try-error")) return(NULL)
-  cc <- summary(f$model)$coefficients
-  data.frame(id = animal, term = rownames(cc), beta = cc[, "coef"])
-}
-
-per_animal <- lapply(unique(trk$id), fit_animal) |> bind_rows()
-
-per_animal |>
-  pivot_wider(names_from = id, values_from = beta) |>
-  mutate(across(-term, \(z) signif(z, 3)))
-```
+## Task 6 — Your mini-project pitch
 
 ::: {.callout-tip}
-`sl_` is measured per **metre**, so its coefficient is tiny by construction and
-rounds to zero at three decimals — `signif()` rather than `round()` keeps it
-readable. This is a presentation problem, not a modelling one, but it is worth
-handling before anyone concludes the effect is exactly zero.
+## Prepare 3–5 minutes, at most three slides
+
+1. **Question** — one sentence, answerable with data you can get.
+2. **Data** — which dataset (course data, Movebank, your own), which animals,
+   what sampling interval.
+3. **Method** — which session's tools, and why they fit the question.
+4. **Pitfall** — what could make your answer wrong, and how you will check it.
+   If you can test your method on simulated data with a known answer first,
+   say so.
+
+Ideas: compare home-range estimates under two fix rates using the simulated
+animal; an SSF for a second fisher; do the buffalo's HMM states line up with
+day and night? do Leo's migration dates shift across years?
 :::
 
-### Your turn
+## To hand in
 
-**6a.** Summarise across individuals. Which effects are consistent?
+::: {.callout-tip}
+## Weekly submission
 
-::: {.callout-note collapse="true"}
-## Solution
-
-```{r}
-pop <- per_animal |>
-  group_by(term) |>
-  summarise(n_animals = n(),
-            mean_beta = mean(beta),
-            se = sd(beta) / sqrt(n()),
-            t = mean_beta / se,
-            p = 2 * pt(-abs(t), df = n() - 1),
-            n_positive = sum(beta > 0),
-            .groups = "drop") |>
-  mutate(across(c(mean_beta, se, t), \(z) round(z, 3)), p = round(p, 4))
-
-pop
-```
-
-```{r}
-#| fig-width: 7.5
-#| fig-height: 4.5
-#| fig-align: center
-boxplot(beta ~ term, data = per_animal, col = "#1f6f78", border = "grey30",
-        las = 2, xlab = "", ylab = "Coefficient",
-        main = "iSSA coefficients, 6 buffalo (6-hourly)")
-abline(h = 0, col = "firebrick", lty = 2, lwd = 2)
-stripchart(beta ~ term, data = per_animal, vertical = TRUE, add = TRUE,
-           pch = 16, col = adjustcolor("black", 0.6), cex = 0.9)
-```
-
-Read the `n_positive` column alongside the p-value. With six animals, a term
-with the same sign in 6 of 6 is strong evidence of a consistent
-population-level effect even when the mean is imprecise; one that is positive
-in 3 and negative in 3 is not a population effect however narrow its interval.
-
-This two-stage summary is honest about sample size: your degrees of freedom
-come from the number of **animals**, not the hundreds of thousands of rows in
-the strata.
-
-With more individuals you would move to a mixed conditional model —
-`glmmTMB` with random slopes and the stratum-intercept variance fixed large,
-following Muff et al. (2020).
+Your pitch slides, and the 2-state HMM of Task 2 fitted to **one other**
+buffalo, with its dwell times and one sentence on whether the states look like
+Cilla's and Toni's.
 :::
 
 ## Self-check
 
 ::: {.quiz}
-*Suppose* an iSSA reported a positive coefficient on `grassland_end` and a
-**negative** one on `sl_:grassland_start` (note: not the pattern our buffalo
-showed). What would the animal be doing?
+You want to know whether buffalo are more likely to start moving when NDVI is
+low. Where does NDVI go in `fitHMM()`?
 
-- [ ] Avoiding grassland but crossing it quickly
-- [x] Moving into grassland, then slowing down once there
-- [ ] Taking longer steps towards grassland
-- [ ] The two results contradict each other
+- [ ] In `Par0`
+- [x] In `formula`, so it acts on the transition probabilities
+- [ ] In `dist`
+- [ ] Nowhere — HMMs cannot include covariates
 
 ::: {.quiz-feedback}
-Two different statements, and they fit together neatly.
-
-`grassland_end` positive: among the steps available at each moment, the animal
-**chooses** those ending in grassland — selection.
-
-`sl_:grassland_start` negative: when it *starts* a step in grassland, that step
-is **shorter** — it slows down.
-
-Together: the animal heads into grassland and then lingers there. That is the
-classic signature of a foraging patch, and it is exactly what a large grazer
-should do.
-
-An RSF cannot express this at all: it has no movement component, so "goes
-there" and "slows down there" collapse into one undifferentiated measure of
-use.
+"More likely to start moving" is a statement about **switching**, which the
+transition probabilities govern. `formula = ~ ndvi` makes them a function of
+NDVI. Putting NDVI on the step-length parameters instead would ask a different
+question: whether the animal moves faster *given* that it is already moving.
 :::
 :::
 
 ::: {.quiz}
-You have Argos locations with 1–5 km error and a 30 m land-cover map. Should
-you fit an iSSA?
+Your HMM assigns 97% of steps to state 1 and 3% to state 2, whose mean step is
+12 km per hour. What has probably happened?
 
-- [ ] Yes — 30 m resolution gives excellent covariate contrast
-- [x] No — the positional error is far larger than the covariate grain, so the covariate assigned to each step is essentially random
-- [ ] Yes, but only with more control steps
-- [ ] Yes, after projecting everything to UTM
+- [ ] The animal travels 3% of the time
+- [x] State 2 is absorbing location errors rather than describing a behaviour
+- [ ] The model needs more states
+- [ ] The sampling interval is too short
 
 ::: {.quiz-feedback}
-With kilometres of positional error, you do not know which 30 m cell the animal
-was in — the land-cover value you extract is close to a random draw from a
-large neighbourhood. Fine covariates cannot rescue coarse locations; they just
-add noise with a confident-looking resolution.
-
-This is the mirror image of Task 4. There the pixels were too **coarse**
-relative to the steps; here they are too **fine** relative to the location
-error. Both break the same requirement:
-
-> the covariate must vary meaningfully **at the scale you can actually resolve
-> the animal's position and movement**.
-
-With Argos data, aggregate the covariates to something comparable to the error
-(1–5 km), and ask a broader-scale question — an RSF at second order, not an
-iSSA.
+A rare state with an extreme mean is the signature of a model mopping up
+outliers. Clean first, then model — which is why Task 1 drops the 63 km spike.
 :::
 :::
 
 ## After the course
 
-You now have the full pipeline: acquire → clean → describe → annotate →
-segment → model. For your project, pick **one** clear question and take it all
-the way through, including the limitations paragraph.
-
-See the [syllabus](../../syllabus.qmd) for marking criteria, and the
+You now have the whole pipeline: **collect → clean → describe → simulate →
+estimate space use → model selection → infer states**. For your project, pick
+one question and take it all the way through, including the limitations
+paragraph. See the [syllabus](../../syllabus.qmd) for the assessment, and the
 [resources page](../../resources.qmd) for where to go next.

@@ -4,112 +4,169 @@ subtitle: "Where to go after the eight classes"
 date-modified: last-modified
 ---
 
-## Foundational reading
+## Reading, session by session
 
-The papers below are the ones actually worth reading in full. Each is tied to
-the class where it becomes relevant.
+The papers below are the ones worth reading in full.
 
-### Movement ecology (Class 1)
+### Session 1 — Foundations
 
 - Nathan R, Getz WM, Revilla E, Holyoak M, Kadmon R, Saltz D, Smouse PE (2008).
   *A movement ecology paradigm for unifying organismal movement research.*
   PNAS 105:19052–19059.
   [doi:10.1073/pnas.0800375105](https://doi.org/10.1073/pnas.0800375105) —
-  the framework the whole field hangs on: internal state, motion capacity,
-  navigation capacity, external factors.
+  the spine of the course.
 - Kays R, Crofoot MC, Jetz W, Wikelski M (2015). *Terrestrial animal tracking
   as an eye on life and planet.* Science 348:aaa2478.
-  [doi:10.1126/science.aaa2478](https://doi.org/10.1126/science.aaa2478)
+  [doi:10.1126/science.aaa2478](https://doi.org/10.1126/science.aaa2478) —
+  the opening bookend.
 - Hebblewhite M, Haydon DT (2010). *Distinguishing technology from biology: a
   critical review of the use of GPS telemetry data in ecology.* Phil Trans R
   Soc B 365:2303–2312.
-  [doi:10.1098/rstb.2010.0087](https://doi.org/10.1098/rstb.2010.0087) —
-  read this before you trust any GPS dataset.
-
-### Tag effects and ethics (Class 1)
-
-- Wilson RP, McMahon CR (2006). *Measuring devices on wild animals: what
-  constitutes acceptable practice?* Front Ecol Environ 4:147–154.
+  [doi:10.1098/rstb.2010.0087](https://doi.org/10.1098/rstb.2010.0087)
+- Laundré JW, Hernández L, Altendorf KB (2001). *Wolves, elk, and bison:
+  reestablishing the "landscape of fear" in Yellowstone National Park, U.S.A.*
+  Canadian Journal of Zoology 79:1401–1409.
 - Portugal SJ, White CR (2018). *Miniaturization of biologgers is not
   alleviating the 5% rule.* Methods Ecol Evol 9:1662–1666.
   [doi:10.1111/2041-210X.13013](https://doi.org/10.1111/2041-210X.13013)
+- Laube P, Purves RS (2011). *How fast is a cow? Cross-scale analysis of
+  movement data.* Transactions in GIS 15:401–418 — the sampling-interval
+  problem, quantified.
 
-### Spatial data in R (Classes 2–3)
+### Session 2 — Spatial data in R
 
 - **[Geocomputation with R](https://r.geocompx.org/)** — Lovelace, Nowosad,
   Muenchow. Free, excellent, the default recommendation.
 - **[Spatial Data Science with applications in R](https://r-spatial.org/book/)** —
   Pebesma & Bivand, by the author of `sf`.
 - **[rspatial.org](https://rspatial.org/)** — Hijmans, the `terra` reference.
-- Movebank's [data documentation](https://www.movebank.org/cms/movebank-content/movebank-attribute-dictionary).
+- Pettorelli N, Vik JO, Mysterud A, Gaillard J-M, Tucker CJ, Stenseth NC (2005).
+  *Using the satellite-derived NDVI to assess ecological responses to
+  environmental change.* TREE 20:503–510.
+  [doi:10.1016/j.tree.2005.05.011](https://doi.org/10.1016/j.tree.2005.05.011)
+- Data portals: [Copernicus Browser](https://browser.dataspace.copernicus.eu/)
+  (Sentinel), [USGS EarthExplorer](https://earthexplorer.usgs.gov/) (Landsat),
+  [NASA AppEEARS](https://appeears.earthdatacloud.nasa.gov/),
+  [Movebank Env-DATA](https://www.movebank.org/cms/movebank-content/env-data).
 
-### Home range and space use (Class 4)
+### Session 3 — From fixes to trajectories
 
-- Powell RA, Mitchell MS (2012). *What is a home range?* J Mammal 93:948–958.
-  [doi:10.1644/11-MAMM-S-177.1](https://doi.org/10.1644/11-MAMM-S-177.1)
-- Fleming CH, Fagan WF, Mueller T, Olson KA, Leimgruber P, Calabrese JM (2015).
-  *Rigorous home range estimation with movement data: a new autocorrelated
-  kernel density estimator.* Ecology 96:1182–1188.
-  [doi:10.1890/14-2010.1](https://doi.org/10.1890/14-2010.1) — why classical
-  KDE under-estimates when fixes are autocorrelated, and what AKDE does about it.
+- Calenge C (2006). *The package "adehabitat" for the R software: a tool for
+  the analysis of space and habitat use by animals.* Ecological Modelling
+  197:516–519.
 - Signer J, Fieberg J, Avgar T (2019). *Animal movement tools (`amt`): R
   package for managing tracking data and conducting habitat selection
   analyses.* Ecol Evol 9:880–890.
   [doi:10.1002/ece3.4823](https://doi.org/10.1002/ece3.4823)
 
-### Remote sensing (Class 5)
+### Session 4 — Quantifying movement
 
-- Pettorelli N, Vik JO, Mysterud A, Gaillard J-M, Tucker CJ, Stenseth NC (2005).
-  *Using the satellite-derived NDVI to assess ecological responses to
-  environmental change.* TREE 20:503–510.
-  [doi:10.1016/j.tree.2005.05.011](https://doi.org/10.1016/j.tree.2005.05.011)
-- Neumann W, et al. (2015). *Opportunities for the application of advanced
-  remotely-sensed data in ecological studies of terrestrial animal movement.*
-  Movement Ecology 3:8.
-- Data portals: [Copernicus Browser](https://browser.dataspace.copernicus.eu/)
-  (Sentinel), [USGS EarthExplorer](https://earthexplorer.usgs.gov/) (Landsat),
-  [NASA AppEEARS](https://appeears.earthdatacloud.nasa.gov/) (MODIS/VIIRS
-  point-and-area extraction),
-  [Movebank Env-DATA](https://www.movebank.org/cms/movebank-content/env-data)
-  (annotates *your* track automatically — start here),
-  [WorldClim](https://worldclim.org/), [Copernicus Global Land Cover](https://land.copernicus.eu/).
-
-### Segmentation and behavioural states (Class 6)
-
-- Patterson TA, Basson M, Bravington MV, Gunn JS (2009). *Classifying
-  movement behaviour in relation to environmental conditions using hidden
-  Markov models.* J Anim Ecol 78:1113–1123.
-- Langrock R, King R, Matthiopoulos J, Thomas L, Fortin D, Morales JM (2012).
-  *Flexible and practical modeling of animal telemetry data: hidden Markov
-  models and extensions.* Ecology 93:2336–2342.
-  [doi:10.1890/11-2241.1](https://doi.org/10.1890/11-2241.1)
-- Michelot T, Langrock R, Patterson TA (2016). *`moveHMM`: an R package for
-  the statistical modelling of animal movement data using hidden Markov
-  models.* Methods Ecol Evol 7:1308–1315.
-- **[A guide to state-space and hidden Markov modelling](https://arxiv.org/abs/1602.08767)**
-  — Michelot & Langrock's `moveHMM` vignette is the most practical starting point.
+- Benhamou S (2004). *How to reliably estimate the tortuosity of an animal's
+  path: straightness, sinuosity, or fractal dimension?* J Theor Biol
+  229:209–220.
+- Turchin P (1996). *Fractal analyses of animal movement: a critique.* Ecology
+  77:2086–2090.
+- Fauchald P, Tveraa T (2003). *Using first-passage time in the analysis of
+  area-restricted search and habitat selection.* Ecology 84:282–288.
+- Bunnefeld N, Börger L, van Moorter B, Rolandsen CM, Dettki H, Solberg EJ,
+  Ericsson G (2011). *A model-driven approach to quantify migration patterns:
+  individual, regional and yearly differences.* J Anim Ecol 80:466–476.
+- Gurarie E, Andrews RD, Laidre KL (2009). *A novel method for identifying
+  behavioural changes in animal movement data.* Ecology Letters 12:395–408 —
+  behavioural change-point analysis (`bcpa`).
 - Edelhoff H, Signer J, Balkenhol N (2016). *Path segmentation for beginners:
   an overview of current methods for detecting changes in animal movement
   patterns.* Movement Ecology 4:21.
 
-### Resource and step selection (Classes 7–8)
+### Session 5 — Movement models and simulation
 
-- Boyce MS, Vernier PR, Nielsen SE, Schmiegelow FKA (2002). *Evaluating
-  resource selection functions.* Ecol Modelling 157:281–300.
-- Fieberg J, Signer J, Smith B, Avgar T (2021). *A "how-to" guide for
-  interpreting parameters in habitat-selection analyses.* J Anim Ecol
-  90:1027–1043.
-  [doi:10.1111/1365-2656.13441](https://doi.org/10.1111/1365-2656.13441) —
-  **the single most useful paper in this course.** Read it twice.
+- Codling EA, Plank MJ, Benhamou S (2008). *Random walk models in biology.*
+  J R Soc Interface 5:813–834.
+  [doi:10.1098/rsif.2008.0014](https://doi.org/10.1098/rsif.2008.0014)
+- Viswanathan GM, Afanasyev V, Buldyrev SV, Murphy EJ, Prince PA, Stanley HE
+  (1996). *Lévy flight search patterns of wandering albatrosses.* Nature
+  381:413–415.
+- Edwards AM et al. (2007). *Revisiting Lévy flight search patterns of
+  wandering albatrosses, bumblebees and deer.* Nature 449:1044–1048.
+- Benhamou S (2007). *How many animals really do the Lévy walk?* Ecology
+  88:1962–1969.
+- Clauset A, Shalizi CR, Newman MEJ (2009). *Power-law distributions in
+  empirical data.* SIAM Review 51:661–703 — how to fit a power law properly.
+- Humphries NE et al. (2010). *Environmental context explains Lévy and
+  Brownian movement patterns of marine predators.* Nature 465:1066–1069.
+
+### Session 6 — Home ranges
+
+- Powell RA, Mitchell MS (2012). *What is a home range?* J Mammal 93:948–958.
+  [doi:10.1644/11-MAMM-S-177.1](https://doi.org/10.1644/11-MAMM-S-177.1)
+- Worton BJ (1989). *Kernel methods for estimating the utilization distribution
+  in home-range studies.* Ecology 70:164–168.
+- Horne JS, Garton EO, Krone SM, Lewis JS (2007). *Analyzing animal movements
+  using Brownian bridges.* Ecology 88:2354–2363.
+- Fleming CH, Fagan WF, Mueller T, Olson KA, Leimgruber P, Calabrese JM (2015).
+  *Rigorous home range estimation with movement data: a new autocorrelated
+  kernel density estimator.* Ecology 96:1182–1188.
+  [doi:10.1890/14-2010.1](https://doi.org/10.1890/14-2010.1)
+- Calabrese JM, Fleming CH, Gurarie E (2016). *ctmm: an R package for analyzing
+  animal relocation data as a continuous-time stochastic process.* Methods Ecol
+  Evol 7:1124–1132.
+- Börger L, Dalziel BD, Fryxell JM (2008). *Are there general mechanisms of
+  animal home range behaviour? A review and prospects for future research.*
+  Ecology Letters 11:637–650.
+
+### Session 7 — Habitat selection
+
+- Fortin D, Beyer HL, Boyce MS, Smith DW, Duchesne T, Mao JS (2005). *Wolves
+  influence elk movements: behavior shapes a trophic cascade in Yellowstone
+  National Park.* Ecology 86:1320–1330 — the step selection function.
+- Lele SR, Keim JL (2006). *Weighted distributions and estimation of resource
+  selection probability functions.* Ecology 87:3021–3028.
 - Avgar T, Potts JR, Lewis MA, Boyce MS (2016). *Integrated step selection
   analysis: bridging the gap between resource selection and animal movement.*
   Methods Ecol Evol 7:619–630.
   [doi:10.1111/2041-210X.12528](https://doi.org/10.1111/2041-210X.12528)
-- Thurfjell H, Ciuti S, Boyce MS (2014). *Applications of step-selection
-  functions in ecology and conservation.* Movement Ecology 2:4.
+- Avgar T, Lele SR, Keim JL, Boyce MS (2017). *Relative selection strength:
+  quantifying effect size in habitat- and step-selection inference.* Ecol Evol
+  7:5322–5330.
+- Fieberg J, Signer J, Smith B, Avgar T (2021). *A "how-to" guide for
+  interpreting parameters in habitat-selection analyses.* J Anim Ecol
+  90:1027–1043.
+  [doi:10.1111/1365-2656.13441](https://doi.org/10.1111/1365-2656.13441) —
+  **the single most useful paper in this course.**
 - Muff S, Signer J, Fieberg J (2020). *Accounting for individual-specific
-  variation in habitat-selection studies.* J Anim Ecol 89:80–92 — how to do
-  this properly with more than one animal.
+  variation in habitat-selection studies.* J Anim Ecol 89:80–92.
+- LaPoint S, Gallery P, Wikelski M, Kays R (2013). *Animal behavior, cost-based
+  corridor models, and real corridors.* Landscape Ecology 28:1615–1630 — the
+  fisher data.
+
+### Session 8 — Hidden Markov models and the frontier
+
+- Langrock R, King R, Matthiopoulos J, Thomas L, Fortin D, Morales JM (2012).
+  *Flexible and practical modeling of animal telemetry data: hidden Markov
+  models and extensions.* Ecology 93:2336–2342.
+- McClintock BT, Michelot T (2018). *momentuHMM: R package for generalized
+  hidden Markov models of animal movement.* Methods Ecol Evol 9:1518–1530.
+- McClintock BT, Langrock R, Gimenez O, Cam E, Borchers DL, Glennie R,
+  Patterson TA (2020). *Uncovering ecological state dynamics with hidden Markov
+  models.* Ecology Letters 23:1878–1903 — the review to read.
+- Jonsen ID, Mills Flemming J, Myers RA (2005). *Robust state–space modeling of
+  animal movement data.* Ecology 86:2874–2880.
+- Johnson DS, London JM, Lea M-A, Durban JW (2008). *Continuous-time correlated
+  random walk model for animal telemetry data.* Ecology 89:1208–1215.
+- Wilson RP, Quintana F, Hobson VJ (2012). *Construction of energy landscapes
+  can clarify the movement and distribution of foraging animals.* Proc R Soc B
+  279:975–980; and Shepard ELC et al. (2013). *Energy landscapes shape animal
+  movement ecology.* Am Nat 182:298–312.
+- Couzin ID, Krause J, Franks NR, Levin SA (2005). *Effective leadership and
+  decision-making in animal groups on the move.* Nature 433:513–516.
+- Nathan R, Spiegel O, Fortmann-Roe S, Harel R, Wikelski M, Getz WM (2012).
+  *Using tri-axial acceleration data to identify behavioral modes of
+  free-ranging animals.* J Exp Biol 215:986–996.
+- Wang G (2019). *Machine learning for inferring animal behavior from location
+  and movement data.* Ecological Informatics 49:69–76.
+- Nathan R et al. (2022). *Big-data approaches lead to an increased
+  understanding of the ecology of animal movement.* Science 375:eabg1780 — the
+  closing bookend.
 
 ## Books
 
@@ -127,10 +184,12 @@ the class where it becomes relevant.
 
 | | |
 |:--|:--|
-| [`amt`](https://cran.r-project.org/package=amt) | Tracks, metrics, RSF/SSF. The course spine. |
+| [`amt`](https://cran.r-project.org/package=amt) | Tracks, steps, resampling, RSF/SSF — used in most sessions |
+| [`adehabitatLT`](https://cran.r-project.org/package=adehabitatLT) | Trajectories (`ltraj`), NSD, first-passage time |
+| [`bcpa`](https://cran.r-project.org/package=bcpa) | Behavioural change-point analysis |
 | [`move2`](https://bartk.gitlab.io/move2/) | Movebank access and the modern `move` successor |
 | [`ctmm`](https://ctmm-initiative.github.io/ctmm/) | Continuous-time models, AKDE. Has a [point-and-click app](https://ctmm.shinyapps.io/ctmmweb/). |
-| [`moveHMM`](https://cran.r-project.org/package=moveHMM) / [`momentuHMM`](https://cran.r-project.org/package=momentuHMM) | HMMs; `momentuHMM` for multiple data streams |
+| [`momentuHMM`](https://cran.r-project.org/package=momentuHMM) | Hidden Markov models with covariates and multiple data streams |
 | [`adehabitatHR`](https://cran.r-project.org/package=adehabitatHR) | Classic home range estimators |
 | [`sf`](https://r-spatial.github.io/sf/) / [`terra`](https://rspatial.github.io/terra/) | The spatial foundation |
 | [AniMove](https://animove.org/) | Annual summer school — the best training available in this field |

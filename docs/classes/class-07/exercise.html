@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.8.21">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Exercise 7 — Fitting a resource selection function – Animal Tracking</title>
+<title>Practical 7 — Habitat selection on the move – Animal Tracking</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -103,14 +103,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><link rel="stylesheet" href="../../assets/quiz.css">
-<meta property="og:title" content="Exercise 7 — Fitting a resource selection function – Animal Tracking">
-<meta property="og:description" content="Class 7 · Theme 5">
-<meta property="og:image" content="https://giulianocolosimo.github.io/animtrack-2627/classes/class-07/exercise_files/figure-html/unnamed-chunk-8-1.png">
+}</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script><link rel="stylesheet" href="../../assets/quiz.css">
+<meta property="og:title" content="Practical 7 — Habitat selection on the move – Animal Tracking">
+<meta property="og:description" content="Session 7 · Resource selection and step selection functions">
+<meta property="og:image" content="https://giulianocolosimo.github.io/animtrack-2627/classes/class-07/exercise_files/figure-html/unnamed-chunk-17-1.png">
 <meta property="og:site_name" content="Animal Tracking">
 <meta property="og:locale" content="en_US">
-<meta property="og:image:height" content="768">
-<meta property="og:image:width" content="1248">
+<meta property="og:image:height" content="1056">
+<meta property="og:image:width" content="1152">
 </head>
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
@@ -585,46 +610,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
    
   <ul>
-<li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+<li><a href="#the-data-fishers-in-new-york" id="toc-the-data-fishers-in-new-york" class="nav-link active" data-scroll-target="#the-data-fishers-in-new-york">The data: fishers in New York</a></li>
   <li>
-<a href="#task-1-used-and-available" id="toc-task-1-used-and-available" class="nav-link" data-scroll-target="#task-1-used-and-available">Task 1 — Used and available</a>
+<a href="#task-1-a-resource-selection-function" id="toc-task-1-a-resource-selection-function" class="nav-link" data-scroll-target="#task-1-a-resource-selection-function">Task 1 — A resource selection function</a>
   <ul class="collapse">
 <li><a href="#your-turn" id="toc-your-turn" class="nav-link" data-scroll-target="#your-turn">Your turn</a></li>
   </ul>
 </li>
   <li>
-<a href="#task-2-fit-and-interpret" id="toc-task-2-fit-and-interpret" class="nav-link" data-scroll-target="#task-2-fit-and-interpret">Task 2 — Fit and interpret</a>
+<a href="#task-2-the-same-fisher-as-a-step-selection-function" id="toc-task-2-the-same-fisher-as-a-step-selection-function" class="nav-link" data-scroll-target="#task-2-the-same-fisher-as-a-step-selection-function">Task 2 — The same fisher, as a step selection function</a>
   <ul class="collapse">
 <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">Your turn</a></li>
   </ul>
 </li>
+  <li><a href="#task-3-the-realised-movement-kernel" id="toc-task-3-the-realised-movement-kernel" class="nav-link" data-scroll-target="#task-3-the-realised-movement-kernel">Task 3 — The realised movement kernel</a></li>
   <li>
-<a href="#task-3-does-availability-sample-size-matter" id="toc-task-3-does-availability-sample-size-matter" class="nav-link" data-scroll-target="#task-3-does-availability-sample-size-matter">Task 3 — Does availability sample size matter?</a>
+<a href="#task-4-does-habitat-change-how-she-moves" id="toc-task-4-does-habitat-change-how-she-moves" class="nav-link" data-scroll-target="#task-4-does-habitat-change-how-she-moves">Task 4 — Does habitat change how she moves?</a>
   <ul class="collapse">
 <li><a href="#your-turn-2" id="toc-your-turn-2" class="nav-link" data-scroll-target="#your-turn-2">Your turn</a></li>
   </ul>
 </li>
+  <li><a href="#task-5-is-there-enough-contrast" id="toc-task-5-is-there-enough-contrast" class="nav-link" data-scroll-target="#task-5-is-there-enough-contrast">Task 5 — Is there enough contrast?</a></li>
   <li>
-<a href="#task-4-change-the-availability-domain" id="toc-task-4-change-the-availability-domain" class="nav-link" data-scroll-target="#task-4-change-the-availability-domain">Task 4 — Change the availability domain</a>
+<a href="#task-6-ground-truth-which-method-recovers-a-known-coefficient" id="toc-task-6-ground-truth-which-method-recovers-a-known-coefficient" class="nav-link" data-scroll-target="#task-6-ground-truth-which-method-recovers-a-known-coefficient">Task 6 — Ground truth: which method recovers a known coefficient?</a>
   <ul class="collapse">
 <li><a href="#your-turn-3" id="toc-your-turn-3" class="nav-link" data-scroll-target="#your-turn-3">Your turn</a></li>
   </ul>
 </li>
-  <li>
-<a href="#task-5-all-six-animals-two-stage" id="toc-task-5-all-six-animals-two-stage" class="nav-link" data-scroll-target="#task-5-all-six-animals-two-stage">Task 5 — All six animals, two-stage</a>
-  <ul class="collapse">
-<li><a href="#your-turn-4" id="toc-your-turn-4" class="nav-link" data-scroll-target="#your-turn-4">Your turn</a></li>
-  </ul>
-</li>
-  <li><a href="#task-6-map-the-prediction" id="toc-task-6-map-the-prediction" class="nav-link" data-scroll-target="#task-6-map-the-prediction">Task 6 — Map the prediction</a></li>
+  <li><a href="#to-hand-in" id="toc-to-hand-in" class="nav-link" data-scroll-target="#to-hand-in">To hand in</a></li>
   <li><a href="#self-check" id="toc-self-check" class="nav-link" data-scroll-target="#self-check">Self-check</a></li>
-  <li><a href="#before-class-8" id="toc-before-class-8" class="nav-link" data-scroll-target="#before-class-8">Before Class 8</a></li>
+  <li><a href="#before-session-8" id="toc-before-session-8" class="nav-link" data-scroll-target="#before-session-8">Before Session 8</a></li>
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/GiulianoColosimo/animtrack-2627/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Classes</li><li class="breadcrumb-item"><a href="../../classes/class-07/slides.html">Class 7 — Resource selection (RSF)</a></li><li class="breadcrumb-item"><a href="../../classes/class-07/exercise.html">Exercise · Fitting an RSF</a></li></ol></nav><div class="quarto-title">
-<h1 class="title">Exercise 7 — Fitting a resource selection function</h1>
-<p class="subtitle lead">Class 7 · Theme 5</p>
+<h1 class="title">Practical 7 — Habitat selection on the move</h1>
+<p class="subtitle lead">Session 7 · Resource selection and step selection functions</p>
 </div>
 
 
@@ -636,7 +657,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 24, 2026</p>
+      <p class="date-modified">September 30, 2026</p>
     </div>
   </div>
     
@@ -645,72 +666,150 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </header><div class="objectives">
-<p><strong>Goals.</strong> Build used and available samples; fit an RSF and read the coefficients as odds ratios; check that estimates stabilise as availability grows; change the availability domain and watch the answer move; fit all six buffalo two-stage; and map the predicted selection surface.</p>
-<p><strong>Time:</strong> ~55 minutes. <strong>Packages:</strong> <code>amt</code>, <code>terra</code>, <code>sf</code>, <code>dplyr</code>, <code>tidyr</code>.</p>
+<p><strong>Goals.</strong> Fit a resource selection function and a step selection function to the same fisher; interpret both with relative selection strength; recover the realised movement kernel; test whether habitat changes how the animal moves; and find out which method recovers a <strong>known</strong> selection coefficient from a simulated animal.</p>
+<p><strong>Time:</strong> ~70 minutes. <strong>Packages:</strong> <code>amt</code>, <code>terra</code>, <code>survival</code>, <code>dplyr</code>, <code>ggplot2</code>.</p>
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jmsigner/amt">amt</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/">terra</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="setup" class="level2"><h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<section id="the-data-fishers-in-new-york" class="level2"><h2 class="anchored" data-anchor-id="the-data-fishers-in-new-york">The data: fishers in New York</h2>
+<p><code>amt</code> ships GPS tracks of four fishers (<em>Pekania pennanti</em>) from LaPoint et al. (2013), with three rasters: land use (GlobCover, 300 m), elevation, and human population density.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">clean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/buffalo_kruger.csv.gz"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">individual.local.identifier</span>,</span>
-<span>            t  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="va">timestamp</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span>,</span>
-<span>            x  <span class="op">=</span> <span class="va">location.long</span>, y <span class="op">=</span> <span class="va">location.lat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">t</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">amt_fisher</span><span class="op">)</span></span>
+<span><span class="va">amt_fisher</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 2</span></span>
+<span><span class="co">#&gt;   name        n</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 Leroy     919</span></span>
+<span><span class="co">#&gt; 2 Lucile   1349</span></span>
+<span><span class="co">#&gt; 3 Lupe     3004</span></span>
+<span><span class="co">#&gt; 4 Ricky T  8958</span></span>
 <span></span>
-<span><span class="va">trk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/track.html">make_track</a></span><span class="op">(</span><span class="va">clean</span>, <span class="va">x</span>, <span class="va">y</span>, <span class="va">t</span>, id <span class="op">=</span> <span class="va">id</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/transform_coords.html">transform_coords</a></span><span class="op">(</span>crs_to <span class="op">=</span> <span class="fl">32736</span><span class="op">)</span></span>
+<span><span class="va">cov</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/get_amt_fisher_covars.html">get_amt_fisher_covars</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Covariates, projected to match the track</span></span>
-<span><span class="va">elev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html">rast</a></span><span class="op">(</span><span class="st">"data/kruger_elevation.tif"</span><span class="op">)</span></span>
-<span><span class="va">terr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/terrain.html">terrain</a></span><span class="op">(</span><span class="va">elev</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"slope"</span>, <span class="st">"TRI"</span><span class="op">)</span>, unit <span class="op">=</span> <span class="st">"degrees"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html">names</a></span><span class="op">(</span><span class="va">terr</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"slope"</span>, <span class="st">"tri"</span><span class="op">)</span></span>
-<span><span class="va">lc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html">rast</a></span><span class="op">(</span><span class="st">"data/kruger_landcover.tif"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">covs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/project.html">project</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">elev</span>, <span class="va">terr</span>, <span class="va">lc</span><span class="op">)</span>, <span class="st">"EPSG:32736"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html">names</a></span><span class="op">(</span><span class="va">covs</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "elevation" "slope"     "tri"       "trees"     "grassland" "shrubs"   </span></span>
-<span><span class="co">#&gt; [7] "cropland"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="co"># GlobCover classes 40-100 and 160-170 are forest</span></span>
+<span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="va">cov</span><span class="op">$</span><span class="va">landuse</span> <span class="op"><a href="https://rspatial.github.io/terra/reference/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">40</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">160</span><span class="op">:</span><span class="fl">170</span><span class="op">)</span></span>
+<span><span class="va">covs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">forest</span>,</span>
+<span>          <span class="fu"><a href="https://rspatial.github.io/terra/reference/resample.html">resample</a></span><span class="op">(</span><span class="va">cov</span><span class="op">$</span><span class="va">elevation</span>, <span class="va">forest</span><span class="op">)</span>,</span>
+<span>          <span class="fu"><a href="https://rspatial.github.io/terra/reference/resample.html">resample</a></span><span class="op">(</span><span class="va">cov</span><span class="op">$</span><span class="va">popden</span>, <span class="va">forest</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html">names</a></span><span class="op">(</span><span class="va">covs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"forest"</span>, <span class="st">"elevation"</span>, <span class="st">"popden"</span><span class="op">)</span></span>
+<span><span class="va">covs</span></span>
+<span><span class="co">#&gt; class       : SpatRaster</span></span>
+<span><span class="co">#&gt; size        : 54, 59, 3  (nrow, ncol, nlyr)</span></span>
+<span><span class="co">#&gt; resolution  : 220, 302  (x, y)</span></span>
+<span><span class="co">#&gt; extent      : 1775801, 1788781, 2398484, 2414792  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs</span></span>
+<span><span class="co">#&gt; source(s)   : memory</span></span>
+<span><span class="co">#&gt; names       : forest,  elevation,      popden</span></span>
+<span><span class="co">#&gt; min values  :  FALSE,  49.067795,   23.639465</span></span>
+<span><span class="co">#&gt; max values  :   TRUE, 147.865814, 4051.015869</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
+<p>We work with <strong>Lupe</strong>, sampled every ~2 minutes, resampled to a regular 10-minute interval.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lupe</span> <span class="op">&lt;-</span> <span class="va">amt_fisher</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">==</span> <span class="st">"Lupe"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/track_resample.html">track_resample</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html">minutes</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, tolerance <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html">minutes</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/filter_min_n_burst.html">filter_min_n_burst</a></span><span class="op">(</span>min_n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">lupe</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 774</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="task-1-a-resource-selection-function" class="level2"><h2 class="anchored" data-anchor-id="task-1-a-resource-selection-function">Task 1 — A resource selection function</h2>
+<p>Used locations versus random points within Lupe’s range (third order).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">rsf_dat</span> <span class="op">&lt;-</span> <span class="va">lupe</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/random_points.html">random_points</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">lupe</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/extract_covariates.html">extract_covariates</a></span><span class="op">(</span><span class="va">covs</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>forest <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">forest</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"other"</span>, <span class="st">"forest"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         elevation_z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/scale.html">scale</a></span><span class="op">(</span><span class="va">elevation</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         popden_z    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/scale.html">scale</a></span><span class="op">(</span><span class="va">popden</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">case_</span>, <span class="fl">1</span>, <span class="fl">5000</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">forest</span> <span class="op">+</span> <span class="va">elevation_z</span> <span class="op">+</span> <span class="va">popden_z</span>,</span>
+<span>           data <span class="op">=</span> <span class="va">rsf_dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span><span class="op">)</span>, weights <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="va">rsf</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt;              Estimate Std. Error z value Pr(&gt;|z|)</span></span>
+<span><span class="co">#&gt; (Intercept)   -12.428      0.577 -21.524    0.000</span></span>
+<span><span class="co">#&gt; forestforest    1.601      0.579   2.767    0.006</span></span>
+<span><span class="co">#&gt; elevation_z     0.245      0.035   6.965    0.000</span></span>
+<span><span class="co">#&gt; popden_z       -0.108      0.037  -2.889    0.004</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="your-turn" class="level3"><h3 class="anchored" data-anchor-id="your-turn">Your turn</h3>
+<p><strong>1a.</strong> Express each coefficient as relative selection strength with a 95% CI.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Project the covariates once, at the start
+<span class="screen-reader-only">Note</span>Solution
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The track is in UTM 36S. <code>amt</code>’s <code><a href="https://rdrr.io/pkg/amt/man/extract_covariates.html">extract_covariates()</a></code> will <strong>not</strong> reproject for you — hand it a raster in EPSG:4326 and every covariate comes back <code>NA</code>, and <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> then fails with <code>no (non-missing) observations</code>. Project once, here, and the rest of the exercise just works.</p>
-</div>
-</div>
-</section><section id="task-1-used-and-available" class="level2"><h2 class="anchored" data-anchor-id="task-1-used-and-available">Task 1 — Used and available</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2026</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">cilla</span> <span class="op">&lt;-</span> <span class="va">trk</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op">==</span> <span class="st">"Cilla"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">rsf_dat</span> <span class="op">&lt;-</span> <span class="va">cilla</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/random_points.html">random_points</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">cilla</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/extract_covariates.html">extract_covariates</a></span><span class="op">(</span><span class="va">covs</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">rsf_dat</span><span class="op">$</span><span class="va">case_</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; FALSE  TRUE </span></span>
-<span><span class="co">#&gt; 35280  3528</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">rsf_dat</span><span class="op">$</span><span class="va">elevation</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">b</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">rsf</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="va">rsf</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html">names</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span>, RSS <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>           lower <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">b</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, upper <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">b</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                      term  RSS lower upper</span></span>
+<span><span class="co">#&gt; forestforest forestforest 4.96  1.60 15.42</span></span>
+<span><span class="co">#&gt; elevation_z   elevation_z 1.28  1.19  1.37</span></span>
+<span><span class="co">#&gt; popden_z         popden_z 0.90  0.83  0.97</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><code><a href="https://rdrr.io/pkg/amt/man/random_points.html">random_points()</a></code> applied to a track draws available points inside that animal’s <strong>MCP</strong> — so this is a <strong>third-order</strong> analysis: where does Cilla go <em>within</em> the range she has already chosen?</p>
-<section id="your-turn" class="level3"><h3 class="anchored" data-anchor-id="your-turn">Your turn</h3>
-<p><strong>1a.</strong> Standardise the covariates and add the infinite weights. <strong>1b.</strong> Why weight the available points so heavily?</p>
+<p>Relative to what is available within her range, Lupe’s locations are several times more likely to fall in forest than in other cover, more likely at higher elevation (per standard deviation), and less likely where people are dense. The intercept is meaningless — it depends only on how many available points you drew.</p>
+</div>
+</div>
+</div>
+</section></section><section id="task-2-the-same-fisher-as-a-step-selection-function" class="level2"><h2 class="anchored" data-anchor-id="task-2-the-same-fisher-as-a-step-selection-function">Task 2 — The same fisher, as a step selection function</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">ssf_dat</span> <span class="op">&lt;-</span> <span class="va">lupe</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/steps.html">steps_by_burst</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/random_steps.html">random_steps</a></span><span class="op">(</span>n_control <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/extract_covariates.html">extract_covariates</a></span><span class="op">(</span><span class="va">covs</span>, where <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>forest_end   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">forest_end</span>,   levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"other"</span>, <span class="st">"forest"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         forest_start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">forest_start</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"other"</span>, <span class="st">"forest"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ssf_dat</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">step_id_</span>, <span class="va">case_</span>, <span class="va">sl_</span>, <span class="va">ta_</span>, <span class="va">forest_end</span>, <span class="va">elevation_end</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html">head</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 11 × 6</span></span>
+<span><span class="co">#&gt;    step_id_ case_   sl_    ta_ forest_end elevation_end</span></span>
+<span><span class="co">#&gt;  *    &lt;dbl&gt; &lt;lgl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;fct&gt;              &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1        3 TRUE   99.7  0.216 forest             105. </span></span>
+<span><span class="co">#&gt;  2        3 FALSE  42.9  2.87  forest             105. </span></span>
+<span><span class="co">#&gt;  3        3 FALSE 172.  -2.70  forest              98.9</span></span>
+<span><span class="co">#&gt;  4        3 FALSE 132.  -1.59  forest              97.9</span></span>
+<span><span class="co">#&gt;  5        3 FALSE  54.7 -0.242 forest             105. </span></span>
+<span><span class="co">#&gt;  6        3 FALSE  19.5 -1.22  forest             105. </span></span>
+<span><span class="co">#&gt;  7        3 FALSE 210.  -1.84  forest              97.8</span></span>
+<span><span class="co">#&gt;  8        3 FALSE  72.2 -0.979 forest             105. </span></span>
+<span><span class="co">#&gt;  9        3 FALSE  86.5 -1.59  forest              97.9</span></span>
+<span><span class="co">#&gt; 10        3 FALSE 353.  -0.341 forest              99.6</span></span>
+<span><span class="co">#&gt; 11        3 FALSE  11.3 -0.199 forest             105.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>One <strong>stratum</strong>: the step Lupe took (<code>case_ = TRUE</code>) and ten she could have taken from the same point at the same moment.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">issf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/fit_clogit.html">fit_issf</a></span><span class="op">(</span><span class="va">ssf_dat</span>,</span>
+<span>                 <span class="va">case_</span> <span class="op">~</span> <span class="va">forest_end</span> <span class="op">+</span> <span class="va">elevation_end</span> <span class="op">+</span> <span class="va">popden_end</span> <span class="op">+</span></span>
+<span>                   <span class="va">sl_</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">sl_</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="va">ta_</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html">strata</a></span><span class="op">(</span><span class="va">step_id_</span><span class="op">)</span>,</span>
+<span>                 model <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="va">issf</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                     coef se(coef) Pr(&gt;|z|)</span></span>
+<span><span class="co">#&gt; forest_endforest  1.4803   0.7378   0.0448</span></span>
+<span><span class="co">#&gt; elevation_end     0.0679   0.0196   0.0005</span></span>
+<span><span class="co">#&gt; popden_end       -0.0010   0.0008   0.2009</span></span>
+<span><span class="co">#&gt; sl_              -0.0001   0.0005   0.8262</span></span>
+<span><span class="co">#&gt; log(sl_)          0.0684   0.0629   0.2771</span></span>
+<span><span class="co">#&gt; cos(ta_)          0.0361   0.0670   0.5895</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="your-turn-1" class="level3"><h3 class="anchored" data-anchor-id="your-turn-1">Your turn</h3>
+<p><strong>2a.</strong> Compute the RSS for a step ending in forest versus other cover, with a confidence interval, using <code><a href="https://rdrr.io/pkg/amt/man/log_rss.html">log_rss()</a></code>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -724,133 +823,77 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">covars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"elevation"</span>, <span class="st">"slope"</span>, <span class="st">"tri"</span>, <span class="st">"trees"</span>, <span class="st">"grassland"</span>, <span class="st">"shrubs"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>forest_end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="st">"forest"</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"other"</span>, <span class="st">"forest"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                 elevation_end <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">mean</a></span><span class="op">(</span><span class="va">ssf_dat</span><span class="op">$</span><span class="va">elevation_end</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                 popden_end    <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">mean</a></span><span class="op">(</span><span class="va">ssf_dat</span><span class="op">$</span><span class="va">popden_end</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                 sl_ <span class="op">=</span> <span class="fl">100</span>, ta_ <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="va">x1</span></span>
+<span><span class="va">x2</span><span class="op">$</span><span class="va">forest_end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="st">"other"</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"other"</span>, <span class="st">"forest"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">rsf_dat</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">if_all</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">covars</span><span class="op">)</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">covars</span><span class="op">)</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/scale.html">scale</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>         w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">case_</span>, <span class="fl">1</span>, <span class="fl">5000</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 38808</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">rss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/log_rss.html">log_rss</a></span><span class="op">(</span><span class="va">issf</span>, <span class="va">x1</span>, <span class="va">x2</span>, ci <span class="op">=</span> <span class="st">"se"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">rss</span><span class="op">$</span><span class="va">df</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"log_rss"</span>, <span class="st">"lwr"</span>, <span class="st">"upr"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   log_rss      lwr      upr</span></span>
+<span><span class="co">#&gt; 1 4.39433 1.034846 18.65991</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The used–available design is really an <strong>inhomogeneous Poisson point process</strong>, and logistic regression is a computational device for fitting it. The equivalence is exact only in the limit of infinitely many, infinitely down-weighted available points. Giving the available points a large weight (here 5,000) makes the logistic coefficients converge to the correct point-process coefficients.</p>
-<p>Standardising makes the coefficients comparable across covariates measured in different units — “per one standard deviation” — and improves the numerical conditioning of the fit.</p>
+<p>Given two equally reachable destinations, identical in elevation and population density, Lupe is roughly four times as likely to step into forest. The interval is wide: forest covers most of this landscape, so there are few strata where forest and non-forest are both on offer — a reminder that selection can only be estimated where there is <strong>choice</strong>.</p>
 </div>
 </div>
 </div>
-</section></section><section id="task-2-fit-and-interpret" class="level2"><h2 class="anchored" data-anchor-id="task-2-fit-and-interpret">Task 2 — Fit and interpret</h2>
+</section></section><section id="task-3-the-realised-movement-kernel" class="level2"><h2 class="anchored" data-anchor-id="task-3-the-realised-movement-kernel">Task 3 — The realised movement kernel</h2>
+<p>The control steps were drawn from a <em>tentative</em> gamma and von Mises fitted to the observed steps. The movement terms in the model correct them.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">elevation</span> <span class="op">+</span> <span class="va">slope</span> <span class="op">+</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">trees</span> <span class="op">+</span> <span class="va">grassland</span> <span class="op">+</span> <span class="va">shrubs</span>,</span>
-<span>           data <span class="op">=</span> <span class="va">d</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span><span class="op">)</span>, weights <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">upd_sl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/update_distr_man.html">update_gamma</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/amt/man/get_distr.html">sl_distr</a></span><span class="op">(</span><span class="va">ssf_dat</span><span class="op">)</span>,</span>
+<span>                       beta_sl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">issf</span><span class="op">)</span><span class="op">[[</span><span class="st">"sl_"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                       beta_log_sl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">issf</span><span class="op">)</span><span class="op">[[</span><span class="st">"log(sl_)"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">upd_ta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/update_distr_man.html">update_vonmises</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/amt/man/get_distr.html">ta_distr</a></span><span class="op">(</span><span class="va">ssf_dat</span><span class="op">)</span>, beta_cos_ta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">issf</span><span class="op">)</span><span class="op">[[</span><span class="st">"cos(ta_)"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Estimate Std. Error   z value Pr(&gt;|z|)</span></span>
-<span><span class="co">#&gt; (Intercept) -10.8483     0.0173 -628.3246   0.0000</span></span>
-<span><span class="co">#&gt; elevation     0.1425     0.0210    6.7763   0.0000</span></span>
-<span><span class="co">#&gt; slope         0.2920     0.0218   13.4035   0.0000</span></span>
-<span><span class="co">#&gt; tri          -0.2102     0.0297   -7.0803   0.0000</span></span>
-<span><span class="co">#&gt; trees        -0.0447     0.0511   -0.8751   0.3815</span></span>
-<span><span class="co">#&gt; grassland    -0.4771     0.0896   -5.3264   0.0000</span></span>
-<span><span class="co">#&gt; shrubs       -0.2962     0.0528   -5.6118   0.0000</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  quantity  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mean step (m)"</span>, <span class="st">"von Mises kappa"</span><span class="op">)</span>,</span>
+<span>  tentative <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/prod.html">prod</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/amt/man/get_distr.html">sl_distr</a></span><span class="op">(</span><span class="va">ssf_dat</span><span class="op">)</span><span class="op">$</span><span class="va">params</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/amt/man/get_distr.html">ta_distr</a></span><span class="op">(</span><span class="va">ssf_dat</span><span class="op">)</span><span class="op">$</span><span class="va">params</span><span class="op">$</span><span class="va">kappa</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  realised  <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/prod.html">prod</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">upd_sl</span><span class="op">$</span><span class="va">params</span><span class="op">)</span><span class="op">)</span>, <span class="va">upd_ta</span><span class="op">$</span><span class="va">params</span><span class="op">$</span><span class="va">kappa</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt;          quantity tentative realised</span></span>
+<span><span class="co">#&gt; 1   mean step (m)    147.26   154.38</span></span>
+<span><span class="co">#&gt; 2 von Mises kappa      0.34     0.38</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="your-turn-1" class="level3"><h3 class="anchored" data-anchor-id="your-turn-1">Your turn</h3>
-<p><strong>2a.</strong> Express each coefficient as an odds ratio with a confidence interval. <strong>2b.</strong> Which covariate has the strongest effect, and in which direction?</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
+<span class="screen-reader-only">Note</span>Reading it
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<p>Here the two kernels are close, and the movement coefficients are not significant: once selection is accounted for, Lupe’s movement is well described by the distributions the controls were drawn from. When they differ, the realised kernel is the one to use for prediction or simulation — it is the animal’s movement with the habitat effect removed.</p>
+</div>
+</div>
+</div>
+</section><section id="task-4-does-habitat-change-how-she-moves" class="level2"><h2 class="anchored" data-anchor-id="task-4-does-habitat-change-how-she-moves">Task 4 — Does habitat change how she moves?</h2>
+<p>Interact the movement terms with the habitat at the <strong>start</strong> of the step. First the obvious candidate, forest:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
-<span>  term <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>,</span>
-<span>  se   <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">!=</span> <span class="st">"(Intercept)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
-<span>    RSS   <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">beta</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,                       <span class="co"># relative selection strength</span></span>
-<span>    lower <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>    upper <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>    beta  <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="va">beta</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">beta</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">res</span></span>
-<span><span class="co">#&gt;                term   beta         se  RSS lower upper</span></span>
-<span><span class="co">#&gt; grassland grassland -0.477 0.08958078 0.62  0.52  0.74</span></span>
-<span><span class="co">#&gt; shrubs       shrubs -0.296 0.05277846 0.74  0.67  0.82</span></span>
-<span><span class="co">#&gt; slope         slope  0.292 0.02178613 1.34  1.28  1.40</span></span>
-<span><span class="co">#&gt; tri             tri -0.210 0.02968249 0.81  0.76  0.86</span></span>
-<span><span class="co">#&gt; elevation elevation  0.143 0.02103398 1.15  1.11  1.20</span></span>
-<span><span class="co">#&gt; trees         trees -0.045 0.05109606 0.96  0.87  1.06</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span>, <span class="op">]</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">beta</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="st">"#1f6f78"</span>, cex <span class="op">=</span> <span class="fl">1.3</span>,</span>
-<span>     xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">beta</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">r</span><span class="op">$</span><span class="va">se</span>, <span class="va">r</span><span class="op">$</span><span class="va">beta</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">r</span><span class="op">$</span><span class="va">se</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>     yaxt <span class="op">=</span> <span class="st">"n"</span>, ylab <span class="op">=</span> <span class="st">""</span>, xlab <span class="op">=</span> <span class="st">"Coefficient (log scale, per 1 SD)"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Cilla: third-order selection"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/segments.html">segments</a></span><span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">beta</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">r</span><span class="op">$</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>         <span class="va">r</span><span class="op">$</span><span class="va">beta</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">r</span><span class="op">$</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"#1f6f78"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/axis.html">axis</a></span><span class="op">(</span><span class="fl">2</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span>, labels <span class="op">=</span> <span class="va">r</span><span class="op">$</span><span class="va">term</span>, las <span class="op">=</span> <span class="fl">1</span>, cex.axis <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fl">0</span>, col <span class="op">=</span> <span class="st">"firebrick"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="624"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Read the table as <strong>relative selection strength</strong>: <code>RSS = exp(beta)</code> is the factor by which the relative probability of use multiplies for a one-standard- deviation increase in that covariate, holding the others fixed.</p>
-<p>An <code>RSS</code> of 1 means no selection; the confidence interval tells you whether you can distinguish it from 1.</p>
-<p>Note the <strong>intercept is not interpretable</strong>. It absorbs the arbitrary ratio of available to used points — change <code>n</code> and the intercept moves, while the slopes do not. That is precisely why only <em>relative</em> statements are licensed.</p>
-</div>
-</div>
-</div>
-</section></section><section id="task-3-does-availability-sample-size-matter" class="level2"><h2 class="anchored" data-anchor-id="task-3-does-availability-sample-size-matter">Task 3 — Does availability sample size matter?</h2>
-<p>The number of available points is your choice. The estimates should stop moving once you have drawn enough.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">multipliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">25</span>, <span class="fl">50</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">stab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">multipliers</span>, <span class="kw">function</span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">dd</span> <span class="op">&lt;-</span> <span class="va">cilla</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/amt/man/random_points.html">random_points</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">cilla</span><span class="op">)</span> <span class="op">*</span> <span class="va">m</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/amt/man/extract_covariates.html">extract_covariates</a></span><span class="op">(</span><span class="va">covs</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">if_all</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">covars</span><span class="op">)</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">covars</span><span class="op">)</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/scale.html">scale</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>           w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">case_</span>, <span class="fl">1</span>, <span class="fl">5000</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">elevation</span> <span class="op">+</span> <span class="va">slope</span> <span class="op">+</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">trees</span> <span class="op">+</span> <span class="va">grassland</span> <span class="op">+</span> <span class="va">shrubs</span>,</span>
-<span>           data <span class="op">=</span> <span class="va">dd</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span><span class="op">)</span>, weights <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="va">m</span>,</span>
-<span>             term <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>             beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>             se   <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">stab</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">mult</span>, <span class="va">term</span>, <span class="va">beta</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">mult</span>, values_from <span class="op">=</span> <span class="va">beta</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="op">-</span><span class="va">term</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="va">z</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 6</span></span>
-<span><span class="co">#&gt;   term         `1`    `5`   `10`   `25`   `50`</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 elevation  0.171  0.128  0.14   0.128  0.136</span></span>
-<span><span class="co">#&gt; 2 slope      0.374  0.268  0.266  0.272  0.265</span></span>
-<span><span class="co">#&gt; 3 tri       -0.24  -0.152 -0.176 -0.191 -0.187</span></span>
-<span><span class="co">#&gt; 4 trees     -0.1   -0.045 -0.089 -0.088 -0.082</span></span>
-<span><span class="co">#&gt; 5 grassland -0.613 -0.444 -0.536 -0.524 -0.535</span></span>
-<span><span class="co">#&gt; 6 shrubs    -0.405 -0.273 -0.322 -0.316 -0.33</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">issf_forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/fit_clogit.html">fit_issf</a></span><span class="op">(</span><span class="va">ssf_dat</span>,</span>
+<span>                        <span class="va">case_</span> <span class="op">~</span> <span class="va">forest_end</span> <span class="op">+</span> <span class="va">elevation_end</span> <span class="op">+</span> <span class="va">popden_end</span> <span class="op">+</span></span>
+<span>                          <span class="va">sl_</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">sl_</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="va">ta_</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                          <span class="va">sl_</span><span class="op">:</span><span class="va">forest_start</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="va">ta_</span><span class="op">)</span><span class="op">:</span><span class="va">forest_start</span> <span class="op">+</span></span>
+<span>                          <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html">strata</a></span><span class="op">(</span><span class="va">step_id_</span><span class="op">)</span>,</span>
+<span>                        model <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="va">issf_forest</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                                coef    exp(coef) Pr(&gt;|z|)</span></span>
+<span><span class="co">#&gt; forest_endforest              1.284 3.611000e+00    0.079</span></span>
+<span><span class="co">#&gt; elevation_end                 0.067 1.070000e+00    0.001</span></span>
+<span><span class="co">#&gt; popden_end                   -0.001 9.990000e-01    0.209</span></span>
+<span><span class="co">#&gt; sl_                           0.105 1.111000e+00    0.994</span></span>
+<span><span class="co">#&gt; log(sl_)                      0.069 1.072000e+00    0.271</span></span>
+<span><span class="co">#&gt; cos(ta_)                     25.751 1.525347e+11    0.993</span></span>
+<span><span class="co">#&gt; sl_:forest_startforest       -0.106 9.000000e-01    0.994</span></span>
+<span><span class="co">#&gt; cos(ta_):forest_startforest -25.721 0.000000e+00    0.993</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="your-turn-2" class="level3"><h3 class="anchored" data-anchor-id="your-turn-2">Your turn</h3>
-<p><strong>3a.</strong> Have the coefficients stabilised? <strong>3b.</strong> What happens to the standard errors?</p>
+<p><strong>4a.</strong> Look at the standard errors of the two interaction terms. What went wrong?</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -863,85 +906,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">terms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html">unique</a></span><span class="op">(</span><span class="va">stab</span><span class="op">$</span><span class="va">term</span><span class="op">)</span></span>
-<span><span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">terms</span><span class="op">)</span>, <span class="st">"Dark 3"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">multipliers</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">stab</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"n"</span>, log <span class="op">=</span> <span class="st">"x"</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Available points (× n used)"</span>, ylab <span class="op">=</span> <span class="st">"Coefficient"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Estimates stabilise"</span><span class="op">)</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">terms</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">z</span> <span class="op">&lt;-</span> <span class="va">stab</span><span class="op">[</span><span class="va">stab</span><span class="op">$</span><span class="va">term</span> <span class="op">==</span> <span class="va">terms</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">]</span></span>
-<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/lines.html">lines</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">mult</span>, <span class="va">z</span><span class="op">$</span><span class="va">beta</span>, col <span class="op">=</span> <span class="va">cols</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, lwd <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"b"</span>, pch <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"grey50"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"bottomright"</span>, <span class="va">terms</span>, col <span class="op">=</span> <span class="va">cols</span>, lwd <span class="op">=</span> <span class="fl">2</span>, bty <span class="op">=</span> <span class="st">"n"</span>, cex <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">multipliers</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">stab</span><span class="op">$</span><span class="va">se</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"n"</span>, log <span class="op">=</span> <span class="st">"xy"</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Available points (× n used)"</span>, ylab <span class="op">=</span> <span class="st">"Standard error"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"SEs shrink without limit"</span><span class="op">)</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">terms</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">z</span> <span class="op">&lt;-</span> <span class="va">stab</span><span class="op">[</span><span class="va">stab</span><span class="op">$</span><span class="va">term</span> <span class="op">==</span> <span class="va">terms</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">]</span></span>
-<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/lines.html">lines</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">mult</span>, <span class="va">z</span><span class="op">$</span><span class="va">se</span>, col <span class="op">=</span> <span class="va">cols</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, lwd <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"b"</span>, pch <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="816"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>The <strong>coefficients</strong> settle down: past roughly 10× the used sample they barely move, which is the check you should always run and report.</p>
-<p>The <strong>standard errors keep shrinking</strong> as you add available points — and this is the crucial asymmetry. Availability points carry information about the <em>landscape</em>, not about the <em>animal</em>. Drawing more of them makes your estimate of what was available more precise, so the SEs fall, but you have not observed the animal any more closely.</p>
-<p>That is why <strong>p-values in used–available designs are close to meaningless</strong>: you choose the sample size, so you choose the p-value. Report effect sizes, confidence intervals, consistency across individuals, and validation.</p>
-</div>
-</div>
-</div>
-</section></section><section id="task-4-change-the-availability-domain" class="level2"><h2 class="anchored" data-anchor-id="task-4-change-the-availability-domain">Task 4 — Change the availability domain</h2>
-<p>Same animal, same covariates, different definition of “available”.</p>
+<p>Standard errors in the tens or thousands mean the model <strong>cannot estimate</strong> those terms. Count the information:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Third order: within Cilla's own MCP (what we did above)</span></span>
-<span><span class="va">third</span> <span class="op">&lt;-</span> <span class="va">d</span></span>
-<span></span>
-<span><span class="co"># Second order: within the MCP of ALL six animals — the population's range</span></span>
-<span><span class="va">pop_mcp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/hrest.html">hr_mcp</a></span><span class="op">(</span><span class="va">trk</span>, levels <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">second</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/random_points.html">random_points</a></span><span class="op">(</span><span class="va">pop_mcp</span>, n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">cilla</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span>, presence <span class="op">=</span> <span class="va">cilla</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/extract_covariates.html">extract_covariates</a></span><span class="op">(</span><span class="va">covs</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">if_all</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">covars</span><span class="op">)</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">covars</span><span class="op">)</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/scale.html">scale</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>         w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">case_</span>, <span class="fl">1</span>, <span class="fl">5000</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># How different are the two domains?</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>cilla_mcp_km2 <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/amt/man/hr_area.html">hr_area</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/amt/man/hrest.html">hr_mcp</a></span><span class="op">(</span><span class="va">cilla</span>, levels <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">area</span> <span class="op">/</span> <span class="fl">1e6</span><span class="op">)</span>,</span>
-<span>  population_mcp_km2 <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/amt/man/hr_area.html">hr_area</a></span><span class="op">(</span><span class="va">pop_mcp</span><span class="op">)</span><span class="op">$</span><span class="va">area</span> <span class="op">/</span> <span class="fl">1e6</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      cilla_mcp_km2 population_mcp_km2 </span></span>
-<span><span class="co">#&gt;                309               2939</span></span>
-<span></span>
-<span><span class="va">f3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">elevation</span> <span class="op">+</span> <span class="va">slope</span> <span class="op">+</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">trees</span> <span class="op">+</span> <span class="va">grassland</span> <span class="op">+</span> <span class="va">shrubs</span>,</span>
-<span>          data <span class="op">=</span> <span class="va">third</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span><span class="op">)</span>, weights <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span>
-<span><span class="va">f2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">elevation</span> <span class="op">+</span> <span class="va">slope</span> <span class="op">+</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">trees</span> <span class="op">+</span> <span class="va">grassland</span> <span class="op">+</span> <span class="va">shrubs</span>,</span>
-<span>          data <span class="op">=</span> <span class="va">second</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span><span class="op">)</span>, weights <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
-<span>  term <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">f3</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>  third_order  <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">f3</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>  second_order <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">f2</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt;                term third_order second_order</span></span>
-<span><span class="co">#&gt; elevation elevation       0.143       -1.290</span></span>
-<span><span class="co">#&gt; slope         slope       0.292        0.120</span></span>
-<span><span class="co">#&gt; tri             tri      -0.210        0.336</span></span>
-<span><span class="co">#&gt; trees         trees      -0.045        0.381</span></span>
-<span><span class="co">#&gt; grassland grassland      -0.477        0.224</span></span>
-<span><span class="co">#&gt; shrubs       shrubs      -0.296       -0.414</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ssf_dat</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">case_</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">forest_start</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span><span class="co">#&gt;   forest_start     n</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;        &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 other            2</span></span>
+<span><span class="co">#&gt; 2 forest         519</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="your-turn-3" class="level3"><h3 class="anchored" data-anchor-id="your-turn-3">Your turn</h3>
-<p><strong>4a.</strong> Do any coefficients change sign or magnitude substantially? <strong>4b.</strong> Which analysis is “right”?</p>
+<p>Almost every observed step starts in forest. With a couple of non-forest starts, there is nothing to compare: the likelihood is flat and the optimiser wanders off towards infinity (quasi-complete separation). The coefficient is not “huge”; it is undefined.</p>
+<p>Always check that the covariate you interact with <strong>varies</strong> among observed steps before you interpret an interaction.</p>
+</div>
+</div>
+</div>
+<p>Population density does vary. Standardise it and interact it with both step terms (they define the gamma distribution together):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ssf_dat</span> <span class="op">&lt;-</span> <span class="va">ssf_dat</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>pop_start_z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/scale.html">scale</a></span><span class="op">(</span><span class="va">popden_start</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">issf_pop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/fit_clogit.html">fit_issf</a></span><span class="op">(</span><span class="va">ssf_dat</span>,</span>
+<span>                     <span class="va">case_</span> <span class="op">~</span> <span class="va">forest_end</span> <span class="op">+</span> <span class="va">elevation_end</span> <span class="op">+</span> <span class="va">popden_end</span> <span class="op">+</span></span>
+<span>                       <span class="va">sl_</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">sl_</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="va">ta_</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                       <span class="va">sl_</span><span class="op">:</span><span class="va">pop_start_z</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">sl_</span><span class="op">)</span><span class="op">:</span><span class="va">pop_start_z</span> <span class="op">+</span></span>
+<span>                       <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html">strata</a></span><span class="op">(</span><span class="va">step_id_</span><span class="op">)</span>,</span>
+<span>                     model <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="va">issf_pop</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                         coef se(coef) Pr(&gt;|z|)</span></span>
+<span><span class="co">#&gt; forest_endforest      1.4758   0.7385   0.0457</span></span>
+<span><span class="co">#&gt; elevation_end         0.0677   0.0195   0.0005</span></span>
+<span><span class="co">#&gt; popden_end           -0.0010   0.0008   0.2014</span></span>
+<span><span class="co">#&gt; sl_                  -0.0003   0.0006   0.5710</span></span>
+<span><span class="co">#&gt; log(sl_)              0.0848   0.0647   0.1901</span></span>
+<span><span class="co">#&gt; cos(ta_)              0.0358   0.0670   0.5935</span></span>
+<span><span class="co">#&gt; sl_:pop_start_z      -0.0015   0.0007   0.0270</span></span>
+<span><span class="co">#&gt; log(sl_):pop_start_z  0.1174   0.0757   0.1209</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>4b.</strong> The two interaction terms work together. Translate them into Lupe’s mean step length where population density is low (−1 SD) and high (+1 SD).</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -950,88 +952,71 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">f3</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>                  third <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">f3</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, second <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">f2</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">cmp</span><span class="op">$</span><span class="va">third</span>, <span class="va">cmp</span><span class="op">$</span><span class="va">second</span>, pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="st">"#1f6f78"</span>, cex <span class="op">=</span> <span class="fl">1.4</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Third order (within own MCP)"</span>,</span>
-<span>     ylab <span class="op">=</span> <span class="st">"Second order (within population range)"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"The domain changes the answer"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, col <span class="op">=</span> <span class="st">"grey50"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">0</span>, v <span class="op">=</span> <span class="fl">0</span>, col <span class="op">=</span> <span class="st">"firebrick"</span>, lty <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html">text</a></span><span class="op">(</span><span class="va">cmp</span><span class="op">$</span><span class="va">third</span>, <span class="va">cmp</span><span class="op">$</span><span class="va">second</span>, <span class="va">cmp</span><span class="op">$</span><span class="va">term</span>, pos <span class="op">=</span> <span class="fl">3</span>, cex <span class="op">=</span> <span class="fl">0.65</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="624"></p>
-</figure>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">issf_pop</span><span class="op">)</span></span>
+<span><span class="va">kernel_at</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/update_distr_man.html">update_gamma</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/amt/man/get_distr.html">sl_distr</a></span><span class="op">(</span><span class="va">ssf_dat</span><span class="op">)</span>,</span>
+<span>                    beta_sl     <span class="op">=</span> <span class="va">b</span><span class="op">[[</span><span class="st">"sl_"</span><span class="op">]</span><span class="op">]</span>      <span class="op">+</span> <span class="va">z</span> <span class="op">*</span> <span class="va">b</span><span class="op">[[</span><span class="st">"sl_:pop_start_z"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                    beta_log_sl <span class="op">=</span> <span class="va">b</span><span class="op">[[</span><span class="st">"log(sl_)"</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">z</span> <span class="op">*</span> <span class="va">b</span><span class="op">[[</span><span class="st">"log(sl_):pop_start_z"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>popden_start_sd <span class="op">=</span> <span class="va">z</span>, mean_step_m <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="va">g</span><span class="op">$</span><span class="va">params</span><span class="op">$</span><span class="va">shape</span> <span class="op">*</span> <span class="va">g</span><span class="op">$</span><span class="va">params</span><span class="op">$</span><span class="va">scale</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="va">kernel_at</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   popden_start_sd mean_step_m</span></span>
+<span><span class="co">#&gt; 1              -1         170</span></span>
+<span><span class="co">#&gt; 2               0         152</span></span>
+<span><span class="co">#&gt; 3               1         141</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Where more people live, Lupe takes shorter steps — she moves more slowly through the populated parts of her range. The effect is modest, and one animal is one animal; but this is exactly the kind of <strong>habitat-mediated movement</strong> an RSF cannot express and an iSSA can.</p>
+<p>Always interpret step-length interactions through the implied distribution, never from one coefficient: <code>sl_</code> and <code>log(sl_)</code> change the scale and shape together, and only their combination has a meaning.</p>
 </div>
 </div>
 </div>
-<p>Points off the dashed 1:1 line are covariates whose apparent importance depends on the domain; points in the upper-left or lower-right quadrants have <strong>changed sign</strong> between the two analyses.</p>
-<p><strong>Neither is “right”.</strong> They answer different questions:</p>
-<ul>
-<li>
-<em>Second order</em> — given the whole area the population occupies, where does Cilla place her range?</li>
-<li>
-<em>Third order</em> — given the range she has already established, where within it does she go?</li>
-</ul>
-<p>A covariate can drive the first decision and be irrelevant to the second, or act in opposite directions at the two scales — an animal may settle in a grass-rich part of the park and then, within it, seek out the scarce shade.</p>
-<p><strong>The obligation on you</strong> is to state the order and the availability domain explicitly, in the abstract, not buried in the methods. A habitat-selection result without that information cannot be interpreted.</p>
+</section></section><section id="task-5-is-there-enough-contrast" class="level2"><h2 class="anchored" data-anchor-id="task-5-is-there-enough-contrast">Task 5 — Is there enough contrast?</h2>
+<p>A step selection function can only detect selection for a covariate that <strong>varies within one step’s reach</strong>. The land-use raster has 300 m cells.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">same_cell</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/xyCellFrom.html">cellFromXY</a></span><span class="op">(</span><span class="va">covs</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">ssf_dat</span><span class="op">$</span><span class="va">x1_</span>, <span class="va">ssf_dat</span><span class="op">$</span><span class="va">y1_</span><span class="op">)</span><span class="op">)</span> <span class="op">==</span></span>
+<span>             <span class="fu"><a href="https://rspatial.github.io/terra/reference/xyCellFrom.html">cellFromXY</a></span><span class="op">(</span><span class="va">covs</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">ssf_dat</span><span class="op">$</span><span class="va">x2_</span>, <span class="va">ssf_dat</span><span class="op">$</span><span class="va">y2_</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>median_step_m <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">median</a></span><span class="op">(</span><span class="va">ssf_dat</span><span class="op">$</span><span class="va">sl_</span><span class="op">[</span><span class="va">ssf_dat</span><span class="op">$</span><span class="va">case_</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  share_in_start_cell <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">mean</a></span><span class="op">(</span><span class="va">same_cell</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       median_step_m share_in_start_cell </span></span>
+<span><span class="co">#&gt;            128.3752              0.4800</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>This also resolves an apparent contradiction with Class 5
+<span class="screen-reader-only">Important</span>Match covariate grain to step length
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In Class 5 we compared used points against points drawn from the convex hull of <strong>all six animals</strong> and found buffalo used grassland about 1.6× more than it was available — apparent <strong>selection</strong>.</p>
-<p>Here, within <strong>Cilla’s own MCP</strong>, the grassland coefficient is <em>negative</em>.</p>
-<p>Both are correct, and together they tell a coherent story: buffalo place their ranges in the grassy parts of the landscape (a second-order preference), and then, within a range that is already overwhelmingly grassland, they move towards the scarcer other things it contains.</p>
-<p>The availability domain for Cilla is 309 km²; for the population it is 2,939 km² — nearly ten times larger, and a very different menu. Reporting the third-order coefficient as “buffalo avoid grassland” would be a serious misreading.</p>
+<p>About half the control steps never leave the cell they started in: for those strata the land-use value is identical for the used step and its alternatives, and they carry no information about forest selection. Elevation, on a much finer grid, is estimated far more precisely. When covariates are coarser than your steps, either get finer covariates or ask a coarser question — never “solve” it by quietly making the steps longer.</p>
 </div>
 </div>
-</div>
-</div>
-</div>
-</section></section><section id="task-5-all-six-animals-two-stage" class="level2"><h2 class="anchored" data-anchor-id="task-5-all-six-animals-two-stage">Task 5 — All six animals, two-stage</h2>
+</section><section id="task-6-ground-truth-which-method-recovers-a-known-coefficient" class="level2"><h2 class="anchored" data-anchor-id="task-6-ground-truth-which-method-recovers-a-known-coefficient">Task 6 — Ground truth: which method recovers a known coefficient?</h2>
+<p><code>R/simulators.R</code> contains <code>simulate_ssf()</code>: an animal that moves with a fixed kernel and, at each step, <strong>chooses</strong> among 30 possible next steps with probability proportional to <span class="math inline">\(\exp(\beta \times \text{habitat})\)</span>. That is exactly the process an SSF assumes. We set <span class="math inline">\(\beta = 1.5\)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_one</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">animal</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">a</span> <span class="op">&lt;-</span> <span class="va">trk</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op">==</span> <span class="va">animal</span><span class="op">)</span></span>
-<span>  <span class="va">dd</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/amt/man/random_points.html">random_points</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/amt/man/extract_covariates.html">extract_covariates</a></span><span class="op">(</span><span class="va">covs</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">if_all</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">covars</span><span class="op">)</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">all_of</a></span><span class="op">(</span><span class="va">covars</span><span class="op">)</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/scale.html">scale</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>           w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">case_</span>, <span class="fl">1</span>, <span class="fl">5000</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">elevation</span> <span class="op">+</span> <span class="va">slope</span> <span class="op">+</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">trees</span> <span class="op">+</span> <span class="va">grassland</span> <span class="op">+</span> <span class="va">shrubs</span>,</span>
-<span>           data <span class="op">=</span> <span class="va">dd</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span><span class="op">)</span>, weights <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">animal</span>, term <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html">unique</a></span><span class="op">(</span><span class="va">trk</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
-<span><span class="va">per_animal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">ids</span>, <span class="va">fit_one</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">per_animal</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">id</span>, values_from <span class="op">=</span> <span class="va">beta</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="op">-</span><span class="va">term</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="va">z</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 7</span></span>
-<span><span class="co">#&gt;   term      Queen  Gabs Cilla Mvubu  Toni Pepper</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 elevation -0.79  0.14  0.13  0.34 -0.01  -0.28</span></span>
-<span><span class="co">#&gt; 2 slope     -0.11  0.2   0.28  0.44 -0.44   0.06</span></span>
-<span><span class="co">#&gt; 3 tri        0    -0.29 -0.2  -0.44 -1.41  -0.03</span></span>
-<span><span class="co">#&gt; 4 trees     -0.23 -0.37 -0.08 -0.34  0.05   0.35</span></span>
-<span><span class="co">#&gt; 5 grassland -0.35 -0.99 -0.55 -1.05  0.18  -0.48</span></span>
-<span><span class="co">#&gt; 6 shrubs    -0.64 -0.42 -0.35 -0.36  0.56  -1.02</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">"R/simulators.R"</span><span class="op">)</span></span>
+<span><span class="va">hab</span> <span class="op">&lt;-</span> <span class="fu">simulate_habitat</span><span class="op">(</span><span class="op">)</span>                         <span class="co"># a smooth, standardised habitat surface</span></span>
+<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">simulate_ssf</span><span class="op">(</span><span class="fl">1500</span>, <span class="va">hab</span>, beta <span class="op">=</span> <span class="fl">1.5</span>, start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sim</span><span class="op">$</span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="st">"2026-01-01"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">step</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">600</span></span>
+<span><span class="va">sim_trk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/track.html">make_track</a></span><span class="op">(</span><span class="va">sim</span>, <span class="va">x</span>, <span class="va">y</span>, <span class="va">t</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="your-turn-4" class="level3"><h3 class="anchored" data-anchor-id="your-turn-4">Your turn</h3>
-<p><strong>5a.</strong> Summarise across individuals: mean coefficient, SE, and a t-test against zero. <strong>5b.</strong> Are the animals consistent?</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">hab</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fl">50</span>, <span class="st">"Greens"</span>, rev <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, main <span class="op">=</span> <span class="st">"Simulated habitat and animal"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/lines.html">lines</a></span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">x</span>, <span class="va">sim</span><span class="op">$</span><span class="va">y</span>, col <span class="op">=</span> <span class="st">"firebrick"</span>, lwd <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="your-turn-3" class="level3"><h3 class="anchored" data-anchor-id="your-turn-3">Your turn</h3>
+<p><strong>6a.</strong> Fit an SSF and an RSF to the simulated animal. Which recovers <span class="math inline">\(\beta = 1.5\)</span>? <strong>6b.</strong> Repeat with <span class="math inline">\(\beta = 0\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1045,134 +1030,76 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pop_level</span> <span class="op">&lt;-</span> <span class="va">per_animal</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">term</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span></span>
-<span>    mean_beta <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">mean</a></span><span class="op">(</span><span class="va">beta</span><span class="op">)</span>,</span>
-<span>    se        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">beta</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    t         <span class="op">=</span> <span class="va">mean_beta</span> <span class="op">/</span> <span class="va">se</span>,</span>
-<span>    p         <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/TDist.html">pt</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span>, df <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>,</span>
-<span>    n_positive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>,</span>
-<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">mean_beta</span>, <span class="va">se</span>, <span class="va">t</span><span class="op">)</span>, \<span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="va">z</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="va">p</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">mean_beta</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">pop_level</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 6</span></span>
-<span><span class="co">#&gt;   term      mean_beta    se      t      p n_positive</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;      &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1 grassland    -0.541 0.184 -2.94  0.0322          1</span></span>
-<span><span class="co">#&gt; 2 tri          -0.394 0.213 -1.85  0.123           0</span></span>
-<span><span class="co">#&gt; 3 shrubs       -0.37  0.213 -1.73  0.143           1</span></span>
-<span><span class="co">#&gt; 4 trees        -0.103 0.112 -0.919 0.400           2</span></span>
-<span><span class="co">#&gt; 5 elevation    -0.077 0.166 -0.466 0.661           3</span></span>
-<span><span class="co">#&gt; 6 slope         0.072 0.127  0.568 0.594           4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">compare_methods</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">beta</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">simulate_ssf</span><span class="op">(</span><span class="fl">1500</span>, <span class="va">hab</span>, beta <span class="op">=</span> <span class="va">beta</span>, start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">s</span><span class="op">$</span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="st">"2026-01-01"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">s</span><span class="op">$</span><span class="va">step</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">600</span></span>
+<span>  <span class="va">tr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/track.html">make_track</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">x</span>, <span class="va">y</span>, <span class="va">t</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
+<span>  <span class="va">ssf</span> <span class="op">&lt;-</span> <span class="va">tr</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/steps.html">steps</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/random_steps.html">random_steps</a></span><span class="op">(</span>n_control <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/extract_covariates.html">extract_covariates</a></span><span class="op">(</span><span class="va">hab</span>, where <span class="op">=</span> <span class="st">"end"</span><span class="op">)</span></span>
+<span>  <span class="va">m_ssf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/fit_clogit.html">fit_issf</a></span><span class="op">(</span><span class="va">ssf</span>, <span class="va">case_</span> <span class="op">~</span> <span class="va">habitat</span> <span class="op">+</span> <span class="va">sl_</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">sl_</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">cos</a></span><span class="op">(</span><span class="va">ta_</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html">strata</a></span><span class="op">(</span><span class="va">step_id_</span><span class="op">)</span>, model <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="va">rsf</span> <span class="op">&lt;-</span> <span class="va">tr</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/random_points.html">random_points</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html">nrow</a></span><span class="op">(</span><span class="va">tr</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/extract_covariates.html">extract_covariates</a></span><span class="op">(</span><span class="va">hab</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>w <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">case_</span>, <span class="fl">1</span>, <span class="fl">5000</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">m_rsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">habitat</span>, data <span class="op">=</span> <span class="va">rsf</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span><span class="op">)</span>, weights <span class="op">=</span> <span class="va">w</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>true_beta <span class="op">=</span> <span class="va">beta</span>,</span>
+<span>             SSF <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">m_ssf</span><span class="op">)</span><span class="op">[[</span><span class="st">"habitat"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>             SSF_se <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/vcov.html">vcov</a></span><span class="op">(</span><span class="va">m_ssf</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="st">"habitat"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>             RSF <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">m_rsf</span><span class="op">)</span><span class="op">[[</span><span class="st">"habitat"</span><span class="op">]</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>             RSF_se <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/math-generics.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html">summary</a></span><span class="op">(</span><span class="va">m_rsf</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span><span class="st">"habitat"</span>, <span class="fl">2</span><span class="op">]</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="fu">compare_methods</span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span>, <span class="fu">compare_methods</span><span class="op">(</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   true_beta   SSF SSF_se   RSF RSF_se</span></span>
+<span><span class="co">#&gt; 1       1.5  1.42   0.11  1.02   0.03</span></span>
+<span><span class="co">#&gt; 2       0.0 -0.04   0.09 -0.06   0.03</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">~</span> <span class="va">term</span>, data <span class="op">=</span> <span class="va">per_animal</span>, col <span class="op">=</span> <span class="st">"#1f6f78"</span>, border <span class="op">=</span> <span class="st">"grey30"</span>,</span>
-<span>        las <span class="op">=</span> <span class="fl">2</span>, xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">"Coefficient (per 1 SD)"</span>,</span>
-<span>        main <span class="op">=</span> <span class="st">"Individual coefficients, 6 buffalo"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">0</span>, col <span class="op">=</span> <span class="st">"firebrick"</span>, lty <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/stripchart.html">stripchart</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">~</span> <span class="va">term</span>, data <span class="op">=</span> <span class="va">per_animal</span>, vertical <span class="op">=</span> <span class="cn">TRUE</span>, add <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>           pch <span class="op">=</span> <span class="fl">16</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html">adjustcolor</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="fl">0.6</span><span class="op">)</span>, cex <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
-</figure>
+<p>The <strong>SSF recovers the true coefficient</strong> (within its standard error) because it is fitted to the same process that generated the data: each step compared with its own reachable alternatives.</p>
+<p>The <strong>RSF does not</strong>, and it is not supposed to. It compares locations with everywhere in the range, as if the animal could teleport; the answer mixes selection with the constraint of having to walk. Note also its standard error: three to four times <em>smaller</em> than the SSF’s, for a <em>less</em> accurate estimate. The RSF treats 1,500 autocorrelated positions as independent, so it is confidently wrong.</p>
+<p>That is not an argument against RSFs — for broad-scale questions about where ranges sit they are the right tool. It is an argument for knowing which question each method answers, and simulation with a known truth is how you find out.</p>
 </div>
 </div>
 </div>
-<p>This is the <strong>two-stage</strong> approach: each animal is one observation, so the degrees of freedom reflect the number of <em>animals</em> (6), not the number of <em>points</em> (hundreds of thousands). That is the honest accounting, and it is why the p-values here are far less impressive than those in Task 2 — as they should be.</p>
-<p>The <code>n_positive</code> column is worth as much as the p-value: a covariate with the same sign in 6 of 6 animals is a consistent effect even if the mean is imprecise, while one that is positive in 3 and negative in 3 is not a population-level effect however tight the pooled interval looks.</p>
-<p>With more animals you would move to a <strong>mixed model with random slopes</strong> (Muff et al.&nbsp;2020). A random intercept alone is not enough — it lets individuals differ in overall intensity of use but forces them to share one selection coefficient, which badly under-states the uncertainty.</p>
-</div>
-</div>
-</div>
-</section></section><section id="task-6-map-the-prediction" class="level2"><h2 class="anchored" data-anchor-id="task-6-map-the-prediction">Task 6 — Map the prediction</h2>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Rebuild the covariate stack standardised the same way as the fitting data</span></span>
-<span><span class="va">cilla_mcp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/hr_isopleths.html">hr_isopleths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/amt/man/hrest.html">hr_mcp</a></span><span class="op">(</span><span class="va">cilla</span>, levels <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">covs_crop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/crop.html">crop</a></span><span class="op">(</span><span class="va">covs</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">cilla_mcp</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/mask.html">mask</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html">vect</a></span><span class="op">(</span><span class="va">cilla_mcp</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">covars</span>, \<span class="op">(</span><span class="va">v</span><span class="op">)</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/summarize-generics.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/values.html">values</a></span><span class="op">(</span><span class="va">covs_crop</span><span class="op">[[</span><span class="va">v</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">sdv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">covars</span>, \<span class="op">(</span><span class="va">v</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/values.html">values</a></span><span class="op">(</span><span class="va">covs_crop</span><span class="op">[[</span><span class="va">v</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html">rast</a></span><span class="op">(</span><span class="va">covs_crop</span><span class="op">[[</span><span class="va">covars</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">v</span> <span class="kw">in</span> <span class="va">covars</span><span class="op">)</span> <span class="va">z</span><span class="op">[[</span><span class="va">v</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">covs_crop</span><span class="op">[[</span><span class="va">v</span><span class="op">]</span><span class="op">]</span> <span class="op">-</span> <span class="va">mu</span><span class="op">[</span><span class="va">v</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="va">sdv</span><span class="op">[</span><span class="va">v</span><span class="op">]</span></span>
-<span></span>
-<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="va">lin</span> <span class="op">&lt;-</span> <span class="va">b</span><span class="op">[[</span><span class="st">"elevation"</span><span class="op">]</span><span class="op">]</span> <span class="op">*</span> <span class="va">z</span><span class="op">[[</span><span class="st">"elevation"</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span></span>
-<span>       <span class="va">b</span><span class="op">[[</span><span class="st">"slope"</span><span class="op">]</span><span class="op">]</span>     <span class="op">*</span> <span class="va">z</span><span class="op">[[</span><span class="st">"slope"</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span></span>
-<span>       <span class="va">b</span><span class="op">[[</span><span class="st">"tri"</span><span class="op">]</span><span class="op">]</span>       <span class="op">*</span> <span class="va">z</span><span class="op">[[</span><span class="st">"tri"</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span></span>
-<span>       <span class="va">b</span><span class="op">[[</span><span class="st">"trees"</span><span class="op">]</span><span class="op">]</span>     <span class="op">*</span> <span class="va">z</span><span class="op">[[</span><span class="st">"trees"</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span></span>
-<span>       <span class="va">b</span><span class="op">[[</span><span class="st">"grassland"</span><span class="op">]</span><span class="op">]</span> <span class="op">*</span> <span class="va">z</span><span class="op">[[</span><span class="st">"grassland"</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span></span>
-<span>       <span class="va">b</span><span class="op">[[</span><span class="st">"shrubs"</span><span class="op">]</span><span class="op">]</span>    <span class="op">*</span> <span class="va">z</span><span class="op">[[</span><span class="st">"shrubs"</span><span class="op">]</span><span class="op">]</span></span>
-<span></span>
-<span><span class="va">rsf_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">lin</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html">names</a></span><span class="op">(</span><span class="va">rsf_map</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"rsf"</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">rsf_map</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fl">50</span>, <span class="st">"Viridis"</span><span class="op">)</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Predicted relative selection — Cilla"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/lines.html">points</a></span><span class="op">(</span><span class="va">cilla</span><span class="op">$</span><span class="va">x_</span>, <span class="va">cilla</span><span class="op">$</span><span class="va">y_</span>, pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.15</span>,</span>
-<span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html">adjustcolor</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="720"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+</section></section><section id="to-hand-in" class="level2"><h2 class="anchored" data-anchor-id="to-hand-in">To hand in</h2>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Why the legend has no units
+<span class="screen-reader-only">Tip</span>Weekly submission
 </div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The values are <strong>relative</strong>, proportional to the probability of use by an unknown constant. A cell with value 4 is predicted to be used about twice as intensively as a cell with value 2 — but neither is a probability.</p>
-<p>It is standard practice to rescale the surface to 0–1, or to bin it into ordered quantiles, purely for display. Do not let that rescaling tempt you into calling it a probability of occurrence.</p>
-<p>Note also that the map is only meaningful <strong>inside the availability domain</strong>. Extrapolating an RSF beyond the range of covariate values the animal actually encountered is unsupported — the model has no information there.</p>
-</div>
+<p>Fit the iSSA of Task 2 to a <strong>second</strong> fisher (Leroy, Lucile or Ricky T). Report the RSS for forest with its CI and one paragraph comparing it with Lupe’s. Is the difference biological, or could it come from how much choice each animal had (Task 5)?</p>
 </div>
 </div>
 </section><section id="self-check" class="level2"><h2 class="anchored" data-anchor-id="self-check">Self-check</h2>
 <div class="quiz">
-<p>You double the number of available points and your p-values all become smaller. What does this tell you about your covariates?</p>
+<p>Removing <code>strata(step_id_)</code> from an SSF formula:</p>
 <ul class="task-list">
-<li><label><input type="checkbox">They are more important than you thought</label></li>
-<li><label><input type="checkbox" checked="">Nothing — you increased the precision of your description of availability, not of your observations of the animal</label></li>
-<li><label><input type="checkbox">The model is now overfitted</label></li>
-<li><label><input type="checkbox">The weights were wrong</label></li>
+<li><label><input type="checkbox">Only changes the standard errors</label></li>
+<li><label><input type="checkbox" checked="">Fits a different, wrong model: every step is compared with every control step in the dataset</label></li>
+<li><label><input type="checkbox">Speeds up fitting without changing the estimates</label></li>
+<li><label><input type="checkbox">Turns the SSF into an RSF with the same meaning</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>Available points are a description of the <strong>landscape</strong>, which you can sample as finely as your computer allows. Drawing more of them sharpens your estimate of what was on offer, so the standard errors fall — but you have not observed the animal any more closely, and no new biological information has entered the model.</p>
-<p>This is why p-values are near-meaningless in used–available designs. What you should report: effect sizes as <code>exp(beta)</code> on standardised covariates, confidence intervals, consistency across individuals, and out-of-sample validation.</p>
-<p>It is also why the two-stage approach in Task 5 is so useful: it makes the degrees of freedom reflect the number of <em>animals</em>, which is the sample size you actually have.</p>
+<p>The stratum is the design: each used step is compared only with the alternatives from the same place and time. Without it, a step in the forest at dawn is compared with control steps from the other side of the range days later — the local, time-specific availability that made the SSF worth fitting is gone.</p>
 </div>
 </div>
 <div class="quiz">
-<p>In Class 5 you found grassland covers 56% of the broader availability domain but 90% of used points, and concluded buffalo select grassland. A colleague objects that grassland is the commonest habitat there. Is your conclusion consistent?</p>
+<p>An RSF gives a smaller standard error than an SSF for the same animal. Does that make it more reliable?</p>
 <ul class="task-list">
-<li><label><input type="checkbox" checked="">Yes — used exceeds available, which is exactly what selection means</label></li>
-<li><label><input type="checkbox">No — you cannot select for the commonest habitat</label></li>
-<li><label><input type="checkbox">Only if the sample sizes are equal</label></li>
-<li><label><input type="checkbox">Cannot say without the p-value</label></li>
+<li><label><input type="checkbox">Yes — smaller standard errors mean more precise estimates</label></li>
+<li><label><input type="checkbox" checked="">No — the RSF treats autocorrelated fixes as independent, so its precision is overstated</label></li>
+<li><label><input type="checkbox">Yes, if the RSF has more available points</label></li>
+<li><label><input type="checkbox">Only if the two coefficients agree</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>Selection is <em>use relative to availability</em>, so a habitat can be both common and selected. 90% use against 56% availability is a ratio of about 1.6 — real selection, and it matches the used/available table you computed in Class 5.</p>
-<p>The common confusion runs the other way: an animal found mostly in the dominant habitat is often described as “preferring” it when the use/availability ratio is 1 or below. That is why raw use frequencies are never enough, and why the availability sample is not optional.</p>
+<p>In the ground-truth task the RSF’s standard error was several times smaller and its estimate further from the truth. Precision you did not earn is worse than honest uncertainty: it makes a wrong answer look certain.</p>
 </div>
 </div>
-</section><section id="before-class-8" class="level2"><h2 class="anchored" data-anchor-id="before-class-8">Before Class 8</h2>
+</section><section id="before-session-8" class="level2"><h2 class="anchored" data-anchor-id="before-session-8">Before Session 8</h2>
 <ul>
-<li>Avgar et al.&nbsp;(2016) on integrated step selection analysis.</li>
-<li>Re-read section 3 of Fieberg et al.&nbsp;(2021) — the interpretation section.</li>
+<li>McClintock et al.&nbsp;(2020), <em>Ecology Letters</em> 23:1878 — sections 1–3.</li>
+<li>Prepare your <strong>3–5 minute mini-project pitch</strong> for the end of Session 8.</li>
 </ul>
 
 

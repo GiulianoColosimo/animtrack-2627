@@ -1,6 +1,6 @@
 ---
-title: "Exercise 4 — Steps, angles, displacement and home range"
-subtitle: "Class 4 · Theme 1"
+title: "Practical 4 — Quantifying movement"
+subtitle: "Session 4 · Path descriptors and behavioural classification"
 date-modified: last-modified
 ---
 
@@ -10,473 +10,469 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 ::: {.objectives}
-**Goals.** Compute and plot step lengths, turning angles and speeds;
-demonstrate that they depend on the sampling interval; use NSD to diagnose
-movement strategy; estimate home ranges with MCP, KDE and AKDE; and show
-yourself the autocorrelation problem.
+**Goals.** Compute net squared displacement and classify movement strategies
+by fitting competing models; measure straightness across scales; find the
+scale of area-restricted search with first-passage time; segment a track with
+a threshold where that is honest; run behavioural change-point analysis and
+test whether its answer survives a change of fix rate.
 
-**Time:** ~55 minutes. **Packages:** `amt`, `dplyr`, `tidyr`, `lubridate`,
-`ctmm`.
+**Time:** ~75 minutes. **Packages:** `amt`, `adehabitatLT`, `bcpa`, `dplyr`,
+`tidyr`, `lubridate`, `ggplot2`.
 :::
 
 ```{r}
 library(amt)
+library(adehabitatLT)
+library(bcpa)
 library(dplyr)
 library(tidyr)
 library(lubridate)
+library(ggplot2)
 ```
 
-## Setup — the cleaned track from Class 3
+## Setup — tracks from Sessions 1–3
 
 ```{r}
-clean <- read.csv("data/buffalo_kruger.csv.gz") |>
+buffalo <- read.csv("data/buffalo_kruger.csv.gz") |>
   transmute(id = individual.local.identifier,
             t  = as.POSIXct(timestamp, tz = "UTC"),
             x  = location.long, y = location.lat) |>
   filter(!is.na(x), !is.na(y)) |>
   distinct(id, t, .keep_all = TRUE)
 
-trk <- make_track(clean, x, y, t, id = id, crs = 4326) |>
+trk <- make_track(buffalo, x, y, t, id = id, crs = 4326) |>
   transform_coords(crs_to = 32736)
 
-resample_by_id <- function(tr, rate, tol) {
-  tr |>
-    nest(data = -id) |>
-    mutate(data = lapply(data, \(d) {
-      d |> track_resample(rate = rate, tolerance = tol) |>
-        filter_min_n_burst(min_n = 3)
-    })) |>
-    unnest(cols = data)
-}
-
-trk_hr <- resample_by_id(trk, hours(1), minutes(10))
-nrow(trk_hr)
-```
-
-## Task 1 — Steps, angles and speeds
-
-```{r}
-st <- trk_hr |>
-  nest(data = -id) |>
-  mutate(data = lapply(data, steps_by_burst)) |>
-  unnest(cols = data)
-
-st <- st |> mutate(speed_kmh = (sl_ / 1000) / as.numeric(dt_, units = "hours"))
-
-st |>
-  summarise(n = n(),
-            median_sl = round(median(sl_)),
-            q99_sl = round(quantile(sl_, 0.99)),
-            max_sl = round(max(sl_)))
-```
-
-### Your turn
-
-**1a.** Plot the distribution of step lengths and of turning angles.
-**1b.** What does the turning-angle distribution tell you?
-
-::: {.callout-note collapse="true"}
-## Solution
-
-```{r}
-#| fig-width: 9
-#| fig-height: 4
-#| fig-align: center
-par(mfrow = c(1, 3))
-
-hist(st$sl_[st$sl_ < 3000], breaks = 60, col = "#1f6f78", border = "white",
-     main = "Step length (< 3 km)", xlab = "metres")
-
-hist(st$ta_, breaks = 40, col = "#1f6f78", border = "white",
-     main = "Turning angle", xlab = "radians")
-
-# A rose diagram respects the circular nature of the data
-ta <- st$ta_[!is.na(st$ta_)]
-brk <- seq(-pi, pi, length.out = 25)
-cnt <- table(cut(ta, brk))
-mid <- (head(brk, -1) + tail(brk, -1)) / 2
-plot(0, 0, type = "n", xlim = c(-1, 1), ylim = c(-1, 1), asp = 1,
-     axes = FALSE, xlab = "", ylab = "", main = "Turning angles (rose)")
-r <- as.numeric(cnt) / max(cnt)
-for (i in seq_along(mid)) {
-  lines(c(0, r[i] * cos(mid[i])), c(0, r[i] * sin(mid[i])),
-        col = "#1f6f78", lwd = 6)
-}
-par(mfrow = c(1, 1))
-```
-
-**Step lengths** are strongly right-skewed: most steps are short (the animal
-is resting or grazing), with a long tail of directed movement. This is why
-step lengths are modelled with a gamma or exponential distribution, never a
-normal one.
-
-**Turning angles** peak sharply at 0 and again — more weakly — near ±π. The
-peak at 0 is *directional persistence*: an animal that was heading somewhere
-tends to keep heading there. The bumps near ±π are reversals, typically an
-animal turning back within a patch, plus some GPS error at very short steps.
-
-A uniform turning-angle distribution would mean no directional memory at all —
-a simple random walk. Real animals are never that.
-:::
-
-## Task 2 — Scale dependence, demonstrated
-
-Resample the *same* animals at four intervals and compare.
-
-For turning angles we need a **circular** summary. The standard one is the
-mean resultant length $\rho = \overline{\cos\theta}$: it is 1 for perfectly
-straight movement and 0 for a uniform (memoryless) distribution.
-
-```{r}
-rates <- list(`1 h` = hours(1), `3 h` = hours(3),
-              `6 h` = hours(6), `12 h` = hours(12))
-
-scale_tab <- lapply(names(rates), function(nm) {
-  tr <- resample_by_id(trk, rates[[nm]], minutes(15))
-  s <- tr |> nest(data = -id) |>
-    mutate(data = lapply(data, steps_by_burst)) |> unnest(cols = data)
-  ta <- s$ta_[!is.na(s$ta_)]
-  data.frame(rate = nm, n_steps = nrow(s),
-             median_sl_m = round(median(s$sl_)),
-             rho = round(mean(cos(ta)), 3),
-             frac_straight = round(mean(abs(ta) < pi / 4), 3))
-}) |> bind_rows()
-
-scale_tab
-```
-
-For reference, a memoryless walk would give `rho = 0` and
-`frac_straight = 0.25`.
-
-### Your turn
-
-**2a.** What happens to median step length as the interval grows?
-**2b.** What happens to directional persistence — and is it monotonic?
-
-::: {.callout-note collapse="true"}
-## Solution
-
-**Step length increases**, from ~150 m at 1 h to ~1.5 km at 12 h — but far
-less than proportionally. Twelve times the interval buys only about ten times
-the displacement, because the path doubles back on itself. If movement were
-perfectly directed the relationship would be linear; the shortfall *is* the
-tortuosity.
-
-**Directional persistence collapses**, but not smoothly:
-
-```{r}
-#| fig-width: 8.5
-#| fig-height: 4
-#| fig-align: center
-par(mfrow = c(1, 2))
-barplot(scale_tab$median_sl_m, names.arg = scale_tab$rate, col = "#1f6f78",
-        border = "white", ylab = "Median step length (m)",
-        xlab = "Sampling interval", main = "Step length grows with interval")
-barplot(scale_tab$rho, names.arg = scale_tab$rate, col = "#b8860b",
-        border = "white", ylab = expression(rho == bar(cos(theta))),
-        xlab = "Sampling interval", main = "Persistence collapses by 12 h")
-abline(h = 0, lty = 2)
-par(mfrow = c(1, 1))
-```
-
-Persistence holds up to about 6 hours and has essentially vanished at 12
-hours ($\rho \approx 0.05$, `frac_straight` ≈ 0.29 against the uniform 0.25).
-So for these buffalo the timescale of directional memory sits somewhere
-between 6 and 12 hours.
-
-**The non-monotonic bit is the interesting part.** $\rho$ is *lower* at 1 h
-than at 3 h. That is not biology — it is measurement. At an hourly interval
-many steps are only a few tens of metres (a resting or grazing animal), and
-when the step is comparable to the GPS error the *direction* of that step is
-largely noise. Randomised directions drag $\rho$ down.
-
-Two practical consequences:
-
-- A correlated random walk fitted at 12 h would report almost no correlation,
-  and you would wrongly conclude the animal moves at random.
-- At very fine intervals, turning angles are contaminated by positional error.
-  This is why step-selection analyses (Class 8) are usually run at an interval
-  where typical step length comfortably exceeds GPS error.
-:::
-
-## Task 3 — Net squared displacement
-
-```{r}
-#| fig-width: 9
-#| fig-height: 4
-#| fig-align: center
-nsd_of <- function(d) {
-  d <- d[order(d$t_), ]
-  data.frame(t = d$t_, nsd = (d$x_ - d$x_[1])^2 + (d$y_ - d$y_[1])^2)
-}
-
-par(mfrow = c(1, 2))
-
-cil <- nsd_of(trk_hr[trk_hr$id == "Cilla", ])
-plot(cil$t, cil$nsd / 1e6, type = "l", col = "#1f6f78",
-     xlab = "", ylab = "NSD (km²)", main = "Buffalo 'Cilla' — sedentary")
-
-vul <- read.csv("data/vulture_leo.csv.gz") |>
+vulture <- read.csv("data/vulture_leo.csv.gz") |>
   transmute(t = as.POSIXct(timestamp, tz = "UTC"),
             x = location.long, y = location.lat) |>
-  filter(!is.na(x)) |> distinct(t, .keep_all = TRUE) |> arrange(t)
-vt <- make_track(vul, x, y, t, crs = 4326) |> transform_coords(crs_to = 6933)
-v <- nsd_of(vt)
-plot(v$t, v$nsd / 1e6, type = "l", col = "#c1440e",
-     xlab = "", ylab = "NSD (km²)", main = "Vulture 'Leo' — migratory")
-par(mfrow = c(1, 1))
+  filter(!is.na(x)) |>
+  distinct(t, .keep_all = TRUE)
+
+# Leo spans 47 degrees of latitude: no UTM zone fits, so use a global
+# equal-area projection (EPSG:6933)
+leo <- make_track(vulture, x, y, t, crs = 4326) |>
+  transform_coords(crs_to = 6933)
 ```
 
-::: {.callout-note collapse="true"}
-## Reading these two plots
+## Task 1 — Net squared displacement
 
-**Cilla** rises quickly to a ceiling and stays there, oscillating. That is the
-signature of a **sedentary** animal with a bounded home range: once it has
-explored its range, it cannot get further from the start.
-
-**Leo** shows six clean cycles: a sigmoid rise (autumn migration), a plateau
-(wintering), a sigmoid fall (spring migration), a plateau (breeding). This is
-the textbook **migratory** NSD profile.
-
-Note the CRS: Leo spans 47° of latitude, so no UTM zone works. EPSG:6933 is a
-global **equal-area** projection — appropriate for continental-scale distances
-and areas.
-
-NSD is a one-line diagnostic and it should be the *first* plot you make for
-any new track. It tells you immediately whether a home range is a meaningful
-thing to estimate.
-:::
-
-## Task 4 — MCP and KDE
+`adehabitatLT` computes NSD for you: it is the `R2n` column.
 
 ```{r}
-cilla <- trk_hr |> filter(id == "Cilla")
+cilla <- trk |> filter(id == "Cilla")
+ltr <- as.ltraj(xy = as.data.frame(cilla[, c("x_", "y_")]),
+                date = cilla$t_, id = "Cilla")
+nsd_cilla <- ld(ltr) |> transmute(t = date, nsd_km2 = R2n / 1e6)
 
-mcp95 <- hr_mcp(cilla, levels = c(0.5, 0.95))
-hr_area(mcp95) |> mutate(area_km2 = round(area / 1e6, 1))
-
-kde95 <- hr_kde(cilla, levels = c(0.5, 0.95))
-hr_area(kde95) |> mutate(area_km2 = round(area / 1e6, 1))
+leo_ltr <- as.ltraj(xy = as.data.frame(leo[, c("x_", "y_")]),
+                    date = leo$t_, id = "Leo")
+nsd_leo <- ld(leo_ltr) |> transmute(t = date, nsd_km2 = R2n / 1e6)
 ```
 
 ```{r}
-#| fig-width: 7
-#| fig-height: 6
+#| fig-width: 9
+#| fig-height: 3.8
 #| fig-align: center
-plot(hr_isopleths(kde95)$geometry, border = "#1f6f78", lwd = 2,
-     main = "Buffalo 'Cilla': MCP (grey) vs KDE (teal)")
-plot(hr_isopleths(mcp95)$geometry, border = "grey40", lwd = 2, lty = 2, add = TRUE)
-points(cilla$x_, cilla$y_, pch = 16, cex = 0.2,
-       col = adjustcolor("black", 0.25))
+bind_rows(mutate(nsd_cilla, who = "Buffalo 'Cilla'"),
+          mutate(nsd_leo,   who = "Vulture 'Leo'")) |>
+  ggplot(aes(t, nsd_km2)) +
+  geom_line(colour = "#1f6f78", linewidth = 0.3) +
+  facet_wrap(~ who, scales = "free") +
+  labs(x = NULL, y = "NSD (km²)") +
+  theme_minimal()
 ```
 
 ### Your turn
 
-**4a.** Which is larger, and why?
-**4b.** What does the 50% contour represent?
+**1a.** Describe each curve in one sentence. Which looks resident, which migratory?
 
 ::: {.callout-note collapse="true"}
 ## Solution
 
-The MCP is convex by construction, so it swallows any concavity in the
-animal's actual use — here, areas it moved around rather than through. The KDE
-can be concave and can even be disjoint, so it hugs the used area more tightly.
+Cilla's NSD rises quickly to a ceiling and fluctuates below it: once she has
+explored her range she cannot get further from the start — a **resident**.
 
-The **50% contour** is conventionally called the *core area*: the smallest
-region containing half the probability mass of the utilisation distribution.
-It is a convention, not a biological threshold — but it is far more
-informative than the 95% boundary, because it shows where the animal actually
-concentrates.
-
-```{r}
-bind_rows(
-  hr_area(mcp95) |> mutate(method = "MCP"),
-  hr_area(kde95) |> mutate(method = "KDE")
-) |>
-  transmute(method, level, area_km2 = round(area / 1e6, 1)) |>
-  pivot_wider(names_from = method, values_from = area_km2)
-```
+Leo's NSD shows six annual cycles: a rise (autumn migration), a plateau
+(wintering), a fall (spring migration), a plateau (breeding) — the textbook
+**migratory** profile. The next task makes that judgement quantitative.
 :::
 
-## Task 5 — Show yourself the autocorrelation problem
+## Task 2 — Classify the strategy by fitting models
 
-If KDE assumed independence and our fixes are autocorrelated, then **thinning**
-the data should change the answer systematically. Let us check.
+Bunnefeld et al. (2011): fit one model per strategy and compare. We fit on
+**daily** mean positions to keep the curves manageable.
 
 ```{r}
-thin_every <- function(tr, k) tr[seq(1, nrow(tr), by = k), ]
+daily_nsd <- function(tr) {
+  d <- tr |>
+    mutate(day = as_date(t_)) |>
+    group_by(day) |>
+    summarise(x = mean(x_), y = mean(y_), .groups = "drop") |>
+    arrange(day)
+  data.frame(t = as.numeric(d$day - d$day[1]),
+             nsd = ((d$x - d$x[1])^2 + (d$y - d$y[1])^2) / 1e6)   # km²
+}
 
-thin_tab <- lapply(c(1, 2, 6, 12, 24, 48), function(k) {
-  d <- thin_every(cilla, k)
-  if (nrow(d) < 30) return(NULL)
-  a <- hr_area(hr_kde(d, levels = 0.95))
-  data.frame(every = paste0(k, " h"), n = nrow(d),
-             kde95_km2 = round(a$area / 1e6, 1))
-}) |> bind_rows()
+fit_strategies <- function(d) {
+  D <- max(d$nsd)
+  ctl <- nls.control(maxiter = 500, warnOnly = TRUE)
+  half_up   <- d$t[which.max(d$nsd > D / 2)]
+  half_down <- d$t[nrow(d) - which.max(rev(d$nsd) > D / 2) + 1]
+  fits <- list(
+    nomad     = try(nls(nsd ~ b * t, d, start = list(b = D / max(d$t))), silent = TRUE),
+    resident  = try(nls(nsd ~ c * (1 - exp(-k * t)), d,
+                        start = list(c = median(d$nsd), k = 0.05), control = ctl), silent = TRUE),
+    disperser = try(nls(nsd ~ dd / (1 + exp((th - t) / ph)), d,
+                        start = list(dd = D, th = half_up, ph = 5), control = ctl), silent = TRUE),
+    migrant   = try(nls(nsd ~ dd / (1 + exp((th1 - t) / ph1)) - dd / (1 + exp((th2 - t) / ph2)), d,
+                        start = list(dd = D, th1 = half_up, ph1 = 5, th2 = half_down, ph2 = 5),
+                        control = ctl), silent = TRUE)
+  )
+  fits[!vapply(fits, inherits, logical(1), "try-error")]
+}
 
-thin_tab
+aic_table <- function(fits) {
+  a <- vapply(fits, AIC, numeric(1))
+  data.frame(model = names(a), dAIC = round(a - min(a))) |> arrange(dAIC)
+}
+```
+
+Leo, June 2007 to June 2008:
+
+```{r}
+leo_07 <- leo |> filter(t_ >= as.POSIXct("2007-06-01", tz = "UTC"),
+                        t_ <  as.POSIXct("2008-06-01", tz = "UTC"))
+fits_leo <- suppressWarnings(fit_strategies(daily_nsd(leo_07)))
+aic_table(fits_leo)
+```
+
+The migrant model wins by a mile. Now **read its parameters**:
+
+```{r}
+cf <- coef(fits_leo$migrant)
+c(migration_distance_km = sqrt(cf[["dd"]]),
+  departs_day = cf[["th1"]], returns_day = cf[["th2"]])
+
+as.Date("2007-06-01") + round(c(cf[["th1"]], cf[["th2"]]))   # as calendar dates
 ```
 
 ### Your turn
 
-**5a.** What happens to the KDE area as you thin?
-**5b.** What would happen if the fixes were genuinely independent?
+**2a.** Fit the four models to every buffalo. What wins?
+**2b.** For the "migrants", what is the migration distance? Are they migrants?
+**2c.** Fit Leo's 2011–2012 year. What goes wrong, and why?
 
 ::: {.callout-note collapse="true"}
 ## Solution
+
+```{r}
+strategy_summary <- function(tr, label) {
+  f <- suppressWarnings(fit_strategies(daily_nsd(tr)))
+  a <- aic_table(f)
+  best <- a$model[1]
+  dist <- if (best == "migrant" || best == "disperser") sqrt(abs(coef(f[[best]])[["dd"]])) else NA
+  data.frame(animal = label, days = nrow(daily_nsd(tr)), best = best,
+             runner_up_dAIC = a$dAIC[2], displacement_km = round(dist, 1))
+}
+
+bind_rows(lapply(unique(trk$id), \(i) strategy_summary(filter(trk, id == i), i)))
+```
+
+Three buffalo come out as **migrants** — with "migration" distances of 10 to
+14 km. That is a shift to another part of the home range for a few weeks or
+months, not a migration. The double-sigmoid is the most flexible of the four
+curves, so it fits any excursion-and-return, and with hundreds of
+autocorrelated daily points AIC differences are hugely inflated.
+
+Look also at `runner_up_dAIC`: for several buffalo the second-best model is
+within a few AIC units of the winner. The data barely separate the stories.
+
+```{r}
+leo_11 <- leo |> filter(t_ >= as.POSIXct("2011-06-01", tz = "UTC"),
+                        t_ <  as.POSIXct("2012-06-01", tz = "UTC"))
+strategy_summary(leo_11, "Leo 2011-12")
+range(leo_11$t_)
+```
+
+Leo, a known migrant, is classified as a **disperser** in 2011–12. The reason
+is in the dates: that year's data stop in the middle of the season, so only
+the outbound half of the cycle is present — which *is* a single sigmoid step.
+An incomplete cycle cannot show a return.
+
+**The lesson:** model-based NSD classification is powerful, but only on
+complete cycles, and only if you read the parameters. A classification
+without a displacement distance and dates is not a result.
+:::
+
+## Task 3 — Straightness across scales
+
+Straightness index = net displacement / path length, computed over a moving
+window.
+
+```{r}
+hourly <- cilla |>
+  track_resample(rate = hours(1), tolerance = minutes(10)) |>
+  filter_min_n_burst(min_n = 3)
+
+straightness <- function(tr, window_h) {
+  tr |>
+    mutate(win = floor(as.numeric(difftime(t_, min(t_), units = "hours")) / window_h)) |>
+    group_by(burst_, win) |>
+    filter(n() >= 0.8 * window_h) |>
+    summarise(net  = sqrt((last(x_) - first(x_))^2 + (last(y_) - first(y_))^2),
+              path = sum(sqrt(diff(x_)^2 + diff(y_)^2)), .groups = "drop") |>
+    mutate(st = net / path)
+}
+
+st_tab <- lapply(c(3, 6, 12, 24, 72), function(w) {
+  s <- straightness(hourly, w)
+  data.frame(window_h = w, windows = nrow(s), median_ST = round(median(s$st), 3))
+}) |> bind_rows()
+st_tab
+```
+
+::: {.callout-note collapse="true"}
+## What this shows
+
+The same buffalo is "straight" over 3 hours and "tortuous" over 3 days:
+straightness falls steadily as the window grows, because over longer periods
+the path doubles back on itself. A straightness index is meaningless without
+its window, and comparing indices computed over different windows is comparing
+different things.
+
+Straightness is at its best for **oriented** movement over a defined journey —
+a homing bird, a migrating vulture between two stopovers — where the window is
+set by the biology rather than by you.
+:::
+
+## Task 4 — First-passage time
+
+```{r}
+radii <- c(100, 250, 500, 1000, 1500, 2000, 3000, 4000, 5000, 6000)
+f <- fpt(ltr, radii = radii, units = "hours")
+
+vl <- varlogfpt(f, graph = FALSE)
+fpt_profile <- data.frame(radius_m = radii, var_log_fpt = as.numeric(vl))
+fpt_profile
+```
 
 ```{r}
 #| fig-width: 6.5
-#| fig-height: 4.2
+#| fig-height: 4
 #| fig-align: center
-plot(thin_tab$n, thin_tab$kde95_km2, type = "b", pch = 16, log = "x",
-     col = "#1f6f78", lwd = 2,
-     xlab = "Number of fixes (log)", ylab = "95% KDE area (km²)",
-     main = "KDE area depends on how many fixes you kept")
-```
-
-The estimate **is not stable** — and it drifts in a consistent direction. The
-95% KDE area grows steadily as we thin, from roughly 290 km² at hourly
-sampling to about 400 km² at 48-hourly, a **~37% difference for the same
-animal over the same period**.
-
-If the fixes were independent draws from a fixed utilisation distribution, the
-KDE area would converge to a constant as $n$ grows — more data, less noise,
-same answer. Instead the denser data give systematically *smaller* ranges,
-because adding more *autocorrelated* fixes adds
-almost no new information about the utilisation distribution while the
-bandwidth selector behaves as though it does. The effective sample size is far
-smaller than `n`.
-
-This is precisely the problem AKDE was built to solve — and precisely why a
-95% KDE from 8,000 hourly fixes is not comparable to one from 60 VHF fixes.
-:::
-
-## Task 6 — AKDE with `ctmm`
-
-`ctmm` fits a continuous-time movement model first, then uses its
-autocorrelation structure to weight the kernel estimate.
-
-::: {.callout-warning}
-Model selection is genuinely slow — minutes, not seconds. We thin to
-6-hourly fixes here so it finishes during class. For real work, use the
-full track and be patient.
-:::
-
-```{r}
-#| cache: true
-library(ctmm)
-
-cil6 <- thin_every(cilla, 6)
-
-mb <- data.frame(
-  timestamp = cil6$t_,
-  location.long = NA, location.lat = NA,
-  individual.local.identifier = "Cilla"
-)
-# ctmm wants geographic coordinates; convert the UTM track back
-ll <- sf::st_coordinates(
-  sf::st_transform(sf::st_as_sf(cil6, coords = c("x_", "y_"), crs = 32736), 4326)
-)
-mb$location.long <- ll[, 1]
-mb$location.lat  <- ll[, 2]
-
-tel <- as.telemetry(mb, timeformat = "auto")
-
-guess <- ctmm.guess(tel, interactive = FALSE)
-fit   <- ctmm.select(tel, guess, verbose = FALSE)
-
-summary(fit)
-```
-
-```{r}
-#| cache: true
-ak <- akde(tel, fit)
-summary(ak)$CI
+ggplot(fpt_profile, aes(radius_m, var_log_fpt)) +
+  geom_line(colour = "#1f6f78") + geom_point(colour = "#1f6f78", size = 2) +
+  labs(x = "Radius (m)", y = "Variance of log(FPT)",
+       title = "Cilla: first-passage time profile") +
+  theme_minimal()
 ```
 
 ### Your turn
 
-**6a.** Compare the AKDE estimate with the KDE estimate on the same thinned data.
-**6b.** What does the confidence interval tell you?
+**4a.** Where is the peak that indicates area-restricted search?
+**4b.** Plot FPT at that radius along the track. When does Cilla linger?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+The variance is highest at the smallest radii — but there it measures resting
+and GPS noise, not search. It falls to a minimum around 1.5 km and **peaks
+again near 4 km**: the scale at which Cilla's use of space is most uneven,
+i.e. the size of the patches she responds to.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 3.5
+#| fig-align: center
+peak_r <- fpt_profile |> filter(radius_m >= 1000) |> slice_max(var_log_fpt) |> pull(radius_m)
+peak_r
+
+data.frame(t = ld(ltr)$date, fpt_h = f[[1]][, which(radii == peak_r)]) |>
+  ggplot(aes(t, fpt_h)) +
+  geom_line(colour = "#1f6f78", linewidth = 0.3) +
+  labs(x = NULL, y = sprintf("FPT at %d m (hours)", peak_r)) +
+  theme_minimal()
+```
+
+Long first-passage times mark periods when Cilla stayed within a few
+kilometres for days; short ones mark relocations. Session 7 asks *why* —
+which habitats hold her.
+:::
+
+## Task 5 — Thresholds: one honest, one not
+
+```{r}
+leo_daily <- leo |>
+  mutate(day = as_date(t_)) |>
+  group_by(day) |>
+  summarise(x = mean(x_), y = mean(y_), .groups = "drop") |>
+  arrange(day) |>
+  mutate(km = c(NA, sqrt(diff(x)^2 + diff(y)^2)) / 1000)
+
+cilla_hourly_speed <- hourly |> steps_by_burst() |>
+  mutate(km_h = (sl_ / 1000) / as.numeric(dt_, units = "hours"))
+```
+
+```{r}
+#| fig-width: 9
+#| fig-height: 3.8
+#| fig-align: center
+par(mfrow = c(1, 2))
+hist(log10(leo_daily$km + 1), breaks = 50, col = "#1f6f78", border = "white",
+     main = "Leo: daily displacement", xlab = "log10(km + 1)")
+hist(log10(cilla_hourly_speed$km_h + 0.001), breaks = 50, col = "#1f6f78",
+     border = "white", main = "Cilla: hourly speed", xlab = "log10(km/h)")
+par(mfrow = c(1, 1))
+```
+
+### Your turn
+
+**5a.** Where would you put a threshold for each animal? Can you defend it?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+Leo's histogram has **two clearly separated modes** — resident days of a few
+kilometres, migration days of a hundred or more — with an empty valley in
+between. Any threshold in the valley gives the same answer, so a threshold is
+transparent and honest:
+
+```{r}
+leo_daily |>
+  filter(km > 50) |>
+  count(month = month(day, label = TRUE), name = "migration_days")
+```
+
+Migration days fall in spring and autumn, exactly as the NSD model said.
+
+Cilla's hourly speeds form one broad, skewed hump. There is no valley, so
+wherever you put the line, you have made the answer rather than found it. That
+is precisely the situation in which you need a model that assigns states
+probabilistically and uses the fact that behaviour persists in time —
+Session 8's hidden Markov models.
+:::
+
+## Task 6 — Behavioural change-point analysis
+
+BCPA on persistence velocity $V\cos\theta$, for the first 25 days of Cilla's
+hourly track.
+
+```{r}
+win <- cilla |> arrange(t_) |> filter(t_ < min(t_) + days(25))
+
+run_bcpa <- function(d, windowsize) {
+  vt <- GetVT(MakeTrack(d$x_, d$y_, d$t_))
+  set.seed(1)
+  ws <- WindowSweep(vt, "V*cos(Theta)", windowsize = windowsize,
+                    progress = FALSE, K = 2)
+  list(vt = vt, ws = ws, cps = ChangePointSummary(ws, clusterwidth = 3))
+}
+
+b1 <- run_bcpa(win, windowsize = 50)
+nrow(b1$cps$phases)
+```
+
+```{r}
+#| fig-width: 9
+#| fig-height: 3.8
+#| fig-align: center
+plot(b1$vt$T.POSIX, b1$vt$V * cos(b1$vt$Theta), type = "l", col = "grey60",
+     xlab = "", ylab = "V cos(θ)  (m/h)", main = "Cilla: BCPA change points")
+abline(v = b1$cps$breaks$middle.POSIX, col = "firebrick", lty = 2)
+```
+
+### Your turn
+
+**6a.** Rerun with `windowsize = 30`. **6b.** Resample to 3-hourly and rerun
+with a window covering the same *time* (17 fixes ≈ 50 hours). **6c.** How many
+change points survive both analyses?
 
 ::: {.callout-note collapse="true"}
 ## Solution
 
 ```{r}
-kde_same <- hr_area(hr_kde(cil6, levels = 0.95))$area / 1e6
-akde_ci  <- summary(ak, units = FALSE)$CI / 1e6   # m² → km²
+b1_30 <- run_bcpa(win, windowsize = 30)
 
-c(KDE_km2 = round(kde_same, 1))
-round(akde_ci, 1)
+win_3h <- win |> track_resample(rate = hours(3), tolerance = minutes(15))
+b3_17  <- run_bcpa(win_3h, windowsize = 17)
+b3_50  <- run_bcpa(win_3h, windowsize = 50)
+
+data.frame(
+  analysis = c("hourly, 50-fix window", "hourly, 30-fix window",
+               "3-hourly, 17-fix window (~50 h)", "3-hourly, 50-fix window (~150 h)"),
+  phases = c(nrow(b1$cps$phases), nrow(b1_30$cps$phases),
+             nrow(b3_17$cps$phases), nrow(b3_50$cps$phases))
+)
 ```
 
-Two things to notice.
+The count moves with every choice you make. The honest question is not "how
+many phases?" but "which change points are **robust**?":
 
-**The point estimate differs.** AKDE corrects for the autocorrelation that
-classical KDE ignores, and for this animal it typically comes out larger.
+```{r}
+cp_1h <- b1$cps$breaks$middle.POSIX
+cp_3h <- b3_17$cps$breaks$middle.POSIX
 
-**AKDE gives you a confidence interval, and it is wide.** That width is the
-honest statement of how much your data actually constrain the answer. A single
-number from classical KDE hides exactly that uncertainty — which is why it is
-so easy to over-interpret small differences between individuals or between
-years.
+matched <- vapply(cp_1h, \(tt) any(abs(difftime(cp_3h, tt, units = "hours")) <= 6),
+                  logical(1))
+c(hourly_change_points = length(cp_1h),
+  also_found_at_3h_within_6h = sum(matched),
+  share_robust = round(mean(matched), 2))
+```
 
-The model summary is also worth reading: `ctmm.select()` chose a movement
-model (OU, OUF, IID…), and the "area" row of `summary(fit)` reports the
-range-residency estimate. If the selected model has **no** range residency,
-the animal is not exhibiting home-range behaviour and an AKDE area is not a
-meaningful quantity — the software will tell you, which classical KDE never does.
+About three quarters of the hourly change points reappear within six hours
+in the 3-hourly analysis. Those are the ones worth interpreting as changes in
+the buffalo's behaviour. The remaining quarter appear only at one resolution:
+treat them as properties of the window and the sampling until shown otherwise.
+:::
+
+## To hand in
+
+::: {.callout-tip}
+## Weekly submission
+
+1. The NSD strategy table (Task 2) for **two** animals of your choice,
+   including displacement distance, with one sentence per animal on whether
+   you believe the classification.
+2. One paragraph: is BCPA's output for Cilla "real" behaviour or an artefact of
+   the fix rate? Support it with the robustness numbers from Task 6.
 :::
 
 ## Self-check
 
 ::: {.quiz}
-You resample a track from hourly to 6-hourly and the mean turning angle
-distribution becomes almost uniform. What does this tell you?
+Turning angles of a track sampled every 6 hours are close to uniform. What
+does this tell you?
 
-- [ ] The animal's behaviour changed
+- [ ] The animal moves at random
 - [x] Directional persistence operates on a shorter timescale than 6 hours
 - [ ] The resampling introduced an error
-- [ ] Turning angles are always uniform at long intervals for all species
+- [ ] GPS error dominates
 
 ::: {.quiz-feedback}
-Directional persistence is a **short-term** property of movement. At a
-six-hour interval the animal has changed activity several times, so the
-direction of one step carries almost no information about the next, and
-turning angles approach uniform.
-
-This is a statement about the timescale of the *behaviour* relative to your
-*sampling*, not about the animal changing. It also matters practically: a
-correlated random walk fitted at 6 hours will report almost no correlation, and
-you would wrongly conclude the animal moves at random.
+Persistence is a short-term property: over six hours the animal has changed
+activity several times, so one step's direction says little about the next.
+That is a statement about the **timescale of the behaviour relative to your
+sampling**, not about the animal being random.
 :::
 :::
 
 ::: {.quiz}
-`ctmm.select()` chooses an IID (independent, identically distributed) model
-for your track. What does that mean for your home-range analysis?
+A disperser model fits a known migrant best. Most likely cause?
 
-- [ ] AKDE will be identical to KDE, so use whichever
-- [x] The fixes carry no detectable autocorrelation — usually a sign your sampling is too sparse to resolve the movement process
-- [ ] The animal has no home range
-- [ ] The model failed to converge
+- [ ] The animal changed strategy
+- [x] The data cover only part of the annual cycle
+- [ ] AIC is unreliable for non-linear models
+- [ ] The CRS is wrong
 
 ::: {.quiz-feedback}
-An IID model says the data show no detectable correlation between successive
-positions. For a modern GPS track that is nearly always a symptom, not a
-finding: fixes so far apart in time that the movement process between them is
-unresolved.
-
-In that regime AKDE reduces to something close to classical KDE — it has no
-autocorrelation to correct for. The estimate is not *wrong*, but you should
-say plainly that the sampling could not resolve the movement process, and be
-cautious comparing it with estimates from denser data.
+A migration observed only on the way out *is* a single step up in NSD — the
+disperser curve. Classify only complete cycles, and check the dates of your
+data before interpreting any strategy.
 :::
 :::
 
-## Before Class 5
+## Before Session 5
 
-- Read Fleming et al. (2015), *Ecology* 96:1182–1188.
-- Have a look at the two rasters in `data/`: `kruger_elevation.tif` and
-  `kruger_landcover.tif`. We use both next week.
+- Codling, Plank & Benhamou (2008), *Random walk models in biology* — sections 1–3.
+- Make sure `library(circular)` loads.

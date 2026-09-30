@@ -1,6 +1,6 @@
 ---
-title: "Exercise 2 — sf, terra and coordinate reference systems"
-subtitle: "Class 2 · Theme 2"
+title: "Practical 2 — The spatial survival kit"
+subtitle: "Session 2 · Spatial data in R"
 date-modified: last-modified
 ---
 
@@ -10,389 +10,312 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 ::: {.objectives}
-**Goals.** Build an `sf` object from a CSV; reproject it; measure distances
-correctly (and incorrectly, so you can see the difference); read a real raster
-and sample it at your fixes; make an undistorted map.
+**Goals.** Turn a CSV into an `sf` object; reproject it and measure distances
+correctly; use the vector verbs you will need all course (`st_buffer`,
+`st_join`, `st_intersection`); load real NDVI and land-cover rasters with
+`terra` and sample them at the fixes; break things on purpose; and finish
+with a publication-quality map.
 
-**Time:** ~50 minutes. **Packages:** `sf`, `terra`, `dplyr`.
+**Time:** ~80 minutes. **Packages:** `sf`, `terra`, `dplyr`, `ggplot2`,
+`ggspatial`.
 :::
 
 ```{r}
 library(sf)
 library(terra)
 library(dplyr)
+library(ggplot2)
 ```
 
 ## Task 1 — From data frame to `sf`
 
 ```{r}
-buffalo <- read.csv("data/buffalo_kruger.csv.gz") |>
-  transmute(
-    id = individual.local.identifier,
-    t  = as.POSIXct(timestamp, tz = "UTC"),
-    lon = location.long,
-    lat = location.lat
-  ) |>
+track <- readr::read_csv("data/buffalo_kruger.csv.gz", show_col_types = FALSE) |>
+  transmute(id = `individual-local-identifier`, t = timestamp,
+            lon = `location-long`, lat = `location-lat`) |>
   filter(!is.na(lon), !is.na(lat)) |>
   distinct(id, t, .keep_all = TRUE) |>
   arrange(id, t)
 
-nrow(buffalo)
-
-buf_sf <- st_as_sf(buffalo, coords = c("lon", "lat"), crs = 4326, remove = FALSE)
-buf_sf
+fixes <- st_as_sf(track, coords = c("lon", "lat"), crs = 4326, remove = FALSE)
+fixes
 ```
-
-::: {.callout-tip}
-`remove = FALSE` keeps the original `lon`/`lat` columns. Handy — you often
-want the plain numbers alongside the geometry.
-:::
 
 ### Your turn
 
-**1a.** What does `st_crs(buf_sf)` report? Find the EPSG code and the units.
-**1b.** What is the bounding box?
+**1a.** What CRS is this, in what units? **1b.** What is the bounding box?
 
 ::: {.callout-note collapse="true"}
 ## Solution
 
 ```{r}
-st_crs(buf_sf)$epsg
-st_crs(buf_sf)$units_gdal
-st_is_longlat(buf_sf)
-
-st_bbox(buf_sf)
+st_crs(fixes)$epsg
+st_is_longlat(fixes)
+st_bbox(fixes)
 ```
 
-Degrees, EPSG:4326, and `st_is_longlat()` is `TRUE` — the flag that should
-make you stop before computing any distance or area.
+EPSG:4326, degrees — and `st_is_longlat()` returning `TRUE` is the flag that
+should make you stop before computing any distance or area.
 :::
 
-## Task 2 — Reproject, and watch the numbers change
+## Task 2 — Reproject, and measure one distance three ways
 
-Kruger sits in UTM zone 36S, EPSG:32736.
-
-```{r}
-buf_utm <- st_transform(buf_sf, 32736)
-
-# Same animal, same fix, different numbers
-st_coordinates(buf_sf)[1, ]
-st_coordinates(buf_utm)[1, ]
-```
-
-::: {.callout-important}
-## Which zone?
-
-`zone = floor((longitude + 180) / 6) + 1`. Kruger is at ~31.8°E, so
-`floor(211.8 / 6) + 1 = 36`. Southern hemisphere → EPSG `327` + zone = **32736**.
-Northern would be `326` + zone.
-:::
-
-### Your turn
-
-**2a.** Confirm the round trip: transform back to 4326 and compare to the original.
-
-::: {.callout-note collapse="true"}
-## Solution
+Kruger is in UTM zone 36S, EPSG:32736.
 
 ```{r}
-back <- st_transform(buf_utm, 4326)
-max(abs(st_coordinates(back) - st_coordinates(buf_sf)))
-```
+fixes_utm <- st_transform(fixes, 32736)
 
-Agreement to ~1e-9 degrees — about 0.1 mm. Reprojection is lossless up to
-floating-point precision; it is not a source of error you need to worry about.
-:::
-
-## Task 3 — Three ways to measure one distance
-
-Take the first two fixes of buffalo "Queen" and measure the step three ways.
-
-```{r}
-queen <- buf_sf |> filter(id == "Queen") |> slice(1:2)
-
-# (1) WRONG — Euclidean on degrees, pretending they are metres
+queen <- fixes |> filter(id == "Queen") |> slice(1:2)
 xy <- st_coordinates(queen)
-wrong <- sqrt(diff(xy[, 1])^2 + diff(xy[, 2])^2)
-wrong
 
-# (2) Geodesic on the ellipsoid — sf does this automatically for 4326
-geodesic <- st_distance(queen[1, ], queen[2, ])
-geodesic
+wrong     <- sqrt(diff(xy[, 1])^2 + diff(xy[, 2])^2)          # "distance" in degrees
+geodesic  <- st_distance(queen[1, ], queen[2, ])              # on the ellipsoid
+projected <- st_distance(st_transform(queen, 32736)[1, ],
+                         st_transform(queen, 32736)[2, ])     # in UTM metres
 
-# (3) Euclidean in projected metres
-queen_utm <- st_transform(queen, 32736)
-projected <- st_distance(queen_utm[1, ], queen_utm[2, ])
-projected
+c(wrong_degrees = wrong, geodesic_m = as.numeric(geodesic),
+  projected_m = as.numeric(projected))
 ```
-
-### Your turn
-
-**3a.** Explain the three numbers.
-**3b.** How big is the disagreement between (2) and (3), in relative terms?
 
 ::: {.callout-note collapse="true"}
-## Solution
+## What the three numbers mean
 
-```{r}
-c(wrong_degrees = as.numeric(wrong),
-  geodesic_m    = as.numeric(geodesic),
-  projected_m   = as.numeric(projected))
+The first is not a distance at all: it mixes degrees of longitude and latitude,
+which are different lengths. The other two agree to a small fraction of a
+percent — UTM's distortion inside a zone is under 0.1%.
 
-# Relative difference between the two *correct* methods
-abs(as.numeric(geodesic) - as.numeric(projected)) / as.numeric(geodesic)
-```
-
-Number (1) is in **degrees** and is not a distance at all — it is a
-dimensionless mix of two different angular units. It is small not because the
-animal barely moved, but because degrees are big.
-
-Numbers (2) and (3) are both in metres and agree to a small fraction of a
-percent. That is UTM doing its job: inside one zone, distortion is under 0.1%.
-
-**Practical rule.** For distances, either is fine inside a zone. But for
-kernel density, step-length distributions, buffers and anything involving
-*area*, project first — those methods assume a plane.
+For distances either works. For kernel densities, buffers and anything
+involving **area**, project first: those methods assume a plane.
 :::
 
-## Task 4 — Scale up: all steps for all animals
+## Task 3 — Vector verbs: buffer, join, intersect
+
+We need polygons to overlay. Build them from the land-cover raster: for each
+cell, which cover type dominates?
 
 ```{r}
-step_lengths <- buf_utm |>
-  group_by(id) |>
-  arrange(t, .by_group = TRUE) |>
-  mutate(
-    sl = as.numeric(st_distance(geometry, lag(geometry), by_element = TRUE)),
-    dt = as.numeric(difftime(t, lag(t), units = "hours"))
-  ) |>
-  ungroup() |>
+lc <- rast("data/kruger_landcover.tif")[[c("trees", "grassland", "shrubs")]]
+dominant <- which.max(lc)
+levels(dominant) <- data.frame(id = 1:3, cover = c("trees", "grassland", "shrubs"))
+
+habitat <- as.polygons(dominant, dissolve = TRUE) |>
+  st_as_sf() |>
+  st_transform(32736)
+
+habitat
+```
+
+### `st_join()` — which polygon is each fix in?
+
+```{r}
+fixes_hab <- st_join(fixes_utm, habitat)
+
+fixes_hab |>
   st_drop_geometry() |>
-  filter(!is.na(sl))
+  count(cover) |>
+  mutate(share = round(n / sum(n), 3))
+```
 
-summary(step_lengths$sl)
+### `st_buffer()` and `st_intersection()` — what is around the animal?
+
+```{r}
+cilla_area <- fixes_utm |>
+  filter(id == "Cilla") |>
+  st_buffer(dist = 500) |>          # 500 m around every fix
+  st_union()                        # one polygon: the area Cilla came near
+
+used_hab <- st_intersection(habitat, cilla_area) |>
+  mutate(km2 = as.numeric(st_area(geometry)) / 1e6)
+
+used_hab |> st_drop_geometry() |> select(cover, km2)
 ```
 
 ### Your turn
 
-**4a.** What is the median step length per individual?
-**4b.** Plot the distribution of step lengths. Why the long tail?
+**3a.** Compare the habitat composition of Cilla's area with that of the whole
+landscape. **3b.** Why must `habitat` and `cilla_area` be projected here?
 
 ::: {.callout-note collapse="true"}
 ## Solution
 
 ```{r}
-step_lengths |>
-  group_by(id) |>
-  summarise(n = n(), median_sl = median(sl), max_sl = max(sl), .groups = "drop")
+study <- st_as_sfc(st_bbox(habitat))
+landscape <- st_intersection(habitat, study) |>
+  mutate(km2 = as.numeric(st_area(geometry)) / 1e6)
+
+left_join(
+  landscape |> st_drop_geometry() |> transmute(cover, landscape = km2 / sum(km2)),
+  used_hab  |> st_drop_geometry() |> transmute(cover, cilla = km2 / sum(km2)),
+  by = "cover"
+) |>
+  mutate(across(c(landscape, cilla), \(z) round(z, 3)),
+         ratio = round(cilla / landscape, 2))
 ```
 
-```{r}
-#| fig-width: 8
-#| fig-height: 4
-#| fig-align: center
-par(mfrow = c(1, 2))
-hist(step_lengths$sl, breaks = 60, col = "#1f6f78", border = "white",
-     main = "Step lengths", xlab = "metres")
-hist(log10(step_lengths$sl + 1), breaks = 60, col = "#1f6f78", border = "white",
-     main = "log10(step length + 1)", xlab = "log10 metres")
-par(mfrow = c(1, 1))
-```
+A ratio above 1 means Cilla's surroundings contain more of that cover than the
+landscape does. This used-versus-available comparison is the seed of
+Session 7.
 
-Two things produce the tail. First, genuine long movements. Second — and this
-is the important one — **steps separated by long time gaps**. A "step" across
-a 12-hour gap is not comparable to a step across one hour.
-
-```{r}
-#| fig-width: 6
-#| fig-height: 4.5
-#| fig-align: center
-plot(step_lengths$dt, step_lengths$sl, pch = 16, cex = 0.2,
-     col = adjustcolor("#1f6f78", 0.3), log = "y",
-     xlab = "Time gap (hours)", ylab = "Step length (m), log scale")
-```
-
-Step length is meaningless without its time interval. This is why Class 3
-**resamples** tracks to a regular interval before computing anything.
+Both layers must be projected because `st_buffer(dist = 500)` needs metres
+(in degrees, 500 would be absurd) and `st_area()` of a union of buffers
+assumes a plane. `sf` would compute geodesic areas on 4326, but buffering in
+degrees produces ellipses, not circles.
 :::
 
-## Task 5 — A real raster
+## Task 4 — Rasters with `terra`: NDVI
 
-We use SRTM-derived elevation for the Kruger area, already cropped for you.
+`data/kruger_ndvi_2005.tif` holds two **MODIS** 16-day NDVI composites
+(MOD13Q1, 250 m) over the buffalo range: one from the wet season and one from
+the dry season of 2005.
 
 ```{r}
-elev <- rast("data/kruger_elevation.tif")
-elev
+ndvi <- rast("data/kruger_ndvi_2005.tif")
+ndvi
+```
+
+```{r}
+#| fig-width: 9
+#| fig-height: 4.8
+#| fig-align: center
+plot(ndvi, col = hcl.colors(50, "Greens", rev = TRUE), range = c(0, 0.9))
 ```
 
 ### Your turn
 
-**5a.** What is the resolution, in degrees and roughly in metres?
-**5b.** Extract elevation at every buffalo fix. What is the range?
+**4a.** What is the resolution in metres? What CRS is it in?
+**4b.** Extract both NDVI layers at every buffalo fix.
 
 ::: {.callout-note collapse="true"}
 ## Solution
 
 ```{r}
-res(elev)                       # degrees
-res(elev)[2] * 111320           # metres, north-south
-res(elev)[1] * 111320 * cos(24.5 * pi / 180)   # metres, east-west
-
-crs(elev, describe = TRUE)$code
+crs(ndvi, describe = TRUE)$code
+res(ndvi)
+round(res(ndvi) * c(111320 * cos(24.6 * pi / 180), 111320))   # approx metres
 ```
 
-30 arc-seconds ≈ 900 m. The raster is in EPSG:4326, the *same* CRS as
-`buf_sf` — so we extract with the geographic version, not the UTM one.
+About 230 m east–west and 230 m north–south — MODIS's 250 m product,
+delivered here in longitude/latitude.
 
 ```{r}
-buf_sf$elevation <- terra::extract(elev, vect(buf_sf))[, "elevation"]
+fixes$ndvi_wet <- terra::extract(ndvi[["ndvi_2005_02_02"]], vect(fixes))[, 2]
+fixes$ndvi_dry <- terra::extract(ndvi[["ndvi_2005_09_14"]], vect(fixes))[, 2]
 
-summary(buf_sf$elevation)
-sum(is.na(buf_sf$elevation))
+summary(st_drop_geometry(fixes)[, c("ndvi_wet", "ndvi_dry")])
 ```
 
-```{r}
-#| fig-width: 6
-#| fig-height: 4
-#| fig-align: center
-boxplot(elevation ~ id, data = st_drop_geometry(buf_sf),
-        col = "#1f6f78", border = "grey30",
-        xlab = "", ylab = "Elevation (m)",
-        main = "Elevation used, by individual")
-```
-
-Individuals occupy noticeably different elevation bands — a first hint that
-they are not interchangeable, and a preview of Class 7.
+The same places are far greener in February than in September. Which value
+belongs to which fix depends on *when* the fix was taken — Session 3 does that
+matching properly.
 :::
 
-## Task 6 — Deliberately break it
+## Task 5 — Break it on purpose
 
-Do this on purpose, once, so you recognise the symptom for the rest of your
-career.
+Two silent failures worth recognising for the rest of your career.
 
-```{r}
-elev_utm <- project(elev, "EPSG:32736")
-```
-
-**First, the good news.** Both objects carry a CRS, so `terra` sorts it out
-itself — note the warning it prints:
+### A bare coordinate matrix has no CRS
 
 ```{r}
-ok <- terra::extract(elev_utm, vect(buf_sf))
+ndvi_utm <- project(ndvi, "EPSG:32736")
+
+# Both objects carry a CRS: terra reprojects for you, with a warning
+ok <- terra::extract(ndvi_utm[[1]], vect(fixes))
 mean(is.na(ok[, 2]))
-```
 
-**Now the bad news.** Strip the coordinates down to a bare matrix and the CRS
-goes with them:
-
-```{r}
-xy <- st_coordinates(buf_sf)          # just numbers — no CRS attached
-bad <- terra::extract(elev_utm, xy)
+# A bare matrix carries none: degrees are read as metres
+bad <- terra::extract(ndvi_utm[[1]], st_coordinates(fixes))
 mean(is.na(bad[, 1]))
 ```
 
-Every value is `NA`. No error, no warning — just a column of missing data that
-would quietly propagate into your model.
+Every value `NA`, no error, no warning. **Keep coordinates in objects that
+carry their CRS.**
 
-### Your turn
-
-**6a.** Explain why. **6b.** Find the second way to produce the same failure.
-
-::: {.callout-note collapse="true"}
-## Solution
-
-A matrix has no CRS, so `terra` can only assume the numbers are already in the
-raster's coordinate system. It reads longitude 31.8 as **31.8 metres** east of
-the UTM 36S origin — a point in the Gulf of Guinea, far outside the extent:
+### `extract(buffer = )` is ignored for points
 
 ```{r}
-ext(elev_utm)
-apply(xy, 2, range)
+at_fix   <- terra::extract(ndvi[[1]], vect(fixes))[, 2]
+buf_2000 <- terra::extract(ndvi[[1]], vect(fixes), buffer = 2000,
+                           fun = mean, na.rm = TRUE)[, 2]
+identical(at_fix, buf_2000)
 ```
 
-The second route to the same failure is an object whose CRS is *undefined*:
+The "2 km mean" is the at-fix value, unchanged. Build buffer polygons yourself:
 
 ```{r}
-elev_nocrs <- elev_utm
-crs(elev_nocrs) <- ""
-worse <- terra::extract(elev_nocrs, vect(buf_sf))
-mean(is.na(worse[, 2]))
+buf_poly <- st_buffer(fixes_utm, 2000) |> st_transform(4326) |> vect()
+buf_2000 <- terra::extract(ndvi[[1]], buf_poly, fun = mean, na.rm = TRUE)[, 2]
+
+c(sd_at_fix = sd(at_fix, na.rm = TRUE), sd_2km_mean = sd(buf_2000, na.rm = TRUE))
 ```
 
-Now `terra` has nothing to transform *to*, so it assumes agreement — and fails
-the same silent way.
+::: {.callout-important}
+## The habit
+
+When an argument is supposed to change the answer, **check that it did**.
+`identical()` costs one line.
+
+Note also what smoothing does: the 2 km mean has less variance than the
+at-fix value. Here the reduction is modest, because savanna greenness varies
+mostly at scales larger than 2 km; for a patchier covariate it can be large.
+Either way, smoothing shrinks the contrast between used and available places.
+The buffer radius is a hypothesis about perception — choose it from biology,
+not from whichever radius gives the smallest p-value.
 :::
 
-::: {.callout-warning}
-## The habit to build
-
-- **Keep coordinates inside objects that carry a CRS** (`sf`, `SpatVector`).
-  Do not pass bare matrices around.
-- When `terra` prints `transforming vector data to the CRS of the raster`,
-  that is not noise — it is telling you your inputs disagreed. Read it.
-- Before every `extract()`, ten seconds of checking:
-
-```r
-crs(r, describe = TRUE)$code ; st_crs(pts)$epsg    # same code?
-ext(r) ; st_bbox(pts)                              # overlapping numbers?
-```
-:::
-
-## Task 7 — A map that is not distorted
+## Task 6 — Mini-challenge: a map worth publishing
 
 ```{r}
-#| fig-width: 7
-#| fig-height: 6.5
+#| fig-width: 8
+#| fig-height: 7.5
 #| fig-align: center
-elev_crop <- crop(elev, ext(st_bbox(buf_sf)) + 0.05)
+library(ggspatial)
 
-plot(elev_crop, col = hcl.colors(50, "Terrain2"),
-     main = "Buffalo tracks over elevation, Kruger NP",
-     plg = list(title = "m a.s.l."))
+ndvi_df <- as.data.frame(ndvi_utm[["ndvi_2005_02_02"]], xy = TRUE, na.rm = TRUE)
+names(ndvi_df)[3] <- "ndvi"
 
-ids <- unique(buf_sf$id)
-cols <- hcl.colors(length(ids), "Dark 3")
-for (i in seq_along(ids)) {
-  d <- buf_sf[buf_sf$id == ids[i], ]
-  lines(st_coordinates(d), col = adjustcolor(cols[i], 0.8), lwd = 1)
-}
-legend("topright", legend = ids, col = cols, lwd = 2, bty = "n", cex = 0.75)
+paths <- fixes_utm |>
+  group_by(id) |>
+  summarise(do_union = FALSE) |>
+  st_cast("LINESTRING")
+
+# Frame the map on where the animals are (robust to a stray fix), plus a margin
+xy <- st_coordinates(fixes_utm)
+lims_x <- quantile(xy[, 1], c(0.001, 0.999)) + c(-4000, 4000)
+lims_y <- quantile(xy[, 2], c(0.001, 0.999)) + c(-4000, 4000)
+
+ggplot() +
+  geom_raster(data = ndvi_df, aes(x, y, fill = ndvi)) +
+  scale_fill_gradientn(colours = hcl.colors(9, "Greens", rev = TRUE),
+                       limits = c(0, 0.9), name = "NDVI\nFeb 2005") +
+  geom_sf(data = paths, aes(colour = id), linewidth = 0.3, alpha = 0.85) +
+  scale_colour_brewer(palette = "Dark2", name = NULL) +
+  annotation_scale(location = "bl", width_hint = 0.25) +
+  annotation_north_arrow(location = "tr", style = north_arrow_minimal()) +
+  coord_sf(crs = 32736, xlim = lims_x, ylim = lims_y, expand = FALSE) +
+  labs(title = "African buffalo in Kruger National Park",
+       subtitle = "GPS tracks over wet-season greenness",
+       caption = "Tracks: Movebank (Getz et al.). NDVI: MODIS MOD13Q1, 2 Feb 2005.") +
+  theme_minimal(base_size = 12) +
+  theme(axis.title = element_blank(), legend.position = "right")
 ```
 
-::: {.callout-note collapse="true"}
-## Why this one is not distorted
+::: {.callout-important}
+## Look at Toni's track
 
-`terra::plot()` reads the CRS and, for geographic coordinates, sets the aspect
-ratio to `1/cos(latitude)` so that a kilometre east looks like a kilometre
-north. Compare with last week's `plot(..., asp = 1)`, which did not.
-
-You can check what it used:
-
-```{r}
-#| fig-show: hide
-p <- plot(elev_crop); 1 / cos(mean(c(-25.3, -23.9)) * pi / 180)
-```
+One straight line leaves the frame towards the north-east. That is a single
+corrupt fix more than 60 km away — the buffalo did not go there and back in
+an hour. A good map shows you problems in the data before any model does;
+Session 3 removes this fix properly.
 :::
 
-### Your turn
+::: {.callout-tip}
+## To hand in
 
-**7a.** Save the buffalo points as a GeoPackage and read them back.
-
-::: {.callout-note collapse="true"}
-## Solution
-
-```{r}
-f <- file.path(tempdir(), "buffalo.gpkg")
-st_write(buf_sf, f, delete_dsn = TRUE, quiet = TRUE)
-
-again <- st_read(f, quiet = TRUE)
-st_crs(again)$epsg
-nrow(again)
-```
-
-Use **GeoPackage** (`.gpkg`), not shapefile. Shapefiles truncate column names
-to 10 characters, cannot store `POSIXct` properly, are limited to 2 GB, and
-are actually 4+ files that people lose track of. GeoPackage is one file, one
-standard, no surprises.
+Your own version of this map, as a PNG at print resolution
+(`ggsave("map.png", width = 17, height = 15, units = "cm", dpi = 300)`), plus
+the `.qmd` that makes it. It must have: a projected CRS, a scale bar, a legend
+with units, a caption crediting the data, and colours that survive greyscale
+printing. Choose a different layer or animal from the one above.
 :::
 
 ## Self-check
@@ -402,46 +325,33 @@ standard, no surprises.
 What have you done?
 
 - [ ] Reprojected the data to UTM 36S
-- [x] Mislabelled the data — the coordinates are unchanged but now claimed to be metres
+- [x] Mislabelled the data — the numbers are unchanged but now claimed to be metres
 - [ ] Nothing; `sf` ignores invalid assignments
 - [ ] Produced an error
 
 ::: {.quiz-feedback}
-Assigning a CRS only **writes a label**. The numbers 31.8 and −24.5 are now
-interpreted as 31.8 m east and 24.5 m south of the UTM 36S origin — a point in
-the Atlantic off West Africa.
-
-It fails silently, which is what makes it dangerous. `st_transform()` is the
-function that changes coordinates.
+Assigning a CRS only **writes a label**. 31.8 and −24.5 are now read as metres
+from the UTM 36S origin — a point off West Africa. It fails silently, which is
+what makes it dangerous. `st_transform()` changes coordinates.
 :::
 :::
 
 ::: {.quiz}
-Which CRS would you use to compute home-range areas for Leo the vulture, whose
-track spans 7°N to 54°N and 108°W to 68°W?
+You `st_join()` 20,000 fixes to a habitat layer and get back 20,412 rows. Why?
 
-- [ ] EPSG:32613 (UTM zone 13N), where he was tagged
-- [ ] EPSG:3857 (Web Mercator)
-- [x] An equal-area projection appropriate to the Americas, or per-season UTM zones after segmenting
-- [ ] EPSG:4326 — `sf` computes geodesic areas anyway
+- [ ] `st_join()` duplicates the last row
+- [x] Some fixes fall in more than one polygon (overlaps, or exactly on a shared boundary)
+- [ ] The CRSs differ
+- [ ] It is a bug in `sf`
 
 ::: {.quiz-feedback}
-A single UTM zone is 6° wide; Leo spans about 40° of longitude, so distortion
-far from zone 13 is severe. Web Mercator is conformal and *not* equal-area —
-areas at 54°N are inflated by roughly a factor of three relative to the
-equator, so it is the worst possible choice for comparing areas.
-
-The right answers are an **equal-area** CRS covering the Americas, or — better
-— to **segment first** (Class 6) and estimate separate ranges for the
-breeding and wintering areas, each in its own local projection. A single
-range for this animal is not a meaningful quantity, whatever CRS you use.
-
-`sf` does compute geodesic areas on 4326, but kernel density estimators need
-projected coordinates regardless.
+`st_join()` is a spatial *left join*: one output row for every match. A point
+on a shared boundary, or inside overlapping polygons, matches twice. Always
+compare row counts before and after a join, and use `largest = TRUE` (for
+polygons) or clean the polygon layer so it tiles without overlaps.
 :::
 :::
 
-## Before Class 3
+## Before Session 3
 
-- Check `library(move2)`, `library(amt)` and `library(mapview)` all load.
-- Try `mapview::mapview(buf_sf)` — an interactive map in one line.
+- Make sure `library(amt)` and `library(adehabitatLT)` both load.

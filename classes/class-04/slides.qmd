@@ -1,6 +1,6 @@
 ---
-title: "Movement metrics and home range"
-subtitle: "Class 4 · Theme 1 — Movement and movement analysis"
+title: "Quantifying movement"
+subtitle: "Session 4 — Path descriptors and behavioural classification"
 author: "Giuliano Colosimo"
 institute: "University of Rome Tor Vergata"
 date: last-modified
@@ -16,7 +16,7 @@ format:
     history: false
     width: 1280
     height: 760
-    footer: "[Animal Tracking 2026-2027 · Class 4](../../index.qmd)"
+    footer: "[Animal Tracking 2026-2027 · Session 4](../../index.qmd)"
     logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
     highlight-style: github
 execute:
@@ -25,42 +25,38 @@ execute:
 
 ## Today
 
-::: {.objectives}
-1. Describe a trajectory with numbers: **step length, turning angle, speed,
-   net displacement**
-2. Why these numbers are **scale-dependent**
-3. Random walks: BRW, CRW, Lévy — the null models
-4. **Home range**: what it is, and what the estimators actually estimate
-5. MCP, KDE and why autocorrelation broke them — **AKDE**
+::: {.paradigm}
+[Internal state]{.pbox .on}
+[Motion capacity]{.pbox .on}
+[Navigation capacity]{.pbox}
+[External factors]{.pbox}
+[Movement path]{.pbox .path .on}
 :::
 
-# 1 · Describing a trajectory {background-color="#14525a"}
+From numbers describing a **path** to inferences about **behaviour** — the
+first time we try to climb from the bottom box to the ones above it.
 
 ---
 
-## The step
+## Where we are going
 
-Two consecutive fixes define a **step**.
-
-::: {.columns}
-::: {.column width="55%"}
-- **Step length** $s_t = \lVert \mathbf{x}_{t+1} - \mathbf{x}_t \rVert$
-- **Absolute direction** $\phi_t = \operatorname{atan2}(\Delta y, \Delta x)$
-- **Turning angle** $\theta_t = \phi_t - \phi_{t-1}$, wrapped to $(-\pi, \pi]$
-- **Speed** $v_t = s_t / \Delta t$
-:::
-::: {.column width="45%"}
-::: {.keyidea}
-A turning angle needs **three** fixes. A step needs two. That is why
-`filter_min_n_burst(min_n = 3)` exists.
-:::
-:::
+::: {.objectives}
+1. Path-level descriptors: net squared displacement, straightness, sinuosity,
+   fractal dimension
+2. Classifying movement strategies from NSD curves (Bunnefeld et al. 2011)
+3. First-passage time and the scale of area-restricted search
+4. Behavioural modes along a path: encamped versus transit
+5. Simple segmentation: thresholds, expert rules, behavioural change-point analysis
 :::
 
 . . .
 
-Turning angles are **circular** data: −179° and +179° are 2° apart, not 358°.
-Never take an arithmetic mean of angles.
+::: {.keyidea}
+Every method today returns a confident-looking answer. The skill is asking
+whether it describes the animal or the sampling.
+:::
+
+# 1 · Describing a whole path {background-color="#14525a"}
 
 ---
 
@@ -89,6 +85,57 @@ that a typical step is much longer than your GPS error.
 
 ---
 
+---
+
+## Straightness and sinuosity
+
+::: {.columns}
+::: {.column width="50%"}
+### Straightness index
+$$\text{ST} = \frac{D}{L}$$
+Net displacement over path length, between 0 and 1.
+
+Intuitive, but it depends on the length of the window you compute it over.
+:::
+::: {.column width="50%"}
+### Sinuosity (Benhamou 2004)
+Built from the step length and the concentration of turning angles.
+
+Describes the *local* tortuosity of a random search path, and is far less
+sensitive to the window.
+:::
+:::
+
+. . .
+
+::: {.keyidea}
+Use straightness for **oriented** movement (how directly did it get there?)
+and sinuosity for **searching** movement (how much does it wiggle?).
+:::
+
+---
+
+## Fractal dimension
+
+::: {.incremental}
+- Measure path length with a "ruler" of length $r$; on a fractal path
+  $L(r) \propto r^{1-D}$, so $D$ comes from the slope of log L on log r
+- $D = 1$: straight line; $D \to 2$: a path that fills the plane
+- Appealing because it claims to be **scale-free**
+- The catch (Benhamou 2004; Turchin 1996): real animal paths are rarely
+  fractal across more than a narrow range of scales, and $D$ estimated from a
+  correlated random walk varies with $r$
+:::
+
+. . .
+
+::: {.keyidea}
+If $D$ changes with the ruler, the path is not fractal — and the change itself
+tells you the scale at which the behaviour changes.
+:::
+
+---
+
 ## Net squared displacement (NSD)
 
 $$\text{NSD}(t) = \lVert \mathbf{x}_t - \mathbf{x}_0 \rVert^2$$
@@ -107,6 +154,56 @@ diagnostic:
 
 Fitting these shapes as competing non-linear models (Bunnefeld et al. 2011) is
 a cheap and surprisingly effective way to classify movement strategies.
+
+---
+
+---
+
+## Classifying strategies from NSD
+
+Bunnefeld et al. (2011) fit competing **non-linear models** to each NSD curve
+and let the data choose:
+
+| Strategy | NSD shape | Model |
+|:--|:--|:--|
+| Nomad | keeps rising | $\beta t$ |
+| Resident | rises, then plateaus | $c\,(1 - e^{-kt})$ |
+| Disperser | one sigmoid step | $\delta / (1 + e^{(\theta - t)/\phi})$ |
+| Migrant | up, plateau, back down | difference of two sigmoids |
+
+. . .
+
+::: {.keyidea}
+The fitted **parameters** are the biology: $\sqrt{\delta}$ is the migration
+distance, $\theta_1$ and $\theta_2$ the departure and return dates. Never
+report the winning model without looking at them.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You fit the four NSD models to a year of data for a savanna buffalo, and the
+**migrant** model wins by ΔAIC = 60. The fitted displacement is 12 km. What do
+you conclude?
+
+- [ ] The buffalo is a migrant
+- [x] It shifted within its range; AIC picked the most flexible curve, and the parameters say it is not a migration
+- [ ] The resident model must have failed to converge
+- [ ] Buffalo cannot be classified with NSD
+
+::: {.quiz-feedback}
+The double-sigmoid "migrant" curve is the most flexible of the four: it also
+fits an animal that drifts to one side of its home range for a few months and
+comes back. AIC rewards that fit — and with hundreds of autocorrelated daily
+points, AIC differences are grossly inflated.
+
+The parameters settle it: 12 km is a home-range-scale shift. A real migrant
+such as Leo the vulture gives a displacement of thousands of kilometres. **Read
+the parameters, not just the winner.**
+:::
+:::
 
 ---
 
@@ -131,186 +228,33 @@ This is why **step length is not comparable across studies** unless the
 interval matches, and why you must state the interval in every methods
 section.
 
-It is also why Class 8's step selection functions always compare an observed
+It is also why Session 7's step selection functions always compare an observed
 step with alternatives of *exactly the same duration*.
 :::
 :::
 
-# 2 · Random walks as null models {background-color="#14525a"}
+# 2 · First-passage time {background-color="#14525a"}
 
 ---
 
-## Three canonical walks
+## How long to leave a circle?
 
-::: {.columns}
-::: {.column width="33%"}
-### Simple / BRW
-Turning angles **uniform**; direction has no memory.
-
-Diffusive: displacement grows as $\sqrt{t}$.
-:::
-::: {.column width="33%"}
-### Correlated (CRW)
-Turning angles **concentrated near 0**; direction persists.
-
-Locally directed, diffusive at long range.
-:::
-::: {.column width="33%"}
-### Lévy walk
-Step lengths from a **heavy-tailed** distribution.
-
-Rare very long steps; super-diffusive. Much argued over.
-:::
-:::
-
-. . .
-
-::: {.keyidea}
-These are **null models**. They tell you what a trajectory would look like if
-the animal responded to nothing. Departures from them are where the biology
-is.
-:::
-
----
-
-## Biased random walk
-
-Add a preferred direction — towards a den, a water hole, a wintering ground —
-and you have a **biased** random walk. Combine with persistence and you get
-the BCRW, the workhorse null model for animals with both memory and a goal.
-
-. . .
-
-Class 8's integrated step selection analysis is, in effect, a biased
-correlated random walk whose bias is estimated from environmental covariates.
-Keep that connection in mind.
-
-# 3 · Home range {background-color="#14525a"}
-
----
-
-## What is a home range?
-
-> "That area traversed by the individual in its normal activities of food
-> gathering, mating and caring for young."
-> — Burt (1943)
-
-. . .
+Fauchald & Tveraa (2003): around each fix, draw a circle of radius $r$ and
+measure the **time** the animal takes to leave it.
 
 ::: {.incremental}
-- Note what it **excludes**: exploratory forays, migration, dispersal
-- Note what it does **not** say: nothing about a probability distribution,
-  nothing about a percentage
-- Powell & Mitchell (2012): a home range is a **cognitive map** the animal
-  uses — and our estimators are crude proxies for it
+- Where the animal searches intensively, first-passage time (FPT) is long;
+  where it travels, FPT is short
+- Repeat for many radii and compute the **variance of log FPT** along the path
+- The radius at which that variance **peaks** is the spatial scale of
+  area-restricted search
 :::
 
 . . .
 
 ::: {.keyidea}
-Every estimator answers a slightly different question. "95% home range" is
-not a fact about the animal; it is a number produced by a method with
-assumptions. Say which method, and why.
-:::
-
----
-
-## MCP — minimum convex polygon
-
-The smallest convex polygon containing $x$% of the fixes.
-
-::: {.columns}
-::: {.column width="50%"}
-**For**
-
-- Trivial to compute and explain
-- Comparable with a century of literature
-- No smoothing parameter to argue about
-:::
-::: {.column width="50%"}
-**Against**
-
-- **Convex** — includes land the animal never used (lakes, cliffs, cities)
-- Extremely sensitive to outliers and to sample size
-- Area grows with the number of fixes; no asymptote
-- No density information — every point counts the same
-:::
-:::
-
-. . .
-
-Use it for comparability with old studies. Do not use it as your only estimate.
-
----
-
-## KDE — kernel density estimation
-
-Put a small "bump" (kernel) on each fix, sum them into a **utilisation
-distribution** (UD), then draw the contour containing 95% of the volume.
-
-::: {.incremental}
-- Gives a **density**, not just a boundary — you can have disjoint core areas
-- The answer is dominated by the **bandwidth** $h$
-  - `href` (reference) — assumes bivariate normal; usually over-smooths
-  - `hlscv` (least-squares cross-validation) — often fails to converge, or
-    fragments the UD into confetti
-  - `hpi` (plug-in) — generally the most reliable default
-:::
-
-. . .
-
-::: {.keyidea}
-Report your bandwidth selector. Two papers using "95% KDE" with different
-bandwidths are not comparable.
-:::
-
----
-
-## The problem KDE has with tracking data
-
-Classical KDE assumes fixes are **independent** samples from the UD.
-
-. . .
-
-GPS fixes an hour apart are nothing of the sort — the animal was 300 m away an
-hour ago and will be 300 m away in an hour.
-
-::: {.incremental}
-- Effective sample size is far smaller than $n$
-- So the UD is **under-estimated** — the home range comes out too small
-- And collecting more fixes at a higher rate makes it **worse**, not better
-:::
-
-. . .
-
-::: {.keyidea}
-This is why area estimates from the 1990s (a few dozen VHF fixes) and from
-today (50,000 GPS fixes) are not comparable. It is not that the animals
-changed.
-:::
-
----
-
-## AKDE — autocorrelated KDE
-
-Fleming et al. (2015): first fit a **continuous-time movement model** to the
-track, estimate the autocorrelation structure, and use it to derive the
-*effective* sample size. Then do the kernel estimate.
-
-::: {.incremental}
-- Gives **confidence intervals** on the area — almost nothing else does
-- Handles irregular sampling gracefully
-- Tells you when your data are inadequate, instead of returning a
-  confident-looking number
-- `ctmm` package; also a point-and-click web app
-:::
-
-. . .
-
-::: {.keyidea}
-If you report one home-range estimate in a modern paper, make it AKDE, and
-report the confidence interval. If your CI spans an order of magnitude, that
-is the honest answer.
+FPT turns "where does the animal slow down?" into a scale: *how big* are the
+patches it responds to?
 :::
 
 ---
@@ -318,46 +262,162 @@ is the honest answer.
 ## Quiz
 
 ::: {.quiz}
-You estimate a 95% KDE home range from hourly GPS data (n = 8,000) and get
-12 km². A 1995 study of the same population using VHF (n = 60) reported
-31 km². What is the most likely explanation?
+You compute var(log FPT) for radii from 25 m to 8 km for an hourly buffalo
+track. It is highest at 25 m, falls to a minimum at 1.5 km, then rises to a
+second peak near 4 km. Which peak is the scale of area-restricted search?
 
-- [ ] The population's range has genuinely shrunk by 60%
-- [x] Autocorrelation in the GPS data biases classical KDE downwards
-- [ ] The VHF study had larger location errors, inflating the area
-- [ ] The two studies used different percentage contours
+- [ ] 25 m — it is the highest
+- [x] ~4 km — the small-radius values are inflated by resting and GPS error
+- [ ] 1.5 km — the minimum
+- [ ] Neither; FPT only works for seabirds
 
 ::: {.quiz-feedback}
-Classical KDE assumes independent fixes. Hourly GPS locations are strongly
-autocorrelated, so 8,000 fixes carry the information of perhaps a few hundred
-independent ones — and the estimator systematically **under-estimates** the
-range. The sparse VHF fixes, days apart, were much closer to independent.
+At radii comparable to GPS error and to the distance a resting animal
+shuffles, FPT is dominated by noise and by long bouts of doing nothing: its
+variance is high for reasons that have nothing to do with searching.
 
-Location error does inflate areas, but it is a far smaller effect than this.
-
-The way to settle it is **AKDE**: fit the movement model, get the effective
-sample size, and produce an area with a confidence interval. Very often the
-modern estimate then agrees with the old one — and you have learned that the
-population did not change, your method did.
+The meaningful signal is the peak at a scale well above the positional error —
+here about 4 km, the scale at which this buffalo concentrates its use. Always
+interpret FPT only for radii several times larger than your location error and
+typical resting movement.
 :::
+:::
+
+# 3 · Behavioural modes {background-color="#14525a"}
+
+---
+
+## The problem
+
+An animal is not doing one thing all day.
+
+::: {.incremental}
+- Resting, foraging, travelling, migrating — each with its own **step-length
+  and turning-angle signature**
+- Pool them and every summary is a meaningless average: a "mean step length"
+  that describes no actual behaviour
+- Leo's six-year track contains residency **and** migration. A single home
+  range spans two continents (Session 1)
+:::
+
+. . .
+
+::: {.keyidea}
+**Segment first, then analyse.** Almost every method in this course assumes a
+homogeneous process. Segmentation is how you earn that assumption.
 :::
 
 ---
 
-## Choosing an estimator
-| | Use when | Watch out for |
+---
+
+## Encamped versus transit
+
+The simplest useful classification has two modes:
+
+::: {.columns}
+::: {.column width="50%"}
+### Encamped
+Short steps, frequent reversals, low net displacement.
+
+Resting, ruminating, foraging within a patch.
+:::
+::: {.column width="50%"}
+### Transit
+Long steps, turning angles near zero, high net displacement.
+
+Travelling between patches, to water, away from danger.
+:::
+:::
+
+. . .
+
+Finer schemes — resting / foraging / travelling — need either finer sampling or
+extra sensors (accelerometers). With hourly GPS, two or three modes is usually
+all the data can resolve.
+
+---
+
+## Two questions, often confused
+
+::: {.columns}
+::: {.column width="50%"}
+### Change-point detection
+*"Where does the process change?"*
+
+Finds **breakpoints** in a time series. Output: a set of segments.
+
+BCPA, `segclust2d`, penalised contrasts.
+:::
+::: {.column width="50%"}
+### State classification
+*"Which of $N$ recurring states is the animal in now?"*
+
+Assigns **every step** to a state, and states can recur.
+
+HMM, EMbC, state-space models.
+:::
+:::
+
+. . .
+
+"Migration started on 14 September" is a change-point question. "Was this step
+foraging or travelling?" is a state question. Choose the tool that matches the
+question.
+
+---
+
+# 4 · Simple segmentation {background-color="#14525a"}
+
+---
+
+## The families
+| Approach | Idea | Notes |
 |:--|:--|:--|
-| **MCP** | Comparing to historical literature | Convexity, outliers, no asymptote |
-| **KDE** | Many roughly independent fixes | Bandwidth choice, autocorrelation |
-| **AKDE** | Modern GPS data — the default | Needs enough data to fit the model |
-| **LoCoH** | Hard boundaries (coast, cliffs) | Parameter choice |
-| **dBBMM** | You care about the *path*, not the points | Assumes Brownian motion |
+| **Thresholding** | "Speed > 2 m/s = travelling" | Transparent; arbitrary; no uncertainty |
+| **First-passage time** | Time to leave a circle of radius *r* | Good for finding *scales* of area-restricted search |
+| **BCPA** | Change points in persistence velocity | Behavioural Change Point Analysis; needs a tuning choice |
+| **Clustering / EMbC** | Cluster steps in (speed, turn) space | No time dependence — ignores that behaviour persists |
+| **HMM** | Latent state chain + state-specific distributions | **The standard.** Uses time dependence |
+| **State-space models** | HMM + explicit observation error | Handles messy data; slower, harder |
+
+---
+
+## Thresholds and expert rules
+
+::: {.incremental}
+- **Speed threshold** — "steps faster than $v^*$ are travelling". Transparent
+  and reproducible
+- **Expert rules** — combine several: speed *and* turning angle *and* time of
+  day, chosen from knowledge of the species
+- Both are defensible **only when the metric is clearly bimodal** — a histogram
+  with an empty valley between modes
+- Without that valley, the threshold is an arbitrary decision dressed up as a
+  result
+:::
+
+---
+
+## Behavioural change-point analysis
+
+BCPA (Gurarie et al. 2009) looks for places where the **statistical
+properties** of the movement change.
+
+::: {.incremental}
+- Works on a single variable, typically **persistence velocity**
+  $V\cos\theta$: fast *and* straight gives high values
+- Slides a window along the track; within each window finds the most likely
+  break in mean, variance or autocorrelation
+- Collects breaks that recur across windows into **change points**
+- Works with irregular sampling, which is its great practical strength
+:::
 
 . . .
 
 ::: {.keyidea}
-And before any of them: **should you be estimating a home range at all?**
-For Leo the vulture the answer is no — not until you have segmented the track.
+BCPA tells you **where** the process changes. It does not tell you what the
+animal was doing, and it cannot know whether a change is behavioural or a
+change in your collar's schedule.
 :::
 
 ---
@@ -365,42 +425,42 @@ For Leo the vulture the answer is no — not until you have segmented the track.
 ## Quiz
 
 ::: {.quiz}
-You compute a 100% MCP for an animal after 3 months, then again after 12
-months. The area has tripled. What can you conclude?
+BCPA on 25 days of hourly buffalo data, window of 50 fixes: **29** phases.
+Window of 30 fixes: **38**. Same 50-fix window on the track resampled to
+3-hourly: **19**. How many behavioural phases did the buffalo go through?
 
-- [ ] The animal expanded its home range over the year
-- [x] Very little — MCP area grows with the number of fixes and has no asymptote
-- [ ] The collar's accuracy degraded
-- [ ] The 100% contour is invalid; use 95%
+- [ ] 29 — the default settings
+- [ ] 19 — hourly data are too noisy
+- [ ] 38 — more resolution finds more behaviour
+- [x] The question has no single answer: phase counts depend on window size and fix rate
 
 ::: {.quiz-feedback}
-The MCP is the convex hull of your points, so **every** new fix can only
-enlarge it or leave it unchanged — never shrink it. Its area therefore
-increases with sample size and duration without converging, which makes
-comparisons across different tracking durations meaningless.
+These are real results for the buffalo Cilla. The window size is an analyst's
+tuning choice, and the fix rate sets what a "window of 50 fixes" means in
+time: 50 hours at hourly sampling, 150 hours at 3-hourly. Match the window in
+*duration* (17 fixes at 3-hourly ≈ 50 hours) and the 3-hourly count rises back
+to 29.
 
-This is the single biggest problem with MCP, and it is why area-vs-sample-size
-curves used to be standard practice.
-
-Dropping to 95% removes the most extreme points and helps a little, but it
-does not fix the underlying behaviour. A genuine expansion would need to be
-demonstrated with an estimator that converges — AKDE, with confidence
-intervals, on comparable time windows.
+A phase count is a property of the analysis, not of the animal. What you can
+interpret biologically are the change points that **persist** across
+reasonable windows and fix rates — which is the robustness check you run in
+today's practical.
 :::
 :::
 
 ---
 
-## Today's exercise
+## Today's practical
 
 ::: {.objectives}
-**[→ Class 4 exercise](exercise.qmd)**
+**[→ Session 4 practical](exercise.qmd)**
 
-1. Step lengths, turning angles, speeds — and their distributions
-2. Show that step length depends on sampling interval
-3. NSD for the buffalo and for the vulture
-4. MCP, KDE and AKDE for one buffalo, compared
-5. Demonstrate the autocorrelation problem by thinning your own data
+1. Net squared displacement with `adehabitatLT` — buffalo and vulture
+2. Classify strategies: fit the four NSD models, then read the parameters
+3. Straightness across scales
+4. First-passage time and the scale of area-restricted search
+5. A threshold that is honest (the vulture) and one that is not (the buffalo)
+6. BCPA — and whether its answer survives a change of fix rate
 :::
 
 ---
@@ -408,18 +468,27 @@ intervals, on comparable time windows.
 ## Recap
 
 ::: {.incremental}
-- Step length, turning angle and speed are **scale-dependent** — always report
-  the interval
-- Turning angles are circular data
-- NSD is a cheap, powerful diagnostic of movement strategy
-- Random walks are null models; biology lives in the departures
-- MCP is comparable but crude; KDE is biased by autocorrelation; **AKDE**
-  addresses it and gives you a CI
+- Path descriptors — NSD, straightness, sinuosity, fractal dimension — all
+  depend on the sampling interval and the window
+- NSD model classification is powerful; **read the parameters**, not just AIC
+- FPT finds the scale of area-restricted search — above the noise floor
+- Encamped versus transit is usually all hourly GPS can resolve
+- Thresholds are honest only across an empty valley; BCPA finds changes, not
+  behaviours, and its answer depends on the fix rate
 :::
 
 . . .
 
-### Before Class 5
+### Before Session 5
 
-- Fleming et al. (2015), *Ecology* 96:1182 — the AKDE paper
-- Check `library(terra)` still works; Class 5 is raster-heavy
+- Codling, Plank & Benhamou (2008), *Random walk models in biology*,
+  J R Soc Interface 5:813 — sections 1–3
+- Make sure `library(circular)` loads
+
+---
+
+## {.center}
+
+### Questions?
+
+[giuliano.colosimo@uniroma2.it](mailto:giuliano.colosimo@uniroma2.it)

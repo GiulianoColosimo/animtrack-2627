@@ -24,6 +24,56 @@ $code-block-font-size: 0.85em;        // ONE size for every code block in every 
 .reveal .footer a:hover,
 .reveal .footer a:focus { text-decoration: underline; }
 
+/* ---------------------------------------------------------------
+   The movement-ecology paradigm (Nathan et al. 2008) is the spine of
+   the course: every deck opens with it and highlights the components
+   that session speaks to.
+
+   ::: {.paradigm}
+   [Internal state]{.pbox .on}
+   [Motion capacity]{.pbox}
+   [Navigation capacity]{.pbox}
+   [External factors]{.pbox .on}
+   [Movement path]{.pbox .path .on}
+   :::
+----------------------------------------------------------------*/
+.reveal .paradigm { margin: 0.6em 0 0.8em; }
+/* pandoc wraps the boxes in a <p>, so that is the grid container */
+.reveal .paradigm > p {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4em;
+  margin: 0;
+}
+.reveal .paradigm .pbox {
+  display: block;
+  text-align: center;
+  padding: 0.45em 0.3em;
+  border-radius: 6px;
+  border: 2px solid rgba(31, 111, 120, 0.25);
+  color: rgba(34, 39, 43, 0.45);
+  background: transparent;
+}
+.reveal .paradigm .pbox.on {
+  border-color: #1f6f78;
+  background: rgba(31, 111, 120, 0.12);
+  color: #14525a;
+  font-weight: 700;
+}
+.reveal .paradigm .pbox.path {
+  grid-column: 1 / -1;
+  position: relative;
+  margin-top: 0.9em;
+}
+.reveal .paradigm .pbox.path::before {
+  content: "↓";
+  position: absolute;
+  top: -1.15em;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #1f6f78;
+}
+
 /* Title slide accent bar */
 .reveal .title-slide h1.title { border-bottom: 4px solid #1f6f78; padding-bottom: 0.2em; }
 

@@ -1,6 +1,6 @@
 ---
-title: "Exercise 7 — Fitting a resource selection function"
-subtitle: "Class 7 · Theme 5"
+title: "Practical 7 — Habitat selection on the move"
+subtitle: "Session 7 · Resource selection and step selection functions"
 date-modified: last-modified
 ---
 
@@ -10,525 +10,398 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 ::: {.objectives}
-**Goals.** Build used and available samples; fit an RSF and read the
-coefficients as odds ratios; check that estimates stabilise as availability
-grows; change the availability domain and watch the answer move; fit all six
-buffalo two-stage; and map the predicted selection surface.
+**Goals.** Fit a resource selection function and a step selection function to
+the same fisher; interpret both with relative selection strength; recover the
+realised movement kernel; test whether habitat changes how the animal moves;
+and find out which method recovers a **known** selection coefficient from a
+simulated animal.
 
-**Time:** ~55 minutes. **Packages:** `amt`, `terra`, `sf`, `dplyr`, `tidyr`.
+**Time:** ~70 minutes. **Packages:** `amt`, `terra`, `survival`, `dplyr`,
+`ggplot2`.
 :::
 
 ```{r}
 library(amt)
 library(terra)
-library(sf)
 library(dplyr)
-library(tidyr)
+library(ggplot2)
+library(lubridate)
 ```
 
-## Setup
+## The data: fishers in New York
+
+`amt` ships GPS tracks of four fishers (*Pekania pennanti*) from LaPoint et al.
+(2013), with three rasters: land use (GlobCover, 300 m), elevation, and human
+population density.
 
 ```{r}
-clean <- read.csv("data/buffalo_kruger.csv.gz") |>
-  transmute(id = individual.local.identifier,
-            t  = as.POSIXct(timestamp, tz = "UTC"),
-            x  = location.long, y = location.lat) |>
-  filter(!is.na(x), !is.na(y)) |>
-  distinct(id, t, .keep_all = TRUE)
+data(amt_fisher)
+amt_fisher |> count(name)
 
-trk <- make_track(clean, x, y, t, id = id, crs = 4326) |>
-  transform_coords(crs_to = 32736)
+cov <- get_amt_fisher_covars()
 
-# Covariates, projected to match the track
-elev <- rast("data/kruger_elevation.tif")
-terr <- terrain(elev, v = c("slope", "TRI"), unit = "degrees")
-names(terr) <- c("slope", "tri")
-lc <- rast("data/kruger_landcover.tif")
-
-covs <- project(c(elev, terr, lc), "EPSG:32736")
-names(covs)
+# GlobCover classes 40-100 and 160-170 are forest
+forest <- cov$landuse %in% c(40:100, 160:170)
+covs <- c(forest,
+          resample(cov$elevation, forest),
+          resample(cov$popden, forest))
+names(covs) <- c("forest", "elevation", "popden")
+covs
 ```
 
-::: {.callout-warning}
-## Project the covariates once, at the start
-
-The track is in UTM 36S. `amt`'s `extract_covariates()` will **not** reproject
-for you — hand it a raster in EPSG:4326 and every covariate comes back `NA`,
-and `glm()` then fails with `no (non-missing) observations`. Project once,
-here, and the rest of the exercise just works.
-:::
-
-## Task 1 — Used and available
+We work with **Lupe**, sampled every ~2 minutes, resampled to a regular
+10-minute interval.
 
 ```{r}
-set.seed(2026)
+lupe <- amt_fisher |>
+  filter(name == "Lupe") |>
+  track_resample(rate = minutes(10), tolerance = minutes(2)) |>
+  filter_min_n_burst(min_n = 3)
 
-cilla <- trk |> filter(id == "Cilla")
-
-rsf_dat <- cilla |>
-  random_points(n = nrow(cilla) * 10) |>
-  extract_covariates(covs)
-
-table(rsf_dat$case_)
-mean(is.na(rsf_dat$elevation))
+nrow(lupe)
 ```
 
-`random_points()` applied to a track draws available points inside that
-animal's **MCP** — so this is a **third-order** analysis: where does Cilla go
-*within* the range she has already chosen?
+## Task 1 — A resource selection function
 
-### Your turn
-
-**1a.** Standardise the covariates and add the infinite weights.
-**1b.** Why weight the available points so heavily?
-
-::: {.callout-note collapse="true"}
-## Solution
+Used locations versus random points within Lupe's range (third order).
 
 ```{r}
-covars <- c("elevation", "slope", "tri", "trees", "grassland", "shrubs")
-
-d <- rsf_dat |>
-  filter(if_all(all_of(covars), \(z) !is.na(z))) |>
-  mutate(across(all_of(covars), \(z) as.numeric(scale(z))),
-         w = ifelse(case_, 1, 5000))
-
-nrow(d)
-```
-
-The used–available design is really an **inhomogeneous Poisson point
-process**, and logistic regression is a computational device for fitting it.
-The equivalence is exact only in the limit of infinitely many, infinitely
-down-weighted available points. Giving the available points a large weight
-(here 5,000) makes the logistic coefficients converge to the correct
-point-process coefficients.
-
-Standardising makes the coefficients comparable across covariates measured in
-different units — "per one standard deviation" — and improves the numerical
-conditioning of the fit.
-:::
-
-## Task 2 — Fit and interpret
-
-```{r}
-fit <- glm(case_ ~ elevation + slope + tri + trees + grassland + shrubs,
-           data = d, family = binomial(), weights = w)
-
-round(summary(fit)$coefficients, 4)
-```
-
-### Your turn
-
-**2a.** Express each coefficient as an odds ratio with a confidence interval.
-**2b.** Which covariate has the strongest effect, and in which direction?
-
-::: {.callout-note collapse="true"}
-## Solution
-
-```{r}
-res <- data.frame(
-  term = names(coef(fit)),
-  beta = coef(fit),
-  se   = summary(fit)$coefficients[, 2]
-) |>
-  filter(term != "(Intercept)") |>
-  mutate(
-    RSS   = round(exp(beta), 2),                       # relative selection strength
-    lower = round(exp(beta - 1.96 * se), 2),
-    upper = round(exp(beta + 1.96 * se), 2),
-    beta  = round(beta, 3)
-  ) |>
-  arrange(desc(abs(beta)))
-
-res
-```
-
-```{r}
-#| fig-width: 6.5
-#| fig-height: 4
-#| fig-align: center
-r <- res[order(res$beta), ]
-plot(r$beta, seq_len(nrow(r)), pch = 16, col = "#1f6f78", cex = 1.3,
-     xlim = range(c(r$beta - 1.96 * r$se, r$beta + 1.96 * r$se)),
-     yaxt = "n", ylab = "", xlab = "Coefficient (log scale, per 1 SD)",
-     main = "Cilla: third-order selection")
-segments(r$beta - 1.96 * r$se, seq_len(nrow(r)),
-         r$beta + 1.96 * r$se, seq_len(nrow(r)), col = "#1f6f78", lwd = 2)
-axis(2, at = seq_len(nrow(r)), labels = r$term, las = 1, cex.axis = 0.8)
-abline(v = 0, col = "firebrick", lty = 2)
-```
-
-Read the table as **relative selection strength**: `RSS = exp(beta)` is the
-factor by which the relative probability of use multiplies for a one-standard-
-deviation increase in that covariate, holding the others fixed.
-
-An `RSS` of 1 means no selection; the confidence interval tells you whether
-you can distinguish it from 1.
-
-Note the **intercept is not interpretable**. It absorbs the arbitrary ratio of
-available to used points — change `n` and the intercept moves, while the
-slopes do not. That is precisely why only *relative* statements are licensed.
-:::
-
-## Task 3 — Does availability sample size matter?
-
-The number of available points is your choice. The estimates should stop
-moving once you have drawn enough.
-
-```{r}
-#| cache: true
-multipliers <- c(1, 5, 10, 25, 50)
-
-stab <- lapply(multipliers, function(m) {
-  dd <- cilla |>
-    random_points(n = nrow(cilla) * m) |>
-    extract_covariates(covs) |>
-    filter(if_all(all_of(covars), \(z) !is.na(z))) |>
-    mutate(across(all_of(covars), \(z) as.numeric(scale(z))),
-           w = ifelse(case_, 1, 5000))
-  f <- glm(case_ ~ elevation + slope + tri + trees + grassland + shrubs,
-           data = dd, family = binomial(), weights = w)
-  data.frame(mult = m,
-             term = names(coef(f))[-1],
-             beta = as.numeric(coef(f))[-1],
-             se   = summary(f)$coefficients[-1, 2])
-}) |> bind_rows()
-
-stab |>
-  select(mult, term, beta) |>
-  pivot_wider(names_from = mult, values_from = beta) |>
-  mutate(across(-term, \(z) round(z, 3)))
-```
-
-### Your turn
-
-**3a.** Have the coefficients stabilised?
-**3b.** What happens to the standard errors?
-
-::: {.callout-note collapse="true"}
-## Solution
-
-```{r}
-#| fig-width: 8.5
-#| fig-height: 4.2
-#| fig-align: center
-par(mfrow = c(1, 2))
-
-terms <- unique(stab$term)
-cols <- hcl.colors(length(terms), "Dark 3")
-plot(range(multipliers), range(stab$beta), type = "n", log = "x",
-     xlab = "Available points (× n used)", ylab = "Coefficient",
-     main = "Estimates stabilise")
-for (i in seq_along(terms)) {
-  z <- stab[stab$term == terms[i], ]
-  lines(z$mult, z$beta, col = cols[i], lwd = 2, type = "b", pch = 16)
-}
-abline(h = 0, lty = 2, col = "grey50")
-legend("bottomright", terms, col = cols, lwd = 2, bty = "n", cex = 0.6)
-
-plot(range(multipliers), range(stab$se), type = "n", log = "xy",
-     xlab = "Available points (× n used)", ylab = "Standard error",
-     main = "SEs shrink without limit")
-for (i in seq_along(terms)) {
-  z <- stab[stab$term == terms[i], ]
-  lines(z$mult, z$se, col = cols[i], lwd = 2, type = "b", pch = 16)
-}
-par(mfrow = c(1, 1))
-```
-
-The **coefficients** settle down: past roughly 10× the used sample they barely
-move, which is the check you should always run and report.
-
-The **standard errors keep shrinking** as you add available points — and this
-is the crucial asymmetry. Availability points carry information about the
-*landscape*, not about the *animal*. Drawing more of them makes your estimate
-of what was available more precise, so the SEs fall, but you have not observed
-the animal any more closely.
-
-That is why **p-values in used–available designs are close to meaningless**:
-you choose the sample size, so you choose the p-value. Report effect sizes,
-confidence intervals, consistency across individuals, and validation.
-:::
-
-## Task 4 — Change the availability domain
-
-Same animal, same covariates, different definition of "available".
-
-```{r}
-#| cache: true
-# Third order: within Cilla's own MCP (what we did above)
-third <- d
-
-# Second order: within the MCP of ALL six animals — the population's range
-pop_mcp <- hr_mcp(trk, levels = 0.99)
-
-second <- random_points(pop_mcp, n = nrow(cilla) * 10, presence = cilla) |>
+set.seed(1)
+rsf_dat <- lupe |>
+  random_points(n = nrow(lupe) * 10) |>
   extract_covariates(covs) |>
-  filter(if_all(all_of(covars), \(z) !is.na(z))) |>
-  mutate(across(all_of(covars), \(z) as.numeric(scale(z))),
+  mutate(forest = factor(forest, levels = c(0, 1), labels = c("other", "forest")),
+         elevation_z = as.numeric(scale(elevation)),
+         popden_z    = as.numeric(scale(popden)),
          w = ifelse(case_, 1, 5000))
 
-# How different are the two domains?
-c(cilla_mcp_km2 = round(hr_area(hr_mcp(cilla, levels = 0.99))$area / 1e6),
-  population_mcp_km2 = round(hr_area(pop_mcp)$area / 1e6))
+rsf <- glm(case_ ~ forest + elevation_z + popden_z,
+           data = rsf_dat, family = binomial(), weights = w)
+round(summary(rsf)$coefficients, 3)
+```
 
-f3 <- glm(case_ ~ elevation + slope + tri + trees + grassland + shrubs,
-          data = third, family = binomial(), weights = w)
-f2 <- glm(case_ ~ elevation + slope + tri + trees + grassland + shrubs,
-          data = second, family = binomial(), weights = w)
+### Your turn
+
+**1a.** Express each coefficient as relative selection strength with a 95% CI.
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+b  <- coef(rsf)[-1]
+se <- summary(rsf)$coefficients[-1, 2]
+data.frame(term = names(b), RSS = round(exp(b), 2),
+           lower = round(exp(b - 1.96 * se), 2), upper = round(exp(b + 1.96 * se), 2))
+```
+
+Relative to what is available within her range, Lupe's locations are several
+times more likely to fall in forest than in other cover, more likely at higher
+elevation (per standard deviation), and less likely where people are dense.
+The intercept is meaningless — it depends only on how many available points
+you drew.
+:::
+
+## Task 2 — The same fisher, as a step selection function
+
+```{r}
+set.seed(2)
+ssf_dat <- lupe |>
+  steps_by_burst() |>
+  random_steps(n_control = 10) |>
+  extract_covariates(covs, where = "both") |>
+  mutate(forest_end   = factor(forest_end,   levels = c(0, 1), labels = c("other", "forest")),
+         forest_start = factor(forest_start, levels = c(0, 1), labels = c("other", "forest")))
+
+ssf_dat |> select(step_id_, case_, sl_, ta_, forest_end, elevation_end) |> head(11)
+```
+
+One **stratum**: the step Lupe took (`case_ = TRUE`) and ten she could have
+taken from the same point at the same moment.
+
+```{r}
+issf <- fit_issf(ssf_dat,
+                 case_ ~ forest_end + elevation_end + popden_end +
+                   sl_ + log(sl_) + cos(ta_) + strata(step_id_),
+                 model = TRUE)
+round(summary(issf$model)$coefficients[, c(1, 3, 5)], 4)
+```
+
+### Your turn
+
+**2a.** Compute the RSS for a step ending in forest versus other cover, with a
+confidence interval, using `log_rss()`.
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+x1 <- data.frame(forest_end = factor("forest", levels = c("other", "forest")),
+                 elevation_end = mean(ssf_dat$elevation_end, na.rm = TRUE),
+                 popden_end    = mean(ssf_dat$popden_end, na.rm = TRUE),
+                 sl_ = 100, ta_ = 0)
+x2 <- x1
+x2$forest_end <- factor("other", levels = c("other", "forest"))
+
+rss <- log_rss(issf, x1, x2, ci = "se")
+exp(rss$df[, c("log_rss", "lwr", "upr")])
+```
+
+Given two equally reachable destinations, identical in elevation and
+population density, Lupe is roughly four times as likely to step into forest.
+The interval is wide: forest covers most of this landscape, so there are few
+strata where forest and non-forest are both on offer — a reminder that
+selection can only be estimated where there is **choice**.
+:::
+
+## Task 3 — The realised movement kernel
+
+The control steps were drawn from a *tentative* gamma and von Mises fitted to
+the observed steps. The movement terms in the model correct them.
+
+```{r}
+upd_sl <- update_gamma(sl_distr(ssf_dat),
+                       beta_sl = coef(issf)[["sl_"]],
+                       beta_log_sl = coef(issf)[["log(sl_)"]])
+upd_ta <- update_vonmises(ta_distr(ssf_dat), beta_cos_ta = coef(issf)[["cos(ta_)"]])
 
 data.frame(
-  term = names(coef(f3))[-1],
-  third_order  = round(coef(f3)[-1], 3),
-  second_order = round(coef(f2)[-1], 3)
+  quantity  = c("mean step (m)", "von Mises kappa"),
+  tentative = round(c(prod(unlist(sl_distr(ssf_dat)$params)), ta_distr(ssf_dat)$params$kappa), 2),
+  realised  = round(c(prod(unlist(upd_sl$params)), upd_ta$params$kappa), 2)
 )
 ```
 
+::: {.callout-note collapse="true"}
+## Reading it
+
+Here the two kernels are close, and the movement coefficients are not
+significant: once selection is accounted for, Lupe's movement is well
+described by the distributions the controls were drawn from. When they differ,
+the realised kernel is the one to use for prediction or simulation — it is the
+animal's movement with the habitat effect removed.
+:::
+
+## Task 4 — Does habitat change how she moves?
+
+Interact the movement terms with the habitat at the **start** of the step.
+First the obvious candidate, forest:
+
+```{r}
+issf_forest <- fit_issf(ssf_dat,
+                        case_ ~ forest_end + elevation_end + popden_end +
+                          sl_ + log(sl_) + cos(ta_) +
+                          sl_:forest_start + cos(ta_):forest_start +
+                          strata(step_id_),
+                        model = TRUE)
+round(summary(issf_forest$model)$coefficients[, c(1, 2, 5)], 3)
+```
+
 ### Your turn
 
-**4a.** Do any coefficients change sign or magnitude substantially?
-**4b.** Which analysis is "right"?
+**4a.** Look at the standard errors of the two interaction terms. What went
+wrong?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+Standard errors in the tens or thousands mean the model **cannot estimate**
+those terms. Count the information:
+
+```{r}
+ssf_dat |> filter(case_) |> count(forest_start)
+```
+
+Almost every observed step starts in forest. With a couple of non-forest
+starts, there is nothing to compare: the likelihood is flat and the optimiser
+wanders off towards infinity (quasi-complete separation). The coefficient is
+not "huge"; it is undefined.
+
+Always check that the covariate you interact with **varies** among observed
+steps before you interpret an interaction.
+:::
+
+Population density does vary. Standardise it and interact it with both step
+terms (they define the gamma distribution together):
+
+```{r}
+ssf_dat <- ssf_dat |> mutate(pop_start_z = as.numeric(scale(popden_start)))
+
+issf_pop <- fit_issf(ssf_dat,
+                     case_ ~ forest_end + elevation_end + popden_end +
+                       sl_ + log(sl_) + cos(ta_) +
+                       sl_:pop_start_z + log(sl_):pop_start_z +
+                       strata(step_id_),
+                     model = TRUE)
+round(summary(issf_pop$model)$coefficients[, c(1, 3, 5)], 4)
+```
+
+**4b.** The two interaction terms work together. Translate them into Lupe's
+mean step length where population density is low (−1 SD) and high (+1 SD).
 
 ::: {.callout-note collapse="true"}
 ## Solution
 
 ```{r}
-#| fig-width: 6.5
-#| fig-height: 4.5
-#| fig-align: center
-cmp <- data.frame(term = names(coef(f3))[-1],
-                  third = coef(f3)[-1], second = coef(f2)[-1])
-
-plot(cmp$third, cmp$second, pch = 16, col = "#1f6f78", cex = 1.4,
-     xlab = "Third order (within own MCP)",
-     ylab = "Second order (within population range)",
-     main = "The domain changes the answer")
-abline(0, 1, col = "grey50", lty = 2)
-abline(h = 0, v = 0, col = "firebrick", lty = 3)
-text(cmp$third, cmp$second, cmp$term, pos = 3, cex = 0.65)
+b <- coef(issf_pop)
+kernel_at <- function(z) {
+  g <- update_gamma(sl_distr(ssf_dat),
+                    beta_sl     = b[["sl_"]]      + z * b[["sl_:pop_start_z"]],
+                    beta_log_sl = b[["log(sl_)"]] + z * b[["log(sl_):pop_start_z"]])
+  data.frame(popden_start_sd = z, mean_step_m = round(g$params$shape * g$params$scale))
+}
+bind_rows(lapply(c(-1, 0, 1), kernel_at))
 ```
 
-Points off the dashed 1:1 line are covariates whose apparent importance
-depends on the domain; points in the upper-left or lower-right quadrants have
-**changed sign** between the two analyses.
+Where more people live, Lupe takes shorter steps — she moves more slowly
+through the populated parts of her range. The effect is modest, and one animal
+is one animal; but this is exactly the kind of **habitat-mediated movement**
+an RSF cannot express and an iSSA can.
 
-**Neither is "right".** They answer different questions:
+Always interpret step-length interactions through the implied distribution,
+never from one coefficient: `sl_` and `log(sl_)` change the scale and shape
+together, and only their combination has a meaning.
+:::
 
-- *Second order* — given the whole area the population occupies, where does
-  Cilla place her range?
-- *Third order* — given the range she has already established, where within it
-  does she go?
+## Task 5 — Is there enough contrast?
 
-A covariate can drive the first decision and be irrelevant to the second, or
-act in opposite directions at the two scales — an animal may settle in a
-grass-rich part of the park and then, within it, seek out the scarce shade.
+A step selection function can only detect selection for a covariate that
+**varies within one step's reach**. The land-use raster has 300 m cells.
 
-**The obligation on you** is to state the order and the availability domain
-explicitly, in the abstract, not buried in the methods. A habitat-selection
-result without that information cannot be interpreted.
+```{r}
+same_cell <- cellFromXY(covs, cbind(ssf_dat$x1_, ssf_dat$y1_)) ==
+             cellFromXY(covs, cbind(ssf_dat$x2_, ssf_dat$y2_))
+c(median_step_m = median(ssf_dat$sl_[ssf_dat$case_]),
+  share_in_start_cell = round(mean(same_cell, na.rm = TRUE), 2))
+```
 
 ::: {.callout-important}
-## This also resolves an apparent contradiction with Class 5
+## Match covariate grain to step length
 
-In Class 5 we compared used points against points drawn from the convex hull
-of **all six animals** and found buffalo used grassland about 1.6× more than
-it was available — apparent **selection**.
-
-Here, within **Cilla's own MCP**, the grassland coefficient is *negative*.
-
-Both are correct, and together they tell a coherent story: buffalo place their
-ranges in the grassy parts of the landscape (a second-order preference), and
-then, within a range that is already overwhelmingly grassland, they move
-towards the scarcer other things it contains.
-
-The availability domain for Cilla is 309 km²; for the population it is
-2,939 km² — nearly ten times larger, and a very different menu. Reporting the
-third-order coefficient as "buffalo avoid grassland" would be a serious
-misreading.
-:::
+About half the control steps never leave the cell they started in: for those
+strata the land-use value is identical for the used step and its alternatives,
+and they carry no information about forest selection. Elevation, on a much
+finer grid, is estimated far more precisely. When covariates are coarser than
+your steps, either get finer covariates or ask a coarser question — never
+"solve" it by quietly making the steps longer.
 :::
 
-## Task 5 — All six animals, two-stage
+## Task 6 — Ground truth: which method recovers a known coefficient?
+
+`R/simulators.R` contains `simulate_ssf()`: an animal that moves with a fixed
+kernel and, at each step, **chooses** among 30 possible next steps with
+probability proportional to $\exp(\beta \times \text{habitat})$. That is
+exactly the process an SSF assumes. We set $\beta = 1.5$.
 
 ```{r}
 #| cache: true
-fit_one <- function(animal) {
-  a <- trk |> filter(id == animal)
-  dd <- a |>
-    random_points(n = nrow(a) * 10) |>
-    extract_covariates(covs) |>
-    filter(if_all(all_of(covars), \(z) !is.na(z))) |>
-    mutate(across(all_of(covars), \(z) as.numeric(scale(z))),
-           w = ifelse(case_, 1, 5000))
-  f <- glm(case_ ~ elevation + slope + tri + trees + grassland + shrubs,
-           data = dd, family = binomial(), weights = w)
-  data.frame(id = animal, term = names(coef(f))[-1], beta = as.numeric(coef(f))[-1])
-}
+source("R/simulators.R")
+hab <- simulate_habitat()                         # a smooth, standardised habitat surface
+sim <- simulate_ssf(1500, hab, beta = 1.5, start = c(0, 0))
+sim$t <- as.POSIXct("2026-01-01", tz = "UTC") + (sim$step - 1) * 600
+sim_trk <- make_track(sim, x, y, t)
+```
 
-ids <- unique(trk$id)
-per_animal <- lapply(ids, fit_one) |> bind_rows()
-
-per_animal |>
-  pivot_wider(names_from = id, values_from = beta) |>
-  mutate(across(-term, \(z) round(z, 2)))
+```{r}
+#| fig-width: 6
+#| fig-height: 5.5
+#| fig-align: center
+plot(hab, col = hcl.colors(50, "Greens", rev = TRUE), main = "Simulated habitat and animal")
+lines(sim$x, sim$y, col = "firebrick", lwd = 0.8)
 ```
 
 ### Your turn
 
-**5a.** Summarise across individuals: mean coefficient, SE, and a t-test against zero.
-**5b.** Are the animals consistent?
+**6a.** Fit an SSF and an RSF to the simulated animal. Which recovers
+$\beta = 1.5$? **6b.** Repeat with $\beta = 0$.
 
 ::: {.callout-note collapse="true"}
 ## Solution
 
 ```{r}
-pop_level <- per_animal |>
-  group_by(term) |>
-  summarise(
-    mean_beta = mean(beta),
-    se        = sd(beta) / sqrt(n()),
-    t         = mean_beta / se,
-    p         = 2 * pt(-abs(t), df = n() - 1),
-    n_positive = sum(beta > 0),
-    .groups = "drop"
-  ) |>
-  mutate(across(c(mean_beta, se, t), \(z) round(z, 3)), p = round(p, 4)) |>
-  arrange(desc(abs(mean_beta)))
-
-pop_level
+#| cache: true
+compare_methods <- function(beta) {
+  s <- simulate_ssf(1500, hab, beta = beta, start = c(0, 0))
+  s$t <- as.POSIXct("2026-01-01", tz = "UTC") + (s$step - 1) * 600
+  tr <- make_track(s, x, y, t)
+  set.seed(3)
+  ssf <- tr |> steps() |> random_steps(n_control = 15) |> extract_covariates(hab, where = "end")
+  m_ssf <- fit_issf(ssf, case_ ~ habitat + sl_ + log(sl_) + cos(ta_) + strata(step_id_), model = TRUE)
+  rsf <- tr |> random_points(n = nrow(tr) * 10) |> extract_covariates(hab) |>
+    mutate(w = ifelse(case_, 1, 5000))
+  m_rsf <- glm(case_ ~ habitat, data = rsf, family = binomial(), weights = w)
+  data.frame(true_beta = beta,
+             SSF = round(coef(m_ssf)[["habitat"]], 2),
+             SSF_se = round(sqrt(diag(vcov(m_ssf$model)))[["habitat"]], 2),
+             RSF = round(coef(m_rsf)[["habitat"]], 2),
+             RSF_se = round(summary(m_rsf)$coefficients["habitat", 2], 2))
+}
+bind_rows(compare_methods(1.5), compare_methods(0))
 ```
 
-```{r}
-#| fig-width: 7
-#| fig-height: 4.5
-#| fig-align: center
-boxplot(beta ~ term, data = per_animal, col = "#1f6f78", border = "grey30",
-        las = 2, xlab = "", ylab = "Coefficient (per 1 SD)",
-        main = "Individual coefficients, 6 buffalo")
-abline(h = 0, col = "firebrick", lty = 2, lwd = 2)
-stripchart(beta ~ term, data = per_animal, vertical = TRUE, add = TRUE,
-           pch = 16, col = adjustcolor("black", 0.6), cex = 0.8)
-```
+The **SSF recovers the true coefficient** (within its standard error) because
+it is fitted to the same process that generated the data: each step compared
+with its own reachable alternatives.
 
-This is the **two-stage** approach: each animal is one observation, so the
-degrees of freedom reflect the number of *animals* (6), not the number of
-*points* (hundreds of thousands). That is the honest accounting, and it is why
-the p-values here are far less impressive than those in Task 2 — as they
-should be.
+The **RSF does not**, and it is not supposed to. It compares locations with
+everywhere in the range, as if the animal could teleport; the answer mixes
+selection with the constraint of having to walk. Note also its standard error:
+three to four times *smaller* than the SSF's, for a *less* accurate estimate.
+The RSF treats 1,500 autocorrelated positions as independent, so it is
+confidently wrong.
 
-The `n_positive` column is worth as much as the p-value: a covariate with the
-same sign in 6 of 6 animals is a consistent effect even if the mean is
-imprecise, while one that is positive in 3 and negative in 3 is not a
-population-level effect however tight the pooled interval looks.
-
-With more animals you would move to a **mixed model with random slopes**
-(Muff et al. 2020). A random intercept alone is not enough — it lets
-individuals differ in overall intensity of use but forces them to share one
-selection coefficient, which badly under-states the uncertainty.
+That is not an argument against RSFs — for broad-scale questions about where
+ranges sit they are the right tool. It is an argument for knowing which
+question each method answers, and simulation with a known truth is how you
+find out.
 :::
 
-## Task 6 — Map the prediction
+## To hand in
 
-```{r}
-#| fig-width: 7.5
-#| fig-height: 6.5
-#| fig-align: center
-# Rebuild the covariate stack standardised the same way as the fitting data
-cilla_mcp <- hr_isopleths(hr_mcp(cilla, levels = 0.99))
-covs_crop <- crop(covs, vect(cilla_mcp)) |> mask(vect(cilla_mcp))
+::: {.callout-tip}
+## Weekly submission
 
-mu <- sapply(covars, \(v) mean(values(covs_crop[[v]]), na.rm = TRUE))
-sdv <- sapply(covars, \(v) sd(values(covs_crop[[v]]), na.rm = TRUE))
-
-z <- rast(covs_crop[[covars]])
-for (v in covars) z[[v]] <- (covs_crop[[v]] - mu[v]) / sdv[v]
-
-b <- coef(fit)
-lin <- b[["elevation"]] * z[["elevation"]] +
-       b[["slope"]]     * z[["slope"]] +
-       b[["tri"]]       * z[["tri"]] +
-       b[["trees"]]     * z[["trees"]] +
-       b[["grassland"]] * z[["grassland"]] +
-       b[["shrubs"]]    * z[["shrubs"]]
-
-rsf_map <- exp(lin)
-names(rsf_map) <- "rsf"
-
-plot(rsf_map, col = hcl.colors(50, "Viridis"),
-     main = "Predicted relative selection — Cilla")
-points(cilla$x_, cilla$y_, pch = 16, cex = 0.15,
-       col = adjustcolor("white", 0.4))
-```
-
-::: {.callout-note collapse="true"}
-## Why the legend has no units
-
-The values are **relative**, proportional to the probability of use by an
-unknown constant. A cell with value 4 is predicted to be used about twice as
-intensively as a cell with value 2 — but neither is a probability.
-
-It is standard practice to rescale the surface to 0–1, or to bin it into
-ordered quantiles, purely for display. Do not let that rescaling tempt you into
-calling it a probability of occurrence.
-
-Note also that the map is only meaningful **inside the availability domain**.
-Extrapolating an RSF beyond the range of covariate values the animal actually
-encountered is unsupported — the model has no information there.
+Fit the iSSA of Task 2 to a **second** fisher (Leroy, Lucile or Ricky T). Report
+the RSS for forest with its CI and one paragraph comparing it with Lupe's. Is
+the difference biological, or could it come from how much choice each animal
+had (Task 5)?
 :::
 
 ## Self-check
 
 ::: {.quiz}
-You double the number of available points and your p-values all become smaller.
-What does this tell you about your covariates?
+Removing `strata(step_id_)` from an SSF formula:
 
-- [ ] They are more important than you thought
-- [x] Nothing — you increased the precision of your description of availability, not of your observations of the animal
-- [ ] The model is now overfitted
-- [ ] The weights were wrong
+- [ ] Only changes the standard errors
+- [x] Fits a different, wrong model: every step is compared with every control step in the dataset
+- [ ] Speeds up fitting without changing the estimates
+- [ ] Turns the SSF into an RSF with the same meaning
 
 ::: {.quiz-feedback}
-Available points are a description of the **landscape**, which you can sample
-as finely as your computer allows. Drawing more of them sharpens your estimate
-of what was on offer, so the standard errors fall — but you have not observed
-the animal any more closely, and no new biological information has entered the
-model.
-
-This is why p-values are near-meaningless in used–available designs. What you
-should report: effect sizes as `exp(beta)` on standardised covariates,
-confidence intervals, consistency across individuals, and out-of-sample
-validation.
-
-It is also why the two-stage approach in Task 5 is so useful: it makes the
-degrees of freedom reflect the number of *animals*, which is the sample size
-you actually have.
+The stratum is the design: each used step is compared only with the
+alternatives from the same place and time. Without it, a step in the forest at
+dawn is compared with control steps from the other side of the range days
+later — the local, time-specific availability that made the SSF worth fitting
+is gone.
 :::
 :::
 
 ::: {.quiz}
-In Class 5 you found grassland covers 56% of the broader availability domain
-but 90% of used points, and concluded buffalo select grassland. A colleague
-objects that grassland is the commonest habitat there. Is your conclusion
-consistent?
+An RSF gives a smaller standard error than an SSF for the same animal. Does
+that make it more reliable?
 
-- [x] Yes — used exceeds available, which is exactly what selection means
-- [ ] No — you cannot select for the commonest habitat
-- [ ] Only if the sample sizes are equal
-- [ ] Cannot say without the p-value
+- [ ] Yes — smaller standard errors mean more precise estimates
+- [x] No — the RSF treats autocorrelated fixes as independent, so its precision is overstated
+- [ ] Yes, if the RSF has more available points
+- [ ] Only if the two coefficients agree
 
 ::: {.quiz-feedback}
-Selection is *use relative to availability*, so a habitat can be both common
-and selected. 90% use against 56% availability is a ratio of about 1.6 — real
-selection, and it matches the used/available table you computed in Class 5.
-
-The common confusion runs the other way: an animal found mostly in the
-dominant habitat is often described as "preferring" it when the use/availability
-ratio is 1 or below. That is why raw use frequencies are never enough, and why
-the availability sample is not optional.
+In the ground-truth task the RSF's standard error was several times smaller
+and its estimate further from the truth. Precision you did not earn is worse
+than honest uncertainty: it makes a wrong answer look certain.
 :::
 :::
 
-## Before Class 8
+## Before Session 8
 
-- Avgar et al. (2016) on integrated step selection analysis.
-- Re-read section 3 of Fieberg et al. (2021) — the interpretation section.
+- McClintock et al. (2020), *Ecology Letters* 23:1878 — sections 1–3.
+- Prepare your **3–5 minute mini-project pitch** for the end of Session 8.

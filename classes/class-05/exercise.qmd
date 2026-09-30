@@ -1,6 +1,6 @@
 ---
-title: "Exercise 5 — Environmental annotation"
-subtitle: "Class 5 · Theme 3"
+title: "Practical 5 — Simulating movement"
+subtitle: "Session 5 · Movement models and simulation"
 date-modified: last-modified
 ---
 
@@ -10,452 +10,433 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 ::: {.objectives}
-**Goals.** Read real elevation and land-cover rasters; derive terrain
-covariates; annotate the buffalo track; compare used with available; see how
-the answer changes with buffer radius; and build a **time-matched**
-annotation.
+**Goals.** Write a correlated random walk simulator from scratch; watch
+straightness emerge as persistence grows; find the ballistic–diffusive
+crossover in mean squared displacement; add a bias and simulate homing;
+discover why a power-law fit is not evidence of a Lévy walk; test whether real
+buffalo are range-resident against a simulated null.
 
-**Time:** ~55 minutes. **Packages:** `terra`, `sf`, `amt`, `dplyr`.
+**Time:** ~70 minutes. **Packages:** `circular`, `amt`, `dplyr`, `ggplot2`.
 :::
 
 ```{r}
-library(terra)
-library(sf)
+library(circular)
 library(amt)
 library(dplyr)
-library(tidyr)
-library(lubridate)
+library(ggplot2)
 ```
 
-## Task 1 — The rasters
+## Task 1 — A correlated random walk, from scratch
+
+Three ingredients: step lengths (gamma), turning angles (von Mises), and a
+running sum. Write it before you look at the solution.
 
 ```{r}
-elev <- rast("data/kruger_elevation.tif")
-lc   <- rast("data/kruger_landcover.tif")
-
-elev
-names(lc)
-```
-
-`lc` holds ESA WorldCover **fractional cover** per 30 arc-second cell: the
-proportion of each cell that is trees, grassland, shrubs or cropland.
-
-```{r}
-#| fig-width: 9
-#| fig-height: 6.5
-#| fig-align: center
-plot(c(elev, lc[["trees"]], lc[["grassland"]], lc[["shrubs"]]),
-     col = hcl.colors(50, "Viridis"), nc = 2)
-```
-
-### Your turn
-
-**1a.** Do the two rasters share a CRS, extent and resolution?
-**1b.** What fraction of the area is dominated by grassland (> 0.5)?
-
-::: {.callout-note collapse="true"}
-## Solution
-
-```{r}
-c(elev = crs(elev, describe = TRUE)$code, lc = crs(lc, describe = TRUE)$code)
-ext(elev); ext(lc)
-res(elev); res(lc)
-
-global(lc[["grassland"]] > 0.5, "mean", na.rm = TRUE)
-```
-
-Same CRS, same resolution — and extents that agree **to within floating-point
-noise**: `lc` reports `31.3999999999942` where `elev` reports `31.4`. `terra`
-tolerates a discrepancy that small and stacks them happily, which is why
-`c(elev, lc)` works in Task 2.
-
-Do not rely on that. In real work rasters come from different providers on
-genuinely different grids, and you must align them explicitly — `project()` to
-a common CRS, then `resample()` one onto the other's grid. Always align
-*before* stacking, never after.
-:::
-
-## Task 2 — Derived terrain covariates
-
-Raw elevation is rarely the thing an animal responds to. Slope and ruggedness
-usually are.
-
-```{r}
-terr <- terrain(elev, v = c("slope", "TRI"), unit = "degrees")
-names(terr) <- c("slope", "tri")
-
-covs <- c(elev, terr, lc)
-names(covs)
-```
-
-```{r}
-#| fig-width: 8
-#| fig-height: 4
-#| fig-align: center
-plot(terr, col = hcl.colors(50, "Inferno"), nc = 2)
-```
-
-::: {.callout-tip}
-**TRI** (terrain ruggedness index) is the mean absolute difference between a
-cell and its neighbours. For animals it often matters more than slope: a
-uniformly steep hillside is easy to traverse, a broken one is not.
-:::
-
-## Task 3 — Annotate the track
-
-```{r}
-clean <- read.csv("data/buffalo_kruger.csv.gz") |>
-  transmute(id = individual.local.identifier,
-            t  = as.POSIXct(timestamp, tz = "UTC"),
-            x  = location.long, y = location.lat) |>
-  filter(!is.na(x), !is.na(y)) |>
-  distinct(id, t, .keep_all = TRUE)
-
-trk <- make_track(clean, x, y, t, id = id, crs = 4326)
-
-used <- trk |>
-  st_as_sf(coords = c("x_", "y_"), crs = 4326) |>
-  bind_cols(terra::extract(covs, vect(
-    st_as_sf(trk, coords = c("x_", "y_"), crs = 4326)
-  ))[, -1])
-
-summary(used[, c("elevation", "slope", "trees", "grassland")] |> st_drop_geometry())
-```
-
-### Your turn
-
-**3a.** Now generate *available* points across the study area and annotate them too.
-**3b.** Compare used vs available for each covariate. What stands out?
-
-::: {.callout-note collapse="true"}
-## Solution
-
-```{r}
-set.seed(1)
-
-# Available = random points within the buffalo's collective range
-hull <- st_convex_hull(st_union(used))
-avail_pts <- st_sample(hull, size = nrow(used), type = "random")
-
-avail <- st_sf(geometry = avail_pts) |>
-  bind_cols(terra::extract(covs, vect(st_sf(geometry = avail_pts)))[, -1])
-
-comp <- bind_rows(
-  used  |> st_drop_geometry() |> select(elevation, slope, tri, trees, grassland, shrubs) |> mutate(what = "used"),
-  avail |> st_drop_geometry() |> select(elevation, slope, tri, trees, grassland, shrubs) |> mutate(what = "available")
-)
-
-comp |>
-  pivot_longer(-what) |>
-  group_by(name, what) |>
-  summarise(mean = round(mean(value, na.rm = TRUE), 3), .groups = "drop") |>
-  pivot_wider(names_from = what, values_from = mean) |>
-  mutate(ratio = round(used / available, 2))
-```
-
-```{r}
-#| fig-width: 9
-#| fig-height: 5.5
-#| fig-align: center
-par(mfrow = c(2, 3))
-for (v in c("elevation", "slope", "tri", "trees", "grassland", "shrubs")) {
-  d_u <- density(comp[[v]][comp$what == "used"], na.rm = TRUE)
-  d_a <- density(comp[[v]][comp$what == "available"], na.rm = TRUE)
-  plot(d_a, col = "grey50", lwd = 2, main = v, xlab = "",
-       ylim = c(0, max(d_u$y, d_a$y)))
-  lines(d_u, col = "#1f6f78", lwd = 2)
-  if (v == "elevation") {
-    legend("topright", c("available", "used"), col = c("grey50", "#1f6f78"),
-           lwd = 2, bty = "n", cex = 0.9)
-  }
+#| eval: false
+simulate_crw <- function(n, shape = 2, scale = 250, kappa = 2) {
+  # 1. draw n - 1 turning angles from a von Mises centred on 0
+  # 2. heading = cumulative sum of turns, starting from 0
+  # 3. draw n step lengths from a gamma
+  # 4. x and y = cumulative sums of step * cos(heading), step * sin(heading)
 }
-par(mfrow = c(1, 1))
 ```
 
-Where the teal (used) curve sits to the right of the grey (available) curve,
-the animals are using more of that covariate than the landscape offers —
-**selection**. To the left is **avoidance**.
-
-This side-by-side comparison of used and available distributions *is* the idea
-behind a resource selection function. Class 7 turns it into a model that
-handles several covariates at once and gives you uncertainty.
-:::
-
-## Task 4 — Point or buffer?
-
-The scale at which you measure the environment is a hypothesis about how far
-the animal can perceive. Let us ask for tree cover averaged over a
-neighbourhood.
+::: {.callout-note collapse="true"}
+## Solution
 
 ```{r}
-pts <- st_as_sf(trk, coords = c("x_", "y_"), crs = 4326) |> vect()
-
-at_point <- terra::extract(covs[["trees"]], pts)[, 2]
-buf_500  <- terra::extract(covs[["trees"]], pts, buffer = 500,  fun = mean, na.rm = TRUE)[, 2]
-buf_2000 <- terra::extract(covs[["trees"]], pts, buffer = 2000, fun = mean, na.rm = TRUE)[, 2]
-
-data.frame(
-  scale = c("at fix", "buffer = 500", "buffer = 2000"),
-  mean  = round(c(mean(at_point,  na.rm = TRUE),
-                  mean(buf_500,   na.rm = TRUE),
-                  mean(buf_2000,  na.rm = TRUE)), 4),
-  sd    = round(c(sd(at_point, na.rm = TRUE),
-                  sd(buf_500,  na.rm = TRUE),
-                  sd(buf_2000, na.rm = TRUE)), 4)
-)
-
-identical(at_point, buf_500)
-identical(at_point, buf_2000)
-```
-
-::: {.callout-important}
-## The `buffer=` argument was silently ignored
-
-All three columns are **identical**. In this version of `terra`
-(`r as.character(packageVersion("terra"))`), passing `buffer=` to
-`extract()` with point geometries does nothing at all — no error, no warning,
-just the at-point values three times over.
-
-Had you not checked, you would have reported a "multi-scale analysis" in which
-every scale was the same scale.
-
-**The habit:** when an argument is supposed to change the answer, *verify that
-it did*. `identical()` costs one line.
-:::
-
-The reliable way is to build the buffer polygons yourself. Work in a projected
-CRS so the radius is honestly in metres.
-
-```{r}
-covs_utm <- project(covs, "EPSG:32736")
-pts_utm  <- project(pts, "EPSG:32736")
-
-buffer_mean <- function(r, p, width) {
-  terra::extract(r, buffer(p, width = width), fun = mean, na.rm = TRUE)[, 2]
+rvm <- function(n, mu = 0, kappa = 1) {
+  a <- as.numeric(rvonmises(n, circular(mu), kappa))   # circular -> plain numbers
+  atan2(sin(a), cos(a))                                 # wrap to (-pi, pi]
 }
 
-scales <- c(500, 2000, 5000)
-tab <- lapply(scales, function(w) {
-  v <- buffer_mean(covs_utm[["trees"]], pts_utm, w)
-  data.frame(radius_m = w, mean = mean(v, na.rm = TRUE), sd = sd(v, na.rm = TRUE))
-}) |> bind_rows()
+simulate_crw <- function(n, shape = 2, scale = 250, kappa = 2) {
+  turn    <- rvm(n - 1, 0, kappa)
+  heading <- cumsum(c(0, turn))
+  sl      <- rgamma(n, shape = shape, scale = scale)
+  data.frame(step = seq_len(n),
+             x = cumsum(sl * cos(heading)),
+             y = cumsum(sl * sin(heading)),
+             sl = sl)
+}
 
-at_pt <- terra::extract(covs_utm[["trees"]], pts_utm)[, 2]
-
-bind_rows(
-  data.frame(radius_m = 0, mean = mean(at_pt, na.rm = TRUE), sd = sd(at_pt, na.rm = TRUE)),
-  tab
-) |> mutate(across(c(mean, sd), \(z) round(z, 4)))
+set.seed(42)
+simulate_crw(5)
 ```
 
-### Your turn
+Two traps worth knowing. `circular::rvonmises()` returns a `circular` object
+that misbehaves in ordinary arithmetic — convert it with `as.numeric()`. And
+its values lie in $[0, 2\pi)$, so wrap them to $(-\pi, \pi]$ before treating
+them as turns left and right.
 
-**4a.** What happens to the variance as the radius grows?
-**4b.** Why does a 500 m radius barely differ from the point value?
-**4c.** Which scale would you choose, and on what grounds?
-
-::: {.callout-note collapse="true"}
-## Solution
-
-```{r}
-#| fig-width: 8.5
-#| fig-height: 4.2
-#| fig-align: center
-b2000 <- buffer_mean(covs_utm[["trees"]], pts_utm, 2000)
-
-par(mfrow = c(1, 2))
-plot(at_pt, b2000, pch = 16, cex = 0.2, col = adjustcolor("#1f6f78", 0.2),
-     xlab = "Tree cover at the fix", ylab = "Mean within 2 km",
-     main = "The same covariate at two scales")
-abline(0, 1, col = "firebrick", lty = 2)
-
-plot(c(0, scales), c(sd(at_pt, na.rm = TRUE), tab$sd), type = "b", pch = 16,
-     col = "#1f6f78", lwd = 2, xlab = "Buffer radius (m)",
-     ylab = "SD of the covariate", main = "Smoothing destroys contrast")
-par(mfrow = c(1, 1))
-```
-
-**Variance falls** as the radius grows: you are averaging over more cells, so
-extremes cancel. The mean barely moves; the spread collapses.
-
-That has a direct statistical consequence. A smoothed covariate has less
-contrast between used and available points, so the **effect size you can
-detect shrinks**, and a real preference can be smoothed into
-non-significance.
-
-**Why 500 m does almost nothing.** The raster cells are 30 arc-seconds —
-about 900 m on the ground here:
-
-```{r}
-round(res(covs_utm))
-```
-
-A 500 m radius fits inside a single cell, so the "neighbourhood mean" is
-mostly that one cell's value. **A buffer smaller than your pixel is not a
-scale — it is a rounding error.** If you want a genuine multi-scale analysis,
-your radii must be several times the cell size, or you need finer data.
-
-**How to choose.** From biology, before you look at the results: how far can
-this animal see, smell, or remember? For buffalo in savanna, a few hundred
-metres to a couple of kilometres is defensible. What you must *not* do is fit
-the model at ten radii and report the one with the smallest p-value — that is
-a garden of forking paths, and the "optimal scale" it finds will not
-replicate.
-
-If scale genuinely *is* your question, there are principled multi-scale
-approaches — but you have to say so in advance.
+The finished version of this function, and the others in this practical,
+lives in `R/simulators.R`. Sessions 6 and 7 `source()` that file.
 :::
 
-## Task 5 — Time-matched annotation
-
-Static covariates are easy. Now the one that actually matters.
-
-```{r}
-prec <- rast("data/kruger_prec_monthly.tif")
-nlyr(prec)
-names(prec)
-```
-
-Twelve layers: the long-term average precipitation for each calendar month.
-Kruger has a strong wet/dry seasonality, so this is a real seasonal signal.
+## Task 2 — Persistence makes straightness
 
 ```{r}
 #| fig-width: 9
 #| fig-height: 5
 #| fig-align: center
-plot(prec[[c(1, 4, 7, 10)]], col = hcl.colors(50, "Blues", rev = TRUE), nc = 2)
+set.seed(1)
+kappas <- c(0, 1, 3, 10)
+
+sims <- lapply(kappas, function(k) {
+  bind_rows(lapply(1:20, function(i) simulate_crw(200, kappa = k)), .id = "sim") |>
+    mutate(kappa = k)
+}) |> bind_rows()
+
+ggplot(sims, aes(x / 1000, y / 1000, group = sim)) +
+  geom_path(alpha = 0.3, colour = "#1f6f78") +
+  facet_wrap(~ paste("κ =", kappa), nrow = 1) +
+  coord_equal() +
+  labs(x = "km", y = "km", title = "Twenty 200-step walks at each κ") +
+  theme_minimal()
 ```
-
-The naive approach — one layer for everything:
-
-```{r}
-static <- terra::extract(prec[[1]], pts)[, 2]   # January, for all fixes
-summary(static)
-```
-
-The correct approach — **each fix gets the layer for its own month**:
-
-```{r}
-month_idx <- as.integer(format(trk$t_, "%m"))
-
-all_months <- terra::extract(prec, pts)[, -1]   # one column per month
-matched <- all_months[cbind(seq_len(nrow(all_months)), month_idx)]
-
-summary(matched)
-```
-
-::: {.callout-important}
-## The indexing trick
-
-`all_months[cbind(row, col)]` is matrix indexing: it picks element
-`[row_i, col_i]` for each `i`. That single line is the whole of time-matched
-annotation. For a real NDVI time series you would build `col` with
-`findInterval()` against the layer dates instead of `format(t, "%m")`.
-:::
 
 ### Your turn
 
-**5a.** How different are the static and time-matched values?
-**5b.** Do the buffalo experience more or less rain than the landscape average?
+**2a.** Compute the straightness index (net displacement / path length) for
+each walk and summarise it by κ.
 
 ::: {.callout-note collapse="true"}
 ## Solution
 
 ```{r}
-cmp <- data.frame(static = static, matched = matched)
-round(cor(cmp, use = "complete.obs"), 3)
+sims |>
+  group_by(kappa, sim) |>
+  summarise(net = sqrt(last(x)^2 + last(y)^2), path = sum(sl), .groups = "drop") |>
+  group_by(kappa) |>
+  summarise(median_straightness = round(median(net / path), 3))
+```
 
-cmp |>
-  summarise(mean_static = round(mean(static, na.rm = TRUE), 1),
-            mean_matched = round(mean(matched, na.rm = TRUE), 1),
-            mean_abs_diff = round(mean(abs(static - matched), na.rm = TRUE), 1))
+Straightness rises steeply with κ. But even at κ = 10 it is well below 1 over
+200 steps: small turns accumulate, and a long enough correlated walk always
+ends up wandering. Straightness is a property of the walk **and** of the
+number of steps you measure it over.
+:::
+
+## Task 3 — Mean squared displacement
+
+```{r}
+msd <- function(d, lags) {
+  sapply(lags, function(L)
+    mean((d$x[-(1:L)] - head(d$x, -L))^2 + (d$y[-(1:L)] - head(d$y, -L))^2))
+}
+
+lags <- 2^(0:8)
+set.seed(2)
+msd_tab <- lapply(c(0, 2, 10), function(k) {
+  m <- rowMeans(sapply(1:30, function(i) msd(simulate_crw(2000, kappa = k), lags)))
+  data.frame(kappa = k, lag = lags, msd = m)
+}) |> bind_rows()
+```
+
+### Your turn
+
+**3a.** Plot MSD against lag on log–log axes.
+**3b.** Estimate the slope at short lags (1–4) and at long lags (64–256).
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+#| fig-width: 7
+#| fig-height: 4.5
+#| fig-align: center
+ggplot(msd_tab, aes(lag, msd, colour = factor(kappa))) +
+  geom_line(linewidth = 1) + geom_point() +
+  scale_x_log10() + scale_y_log10() +
+  labs(x = "Lag (steps)", y = "MSD (m²)", colour = "κ") +
+  theme_minimal()
 ```
 
 ```{r}
-#| fig-width: 8.5
-#| fig-height: 4
-#| fig-align: center
-par(mfrow = c(1, 2))
-plot(static, matched, pch = 16, cex = 0.2, col = adjustcolor("#1f6f78", 0.2),
-     xlab = "January value (static)", ylab = "Value for the fix's own month",
-     main = "Static vs time-matched")
-abline(0, 1, col = "firebrick", lty = 2)
-
-boxplot(matched ~ month_idx, col = "#1f6f78", border = "grey30",
-        xlab = "Month", ylab = "Precipitation (mm)",
-        main = "What the animals actually experienced")
-par(mfrow = c(1, 1))
+msd_tab |>
+  group_by(kappa) |>
+  summarise(
+    slope_short = coef(lm(log(msd[lag <= 4]) ~ log(lag[lag <= 4])))[2],
+    slope_long  = coef(lm(log(msd[lag >= 64]) ~ log(lag[lag >= 64])))[2]
+  ) |>
+  mutate(across(starts_with("slope"), \(z) round(z, 2)))
 ```
 
-The two are barely related. The static version varies only in **space**; the
-matched version varies in space *and* time, and the temporal swing here
-dominates — Kruger's wet season delivers an order of magnitude more rain than
-its dry season.
+The uncorrelated walk (κ = 0) has slope 1 at every lag: diffusive throughout.
+Persistent walks start **ballistic** (slope approaching 2: they keep going
+straight) and relax towards **diffusive** (slope 1) once they have forgotten
+their heading. The more persistent the walk, the later the crossover — at
+κ = 10 it has not quite finished even after 256 steps.
 
-Any model using the static column would be answering "do buffalo prefer
-places that are wet **in January**", not "do buffalo respond to rainfall".
-Those are different questions, and they can easily give opposite answers.
-
-::: {.callout-note}
-These are long-term monthly *climatologies*, not the actual weather of
-2005–2006. They carry the seasonal cycle but not the year-to-year anomaly. For
-real work you would use a dated product — MODIS NDVI composites, ERA5
-reanalysis, or Movebank's Env-DATA — and match on the actual date with
-`findInterval()`. The mechanics are identical; only the layer dates change.
+On a real track, the lag at which the slope drops from ~2 to ~1 estimates how
+long the animal holds its direction. A slope that drops towards **0** means
+something a random walk cannot do: the animal stops getting further away.
 :::
+
+## Task 4 — Bias: homing and central places
+
+```{r}
+source("R/simulators.R")   # simulate_bcrw() and friends
+args(simulate_bcrw)
+```
+
+In `simulate_bcrw()`, each new heading is centred on a weighted circular mean
+of the previous heading and the bearing to `goal`; `w` is the weight on the
+goal.
+
+### Your turn
+
+**4a.** Release an animal 10 km from home. How many steps does it take to come
+within 500 m, for `w` = 0.05, 0.1, 0.3?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+steps_to_home <- function(w, n = 3000) {
+  d <- simulate_bcrw(n, goal = c(0, 0), w = w, kappa = 2, start = c(10000, 0))
+  hit <- which(sqrt(d$x^2 + d$y^2) < 500)
+  if (length(hit)) hit[1] else NA
+}
+
+set.seed(3)
+homing <- lapply(c(0.05, 0.1, 0.3), function(w)
+  data.frame(w = w, steps = replicate(50, steps_to_home(w)))) |>
+  bind_rows()
+
+homing |>
+  group_by(w) |>
+  summarise(median_steps = median(steps, na.rm = TRUE),
+            failed = sum(is.na(steps)))
+```
+
+With the weakest bias, nearly half the walkers are still lost after 3,000
+steps; doubling it gets almost all of them home, and a strong bias does it in
+a few dozen steps. The weak-bias walkers wander a long way first: over a short
+stretch you would not see the bias at all.
+:::
+
+**4b.** Keep the goal at the start point and run the walker for a long time.
+What emerges?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+#| fig-width: 6
+#| fig-height: 6
+#| fig-align: center
+truth <- truth_animal()     # a central-place BCRW, 5,000 steps, fixed seed
+ggplot(truth, aes(x / 1000, y / 1000)) +
+  geom_path(colour = "#1f6f78", linewidth = 0.2, alpha = 0.6) +
+  annotate("point", x = 0, y = 0, colour = "firebrick", size = 3, shape = 17) +
+  coord_equal() +
+  labs(x = "km", y = "km", title = "A home range, from one movement rule") +
+  theme_minimal()
+```
+
+A **home range**. Nothing in the rule mentions an area: the animal simply
+wanders, with a slight pull towards home. The boundary emerges.
+
+This is our **ground-truth animal**. Because we wrote the rule, we can
+simulate it for as long as we like and know its true utilisation
+distribution — so in Session 6 we can check which home-range estimator
+recovers it.
+:::
+
+## Task 5 — Is it a Lévy walk?
+
+Fit two models to step lengths above a threshold `xmin`, by maximum
+likelihood: a (shifted) exponential and a power law (Pareto). Both have one
+parameter, so AIC compares them fairly.
+
+```{r}
+compare_tails <- function(x, xmin) {
+  x <- x[x >= xmin]
+  n <- length(x)
+  # power law: f(x) = (a - 1) / xmin * (x / xmin)^-a
+  s <- sum(log(x / xmin))
+  a <- 1 + n / s
+  ll_pow <- n * log(a - 1) - n * log(xmin) - a * s
+  # exponential shifted to start at xmin
+  lambda <- 1 / (mean(x) - xmin)
+  ll_exp <- n * log(lambda) - lambda * sum(x - xmin)
+  data.frame(n = n, mu_hat = round(a, 2),
+             AIC_exponential = round(2 - 2 * ll_exp),
+             AIC_power_law   = round(2 - 2 * ll_pow),
+             winner = ifelse(ll_pow > ll_exp, "power law", "exponential"))
+}
+```
+
+### Your turn
+
+**5a.** Test it on data where you know the answer: 2,000 exponential steps, and
+2,000 power-law steps with μ = 2.
+**5b.** Now 2,000 steps from an animal that switches between two behaviours,
+each with *exponential* steps: 75% short (mean 60 m) and 25% long (mean
+1,500 m).
+
+::: {.callout-note collapse="true"}
+## Solution
+
+```{r}
+set.seed(4)
+bind_rows(
+  cbind(data = "exponential",            compare_tails(rexp(2000, 1 / 300) + 50, 50)),
+  cbind(data = "power law, mu = 2",      compare_tails(50 * runif(2000)^(-1), 50)),
+  cbind(data = "two exponential modes",  compare_tails(c(rexp(1500, 1 / 60),
+                                                         rexp(500, 1 / 1500)) + 10, 10))
+)
+```
+
+The method gets the first two right. But the **mixture of two exponentials** —
+two ordinary random walks, no power law anywhere — is "identified" as a power
+law, decisively. That is Benhamou's (2007) point: a heavy-tailed step-length
+distribution is what you get whenever an animal switches between short-step
+and long-step behaviours.
+
+A power-law fit describes the **shape** of the distribution. It cannot tell
+you the **process**. To claim a Lévy strategy you must first rule out that the
+long steps belong to a separate behavioural state — which is what the hidden
+Markov models of Session 8 are for.
+:::
+
+## Task 6 — Is a buffalo range-resident? A simulation test
+
+Null hypothesis: the buffalo moves like a correlated random walk with its
+**own** step-length and turning-angle distributions, and no memory of place.
+Statistic: the **radius of gyration** of its longest continuous burst — the
+root-mean-square distance of its positions from their centre.
+
+```{r}
+buffalo <- read.csv("data/buffalo_kruger.csv.gz") |>
+  transmute(id = individual.local.identifier, t = as.POSIXct(timestamp, tz = "UTC"),
+            x = location.long, y = location.lat) |>
+  filter(!is.na(x)) |>
+  distinct(id, t, .keep_all = TRUE)
+
+trk <- make_track(buffalo, x, y, t, id = id, crs = 4326) |>
+  transform_coords(crs_to = 32736)
+
+radius_of_gyration <- function(x, y) sqrt(mean((x - mean(x))^2 + (y - mean(y))^2)) / 1000
+
+null_test <- function(animal, n_sim = 300) {
+  hourly <- trk |>
+    filter(id == animal) |>
+    track_resample(rate = lubridate::hours(1), tolerance = lubridate::minutes(10)) |>
+    filter_min_n_burst(min_n = 3)
+  st <- hourly |> steps_by_burst() |> filter(sl_ > 0, sl_ < 10000)
+  g  <- fit_distr(st$sl_, "gamma")                          # the animal's own steps
+  vm <- fit_distr(st$ta_[!is.na(st$ta_)], "vonmises")       # and its own turns
+  longest <- hourly |> filter(burst_ == names(which.max(table(burst_))))
+  n <- nrow(longest)
+  obs <- radius_of_gyration(longest$x_, longest$y_)
+  sim <- replicate(n_sim, {
+    d <- simulate_crw(n, shape = g$params$shape, scale = g$params$scale,
+                      kappa = vm$params$kappa)
+    radius_of_gyration(d$x, d$y)
+  })
+  data.frame(id = animal, burst_days = round(n / 24), observed_km = round(obs, 1),
+             null_median_km = round(median(sim), 1),
+             percentile = round(100 * mean(sim < obs)))
+}
+
+set.seed(7)
+null_test("Cilla")
+```
+
+### Your turn
+
+**6a.** Is Cilla more confined than a random walk?
+**6b.** Run the test on all six buffalo, and plot the percentile against burst
+length. What do you learn?
+
+::: {.callout-note collapse="true"}
+## Solution
+
+Cilla's radius of gyration is smaller than the simulated median, but about a
+third of the random walks are more compact still (the exact share varies a
+little from run to run). With 77 days of data we **cannot**
+reject the null.
+
+```{r}
+set.seed(7)
+all_tests <- bind_rows(lapply(unique(trk$id), null_test))
+all_tests
+```
+
+```{r}
+#| fig-width: 6.5
+#| fig-height: 4
+#| fig-align: center
+ggplot(all_tests, aes(burst_days, percentile, label = id)) +
+  geom_hline(yintercept = c(2.5, 50), linetype = c(2, 3), colour = "grey50") +
+  geom_point(size = 3, colour = "#1f6f78") +
+  geom_text(nudge_y = 5) +
+  labs(x = "Length of continuous burst (days)",
+       y = "Percentile within the CRW null",
+       title = "Confinement shows only in long tracks") +
+  theme_minimal()
+```
+
+Only Toni, with 157 days of continuous data, is clearly more confined than a
+random walk. The others were tracked for weeks, not months, and over a few
+weeks a resident and a random walker cover similar ground: the resident has
+not yet had time to reach the edges of its range.
+
+This is the **tracking duration versus occupation timescale** problem. It is
+not a failure of the test; it is the test telling you your data are too short
+to answer the question. Session 6's variogram diagnoses the same thing.
+:::
+
+## To hand in
+
+::: {.callout-tip}
+## Weekly submission
+
+Either (a) the MSD plot from Task 3 for three κ values of your choice, with
+a paragraph interpreting the slopes; or (b) the null-test plot from Task 6,
+with a paragraph on what it implies for how long you would collar a buffalo to
+study its home range.
 :::
 
 ## Self-check
 
 ::: {.quiz}
-You extract NDVI with `terra::extract()` and `summary()` reports a range of
-−2000 to 9500. What is wrong?
+You simulate 1,000 CRWs as a null and your animal's statistic falls at the
+40th percentile. What can you conclude?
 
-- [ ] The raster is corrupt
-- [x] You have raw stored integers — apply the scale factor, and handle the fill value
-- [ ] NDVI can legitimately take these values
-- [ ] The CRS is wrong
+- [ ] The animal is a correlated random walker
+- [x] The data do not let you distinguish the animal from the null for this statistic
+- [ ] The simulation was too small
+- [ ] The animal is range-resident
 
 ::: {.quiz-feedback}
-NDVI is bounded by −1 and +1 **by definition** — it is a normalised
-difference. Values in the thousands mean the product stores NDVI as scaled
-integers to save space; MODIS uses a scale factor of 0.0001, so 9500 → 0.95.
-
-The negative extreme is usually the **fill value** for missing data (MODIS
-uses −3000), which must be set to `NA`, not multiplied. Leave it in and it
-becomes a strongly negative NDVI at exactly the cloudy pixels where you had no
-data.
-
-Rule: after every extraction, `summary()` the new column and ask whether the
-range is physically possible.
+Failing to reject a null is not evidence that the null is true. The animal
+might be doing something else entirely that this statistic cannot detect — or
+the track may simply be too short. Report it as "consistent with", never as
+"is".
 :::
 :::
 
 ::: {.quiz}
-Your study area straddles a national border and you stack a land-cover raster
-from one country with a DEM from another. `c(dem, lc)` throws an error about
-extents. What is the right fix?
+Why must the null CRW use the animal's **own** fitted step and turn
+distributions?
 
-- [ ] Crop both to their intersection and hope the grids align
-- [x] `project()` to a common CRS if needed, then `resample()` one onto the other's grid
-- [ ] Convert both to data frames and join by coordinates
-- [ ] Use `extract()` separately on each and skip stacking
+- [ ] To make the simulation faster
+- [x] So that the null differs from the animal only in the mechanism being tested
+- [ ] Because `simulate_crw()` requires them
+- [ ] It does not matter which distributions you use
 
 ::: {.quiz-feedback}
-Stacking requires identical CRS, extent **and** cell alignment. Cropping alone
-fixes the extent but not the alignment — two 30 m grids offset by 7 m are
-still incompatible.
-
-`resample()` interpolates one raster onto the other's grid. Use
-`method = "near"` for categorical data such as land-cover classes, or you will
-invent classes that do not exist.
-
-Extracting separately does work and avoids the problem, but only if you never
-need the layers in a single object.
+If the null used shorter steps than the animal, the animal would look "less
+confined" simply because it moves further per hour. A null must match the
+animal in everything **except** the mechanism under test — here, memory of
+place — or rejecting it tells you nothing.
 :::
 :::
 
-## Before Class 6
+## Before Session 6
 
-- Pettorelli et al. (2005) on NDVI in ecology.
-- Try `vignette("moveHMM-guide", package = "moveHMM")`.
+- Fleming et al. (2015), *Ecology* 96:1182 — autocorrelated KDE.
+- Make sure `library(ctmm)` and `library(adehabitatHR)` both load.

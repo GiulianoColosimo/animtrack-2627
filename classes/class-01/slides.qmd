@@ -1,6 +1,6 @@
 ---
-title: "Movement, and how we track animals"
-subtitle: "Class 1 · Theme 1 — Movement and movement analysis"
+title: "Why animals move, and how we watch them"
+subtitle: "Session 1 — Foundations: why animals move, tracking technologies, data types"
 author: "Giuliano Colosimo"
 institute: "University of Rome Tor Vergata"
 date: last-modified
@@ -16,31 +16,35 @@ format:
     history: false
     width: 1280
     height: 760
-    footer: "[Animal Tracking 2026-2027 · Class 1](../../index.qmd)"
+    footer: "[Animal Tracking 2026-2027 · Session 1](../../index.qmd)"
     logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
     highlight-style: github
 ---
 
 ## Where we are going
+
 ::: {.objectives}
 **By the end of today you will be able to**
 
-1. State the four questions of the movement-ecology paradigm
-2. Name the main tracking technologies and pick one for a given species
-3. Explain what a *fix* is, and what its error structure looks like
-4. Recognise the three biases that ruin tracking datasets
-5. Have R running on your laptop
+1. State the four components of the movement-ecology paradigm
+2. Name the ecological drivers of movement and the trade-offs between them
+3. Pick a tracking technology for a given species, question and budget
+4. Explain what a *fix* is, and how the fix interval shapes the path you see
+5. Load a real GPS track in R and find its gaps
 :::
 
-. . .
+---
 
-**The plan for the eight classes**
+## Eight sessions, one framework
 
-| | | |
-|:--|:--|:--|
-| 1 · Movement & tracking | 2 · Spatial data in R | 3 · Tracking data in R |
-| 4 · Metrics & home range | 5 · Remote sensing | 6 · Segmentation |
-| 7 · RSF | 8 · SSF / iSSA | |
+| | |
+|:--|:--|
+| 1 · Foundations | 5 · Movement models & simulation |
+| 2 · Spatial data in R | 6 · Home ranges & space use |
+| 3 · From fixes to trajectories | 7 · Habitat selection: RSF & SSF |
+| 4 · Quantifying movement | 8 · Hidden Markov models & synthesis |
+
+Every session: **~45 minutes of theory, ~75 minutes of R.**
 
 ---
 
@@ -122,6 +126,91 @@ every movement path:
 $U_t = f(\Omega, \Phi, r_t, w_t)$ — the observed path is the *joint outcome* of
 all four. This is why a track is hard to interpret: many different
 combinations produce similar-looking paths.
+:::
+
+---
+
+## Our spine for eight weeks
+
+::: {.paradigm}
+[Internal state]{.pbox .on}
+[Motion capacity]{.pbox .on}
+[Navigation capacity]{.pbox .on}
+[External factors]{.pbox .on}
+[Movement path]{.pbox .path .on}
+:::
+
+Each session opens with this diagram, lit up where that session's methods
+speak. Tracking data record only the **bottom box**. Every method in this
+course is an attempt to reason *upwards* from the path to the boxes above it.
+
+---
+
+## Why move? The ecological drivers
+
+::: {.incremental}
+- **Foraging** — resources are patchy and deplete; staying costs as much as leaving
+- **Dispersal** — leaving the natal area: avoids inbreeding and competition with kin
+- **Migration** — seasonal, round-trip tracking of resources across large distances
+- **Predator avoidance** — moving away from risk, or towards refuges
+- **Reproduction** — finding mates, defending territories, provisioning young
+:::
+
+. . .
+
+::: {.keyidea}
+These map onto different *scales* of movement: foraging steps in minutes,
+dispersal once in a lifetime, migration once a year. The same animal does all
+of them — which is why one trajectory usually hides several processes.
+:::
+
+---
+
+## Movement is a trade-off
+
+Every movement decision balances **gain** against **cost**:
+
+::: {.incremental}
+- **Energy** — travelling costs calories; a richer patch further away may not pay
+- **Risk** — the best food is often where predators are; the *landscape of fear*
+  (Laundré et al. 2001) can matter as much as the landscape of food
+- **Information** — exploring costs now but may pay later
+- **Time** — a day spent travelling is a day not spent feeding or breeding
+:::
+
+. . .
+
+::: {.keyidea}
+When a model says an animal "selects" a habitat, it is summarising the net
+outcome of all these trade-offs. Sessions 7 and 8 are about disentangling
+them.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+After wolves returned to Yellowstone, elk in wolf-rich areas made less use of
+aspen stands, a key forage (Fortin et al. 2005). Assuming the forage itself
+did not change, which component of the paradigm explains the shift?
+
+- [ ] Motion capacity
+- [ ] Navigation capacity
+- [x] External factors — acting through the animals' internal state (fear)
+- [ ] None; this is a habitat-quality effect
+
+::: {.quiz-feedback}
+Forage did not change, so the habitat itself did not change. What changed was
+**predation risk** — an external factor — which altered the elk's internal
+state and therefore the trade-off between food and safety. This is the
+*landscape of fear* idea.
+
+It also shows why the four components cannot be read separately: the same
+external change works through the animal's internal state. It is also why a
+habitat-selection model fitted before and after wolf reintroduction would give
+different coefficients for the same, unchanged vegetation.
+:::
 :::
 
 ---
@@ -316,7 +405,7 @@ else reaches insects and the smallest bats.
 . . .
 
 ::: {.keyidea}
-The bat dataset we will use in Class 3 is exactly this: 17 individuals,
+The bat dataset we will use in Session 3 is exactly this: 17 individuals,
 1,740 fixes *in total*, wildly irregular. Most methods in this course assume
 regular sampling. Part of your training is learning to say **"not with these
 data"**.
@@ -429,8 +518,31 @@ Fish, sharks, invertebrates.
 
 ::: {.keyidea}
 The frontier is not more locations. It is **locations plus sensors**: knowing
-*where* **and** *what the animal was doing there*. Class 6 is the statistical
+*where* **and** *what the animal was doing there*. Session 8 is the statistical
 version of this question when all you have is the trajectory.
+:::
+
+---
+
+## Archival tags and camera traps
+
+::: {.columns}
+::: {.column width="50%"}
+### Archival tags
+Store everything on board — depth, temperature, light, acceleration — for
+months or years. No transmission, so tiny and long-lived.
+
+The catch: **you only get the data if you get the tag back**. Pop-up archival
+tags on fish detach and float to the surface to transmit a summary.
+:::
+::: {.column width="50%"}
+### Camera traps
+Eulerian, not Lagrangian: they watch a place, not an animal.
+
+But they are the natural **complement** to tracking — who else uses the
+places your collared animals use, when, and how often? Occupancy and
+spatial capture–recapture models connect the two worlds.
+:::
 :::
 
 ---
@@ -486,9 +598,10 @@ how much does the animal weigh", not from "what accuracy would be nice".
 ## Tag effects are real
 
 ::: {.incremental}
-- The **5% rule** (tag ≤ 5% of body mass) is a *convention*, not a finding.
-  Portugal & White (2018) showed miniaturisation has not actually made
-  published studies lighter relative to body mass.
+- The **3–5% rule** (tag ≤ 3% of body mass for flying animals, ≤ 5% for
+  terrestrial ones) is a *convention*, not a finding. Portugal & White (2018)
+  showed miniaturisation has not made published studies lighter relative to
+  body mass — researchers just tag smaller animals.
 - For flying and diving animals, **drag and shape matter more than mass**.
   A streamlined 3% package can beat a bluff 1.5% one.
 - Documented effects: reduced breeding success, higher energy expenditure,
@@ -542,11 +655,117 @@ And "it's the standard" is never a reason — it is a description of what other
 people's batteries could manage.
 
 The real cost: coarse sampling **truncates** the step-length distribution.
-You will see this bite in Classes 4 and 8.
+You will see this bite in Sessions 4 and 7.
 :::
 :::
 
-# 4 · The three biases {background-color="#14525a"}
+# 4 · Sampling design {background-color="#14525a"}
+
+---
+
+## The fix interval decides what path you see
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+source("R/simulators.R")
+set.seed(8)
+true_path <- simulate_crw(2880, shape = 2, scale = 15, kappa = 1.2)  # 1 fix/min, 2 days
+op <- par(mfrow = c(1, 3), mar = c(1, 1, 3, 1))
+for (k in c(1, 60, 360)) {
+  d <- true_path[seq(1, nrow(true_path), by = k), ]
+  len <- sum(sqrt(diff(d$x)^2 + diff(d$y)^2)) / 1000
+  plot(true_path$x, true_path$y, type = "l", col = "grey85", asp = 1,
+       axes = FALSE, xlab = "", ylab = "")
+  lines(d$x, d$y, col = "#1f6f78", lwd = 2)
+  points(d$x, d$y, pch = 16, cex = if (k == 1) 0 else 0.9, col = "#1f6f78")
+  title(sprintf("every %s — path %.0f km",
+                c("1" = "minute", "60" = "hour", "360" = "6 hours")[as.character(k)], len),
+        cex.main = 2)
+}
+par(op)
+```
+
+The **same** two days of simulated movement (grey), sampled at three rates.
+
+---
+
+## The modifiable temporal unit problem
+
+The spatial version is famous in geography (Openshaw 1984): results change
+with the size of the spatial units you aggregate into. Tracking has its own
+temporal version.
+
+::: {.incremental}
+- **Path length** shrinks as the interval grows — every straight segment cuts
+  corners the animal actually walked
+- **Speed** is really *distance per interval*: the same animal is "slower"
+  when sampled more coarsely
+- **Tortuosity** and **turning angles** change — fine sampling shows wiggles,
+  coarse sampling shows randomness
+- **Behaviours shorter than the interval become invisible**
+:::
+
+. . .
+
+::: {.keyidea}
+There is no "true" speed or step length independent of the fix interval. Choose
+the interval from the **question**, and never compare metrics across studies
+sampled at different rates.
+:::
+
+---
+
+## Designing a deployment
+
+Four numbers you fix before the first capture:
+
+::: {.incremental}
+1. **Fix interval** — set by the fastest behaviour you need to resolve
+2. **Duration** — set by the slowest process (seasonal selection needs a year)
+3. **Number of animals** — set by the *population* question; individuals vary
+4. **Battery** — the budget that forces 1 × 2 × 3 into a compromise
+:::
+
+. . .
+
+::: {.keyidea}
+Interval × duration × number of animals ≈ constant for a given budget. A study
+of foraging decisions and a study of seasonal range shifts need different
+collars, or at least different schedules.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You compute a buffalo's daily travel distance from hourly fixes and get 4 km.
+A colleague using the same collars set to fix every 5 minutes reports 9 km for
+the same population. What is the most likely explanation?
+
+- [ ] The colleague's collars were less accurate
+- [x] Finer sampling captures more of the path's tortuosity, so summed distance grows
+- [ ] The populations behave differently
+- [ ] Hourly fixes over-estimate distance
+
+::: {.quiz-feedback}
+Summed step length is a **lower bound** on the distance travelled, and the
+bound tightens as sampling gets finer: every hourly step cuts across the
+wiggles that 5-minute fixes capture. More than doubling is entirely normal.
+
+There is a second, smaller effect working the other way: at very fine
+intervals GPS error adds spurious zig-zag, inflating distance. That is why the
+"right" interval is not simply "as fine as possible".
+
+Neither 4 km nor 9 km is *the* daily distance. Each is a daily distance **at a
+given sampling interval**, and must be reported that way.
+:::
+:::
+
+# 5 · The three biases {background-color="#14525a"}
 
 ---
 
@@ -586,7 +805,7 @@ collars in each habitat type, and model fix success explicitly.
 . . .
 
 Keep the DOP / satellite-count columns. They are your evidence about which
-fixes to distrust. We use them in Class 3.
+fixes to distrust. We use them in Session 3.
 
 ---
 
@@ -635,7 +854,7 @@ model accordingly.
 :::
 :::
 
-# 5 · Where the data live {background-color="#14525a"}
+# 6 · Where the data live {background-color="#14525a"}
 
 ---
 
@@ -648,7 +867,7 @@ model accordingly.
 - A **controlled vocabulary**: `timestamp`, `location-long`, `location-lat`,
   `individual-local-identifier` — always the same names, always UTC, always WGS84
 - **Env-DATA**: upload a track, get it annotated with weather, NDVI, land
-  cover, elevation. We do this by hand in Class 5 so you understand what it does.
+  cover, elevation. We do this by hand in Sessions 2–3 so you understand what it does.
 - R access through the `move2` package
 :::
 
@@ -658,22 +877,22 @@ Our three datasets all come from there — see the [Datasets page](../../data.qm
 
 ---
 
-## Today's exercise
+## Today's practical
 
 ::: {.objectives}
-**[→ Class 1 exercise](exercise.qmd)**
+**[→ Session 1 practical](exercise.qmd)**
 
-1. Check that R, RStudio and the course packages work
-2. Read a real Movebank file and look at what is actually in it
-3. Compute a first fix rate and a first fix success rate
-4. Plot your first trajectory — with no spatial packages at all
+1. Orientation: the course project, RStudio, and where everything lives
+2. Load a real GPS track with `readr` and `lubridate`
+3. Plot it with `ggplot2` — and see why the plot is subtly wrong
+4. Count fixes per day, compute daily distances, and find the gaps
 :::
 
 . . .
 
 ::: {.keyidea}
-Today's plot will be *wrong* in an instructive way: it treats longitude and
-latitude as if they were plane coordinates. Fixing that is Class 2.
+Today's plot treats longitude and latitude as plane coordinates. Fixing that
+properly is Session 2.
 :::
 
 ---
@@ -681,21 +900,23 @@ latitude as if they were plane coordinates. Fixing that is Class 2.
 ## Recap
 
 ::: {.incremental}
-- Movement links the individual to the landscape; four questions (Nathan et al.)
-- A **fix** is a timestamped location estimate; a **track** is a *sample* of a path
-- Technology choice is driven by **body mass** and **data recovery**, not by
-  desired accuracy
-- Tags affect animals; the 5% rule is a convention, not a guarantee
+- The **paradigm**: internal state, motion capacity, navigation, external
+  factors → path. We only ever observe the path
+- Animals move to forage, disperse, migrate, avoid predators and breed — each
+  a trade-off between gain and cost
+- Technology choice is driven by **body mass** and **data recovery**; the
+  3–5% rule is a convention, not a guarantee
+- The **fix interval** shapes the path you see — the modifiable temporal unit
+  problem
 - Three biases: **fix success**, **location error**, **which animals you caught**
 :::
 
 . . .
 
-### Before Class 2
+### Before Session 2
 
 - Finish the [setup page](../../setup.qmd) — `sf` and `terra` must install cleanly
 - Read Nathan et al. (2008), PNAS 105:19052 — it is 8 pages
-- Skim the [Datasets page](../../data.qmd)
 
 ---
 

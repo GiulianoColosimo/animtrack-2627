@@ -1,6 +1,6 @@
 ---
-title: "Exercise 6 — Fitting a hidden Markov model"
-subtitle: "Class 6 · Theme 4"
+title: "Practical 6 — Home ranges, four ways"
+subtitle: "Session 6 · Home ranges and space use"
 date-modified: last-modified
 ---
 
@@ -10,399 +10,393 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
 ::: {.objectives}
-**Goals.** Prepare a track for `moveHMM`; fit a 2-state model; read its
-output properly; decode and map the states; compare 2 and 3 states; check
-pseudo-residuals; and segment Leo's migration a different way.
+**Goals.** Estimate one buffalo's home range with MCP, KDE (two bandwidths),
+a Brownian bridge and AKDE; map them together and explain why they differ;
+use variograms to tell a resident from a nomad; and test every estimator
+against a simulated animal whose true home range we know.
 
-**Time:** ~55 minutes. **Packages:** `moveHMM`, `amt`, `dplyr`, `tidyr`,
-`lubridate`.
+**Time:** ~70 minutes. **Packages:** `adehabitatHR`, `adehabitatLT`, `ctmm`,
+`amt`, `sf`, `dplyr`, `ggplot2`.
 :::
 
 ```{r}
-library(moveHMM)
+library(adehabitatHR)
+library(adehabitatLT)
+library(ctmm)
 library(amt)
+library(sf)
 library(dplyr)
-library(tidyr)
-library(lubridate)
+library(ggplot2)
 ```
 
-## Task 1 — Prepare the data
-
-An HMM needs **regular** sampling and **contiguous** sequences. That is exactly
-what the bursts from Class 3 give us.
+## Setup — one buffalo
 
 ```{r}
-clean <- read.csv("data/buffalo_kruger.csv.gz") |>
-  transmute(id = individual.local.identifier,
-            t  = as.POSIXct(timestamp, tz = "UTC"),
-            x  = location.long, y = location.lat) |>
+buffalo <- read.csv("data/buffalo_kruger.csv.gz") |>
+  transmute(id = individual.local.identifier, t = as.POSIXct(timestamp, tz = "UTC"),
+            x = location.long, y = location.lat) |>
   filter(!is.na(x), !is.na(y)) |>
-  distinct(id, t, .keep_all = TRUE)
+  distinct(id, t, .keep_all = TRUE) |>
+  arrange(id, t)
 
-trk_hr <- make_track(clean, x, y, t, id = id, crs = 4326) |>
-  transform_coords(crs_to = 32736) |>
-  nest(data = -id) |>
-  mutate(data = lapply(data, \(d) {
-    d |> track_resample(rate = hours(1), tolerance = minutes(10)) |>
-      filter_min_n_burst(min_n = 3)
-  })) |>
-  unnest(cols = data)
+cilla <- buffalo |> filter(id == "Cilla")
 
-# Each burst is an independent sequence: that is what moveHMM calls an "ID"
-hmm_in <- trk_hr |>
-  filter(id %in% c("Cilla", "Toni")) |>
-  transmute(ID = paste(id, burst_, sep = "_"), x = x_, y = y_)
+# Projected coordinates (UTM 36S) for adehabitatHR, which assumes a plane
+cilla_utm <- st_as_sf(cilla, coords = c("x", "y"), crs = 4326) |>
+  st_transform(32736)
+xy <- st_coordinates(cilla_utm)
+pts <- SpatialPoints(xy, proj4string = CRS("EPSG:32736"))
 
-pd <- prepData(as.data.frame(hmm_in), type = "UTM", coordNames = c("x", "y"))
-
-summary(pd$step)
-sum(pd$step == 0, na.rm = TRUE)
+nrow(cilla)
+range(cilla$t)
 ```
 
-::: {.callout-important}
-## Two things to notice before fitting
-
-**Zero step lengths.** A gamma distribution has zero density at zero, so any
-exact zero makes the likelihood infinite. `moveHMM` handles this with a
-**zero-mass** parameter per state — but only if you supply initial values for
-it, otherwise you get
-`Wrong number of initial parameters -- there should be 6`.
-
-**A 63 km step.** That is the spatial outlier we found in Class 3. An HMM will
-happily invent a "teleporting" state to accommodate two bad fixes. Remove them.
+::: {.callout-note}
+`adehabitatHR` predates `sf` and expects `sp` objects — hence
+`SpatialPoints()`. This is the "messy history" from Session 2 in practice.
 :::
 
+## Task 1 — Five estimates of one home range
+
+### MCP and KDE
+
 ```{r}
-max(pd$step, na.rm = TRUE)
-sum(pd$step > 5000, na.rm = TRUE)
+mcp95 <- mcp(pts, percent = 95)
+area_mcp <- mcp.area(pts, percent = 95, unout = "km2", plotit = FALSE)[[1]]
 
-bad_ids <- unique(pd$ID[which(pd$step > 5000)])
-pd <- pd[!(pd$ID %in% bad_ids), ]
+kd_href <- kernelUD(pts, h = "href", grid = 300, extent = 1)
+kd_lscv <- kernelUD(pts, h = "LSCV", grid = 300, extent = 1)
 
-nrow(pd)
-round(max(pd$step, na.rm = TRUE))
+area_href <- kernel.area(kd_href, percent = 95, unout = "km2")[[1]]
+area_lscv <- kernel.area(kd_lscv, percent = 95, unout = "km2")[[1]]
+
+c(h_ref_m = kd_href@h$h, h_lscv_m = kd_lscv@h$h,
+  lscv_converged = kd_lscv@h$convergence)
 ```
 
-## Task 2 — Fit a 2-state model
+### Brownian bridge
+
+The bridge needs the *trajectory*, not just the points, and two variance
+parameters: `sig2`, the location error (we assume ~30 m for GPS), and `sig1`,
+the animal's mobility, which `liker()` estimates by maximum likelihood.
 
 ```{r}
 #| cache: true
-set.seed(42)
+ltr <- as.ltraj(xy = as.data.frame(xy), date = cilla$t, id = "Cilla")
+lik <- liker(ltr, sig2 = 30, rangesig1 = c(1, 100), plotit = FALSE)
+lik$Cilla$sig1
 
-m2 <- fitHMM(
-  pd, nbStates = 2,
-  # mu1, mu2, sd1, sd2, zeromass1, zeromass2
-  stepPar0  = c(50, 500, 50, 500, 0.01, 0.001),
-  # angle mean1, mean2, concentration1, concentration2
-  anglePar0 = c(0, 0, 1, 3)
-)
-
-m2$mle$stepPar
-m2$mle$anglePar
-m2$mle$gamma
+bb <- kernelbb(ltr, sig1 = lik$Cilla$sig1, sig2 = 30, grid = 300, extent = 0.3)
+area_bb <- kernel.area(bb, percent = 95, unout = "km2")[[1]]
 ```
 
-### Your turn
+### AKDE
 
-**2a.** Describe the two states in words.
-**2b.** What is the expected dwell time in each?
-
-::: {.callout-note collapse="true"}
-## Solution
+`ctmm` fits a continuous-time movement model first. It wants Movebank-style
+columns and works in geographic coordinates.
 
 ```{r}
-round(m2$mle$stepPar, 3)
-round(m2$mle$anglePar, 3)
+#| cache: true
+tel <- as.telemetry(
+  data.frame(timestamp = cilla$t, location.long = cilla$x, location.lat = cilla$y,
+             individual.local.identifier = "Cilla"),
+  timeformat = "auto")
 
-gam <- m2$mle$gamma
-dwell <- 1 / (1 - diag(gam))
-round(dwell, 2)
-```
+guess <- ctmm.guess(tel, interactive = FALSE)   # not variogram.fit(): that opens a GUI
+fit   <- ctmm.select(tel, guess)
+ak    <- akde(tel, fit)
 
-**State 1** — mean step of about 15 m with very low angular concentration and
-a mean turning angle near π: the animal barely moves and reverses direction
-constantly. This is an *encamped* state: resting, ruminating, or grazing
-within a very small patch.
-
-**State 2** — mean step of a few hundred metres, mean turning angle near 0 and
-higher concentration: **directed movement**.
-
-Dwell times: roughly 2 hours in the encamped state and about 8 hours in the
-moving state. Note that these are in **hours** only because the data are
-hourly — the units of a dwell time are always "number of sampling intervals".
-
-```{r}
-states <- viterbi(m2)
-round(table(states) / length(states), 3)
+summary(fit)
+akde_ci <- summary(ak, units = FALSE)$CI / 1e6   # m² -> km²
+akde_ci
 ```
 
 ::: {.callout-warning}
-The model has given you *state 1* and *state 2*. Calling them "resting" and
-"travelling" is an **interpretation**, and everything above is consistent with
-several other stories. To make the labels a measurement rather than a guess
-you would need external evidence: accelerometer data, direct observation, or
-known activity patterns.
+## Do not use `variogram.fit()` in a script
+
+It opens an interactive slider window for choosing starting values by eye —
+great at the console, fatal in a rendered document. `ctmm.guess(...,
+interactive = FALSE)` gives the same starting values automatically.
 :::
-:::
-
-## Task 3 — Decode and map
-
-```{r}
-#| fig-width: 8.5
-#| fig-height: 5
-#| fig-align: center
-pd$state <- factor(viterbi(m2))
-
-one <- pd[pd$ID == names(sort(table(pd$ID), decreasing = TRUE))[1], ]
-
-par(mfrow = c(1, 2))
-plot(one$x, one$y, type = "l", col = "grey70", asp = 1,
-     xlab = "Easting (m)", ylab = "Northing (m)", main = "Track coloured by state")
-points(one$x, one$y, col = c("#1f6f78", "#c1440e")[one$state], pch = 16, cex = 0.5)
-legend("topleft", c("state 1 (encamped)", "state 2 (moving)"),
-       col = c("#1f6f78", "#c1440e"), pch = 16, bty = "n", cex = 0.8)
-
-plot(one$step, type = "h", col = c("#1f6f78", "#c1440e")[one$state],
-     xlab = "Step index", ylab = "Step length (m)", main = "Step length by state")
-par(mfrow = c(1, 1))
-```
-
-```{r}
-#| fig-width: 8
-#| fig-height: 4.5
-#| fig-align: center
-plot(m2, ask = FALSE, plotCI = FALSE, plotTracks = FALSE)
-```
-
-::: {.callout-tip}
-The second plot is the one to inspect most carefully: it overlays the
-**state-dependent densities** on the histogram of your data. If the coloured
-curves do not add up to the shape of the histogram, the model has not
-described your data and nothing downstream is trustworthy.
-:::
-
-## Task 4 — How many states?
-
-```{r}
-#| cache: true
-m3 <- fitHMM(
-  pd, nbStates = 3,
-  stepPar0  = c(30, 200, 800, 30, 200, 800, 0.01, 0.001, 0.001),
-  anglePar0 = c(0, 0, 0, 0.5, 1, 3)
-)
-
-data.frame(states = c(2, 3), AIC = c(AIC(m2), AIC(m3)))
-round(m3$mle$stepPar, 1)
-```
 
 ### Your turn
 
-**4a.** AIC prefers 3 states. Should you report 3 states?
-**4b.** What would make you confident that a third state is real?
+**1a.** Put all five 95% areas in one table. **1b.** Did LSCV converge?
 
 ::: {.callout-note collapse="true"}
 ## Solution
 
 ```{r}
-round(m3$mle$anglePar, 2)
-round(1 / (1 - diag(m3$mle$gamma)), 2)
-round(table(viterbi(m3)) / nrow(pd), 3)
+areas <- data.frame(
+  estimator = c("MCP 95%", "KDE h_ref", "KDE LSCV", "Brownian bridge", "AKDE"),
+  area_km2  = round(c(area_mcp, area_href, area_lscv, area_bb, akde_ci[2])),
+  low_km2   = c(NA, NA, NA, NA, round(akde_ci[1])),
+  high_km2  = c(NA, NA, NA, NA, round(akde_ci[3]))
+)
+areas
 ```
 
-AIC is **lower** for 3 states, and it would very likely keep falling for 4 and
-5. That is what mixture models do: extra components always improve the fit to
-the shape of the data, whether or not they correspond to behaviours.
-
-Ask instead:
-
-1. **Are the states distinct?** If two states have overlapping step-length
-   distributions and similar turning angles, the model has split one behaviour
-   in two.
-2. **Are the dwell times plausible?** A state occupied for a single step at a
-   time is a statistical artefact, not a behaviour.
-3. **Is any state rare?** A state holding 2% of steps is usually absorbing
-   outliers.
-4. **Does it survive?** Refit on a different individual, or a different
-   season. A real behaviour recurs; an artefact does not.
-
-Here the third state sits between the other two, which is biologically
-reasonable for a large grazer (rest / graze / travel) — but you should say
-that you chose 3 for *that* reason, not because AIC said so.
-
-**Report the simplest model that answers your question and passes its
-checks**, and state your criterion in the methods.
+A factor of about four between the smallest and largest estimate, for the same
+animal and the same fixes. LSCV **did not converge** — `kernelUD()` warned —
+and chose a bandwidth of about 100 m, which splits the range into fragments
+around clusters of consecutive fixes. Only AKDE comes with a confidence
+interval.
 :::
 
-## Task 5 — Check the residuals
-
-```{r}
-#| fig-width: 8
-#| fig-height: 5
-#| fig-align: center
-pr <- pseudoRes(m2)
-
-par(mfrow = c(1, 2))
-qqnorm(pr$stepRes, main = "Step pseudo-residuals", pch = 16, cex = 0.3,
-       col = adjustcolor("#1f6f78", 0.4))
-qqline(pr$stepRes, col = "firebrick", lwd = 2)
-qqnorm(pr$angleRes, main = "Angle pseudo-residuals", pch = 16, cex = 0.3,
-       col = adjustcolor("#1f6f78", 0.4))
-qqline(pr$angleRes, col = "firebrick", lwd = 2)
-par(mfrow = c(1, 1))
-```
+**1c.** Show yourself the autocorrelation problem: thin the fixes and watch
+the KDE area.
 
 ::: {.callout-note collapse="true"}
-## Reading a pseudo-residual plot
+## Solution
 
-If the model describes the data, pseudo-residuals are standard normal and the
-points lie on the line. Departures tell you *where* the model fails:
+```{r}
+thin_tab <- lapply(c(1, 2, 6, 12, 24, 48), function(k) {
+  keep <- seq(1, nrow(xy), by = k)
+  a <- kernel.area(kernelUD(SpatialPoints(xy[keep, ]), h = "href", grid = 200),
+                   percent = 95, unout = "km2")[[1]]
+  data.frame(every_nth_fix = k, fixes = length(keep), kde95_km2 = round(a))
+}) |> bind_rows()
+thin_tab
+```
 
-- **Heavy tails** — the step-length distribution is wrong (try log-normal or
-  Weibull), or outliers remain
-- **Systematic curvature** — the wrong number of states, or a state whose
-  distribution family does not match
-- **Structure when plotted against time** — a covariate is missing: perhaps
-  behaviour depends on time of day and you have not let it
-
-This is the HMM equivalent of plotting residuals in a regression, and it is
-skipped in far too many papers.
+If the fixes were independent draws from a fixed UD, the estimate would
+stabilise as you add data. Instead the densest data give the **smallest**
+range: every extra autocorrelated fix adds almost no new information but makes
+the estimator more confident. That is exactly the bias AKDE corrects.
 :::
 
-## Task 6 — A different kind of segmentation
+## Task 2 — Map them together
 
-Leo the vulture needs **change-point** thinking, not state classification. The
-question is *when did migration start*, and the NSD profile from Class 4 is
-enough to answer it.
+```{r}
+#| fig-width: 7.5
+#| fig-height: 7
+#| fig-align: center
+contour_sf <- function(ud, label) {
+  st_as_sf(getverticeshr(ud, percent = 95)) |>
+    st_set_crs(32736) |> mutate(estimator = label) |> select(estimator)
+}
+
+contours <- bind_rows(
+  st_as_sf(mcp95) |> st_set_crs(32736) |> mutate(estimator = "MCP 95%") |> select(estimator),
+  contour_sf(kd_href, "KDE h_ref"),
+  contour_sf(kd_lscv, "KDE LSCV"),
+  contour_sf(bb, "Brownian bridge"),
+  as.sf(ak, level.UD = 0.95) |> st_transform(32736) |>
+    filter(grepl("est", name)) |> mutate(estimator = "AKDE") |> select(estimator)
+)
+
+ggplot() +
+  geom_sf(data = cilla_utm, size = 0.1, alpha = 0.25, colour = "grey30") +
+  geom_sf(data = contours, aes(colour = estimator), fill = NA, linewidth = 0.8) +
+  scale_colour_manual(values = c("MCP 95%" = "grey20", "KDE h_ref" = "#1f6f78",
+                                 "KDE LSCV" = "#6fc3cd", "Brownian bridge" = "#b8860b",
+                                 "AKDE" = "#c1440e")) +
+  coord_sf(crs = 32736) +
+  labs(title = "Cilla: five 95% home ranges", colour = NULL) +
+  theme_minimal()
+```
+
+::: {.callout-tip}
+## To hand in
+
+This map, and **one paragraph** explaining why the five estimates differ. For
+each estimator name the question it answers and the assumption it makes about
+the fixes. This comparison — not any single number — is the point of the
+session.
+:::
+
+## Task 3 — Variograms: is there a home range at all?
 
 ```{r}
 #| fig-width: 9
 #| fig-height: 4
 #| fig-align: center
-vul <- read.csv("data/vulture_leo.csv.gz") |>
-  transmute(t = as.POSIXct(timestamp, tz = "UTC"),
-            x = location.long, y = location.lat) |>
-  filter(!is.na(x)) |> distinct(t, .keep_all = TRUE) |> arrange(t)
+data(gazelle)
+gz <- gazelle[[1]]
 
-vt <- make_track(vul, x, y, t, crs = 4326) |> transform_coords(crs_to = 6933)
+vg_cilla <- variogram(tel)
+vg_gz    <- variogram(gz)
 
-daily <- vt |>
-  mutate(day = as.Date(t_)) |>
-  group_by(day) |>
-  summarise(x = mean(x_), y = mean(y_), .groups = "drop") |>
-  arrange(day) |>
-  mutate(disp_km = c(NA, sqrt(diff(x)^2 + diff(y)^2)) / 1000)
-
-daily <- daily |> mutate(migrating = disp_km > 50)
-
-plot(daily$day, daily$disp_km, type = "h",
-     col = ifelse(daily$migrating, "#c1440e", "grey65"),
-     xlab = "", ylab = "Daily displacement (km)",
-     main = "Leo: daily displacement, migration days in red")
-abline(h = 50, col = "firebrick", lty = 2)
+par(mfrow = c(1, 2))
+plot(vg_cilla, CTMM = fit, fraction = 0.5, main = "Buffalo 'Cilla'")
+plot(vg_gz, fraction = 0.5, main = "Mongolian gazelle")
+par(mfrow = c(1, 1))
 ```
 
 ### Your turn
 
-**6a.** How many migration days per year, and in which months?
-**6b.** Why is a simple threshold acceptable here, when it would not be for the buffalo?
+**3a.** Which variogram levels off? **3b.** Fit a model to the gazelle and
+compare its range-crossing time with the tracking duration.
+
+::: {.callout-note collapse="true"}
+## Solution
+
+Cilla's variogram rises and then **flattens**: beyond a lag of a few days her
+positions are as far apart as they ever get. That asymptote *is* range
+residency, and the fitted model's curve follows it.
+
+The gazelle's variogram keeps climbing across much of the plot, with no clear
+plateau.
+
+```{r}
+#| cache: true
+fit_gz <- ctmm.select(gz, ctmm.guess(gz, interactive = FALSE))
+summary(fit_gz)$CI[c(1, 2), ]
+
+c(tracking_days = as.numeric(diff(range(gz$t))) / 86400)
+```
+
+The gazelle's estimated range-crossing time is months long, with a confidence
+interval whose upper end exceeds the whole study. In the time it was tracked,
+it crossed its "range" only a handful of times — perhaps not at all — so the
+area estimate spans an order of magnitude. More fixes per day would not help;
+only a much longer track could. For a nomadic species, the honest answer may be
+that a home range is the wrong summary.
+:::
+
+## Task 4 — Ground truth
+
+In Session 5 we built a central-place walker. Because we wrote its rule, we can
+compute its **true** 95% home range by simulating it for a very long time.
+
+```{r}
+#| cache: true
+source("R/simulators.R")
+true95 <- truth_area(0.95)
+true95
+```
+
+Now pretend it is a collared animal: sample it every hour for ~69 days and
+estimate its range.
+
+```{r}
+#| cache: true
+sim <- truth_animal()                           # 5,000 steps of 20 minutes
+obs <- sim[seq(1, nrow(sim), by = 3), ]         # an hourly GPS fix
+obs$t <- as.POSIXct("2026-01-01", tz = "UTC") + (obs$step - 1) * 20 * 60
+
+sim_pts <- SpatialPoints(obs[, c("x", "y")])
+est <- c(
+  MCP      = mcp.area(sim_pts, percent = 95, unout = "km2", plotit = FALSE)[[1]],
+  KDE_href = kernel.area(kernelUD(sim_pts, h = "href", grid = 200), percent = 95, unout = "km2")[[1]],
+  KDE_LSCV = kernel.area(suppressWarnings(kernelUD(sim_pts, h = "LSCV", grid = 200)),
+                         percent = 95, unout = "km2")[[1]]
+)
+
+# AKDE: park the simulated animal in UTM 36S so ctmm gets longitude/latitude
+ll <- st_coordinates(st_transform(
+  st_as_sf(data.frame(x = obs$x + 4e5, y = obs$y + 7.3e6), coords = c("x", "y"), crs = 32736),
+  4326))
+sim_tel <- as.telemetry(data.frame(timestamp = obs$t, location.long = ll[, 1],
+                                   location.lat = ll[, 2], individual.local.identifier = "truth"),
+                        timeformat = "auto")
+sim_fit <- ctmm.select(sim_tel, ctmm.guess(sim_tel, interactive = FALSE))
+sim_ci  <- summary(akde(sim_tel, sim_fit), units = FALSE)$CI / 1e6
+
+round(c(est, AKDE = sim_ci[2], AKDE_low = sim_ci[1], AKDE_high = sim_ci[3],
+        TRUTH = true95))
+```
+
+One animal is one draw: an estimator can be lucky. The fair test repeats the
+experiment on many independent animals. That takes ~20 minutes, so it has been
+run for you by `R/hr_ground_truth.R`; the results are in
+`data/hr_ground_truth.csv`.
+
+```{r}
+reps <- read.csv("data/hr_ground_truth.csv")
+nrow(reps)
+```
+
+### Your turn
+
+**4a.** For each estimator, plot estimate / truth across the replicates.
+**4b.** How often does AKDE's 95% confidence interval contain the truth?
 
 ::: {.callout-note collapse="true"}
 ## Solution
 
 ```{r}
-daily |>
-  filter(migrating) |>
-  count(year = year(day), name = "migration_days")
+#| fig-width: 7.5
+#| fig-height: 4.5
+#| fig-align: center
+long <- reps |>
+  tidyr::pivot_longer(c(MCP, KDE_href, KDE_LSCV, BBMM, AKDE),
+                      names_to = "estimator", values_to = "km2") |>
+  mutate(ratio = km2 / true95,
+         estimator = factor(estimator, c("MCP", "KDE_href", "KDE_LSCV", "BBMM", "AKDE")))
 
-daily |>
-  filter(migrating) |>
-  count(month = month(day, label = TRUE), name = "days")
+ggplot(long, aes(estimator, ratio)) +
+  geom_hline(yintercept = 1, linetype = 2, colour = "firebrick") +
+  geom_boxplot(fill = "#1f6f78", alpha = 0.25, outlier.shape = NA) +
+  geom_jitter(width = 0.12, size = 1.6, colour = "#1f6f78") +
+  labs(x = NULL, y = "Estimate / true area",
+       title = "Twenty simulated animals, 69 days of hourly fixes each") +
+  theme_minimal()
 ```
-
-Migration days cluster strongly in the **spring and autumn** months, exactly
-as the NSD sawtooth in Class 4 suggested.
-
-**Why a threshold is defensible here.** The two behaviours are separated by
-roughly an order of magnitude: a resident vulture moves a few kilometres a
-day, a migrating one moves hundreds. The distribution of daily displacement is
-clearly bimodal with a wide, empty valley between the modes, so the exact
-threshold barely matters.
 
 ```{r}
-#| fig-width: 6.5
-#| fig-height: 4
-#| fig-align: center
-hist(log10(daily$disp_km + 1), breaks = 50, col = "#1f6f78", border = "white",
-     xlab = "log10(daily displacement km + 1)", main = "Two clearly separated modes")
-abline(v = log10(51), col = "firebrick", lwd = 2, lty = 2)
+long |>
+  group_by(estimator) |>
+  summarise(median_ratio = round(median(ratio), 2),
+            spread_IQR   = round(IQR(ratio), 2), .groups = "drop")
+
+c(AKDE_CI_covers_truth = mean(reps$AKDE_low <= reps$true95 & reps$AKDE_high >= reps$true95))
 ```
 
-For the buffalo there is no such valley: resting, grazing and travelling
-produce overlapping step-length distributions with no gap to cut at. That is
-precisely when you need a model that assigns states probabilistically and uses
-the time dependence to resolve the overlap — an HMM.
+Every estimator fails in a characteristic way, and now you can see which way:
 
-**The general rule:** if a histogram of your metric shows a clean gap, a
-threshold is honest and transparent. If it does not, a threshold is an
-arbitrary decision dressed as a result.
+- **MCP** and **LSCV** sit below the line — too small, for the reasons in the
+  slides (convexity cuts both ways; LSCV fragments the UD).
+- **The Brownian bridge** is far below the line — not because it is wrong, but
+  because it answers a different question: where the animal *went* in 69
+  days, not where it *lives*.
+- **KDE with $h_\text{ref}$** can land close to the truth for this animal —
+  its over-smoothing happens to offset the autocorrelation bias. That is luck
+  of the geometry, not a property you can rely on: compare its performance on
+  Cilla, whose range is far from a single bivariate normal.
+- **AKDE** is the only estimator whose uncertainty is stated, and its
+  confidence interval should contain the truth in most replicates.
+
+Estimators are not "right" or "wrong" in general. They are right or wrong
+*for a question*, and simulation with a known truth is how you find out which.
 :::
 
 ## Self-check
 
 ::: {.quiz}
-Your 2-state HMM assigns 97% of steps to state 1 and 3% to state 2, and state
-2 has a mean step length of 12 km. What has probably happened?
+You double the fix rate of your collars from hourly to every 30 minutes, for
+the same 3 months. What happens to AKDE's confidence interval on the home-range
+area?
 
-- [ ] The animal genuinely travels 3% of the time
-- [x] State 2 is absorbing location errors rather than describing a behaviour
-- [ ] The model needs more states
-- [ ] The sampling interval is too short
+- [ ] It halves
+- [ ] It narrows by a factor of √2
+- [x] It barely changes, because the effective sample size depends on how many times the animal crossed its range
+- [ ] It widens
 
 ::: {.quiz-feedback}
-A rare state with an extreme mean is the classic signature of a model mopping
-up **outliers**. Twelve kilometres in one step is implausible for most
-terrestrial mammals at an hourly interval, and the HMM has done what it was
-asked to do: found the mixture that best fits the data, including the bad
-points.
-
-Clean first, then model. Find the offending steps, look at them on a map,
-decide whether they are real, and remove them (or the affected bursts) before
-refitting. This is why Task 1 drops the 63 km steps.
-
-More states would not help — you would simply get more outlier-absorbing
-states.
+AKDE's effective sample size is roughly the tracking duration divided by the
+range-crossing time. Sampling faster adds fixes, but not range crossings. To
+narrow the interval you must track for **longer**, not more often.
 :::
 :::
 
 ::: {.quiz}
-You want to know whether buffalo are more likely to start moving when it is
-hot. What do you change in `fitHMM()`?
+Which estimator would you use to map the corridors an animal actually used
+during a 2-week dispersal event?
 
-- [ ] Add temperature to `stepPar0`
-- [x] Pass `formula = ~ temperature` so the covariate acts on the transition probabilities
-- [ ] Fit separate models for hot and cold days
-- [ ] Nothing — HMMs cannot include covariates
+- [ ] AKDE
+- [x] A Brownian bridge
+- [ ] MCP
+- [ ] KDE with LSCV
 
 ::: {.quiz-feedback}
-The question is about **switching between behaviours**, and switching is
-governed by the transition probability matrix. `formula = ~ temperature` makes
-the transition probabilities a (multinomial-logit) function of temperature,
-which is exactly the hypothesis.
-
-Putting a covariate on the *state-dependent distributions* instead would ask a
-different question — "does the animal travel faster when it is hot", given
-that it is already travelling.
-
-Fitting separate models for hot and cold days throws away the transitions
-between them and gives you no test of the difference.
-
-This is where Class 5 and Class 6 join up: annotate each fix with the
-contemporaneous covariate, then let it drive the transitions.
+A dispersal event is non-stationary by definition, so a *range* distribution
+is meaningless; you want the **occurrence** distribution — where the animal
+went — which is exactly what the Brownian bridge estimates.
 :::
 :::
 
-## Before Class 7
+## Before Session 7
 
-- **Read Fieberg et al. (2021)**, *J Anim Ecol* 90:1027–1043. Genuinely the
-  most useful paper in this course.
-- Make sure `library(amt)` and `library(survival)` both load.
+- Fieberg et al. (2021), *J Anim Ecol* 90:1027–1043.
+- Make sure `library(survival)` loads.

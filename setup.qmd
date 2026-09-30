@@ -1,6 +1,6 @@
 ---
 title: "Software setup"
-subtitle: "Do this before Class 1"
+subtitle: "Do this before Session 1"
 date-modified: last-modified
 ---
 
@@ -39,18 +39,22 @@ missing, so it is safe to rerun.
 ```{r}
 #| eval: false
 pkgs <- c(
-  # --- spatial core (Classes 2, 3, 5) ---
-  "sf", "terra", "units",
-  # --- tracking data (Classes 3, 4, 7, 8) ---
-  "move2", "amt", "adehabitatHR", "ctmm",
-  # --- segmentation (Class 6) ---
-  "moveHMM", "circular",
-  # --- selection functions (Classes 7, 8) ---
-  "survival", "glmmTMB",
+  # --- spatial core (Sessions 2-3) ---
+  "sf", "terra", "units", "ggspatial",
+  # --- trajectories and metrics (Sessions 3-4) ---
+  "amt", "adehabitatLT", "bcpa", "move2",
+  # --- simulation (Session 5) ---
+  "circular",
+  # --- home ranges (Session 6) ---
+  "adehabitatHR", "ctmm",
+  # --- selection functions (Session 7) ---
+  "survival",
+  # --- hidden Markov models (Session 8) ---
+  "momentuHMM",
   # --- wrangling and graphics ---
-  "dplyr", "tidyr", "lubridate", "ggplot2", "patchwork", "viridis",
-  # --- maps and tables ---
-  "mapview", "leaflet", "tmap", "rnaturalearth", "gt", "DT",
+  "tidyverse", "lubridate", "patchwork",
+  # --- environmental data (optional) ---
+  "MODISTools",
   # --- documents ---
   "knitr", "rmarkdown"
 )
@@ -83,8 +87,8 @@ ready.
 
 ```{r}
 #| eval: false
-need <- c("sf", "terra", "move2", "amt", "adehabitatHR", "ctmm",
-          "moveHMM", "survival", "dplyr", "ggplot2", "mapview")
+need <- c("sf", "terra", "amt", "adehabitatLT", "adehabitatHR", "ctmm",
+          "bcpa", "momentuHMM", "circular", "tidyverse", "ggspatial")
 for (p in need) {
   ok <- requireNamespace(p, quietly = TRUE)
   cat(sprintf("%-14s %s\n", p, if (ok) as.character(packageVersion(p)) else "MISSING"))
@@ -129,10 +133,10 @@ If R is new to you, these are worth the evening:
 - [R for Data Science (2e), chapters 1–5](https://r4ds.hadley.nz/) — the
   standard introduction to the data-wrangling verbs used throughout.
 - [Spatial Data Science with R and `terra`](https://rspatial.org/) — the
-  reference for Classes 2 and 5.
+  reference for Sessions 2 and 3.
 - [Geocomputation with R](https://r.geocompx.org/) — the best free GIS-in-R book.
 
-The three things you must be comfortable with before Class 2:
+The three things you must be comfortable with before Session 2:
 
 ```{r}
 #| eval: false

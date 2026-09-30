@@ -57,55 +57,55 @@ website:
         href: setup.qmd
       - text: "Datasets"
         href: data.qmd
-      - section: "Classes"
+      - section: "Sessions"
         contents:
-          - section: "Class 1 — Movement & tracking technologies"
+          - section: "1 · Foundations"
             contents:
-              - text: "Slides · Theme 1"
+              - text: "Slides — Why animals move, how we watch them"
                 href: classes/class-01/slides.qmd
-              - text: "Exercise · First contact with a track"
+              - text: "Practical"
                 href: classes/class-01/exercise.qmd
-          - section: "Class 2 — Spatial data in R"
+          - section: "2 · Spatial data in R"
             contents:
-              - text: "Slides · Theme 2"
+              - text: "Slides — The survival kit"
                 href: classes/class-02/slides.qmd
-              - text: "Exercise · sf, terra and CRS"
+              - text: "Practical"
                 href: classes/class-02/exercise.qmd
-          - section: "Class 3 — Tracking data in R"
+          - section: "3 · From fixes to trajectories"
             contents:
-              - text: "Slides · Theme 2"
+              - text: "Slides — Cleaning, bursts, resampling"
                 href: classes/class-03/slides.qmd
-              - text: "Exercise · Clean, resample, map"
+              - text: "Practical"
                 href: classes/class-03/exercise.qmd
-          - section: "Class 4 — Movement metrics & home range"
+          - section: "4 · Quantifying movement"
             contents:
-              - text: "Slides · Theme 1"
+              - text: "Slides — Path descriptors, behaviour"
                 href: classes/class-04/slides.qmd
-              - text: "Exercise · Steps, angles, home range"
+              - text: "Practical"
                 href: classes/class-04/exercise.qmd
-          - section: "Class 5 — Remote sensing & annotation"
+          - section: "5 · Movement models"
             contents:
-              - text: "Slides · Theme 3"
+              - text: "Slides — Random walks and simulation"
                 href: classes/class-05/slides.qmd
-              - text: "Exercise · Environmental annotation"
+              - text: "Practical"
                 href: classes/class-05/exercise.qmd
-          - section: "Class 6 — Segmentation & HMMs"
+          - section: "6 · Home ranges"
             contents:
-              - text: "Slides · Theme 4"
+              - text: "Slides — MCP → KDE → BBMM → AKDE"
                 href: classes/class-06/slides.qmd
-              - text: "Exercise · Fitting an HMM"
+              - text: "Practical"
                 href: classes/class-06/exercise.qmd
-          - section: "Class 7 — Resource selection (RSF)"
+          - section: "7 · Habitat selection"
             contents:
-              - text: "Slides · Theme 5"
+              - text: "Slides — RSF and SSF"
                 href: classes/class-07/slides.qmd
-              - text: "Exercise · Fitting an RSF"
+              - text: "Practical"
                 href: classes/class-07/exercise.qmd
-          - section: "Class 8 — Step selection (SSF/iSSA)"
+          - section: "8 · Hidden Markov models"
             contents:
-              - text: "Slides · Theme 5"
+              - text: "Slides — States, frontier, synthesis"
                 href: classes/class-08/slides.qmd
-              - text: "Exercise · Step selection and iSSA"
+              - text: "Practical"
                 href: classes/class-08/exercise.qmd
       - text: "Resources"
         href: resources.qmd

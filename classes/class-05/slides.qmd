@@ -1,6 +1,6 @@
 ---
-title: "Remote sensing and environmental annotation"
-subtitle: "Class 5 · Theme 3 — Remote sensing"
+title: "Movement models and simulation"
+subtitle: "Session 5 — Random walks, correlated and biased random walks, Lévy walks"
 author: "Giuliano Colosimo"
 institute: "University of Rome Tor Vergata"
 date: last-modified
@@ -16,7 +16,7 @@ format:
     history: false
     width: 1280
     height: 760
-    footer: "[Animal Tracking 2026-2027 · Class 5](../../index.qmd)"
+    footer: "[Animal Tracking 2026-2027 · Session 5](../../index.qmd)"
     logo: ../../assets/figures/Tor-Vergata_logo_cmyk.png
     highlight-style: github
 execute:
@@ -25,373 +25,402 @@ execute:
 
 ## Today
 
-::: {.objectives}
-1. What a satellite sensor actually measures
-2. The **four resolutions**, and the trade-offs between them
-3. Spectral indices: **NDVI**, EVI, NDWI — what they mean and where they fail
-4. The main missions and where to get the data
-5. **Environmental annotation**: attaching covariates to a trajectory in space
-   *and* time
+::: {.paradigm}
+[Internal state]{.pbox}
+[Motion capacity]{.pbox .on}
+[Navigation capacity]{.pbox .on}
+[External factors]{.pbox}
+[Movement path]{.pbox .path .on}
 :::
 
-. . .
-
-::: {.keyidea}
-A tracking dataset on its own tells you *where*. Remote sensing tells you
-*what was there* — and that is what turns a map into ecology.
-:::
-
-# 1 · What a sensor measures {background-color="#14525a"}
+Random walks are the simplest possible answers to *how* an animal moves and
+*where* it is heading. Their value is not realism — it is that they tell you
+what to expect **if nothing else were going on**.
 
 ---
 
-## Radiation, not "pictures"
-
-::: {.incremental}
-- The Sun emits across the electromagnetic spectrum; surfaces **reflect**
-  some of it and **absorb** the rest
-- A passive sensor records the **radiance** arriving at the detector in a set
-  of wavelength **bands**
-- That raw signal is contaminated by the atmosphere, the Sun's angle, the
-  viewing angle and the terrain
-- What you download is the result of a **processing chain**, and the level
-  matters
-:::
-
-. . .
-
-**Level 1** — top of atmosphere radiance/reflectance.
-**Level 2** — surface reflectance, atmospherically corrected. *Start here.*
-**Level 3+** — derived products: NDVI composites, land cover, LAI.
-
----
-
-## Why vegetation looks the way it does
-
-::: {.columns}
-::: {.column width="55%"}
-Healthy green vegetation:
-
-- **absorbs** strongly in the **red** (~660 nm) — chlorophyll is doing
-  photosynthesis
-- **reflects** strongly in the **near infrared** (~850 nm) — the internal leaf
-  structure scatters it
-
-So the *contrast* between red and NIR is a measure of green biomass.
-:::
-::: {.column width="45%"}
-::: {.keyidea}
-That single fact is the basis of essentially every vegetation index ever
-published.
-:::
-:::
-:::
-
----
-
-## Active sensors
-
-::: {.incremental}
-- **Radar (SAR)** — emits microwaves and measures the return. Sees **through
-  cloud and at night**. Sentinel-1. Sensitive to structure and moisture, not
-  to greenness.
-- **LiDAR** — emits laser pulses, measures return time. Gives **3-D
-  structure**: canopy height, vertical complexity. GEDI (spaceborne),
-  airborne for fine detail.
-:::
-
-. . .
-
-For a forest animal, canopy height and vertical structure from LiDAR are often
-far more informative than NDVI — greenness saturates in dense forest, but
-structure does not.
-
-# 2 · The four resolutions {background-color="#14525a"}
-
----
-
-## You cannot have all four
-
-::: {.incremental}
-- **Spatial** — pixel size. 10 m (Sentinel-2) … 500 m (MODIS) … 25 km (some
-  climate products)
-- **Temporal** — revisit time. 5 days (Sentinel-2) vs **daily** (MODIS) vs
-  16 days (Landsat)
-- **Spectral** — number and width of bands. 4 broad bands vs 200 narrow
-  (hyperspectral)
-- **Radiometric** — bit depth; how finely brightness is quantised
-:::
-
-. . .
-
-::: {.keyidea}
-They trade off against each other: a detector collecting light from a small
-patch, in a narrow band, gets few photons — so it needs a longer dwell time,
-which means a narrower swath and a longer revisit.
-:::
-
----
-
-## The missions you will actually use
-| Mission | Spatial | Temporal | Since | Good for |
-|:--|:--|:--|:--|:--|
-| **MODIS** (Terra/Aqua) | 250–500 m | Daily | 2000 | Long consistent NDVI series |
-| **VIIRS** | 375–750 m | Daily | 2012 | MODIS successor |
-| **Landsat 5/7/8/9** | 30 m | 16 days | **1984** | Long-term landscape change |
-| **Sentinel-2** | 10–20 m | 5 days | 2015 | Fine-grained habitat |
-| **Sentinel-1** (SAR) | 10 m | 6–12 days | 2014 | Cloud-free, structure, water |
-| **GEDI** (LiDAR) | 25 m footprint | sampled | 2019 | Canopy height |
-
-. . .
-
-::: {.keyidea}
-**Match the pixel to the animal and to your positional error.** A 10 m
-Sentinel pixel is wasted on an Argos fix with 5 km error — and a 500 m MODIS
-pixel is useless for a dormouse.
-:::
-
----
-
-## Quiz
-
-::: {.quiz}
-You study habitat selection by a forest ungulate using GPS collars (error
-~15 m, hourly fixes) in a landscape with small forest patches of 1–5 ha. Which
-product for vegetation cover?
-
-- [ ] MODIS NDVI, 250 m, daily
-- [x] Sentinel-2, 10–20 m, every 5 days
-- [ ] A 1 km global land-cover map
-- [ ] Sentinel-1 SAR, 10 m
-
-::: {.quiz-feedback}
-A 1–5 ha patch is roughly 100–220 m across. A **250 m MODIS pixel is larger
-than the patch**, so every fix would get a mixed value averaging forest and
-open land — the very contrast you are trying to measure would be erased. A
-1 km product is hopeless for the same reason.
-
-Sentinel-2 at 10–20 m resolves those patches comfortably, and its 5-day
-revisit captures the growing season. Its resolution is also well matched to
-15 m GPS error: finer would just add noise.
-
-Sentinel-1 is excellent for structure and for cloudy regions, but it does not
-measure greenness — it is the right answer to a different question.
-:::
-:::
-
-# 3 · Spectral indices {background-color="#14525a"}
-
----
-
-## NDVI
-
-$$\text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}$$
-
-::: {.incremental}
-- Ranges −1 to +1. Water < 0; bare soil/rock ~0.1–0.2; sparse vegetation
-  ~0.2–0.4; dense green vegetation 0.6–0.9
-- A **proxy** for green biomass and primary productivity
-- Normalised, so it partly cancels illumination and viewing-angle effects
-:::
-
-. . .
-
-::: {.callout-warning appearance="simple"}
-**It saturates.** Above ~0.8 — closed canopy — NDVI stops responding to extra
-biomass. In rainforest it is nearly flat and nearly useless.
-:::
-
----
-
-## The other indices worth knowing
-| Index | Formula | Use |
-|:--|:--|:--|
-| **EVI** | $2.5\frac{\text{NIR}-\text{Red}}{\text{NIR}+6\text{Red}-7.5\text{Blue}+1}$ | Like NDVI but resists saturation and soil background |
-| **NDWI** | $\frac{\text{Green}-\text{NIR}}{\text{Green}+\text{NIR}}$ | Open water — very useful for waterholes |
-| **NDSI** | $\frac{\text{Green}-\text{SWIR}}{\text{Green}+\text{SWIR}}$ | Snow cover |
-| **LAI / fPAR** | modelled | Leaf area, absorbed radiation |
-
----
-
-## Beyond greenness: derived metrics
-
-::: {.incremental}
-- **Rate of green-up** (the derivative of NDVI in time) — this, not NDVI
-  itself, is what drives the *green wave surfing* of migratory ungulates
-- **Phenology metrics** — start of season, peak, length
-- **Terrain** from a DEM: slope, aspect, ruggedness, topographic position
-- **Distance to** — water, roads, forest edge. Often the strongest predictor
-  in the whole model
-:::
-
-. . .
-
-::: {.keyidea}
-The best covariate is rarely the raw band. It is a transformation that
-corresponds to something the animal could plausibly perceive or care about.
-:::
-
-# 4 · Annotation {background-color="#14525a"}
-
----
-
-## The operation
-
-For every fix, look up the environment **there** and **then**.
-
-::: {.incremental}
-- **Static** covariates — elevation, slope, distance to river. One raster;
-  `extract()` and done.
-- **Dynamic** covariates — NDVI, temperature, snow. A **stack** of rasters
-  with timestamps. You must match each fix to the right layer.
-:::
-
-. . .
-
-::: {.keyidea}
-A track that spans two years annotated with a *single* NDVI image is not
-annotated — it is decorated. If your covariate varies in time and your
-analysis does not, you have thrown away the mechanism.
-:::
-
----
-
-## Doing it in time
-
-```r
-# Which layer does each fix belong to?
-layer_dates <- as.Date(c("2005-01-01", "2005-01-17", ...))
-
-idx <- findInterval(as.Date(trk$t_), layer_dates)
-
-# Extract from the whole stack, then pick the right column per row
-vals <- terra::extract(ndvi_stack, vect(trk))[, -1]
-trk$ndvi <- vals[cbind(seq_len(nrow(vals)), idx)]
-```
-
-. . .
-
-`Movebank Env-DATA` does this for you, including interpolation in time, for
-dozens of products. Use it for real projects — but understand what it is doing
-first, which is what today's exercise is for.
-
----
-
-## Scale is a decision, not a detail
-
-::: {.incremental}
-- Do you want the value **at the fix**, or the **mean within a buffer**?
-- A buffer radius is a hypothesis about **perceptual range** — how far the
-  animal can assess its surroundings
-- Different radii can reverse the sign of an effect
-:::
-
-. . .
-
-```r
-terra::extract(ndvi, vect(trk), buffer = 500, fun = mean)
-```
-
-::: {.keyidea}
-Choose the radius from biology, before you look at the results. Fitting at
-ten radii and reporting the best one is a garden of forking paths.
-:::
-
----
-
-## Quiz
-
-::: {.quiz}
-You annotate two years of buffalo fixes with a single dry-season NDVI image
-and find a strong positive selection for high NDVI. What is the main problem?
-
-- [ ] NDVI saturates in dense vegetation
-- [x] The covariate is static while both the animal and the vegetation varied seasonally
-- [ ] The pixel size is too coarse
-- [ ] NDVI cannot be used for savanna
-
-::: {.quiz-feedback}
-The image describes one moment. Over two years, vegetation in a savanna swings
-enormously between wet and dry season, and the buffalo's needs swing with it.
-By holding NDVI fixed you have conflated "places that were green **in that dry
-season**" with "places that are green **when the animal was there**".
-
-What you have measured is selection for *persistently* productive places —
-which may be interesting, but is not what the model claims.
-
-The result can even be the *opposite* sign from the time-matched analysis: an
-animal may select the greenest available patch at every moment while showing
-no preference for places that are green on average.
-
-Fix: use a time series and match each fix to the contemporaneous layer.
-:::
-:::
-
----
-
-## Common failures
-::: {.incremental}
-- **CRS mismatch** — or worse, passing a bare coordinate matrix (Class 2)
-- **Cloud contamination** — an uncomposited optical image over the tropics is
-  mostly cloud. Use quality flags; use composites.
-- **Fill values** — `-3000` or `32767` read as real numbers will destroy your
-  model. Check the product's documentation for the scale factor and no-data value.
-- **Scale factors** — MODIS NDVI is stored as integers; multiply by 0.0001
-- **Time zones** — your fixes are UTC; is the product local solar time?
-:::
-
-. . .
-
-::: {.keyidea}
-After every annotation: `summary()` the new column. If the range is
-`-3000` to `10000`, you have raw integers, not NDVI.
-:::
-
----
-
-## Quiz
-
-::: {.quiz}
-Your GPS fixes have ~15 m error. You have both a 10 m Sentinel-2 product and a
-500 m MODIS product. You take the 10 m one because finer is better. When is
-that reasoning wrong?
-
-- [ ] Never — finer resolution is always preferable
-- [x] When the process you are modelling operates at a coarser scale than the pixel
-- [ ] When the file is too large to process
-- [ ] Only for aquatic species
-
-::: {.quiz-feedback}
-Resolution should match **the scale of the process**, not simply be as fine as
-available. If an animal responds to the overall productivity of a valley, a
-10 m pixel measures the individual bush it happened to stand next to — real
-variation, but not the variation driving the behaviour. You add noise and lose
-power.
-
-The two constraints are:
-
-- the pixel should not be much **finer** than your positional error (you
-  cannot tell which pixel the animal was in);
-- the pixel should not be much **coarser** than the animal's typical
-  displacement (Class 8 shows exactly what breaks when it is).
-
-Between those bounds, the choice is a hypothesis about the animal's perceptual
-scale — and you should state it.
-:::
-:::
-
----
-
-## Today's exercise
+## Where we are going
 
 ::: {.objectives}
-**[→ Class 5 exercise](exercise.qmd)**
+1. Why simulate: you cannot rewind an animal, but you can simulate a null
+2. The uncorrelated random walk and mean squared displacement
+3. Correlated random walks: persistence, and the scales of movement
+4. Biased random walks: advection versus diffusion
+5. Lévy walks — and an honest account of the controversy
+6. Using simulations as hypothesis tests
+:::
 
-1. Read real elevation and land-cover rasters for Kruger
-2. Derive slope and terrain ruggedness
-3. Annotate the buffalo fixes, and compare used vs available
-4. Extract at a point vs in a buffer — and see the answer change
-5. Build a **time-varying** covariate and do a time-matched annotation
+. . .
+
+::: {.keyidea}
+Today's practical builds a simulator from scratch. The same simulated animal
+becomes the **ground truth** you test estimators against in Sessions 6 and 7.
+:::
+
+# 1 · Why model movement? {background-color="#14525a"}
+
+---
+
+## You cannot rewind an animal
+
+::: {.incremental}
+- A tracking study observes **one realisation** of a random process
+- To ask "is this unusual?" you need the distribution of what *could* have
+  happened — and nature will not rerun the experiment
+- A movement model is a recipe that **generates** tracks. Run it a thousand
+  times and you have that distribution
+- Compare the real track with the simulated ones: where does it fall?
+:::
+
+. . .
+
+::: {.keyidea}
+A random walk is a **null model**. When the animal departs from it, the
+departure is the biology: memory, attraction, avoidance, a home range.
+:::
+
+---
+
+## Four canonical walks
+
+```{r}
+#| echo: false
+#| fig-width: 13
+#| fig-height: 4.3
+#| fig-align: center
+source("R/simulators.R")
+set.seed(3)
+n <- 400
+rw   <- simulate_crw(n, kappa = 0)
+crw  <- simulate_crw(n, kappa = 4)
+bcrw <- simulate_bcrw(n, goal = c(25000, 0), w = 0.3, kappa = 4, start = c(0, 0))
+lsl  <- pmin(50 * runif(n)^(-1 / 1.1), 15000)            # Pareto, mu = 2.1
+lh   <- runif(n, -pi, pi)
+levy <- data.frame(x = cumsum(lsl * cos(lh)), y = cumsum(lsl * sin(lh)))
+op <- par(mfrow = c(1, 4), mar = c(0.5, 0.5, 3, 0.5))
+for (d in list(list(rw, "Random walk"), list(crw, "Correlated (κ = 4)"),
+               list(bcrw, "Biased correlated"), list(levy, "Lévy walk (μ ≈ 2)"))) {
+  plot(d[[1]]$x, d[[1]]$y, type = "l", asp = 1, axes = FALSE, xlab = "", ylab = "",
+       col = "#1f6f78", lwd = 1.2)
+  points(0, 0, pch = 17, col = "firebrick", cex = 1.6)
+  if (d[[2]] == "Biased correlated") points(25000, 0, pch = 4, col = "firebrick", cex = 2, lwd = 3)
+  title(d[[2]], cex.main = 2)
+}
+par(op)
+```
+
+Same number of steps. Red triangle: start. Cross: the goal of the biased walk.
+
+# 2 · The uncorrelated random walk {background-color="#14525a"}
+
+---
+
+## The Brownian baseline
+
+::: {.incremental}
+- Each step has a random length and a **uniformly random** direction,
+  independent of the previous one
+- The animal has no memory and no goal
+- After $n$ steps the expected squared distance from the start — the **mean
+  squared displacement** — is
+  $$\text{MSD}(n) = n\,\mathrm{E}[l^2]$$
+- MSD grows **linearly** with time: $\text{MSD} = 4Dt$ in two dimensions, with
+  $D$ the diffusion coefficient
+:::
+
+. . .
+
+::: {.keyidea}
+Linear MSD means the typical distance from the start grows only as
+$\sqrt{t}$. A random walker four times as long gets only twice as far.
+:::
+
+# 3 · Correlated random walks {background-color="#14525a"}
+
+---
+
+## Persistence
+
+A **correlated random walk** (CRW) draws each new heading close to the last:
+
+$$\phi_t = \phi_{t-1} + \theta_t, \qquad \theta_t \sim \text{von Mises}(0, \kappa)$$
+
+::: {.incremental}
+- $\kappa = 0$: turning angles uniform — the uncorrelated walk
+- large $\kappa$: turning angles near zero — nearly straight lines
+- Step lengths from a gamma, Weibull or log-normal distribution
+- Two parameters for steps, one for turns: the same ingredients as the step
+  selection functions of Session 7 and the hidden Markov models of Session 8
+:::
+
+---
+
+## The scales of movement
+
+```{r}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 4.4
+#| fig-align: center
+source("R/simulators.R")
+msd <- function(d, lags) sapply(lags, function(L)
+  mean((d$x[-(1:L)] - head(d$x, -L))^2 + (d$y[-(1:L)] - head(d$y, -L))^2))
+lags <- 2^(0:8)
+set.seed(1)
+cols <- c("grey40", "#1f6f78", "#c1440e")
+curves <- lapply(c(0, 2, 10), function(k)
+  rowMeans(sapply(1:30, function(j) msd(simulate_crw(2000, kappa = k), lags))))
+op <- par(mar = c(4.5, 5, 1, 1))
+plot(NA, xlim = range(lags), ylim = range(unlist(curves)) * c(0.15, 2), log = "xy",
+     xlab = "Lag (steps)", ylab = "Mean squared displacement (m²)",
+     cex.lab = 1.5, cex.axis = 1.3)
+for (i in 1:3) {
+  lines(lags, curves[[i]], col = cols[i], lwd = 3)
+  points(lags, curves[[i]], col = cols[i], pch = 16, cex = 1.3)
+}
+# guides: slope 2 under kappa = 10 at short lags; slope 1 under kappa = 0 at long lags
+s2 <- lags[1:5];  lines(s2, 0.35 * curves[[3]][1] * s2^2, lty = 2, lwd = 2)
+s1 <- lags[5:9];  lines(s1, 0.35 * curves[[1]][9] * s1 / lags[9], lty = 3, lwd = 2)
+legend("topleft", c("κ = 0", "κ = 2", "κ = 10", "slope 2: ballistic", "slope 1: diffusive"),
+       col = c(cols, "black", "black"), lwd = c(3, 3, 3, 2, 2), lty = c(1, 1, 1, 2, 3),
+       bty = "n", cex = 1.3)
+par(op)
+```
+
+Short lags: persistence makes a CRW **ballistic** (MSD ∝ t²). Long lags: it
+forgets its direction and becomes **diffusive** (MSD ∝ t). The crossover is
+the scale of the animal's directional memory.
+
+---
+
+## Quiz
+
+::: {.quiz}
+You plot MSD against lag on log–log axes for a real track. The slope is ~1.8
+at lags up to 3 hours, then ~1.0 up to 10 days, then **flattens to ~0**. What
+does each regime suggest?
+
+- [ ] Nothing — MSD is always linear for real animals
+- [x] Directed movement at short scales, random-walk-like at intermediate scales, and confinement to a home range at long scales
+- [ ] GPS error at short scales, directed movement at long scales
+- [ ] The track needs resampling
+
+::: {.quiz-feedback}
+Slope near 2: ballistic, persistent movement — the animal keeps its heading
+for a few hours. Slope near 1: diffusive, a correlated random walk has
+forgotten its direction. Slope near 0: MSD stops growing because the animal
+cannot get any further from where it was — a **home range**.
+
+That last regime is what an unbiased random walk can never produce, and it is
+the starting point of Session 6. One caution: very short lags can also look
+flat because GPS error sets a floor on the smallest measurable displacement.
+:::
+:::
+
+# 4 · Biased random walks {background-color="#14525a"}
+
+---
+
+## Advection and diffusion
+
+Add a preferred direction — towards a den, a water hole, a breeding ground:
+
+::: {.incremental}
+- **Biased random walk (BRW)**: each heading drawn around the bearing to the
+  goal, with no memory of the last heading
+- **Biased correlated random walk (BCRW)**: a compromise between the previous
+  heading (persistence) and the bearing to the goal (bias)
+- Two processes act at once: **advection** (drift towards the goal, distance
+  ∝ $t$) and **diffusion** (random spread, distance ∝ $\sqrt{t}$)
+- Over long enough times, advection always wins
+:::
+
+. . .
+
+::: {.keyidea}
+Weak bias is invisible over a few steps and decisive over many. That is why
+orientation mechanisms are so hard to detect in short tracks and so obvious in
+migrations.
+:::
+
+---
+
+## Central places
+
+A BCRW whose goal is its own **home** produces something new: the animal
+wanders, drifts back, wanders again. It never escapes.
+
+::: {.incremental}
+- The track stays within a bounded area: a **home range** emerges from a simple
+  movement rule
+- The long-run spread of positions is a stationary **utilisation distribution**
+- Mechanistic home-range models (Moorcroft & Lewis 2006) build on exactly this
+  idea
+:::
+
+. . .
+
+::: {.keyidea}
+In the practical this central-place walker becomes our **ground-truth
+animal**: we know its true home range, so in Session 6 we can check which
+estimator gets it right.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+A homing pigeon is simulated as a BCRW with a weak bias towards its loft. Over
+the first 10 steps its track is indistinguishable from an unbiased CRW. Over
+500 steps it heads unmistakably home. Why?
+
+- [ ] The bias strength increases with time
+- [x] Drift accumulates linearly with time while random spread grows only with its square root
+- [ ] The CRW component weakens over time
+- [ ] Simulation error
+
+::: {.quiz-feedback}
+The bias adds a small, consistent component to every step: after $n$ steps
+the drift has accumulated in proportion to $n$. The random component partly
+cancels itself out, growing only as $\sqrt{n}$. Eventually the drift must
+dominate.
+
+Detecting orientation in real animals is hard for exactly this reason: over a
+short track, even a genuine bias is swamped by noise.
+:::
+:::
+
+# 5 · Lévy walks {background-color="#14525a"}
+
+---
+
+## The Lévy hypothesis
+
+::: {.incremental}
+- Step lengths drawn from a **power law**: $P(l) \propto l^{-\mu}$, with
+  $1 < \mu \le 3$
+- No characteristic scale: many short steps, occasional enormous ones
+- Viswanathan et al. (1996) reported Lévy flights in wandering albatrosses;
+  Viswanathan et al. (1999) showed that $\mu \approx 2$ is an **optimal search**
+  strategy for sparse, randomly placed targets
+- A seductive idea: a universal, scale-free rule for foraging
+:::
+
+---
+
+## The reversal
+
+::: {.incremental}
+- Edwards et al. (2007) reanalysed the albatross data with better records:
+  the long "flights" included time sitting on the water. **The Lévy pattern
+  disappeared**
+- They also showed that log–log regression of histograms, the standard method
+  at the time, is biased; power laws must be fitted by **maximum likelihood**
+  and compared with alternatives (Clauset et al. 2009)
+- Benhamou (2007): an animal **switching between two behaviours**, each a
+  simple random walk, produces a step-length distribution that a power law
+  fits beautifully
+- Lévy-like patterns do appear in some marine predators, but depend on
+  environmental context (Sims et al. 2008; Humphries et al. 2010)
+:::
+
+. . .
+
+::: {.keyidea}
+The honest position: a power-law fit is not evidence of a Lévy *strategy*.
+Different mechanisms produce indistinguishable step-length distributions.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You fit an exponential and a power law to 2,000 step lengths by maximum
+likelihood. The power law wins by more than 2,000 AIC units. What have you
+shown?
+
+- [ ] The animal performs a Lévy walk
+- [ ] The animal optimises its search
+- [x] The step lengths are heavy-tailed — which a mixture of two behaviours can produce just as well
+- [ ] The exponential model failed to converge
+
+::: {.quiz-feedback}
+In the practical you will generate exactly this result from a mixture of two
+*exponential* distributions — a short-step mode and a long-step mode, and no
+power law anywhere. The power law wins decisively anyway.
+
+A fit tells you about the **shape** of a distribution. It cannot tell you
+which **process** generated it. To argue for a Lévy strategy you would need to
+rule out composite walks — for instance by showing that the long steps do not
+belong to a distinct behavioural state (Session 8).
+:::
+:::
+
+# 6 · Simulation as a hypothesis test {background-color="#14525a"}
+
+---
+
+## The recipe
+
+::: {.incremental}
+1. Choose a **statistic** that captures your question — net displacement,
+   radius of gyration, time to reach water
+2. Choose a **null process** that lacks the mechanism you are testing — a CRW
+   with the animal's own step and turn distributions, but no memory
+3. **Simulate** it many times; compute the statistic each time
+4. Locate the observed value in the simulated distribution
+:::
+
+. . .
+
+::: {.keyidea}
+The null must match the animal in everything **except** the mechanism. A null
+with the wrong step lengths is a straw man, and rejecting it proves nothing.
+:::
+
+---
+
+## Quiz
+
+::: {.quiz}
+You test whether a buffalo is range-resident by comparing its radius of
+gyration with 300 CRWs built from its own steps and turns. For a 36-day track
+it sits at the 73rd percentile; for a 157-day track of another buffalo, the
+1st. What is the most important lesson?
+
+- [ ] Only the second buffalo is range-resident
+- [ ] The test is broken
+- [x] Confinement is detectable only when the track is much longer than the time needed to cross the range
+- [ ] More simulations would make the first test significant
+
+::: {.quiz-feedback}
+These are real results for the Kruger buffalo. Over a month, a resident and a
+random walker cover similar ground: the resident has not yet had time to hit
+the edges of its range. Only over months does the random walker keep spreading
+while the resident stays put.
+
+More simulations only sharpen the null distribution; they do not add
+information about the animal. This is the **tracking duration versus
+occupation timescale** problem — and exactly what the variogram in Session 6
+diagnoses.
+:::
+:::
+
+---
+
+## Today's practical
+
+::: {.objectives}
+**[→ Session 5 practical](exercise.qmd)**
+
+1. Write a correlated random walk simulator from scratch
+2. Vary κ and watch straightness emerge
+3. Mean squared displacement: find the ballistic–diffusive crossover
+4. Add a bias: simulate homing, and a central-place animal
+5. Exponential versus power law — discover the identifiability problem
+6. Is a real buffalo range-resident? Test it against a simulated null
 :::
 
 ---
@@ -399,19 +428,26 @@ scale — and you should state it.
 ## Recap
 
 ::: {.incremental}
-- Sensors record **radiance in bands**; products are processed, and the
-  processing level matters
-- Four resolutions, all trading off. **Match the pixel to the animal and to
-  your positional error**
-- NDVI is red/NIR contrast: useful, and it **saturates**
-- Annotation must match in **space and in time**; a static covariate for a
-  dynamic process is a modelling error, not a shortcut
-- Buffer radius encodes a hypothesis about perception. Choose it first
+- Simulation replaces the replication nature will not give you
+- Uncorrelated walk: MSD ∝ t. CRW: ballistic at short scales, diffusive at long
+- Bias adds drift, which always wins eventually; a bias towards home
+  **creates** a home range
+- Power-law step lengths are not evidence of a Lévy strategy
+- A simulation null must match the animal in everything but the mechanism —
+  and has power only if the track is long enough
 :::
 
 . . .
 
-### Before Class 6
+### Before Session 6
 
-- Pettorelli et al. (2005) on NDVI in ecology
-- Skim the `moveHMM` vignette — we fit our first state model next week
+- Fleming et al. (2015), *Ecology* 96:1182 — autocorrelated KDE
+- Make sure `library(ctmm)` and `library(adehabitatHR)` both load
+
+---
+
+## {.center}
+
+### Questions?
+
+[giuliano.colosimo@uniroma2.it](mailto:giuliano.colosimo@uniroma2.it)
