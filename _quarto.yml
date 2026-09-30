@@ -28,6 +28,8 @@ website:
     left:
       - text: "Home"
         href: index.qmd
+      - text: "Calendar"
+        href: calendar.qmd
       - text: "Syllabus"
         href: syllabus.qmd
       - text: "Setup"
@@ -47,6 +49,8 @@ website:
     contents:
       - text: "Home"
         href: index.qmd
+      - text: "Calendar"
+        href: calendar.qmd
       - text: "Syllabus"
         href: syllabus.qmd
       - text: "Software setup"

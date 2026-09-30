@@ -1,0 +1,17 @@
+{
+  "hash": "ec99030934fa96ac733f696676cb5a51",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Calendar\"\nauthor: \"Giuliano Colosimo\"\ndate: \"2026-09-30\"\ndate-modified: last-modified\ntoc: false\n---\n\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n\n\nTable: The course will begin on Friday, October 16, 2026, and runs for eight consecutive Fridays until December 4. The date for the final project submission will be published here during the course.\n\n|                         |Day    |Time        |Location        |\n|:------------------------|:------|:-----------|:---------------|\n|Lectures                 |Friday |11:00-13:00 |To be announced |\n|Final project submission |TBD    |TBD         |TBD             |\n\n\n:::\n:::\n\n\n::: callout-important\n## Read carefully!\n\nIt is each student's responsibility to periodically check this website to make\nsure they have the most up-to-date information about the course schedule and\ncontent. The deadline for the final project will be published on this website\nlater during the course.\n:::\n\n## Class by class\n\n\n::: {.cell}\n::: {.cell-output-display}\n\n\n| Class |Date       | Theme |Topic                                          |Materials         |\n|:-----:|:----------|:-----:|:----------------------------------------------|:-----------------|\n|   1   |Fri 16 Oct |   1   |Movement, and how we track animals             |[Slides](classes/class-01/slides.qmd) · [Exercise](classes/class-01/exercise.qmd)|\n|   2   |Fri 23 Oct |   2   |Spatial data in R                              |[Slides](classes/class-02/slides.qmd) · [Exercise](classes/class-02/exercise.qmd)|\n|   3   |Fri 30 Oct |   2   |Tracking data in R                             |[Slides](classes/class-03/slides.qmd) · [Exercise](classes/class-03/exercise.qmd)|\n|   4   |Fri 06 Nov |   1   |Movement metrics and home range                |[Slides](classes/class-04/slides.qmd) · [Exercise](classes/class-04/exercise.qmd)|\n|   5   |Fri 13 Nov |   3   |Remote sensing and environmental annotation    |[Slides](classes/class-05/slides.qmd) · [Exercise](classes/class-05/exercise.qmd)|\n|   6   |Fri 20 Nov |   4   |Movement segmentation and hidden Markov models |[Slides](classes/class-06/slides.qmd) · [Exercise](classes/class-06/exercise.qmd)|\n|   7   |Fri 27 Nov |   5   |Resource selection functions                   |[Slides](classes/class-07/slides.qmd) · [Exercise](classes/class-07/exercise.qmd)|\n|   8   |Fri 04 Dec |   5   |Step selection functions and iSSA              |[Slides](classes/class-08/slides.qmd) · [Exercise](classes/class-08/exercise.qmd)|\n\n\n:::\n:::\n\n\nNo Italian national holiday falls on a class Friday this year, so there are no\ngaps in the schedule.\n\n## Monthly view\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](calendar_files/figure-html/october-1.png){width=100%}\n:::\n:::\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](calendar_files/figure-html/november-1.png){width=100%}\n:::\n:::\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](calendar_files/figure-html/december-1.png){width=100%}\n:::\n:::\n\n",
+    "supporting": [
+      "calendar_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

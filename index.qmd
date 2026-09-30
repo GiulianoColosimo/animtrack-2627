@@ -38,6 +38,7 @@ yourself, because tracking analysis is a craft you learn by doing.
 | **Degree** | MSc Biologia Ambientale |
 | **Credits** | 2 CFU — 16 hours |
 | **Structure** | 8 classes × 2 hours |
+| **When** | Fridays 11:00–13:00, 16 October – 4 December 2026 — see the [calendar](calendar.qmd) |
 | **Language** | English |
 | **Software** | R, RStudio, Quarto — all free and open source |
 | **Assessment** | See the [syllabus](syllabus.qmd) |

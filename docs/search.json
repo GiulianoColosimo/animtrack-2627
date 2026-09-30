@@ -1208,6 +1208,39 @@
     ]
   },
   {
+    "objectID": "calendar.html",
+    "href": "calendar.html",
+    "title": "Calendar",
+    "section": "",
+    "text": "The course will begin on Friday, October 16, 2026, and runs for eight consecutive Fridays until December 4. The date for the final project submission will be published here during the course.\n\n\nDay\nTime\nLocation\n\n\n\nLectures\nFriday\n11:00-13:00\nTo be announced\n\n\nFinal project submission\nTBD\nTBD\nTBD",
+    "crumbs": [
+      "Home",
+      "Calendar"
+    ]
+  },
+  {
+    "objectID": "calendar.html#class-by-class",
+    "href": "calendar.html#class-by-class",
+    "title": "Calendar",
+    "section": "Class by class",
+    "text": "Class by class\n\n\n\n\nClass\nDate\nTheme\nTopic\nMaterials\n\n\n\n1\nFri 16 Oct\n1\nMovement, and how we track animals\n\nSlides · Exercise\n\n\n\n2\nFri 23 Oct\n2\nSpatial data in R\n\nSlides · Exercise\n\n\n\n3\nFri 30 Oct\n2\nTracking data in R\n\nSlides · Exercise\n\n\n\n4\nFri 06 Nov\n1\nMovement metrics and home range\n\nSlides · Exercise\n\n\n\n5\nFri 13 Nov\n3\nRemote sensing and environmental annotation\n\nSlides · Exercise\n\n\n\n6\nFri 20 Nov\n4\nMovement segmentation and hidden Markov models\n\nSlides · Exercise\n\n\n\n7\nFri 27 Nov\n5\nResource selection functions\n\nSlides · Exercise\n\n\n\n8\nFri 04 Dec\n5\nStep selection functions and iSSA\n\nSlides · Exercise\n\n\n\n\n\n\nNo Italian national holiday falls on a class Friday this year, so there are no gaps in the schedule.",
+    "crumbs": [
+      "Home",
+      "Calendar"
+    ]
+  },
+  {
+    "objectID": "calendar.html#monthly-view",
+    "href": "calendar.html#monthly-view",
+    "title": "Calendar",
+    "section": "Monthly view",
+    "text": "Monthly view",
+    "crumbs": [
+      "Home",
+      "Calendar"
+    ]
+  },
+  {
     "objectID": "classes/class-01/slides.html#where-we-are-going",
     "href": "classes/class-01/slides.html#where-we-are-going",
     "title": "Movement, and how we track animals",
@@ -3299,7 +3332,7 @@
     "href": "index.html#course-at-a-glance",
     "title": "Animal Tracking in Conservation Biology",
     "section": "Course at a glance",
-    "text": "Course at a glance\n\n\n\nDegree\nMSc Biologia Ambientale\n\n\nCredits\n2 CFU — 16 hours\n\n\nStructure\n8 classes × 2 hours\n\n\nLanguage\nEnglish\n\n\nSoftware\nR, RStudio, Quarto — all free and open source\n\n\nAssessment\nSee the syllabus",
+    "text": "Course at a glance\n\n\n\nDegree\nMSc Biologia Ambientale\n\n\nCredits\n2 CFU — 16 hours\n\n\nStructure\n8 classes × 2 hours\n\n\nWhen\nFridays 11:00–13:00, 16 October – 4 December 2026 — see the calendar\n\n\nLanguage\nEnglish\n\n\nSoftware\nR, RStudio, Quarto — all free and open source\n\n\nAssessment\nSee the syllabus",
     "crumbs": [
       "Home"
     ]
