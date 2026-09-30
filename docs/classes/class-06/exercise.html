@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.8.21">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Exercise 6 — Fitting a hidden Markov model – Animal Tracking</title>
+<title>Practical 6 — Home ranges, four ways – Animal Tracking</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -103,14 +103,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><link rel="stylesheet" href="../../assets/quiz.css">
-<meta property="og:title" content="Exercise 6 — Fitting a hidden Markov model – Animal Tracking">
-<meta property="og:description" content="Class 6 · Theme 4">
-<meta property="og:image" content="https://giulianocolosimo.github.io/animtrack-2627/classes/class-06/exercise_files/figure-html/unnamed-chunk-8-1.png">
+}</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script><link rel="stylesheet" href="../../assets/quiz.css">
+<meta property="og:title" content="Practical 6 — Home ranges, four ways – Animal Tracking">
+<meta property="og:description" content="Session 6 · Home ranges and space use">
+<meta property="og:image" content="https://giulianocolosimo.github.io/animtrack-2627/classes/class-06/exercise_files/figure-html/unnamed-chunk-9-1.png">
 <meta property="og:site_name" content="Animal Tracking">
 <meta property="og:locale" content="en_US">
-<meta property="og:image:height" content="960">
-<meta property="og:image:width" content="1632">
+<meta property="og:image:height" content="1344">
+<meta property="og:image:width" content="1440">
 </head>
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
@@ -330,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Classes</li><li class="breadcrumb-item"><a href="../../classes/class-06/slides.html">Class 6 — Segmentation &amp; HMMs</a></li><li class="breadcrumb-item"><a href="../../classes/class-06/exercise.html">Exercise · Fitting an HMM</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Sessions</li><li class="breadcrumb-item"><a href="../../classes/class-06/slides.html">6 · Home ranges</a></li><li class="breadcrumb-item"><a href="../../classes/class-06/exercise.html">Practical</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -379,7 +404,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Classes</span></a>
+ <span class="menu-text">Sessions</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -388,7 +413,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
- <span class="menu-text">Class 1 — Movement &amp; tracking technologies</span></a>
+ <span class="menu-text">1 · Foundations</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -397,13 +422,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-01/slides.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Slides · Theme 1</span></a>
+ <span class="menu-text">Slides — Why animals move, how we watch them</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-01/exercise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise · First contact with a track</span></a>
+ <span class="menu-text">Practical</span></a>
   </div>
 </li>
       </ul>
@@ -411,7 +436,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
- <span class="menu-text">Class 2 — Spatial data in R</span></a>
+ <span class="menu-text">2 · Spatial data in R</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -420,13 +445,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-02/slides.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Slides · Theme 2</span></a>
+ <span class="menu-text">Slides — The survival kit</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-02/exercise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise · sf, terra and CRS</span></a>
+ <span class="menu-text">Practical</span></a>
   </div>
 </li>
       </ul>
@@ -434,7 +459,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
- <span class="menu-text">Class 3 — Tracking data in R</span></a>
+ <span class="menu-text">3 · From fixes to trajectories</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -443,13 +468,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-03/slides.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Slides · Theme 2</span></a>
+ <span class="menu-text">Slides — Cleaning, bursts, resampling</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-03/exercise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise · Clean, resample, map</span></a>
+ <span class="menu-text">Practical</span></a>
   </div>
 </li>
       </ul>
@@ -457,7 +482,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
- <span class="menu-text">Class 4 — Movement metrics &amp; home range</span></a>
+ <span class="menu-text">4 · Quantifying movement</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -466,13 +491,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-04/slides.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Slides · Theme 1</span></a>
+ <span class="menu-text">Slides — Path descriptors, behaviour</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-04/exercise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise · Steps, angles, home range</span></a>
+ <span class="menu-text">Practical</span></a>
   </div>
 </li>
       </ul>
@@ -480,7 +505,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
- <span class="menu-text">Class 5 — Remote sensing &amp; annotation</span></a>
+ <span class="menu-text">5 · Movement models</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -489,13 +514,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-05/slides.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Slides · Theme 3</span></a>
+ <span class="menu-text">Slides — Random walks and simulation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-05/exercise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise · Environmental annotation</span></a>
+ <span class="menu-text">Practical</span></a>
   </div>
 </li>
       </ul>
@@ -503,7 +528,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
- <span class="menu-text">Class 6 — Segmentation &amp; HMMs</span></a>
+ <span class="menu-text">6 · Home ranges</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -512,13 +537,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-06/slides.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Slides · Theme 4</span></a>
+ <span class="menu-text">Slides — MCP → KDE → BBMM → AKDE</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-06/exercise.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Exercise · Fitting an HMM</span></a>
+ <span class="menu-text">Practical</span></a>
   </div>
 </li>
       </ul>
@@ -526,7 +551,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
- <span class="menu-text">Class 7 — Resource selection (RSF)</span></a>
+ <span class="menu-text">7 · Habitat selection</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -535,13 +560,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-07/slides.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Slides · Theme 5</span></a>
+ <span class="menu-text">Slides — RSF and SSF</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-07/exercise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise · Fitting an RSF</span></a>
+ <span class="menu-text">Practical</span></a>
   </div>
 </li>
       </ul>
@@ -549,7 +574,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
- <span class="menu-text">Class 8 — Step selection (SSF/iSSA)</span></a>
+ <span class="menu-text">8 · Hidden Markov models</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -558,13 +583,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-08/slides.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Slides · Theme 5</span></a>
+ <span class="menu-text">Slides — States, frontier, synthesis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../classes/class-08/exercise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Exercise · Step selection and iSSA</span></a>
+ <span class="menu-text">Practical</span></a>
   </div>
 </li>
       </ul>
@@ -585,35 +610,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
    
   <ul>
-<li><a href="#task-1-prepare-the-data" id="toc-task-1-prepare-the-data" class="nav-link active" data-scroll-target="#task-1-prepare-the-data">Task 1 — Prepare the data</a></li>
+<li><a href="#setup-one-buffalo" id="toc-setup-one-buffalo" class="nav-link active" data-scroll-target="#setup-one-buffalo">Setup — one buffalo</a></li>
   <li>
-<a href="#task-2-fit-a-2-state-model" id="toc-task-2-fit-a-2-state-model" class="nav-link" data-scroll-target="#task-2-fit-a-2-state-model">Task 2 — Fit a 2-state model</a>
+<a href="#task-1-five-estimates-of-one-home-range" id="toc-task-1-five-estimates-of-one-home-range" class="nav-link" data-scroll-target="#task-1-five-estimates-of-one-home-range">Task 1 — Five estimates of one home range</a>
   <ul class="collapse">
-<li><a href="#your-turn" id="toc-your-turn" class="nav-link" data-scroll-target="#your-turn">Your turn</a></li>
+<li><a href="#mcp-and-kde" id="toc-mcp-and-kde" class="nav-link" data-scroll-target="#mcp-and-kde">MCP and KDE</a></li>
+  <li><a href="#brownian-bridge" id="toc-brownian-bridge" class="nav-link" data-scroll-target="#brownian-bridge">Brownian bridge</a></li>
+  <li><a href="#akde" id="toc-akde" class="nav-link" data-scroll-target="#akde">AKDE</a></li>
+  <li><a href="#your-turn" id="toc-your-turn" class="nav-link" data-scroll-target="#your-turn">Your turn</a></li>
   </ul>
 </li>
-  <li><a href="#task-3-decode-and-map" id="toc-task-3-decode-and-map" class="nav-link" data-scroll-target="#task-3-decode-and-map">Task 3 — Decode and map</a></li>
+  <li><a href="#task-2-map-them-together" id="toc-task-2-map-them-together" class="nav-link" data-scroll-target="#task-2-map-them-together">Task 2 — Map them together</a></li>
   <li>
-<a href="#task-4-how-many-states" id="toc-task-4-how-many-states" class="nav-link" data-scroll-target="#task-4-how-many-states">Task 4 — How many states?</a>
+<a href="#task-3-variograms-is-there-a-home-range-at-all" id="toc-task-3-variograms-is-there-a-home-range-at-all" class="nav-link" data-scroll-target="#task-3-variograms-is-there-a-home-range-at-all">Task 3 — Variograms: is there a home range at all?</a>
   <ul class="collapse">
 <li><a href="#your-turn-1" id="toc-your-turn-1" class="nav-link" data-scroll-target="#your-turn-1">Your turn</a></li>
   </ul>
 </li>
-  <li><a href="#task-5-check-the-residuals" id="toc-task-5-check-the-residuals" class="nav-link" data-scroll-target="#task-5-check-the-residuals">Task 5 — Check the residuals</a></li>
   <li>
-<a href="#task-6-a-different-kind-of-segmentation" id="toc-task-6-a-different-kind-of-segmentation" class="nav-link" data-scroll-target="#task-6-a-different-kind-of-segmentation">Task 6 — A different kind of segmentation</a>
+<a href="#task-4-ground-truth" id="toc-task-4-ground-truth" class="nav-link" data-scroll-target="#task-4-ground-truth">Task 4 — Ground truth</a>
   <ul class="collapse">
 <li><a href="#your-turn-2" id="toc-your-turn-2" class="nav-link" data-scroll-target="#your-turn-2">Your turn</a></li>
   </ul>
 </li>
   <li><a href="#self-check" id="toc-self-check" class="nav-link" data-scroll-target="#self-check">Self-check</a></li>
-  <li><a href="#before-class-7" id="toc-before-class-7" class="nav-link" data-scroll-target="#before-class-7">Before Class 7</a></li>
+  <li><a href="#before-session-7" id="toc-before-session-7" class="nav-link" data-scroll-target="#before-session-7">Before Session 7</a></li>
   </ul><div class="toc-actions"><ul><li><a href="https://github.com/GiulianoColosimo/animtrack-2627/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Classes</li><li class="breadcrumb-item"><a href="../../classes/class-06/slides.html">Class 6 — Segmentation &amp; HMMs</a></li><li class="breadcrumb-item"><a href="../../classes/class-06/exercise.html">Exercise · Fitting an HMM</a></li></ol></nav><div class="quarto-title">
-<h1 class="title">Exercise 6 — Fitting a hidden Markov model</h1>
-<p class="subtitle lead">Class 6 · Theme 4</p>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Sessions</li><li class="breadcrumb-item"><a href="../../classes/class-06/slides.html">6 · Home ranges</a></li><li class="breadcrumb-item"><a href="../../classes/class-06/exercise.html">Practical</a></li></ol></nav><div class="quarto-title">
+<h1 class="title">Practical 6 — Home ranges, four ways</h1>
+<p class="subtitle lead">Session 6 · Home ranges and space use</p>
 </div>
 
 
@@ -625,7 +652,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 24, 2026</p>
+      <p class="date-modified">September 30, 2026</p>
     </div>
   </div>
     
@@ -634,104 +661,128 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </header><div class="objectives">
-<p><strong>Goals.</strong> Prepare a track for <code>moveHMM</code>; fit a 2-state model; read its output properly; decode and map the states; compare 2 and 3 states; check pseudo-residuals; and segment Leo’s migration a different way.</p>
-<p><strong>Time:</strong> ~55 minutes. <strong>Packages:</strong> <code>moveHMM</code>, <code>amt</code>, <code>dplyr</code>, <code>tidyr</code>, <code>lubridate</code>.</p>
+<p><strong>Goals.</strong> Estimate one buffalo’s home range with MCP, KDE (two bandwidths), a Brownian bridge and AKDE; map them together and explain why they differ; use variograms to tell a resident from a nomad; and test every estimator against a simulated animal whose true home range we know.</p>
+<p><strong>Time:</strong> ~70 minutes. <strong>Packages:</strong> <code>adehabitatHR</code>, <code>adehabitatLT</code>, <code>ctmm</code>, <code>amt</code>, <code>sf</code>, <code>dplyr</code>, <code>ggplot2</code>.</p>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/TheoMichelot/moveHMM">moveHMM</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">adehabitatHR</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">adehabitatLT</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ctmm-initiative/ctmm">ctmm</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jmsigner/amt">amt</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org">lubridate</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="task-1-prepare-the-data" class="level2"><h2 class="anchored" data-anchor-id="task-1-prepare-the-data">Task 1 — Prepare the data</h2>
-<p>An HMM needs <strong>regular</strong> sampling and <strong>contiguous</strong> sequences. That is exactly what the bursts from Class 3 give us.</p>
+<section id="setup-one-buffalo" class="level2"><h2 class="anchored" data-anchor-id="setup-one-buffalo">Setup — one buffalo</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">clean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/buffalo_kruger.csv.gz"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">individual.local.identifier</span>,</span>
-<span>            t  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="va">timestamp</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span>,</span>
-<span>            x  <span class="op">=</span> <span class="va">location.long</span>, y <span class="op">=</span> <span class="va">location.lat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">buffalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/buffalo_kruger.csv.gz"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">individual.local.identifier</span>, t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="va">timestamp</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span>,</span>
+<span>            x <span class="op">=</span> <span class="va">location.long</span>, y <span class="op">=</span> <span class="va">location.lat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">t</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">t</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">t</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">trk_hr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/track.html">make_track</a></span><span class="op">(</span><span class="va">clean</span>, <span class="va">x</span>, <span class="va">y</span>, <span class="va">t</span>, id <span class="op">=</span> <span class="va">id</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/amt/man/transform_coords.html">transform_coords</a></span><span class="op">(</span>crs_to <span class="op">=</span> <span class="fl">32736</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html">nest</a></span><span class="op">(</span>data <span class="op">=</span> <span class="op">-</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">data</span>, \<span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">d</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/track_resample.html">track_resample</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html">hours</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, tolerance <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html">minutes</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/amt/man/filter_min_n_burst.html">filter_min_n_burst</a></span><span class="op">(</span>min_n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<span><span class="va">cilla</span> <span class="op">&lt;-</span> <span class="va">buffalo</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op">==</span> <span class="st">"Cilla"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Each burst is an independent sequence: that is what moveHMM calls an "ID"</span></span>
-<span><span class="va">hmm_in</span> <span class="op">&lt;-</span> <span class="va">trk_hr</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Cilla"</span>, <span class="st">"Toni"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span>ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">burst_</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span>, x <span class="op">=</span> <span class="va">x_</span>, y <span class="op">=</span> <span class="va">y_</span><span class="op">)</span></span>
+<span><span class="co"># Projected coordinates (UTM 36S) for adehabitatHR, which assumes a plane</span></span>
+<span><span class="va">cilla_utm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">cilla</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="fl">32736</span><span class="op">)</span></span>
+<span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">cilla_utm</span><span class="op">)</span></span>
+<span><span class="va">pts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edzer.github.io/sp/reference/SpatialPoints.html">SpatialPoints</a></span><span class="op">(</span><span class="va">xy</span>, proj4string <span class="op">=</span> <span class="fu"><a href="https://edzer.github.io/sp/reference/CRS-class.html">CRS</a></span><span class="op">(</span><span class="st">"EPSG:32736"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/moveHMM/man/prepData.html">prepData</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">hmm_in</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"UTM"</span>, coordNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">step</span><span class="op">)</span></span>
-<span><span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max.      NAs </span></span>
-<span><span class="co">#&gt;     0.00    39.25   163.72   290.19   381.02 63102.52       28</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">step</span> <span class="op">==</span> <span class="fl">0</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 9</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cilla</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 3528</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">cilla</span><span class="op">$</span><span class="va">t</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "2005-07-14 04:35:00 UTC" "2005-12-07 22:16:00 UTC"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>Two things to notice before fitting
+Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Zero step lengths.</strong> A gamma distribution has zero density at zero, so any exact zero makes the likelihood infinite. <code>moveHMM</code> handles this with a <strong>zero-mass</strong> parameter per state — but only if you supply initial values for it, otherwise you get <code>Wrong number of initial parameters -- there should be 6</code>.</p>
-<p><strong>A 63 km step.</strong> That is the spatial outlier we found in Class 3. An HMM will happily invent a “teleporting” state to accommodate two bad fixes. Remove them.</p>
+<p><code>adehabitatHR</code> predates <code>sf</code> and expects <code>sp</code> objects — hence <code><a href="https://edzer.github.io/sp/reference/SpatialPoints.html">SpatialPoints()</a></code>. This is the “messy history” from Session 2 in practice.</p>
 </div>
 </div>
+</section><section id="task-1-five-estimates-of-one-home-range" class="level2"><h2 class="anchored" data-anchor-id="task-1-five-estimates-of-one-home-range">Task 1 — Five estimates of one home range</h2>
+<section id="mcp-and-kde" class="level3"><h3 class="anchored" data-anchor-id="mcp-and-kde">MCP and KDE</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">step</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 63102.52</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">step</span> <span class="op">&gt;</span> <span class="fl">5000</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 2</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mcp95</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/mcp.html">mcp</a></span><span class="op">(</span><span class="va">pts</span>, percent <span class="op">=</span> <span class="fl">95</span><span class="op">)</span></span>
+<span><span class="va">area_mcp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/mcp.html">mcp.area</a></span><span class="op">(</span><span class="va">pts</span>, percent <span class="op">=</span> <span class="fl">95</span>, unout <span class="op">=</span> <span class="st">"km2"</span>, plotit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
-<span><span class="va">bad_ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">ID</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">step</span> <span class="op">&gt;</span> <span class="fl">5000</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="va">pd</span><span class="op">[</span><span class="op">!</span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">bad_ids</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="va">kd_href</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernelUD</a></span><span class="op">(</span><span class="va">pts</span>, h <span class="op">=</span> <span class="st">"href"</span>, grid <span class="op">=</span> <span class="fl">300</span>, extent <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">kd_lscv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernelUD</a></span><span class="op">(</span><span class="va">pts</span>, h <span class="op">=</span> <span class="st">"LSCV"</span>, grid <span class="op">=</span> <span class="fl">300</span>, extent <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">pd</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 9264</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">step</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 4166</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">area_href</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernel.area</a></span><span class="op">(</span><span class="va">kd_href</span>, percent <span class="op">=</span> <span class="fl">95</span>, unout <span class="op">=</span> <span class="st">"km2"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">area_lscv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernel.area</a></span><span class="op">(</span><span class="va">kd_lscv</span>, percent <span class="op">=</span> <span class="fl">95</span>, unout <span class="op">=</span> <span class="st">"km2"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>h_ref_m <span class="op">=</span> <span class="va">kd_href</span><span class="op">@</span><span class="va">h</span><span class="op">$</span><span class="va">h</span>, h_lscv_m <span class="op">=</span> <span class="va">kd_lscv</span><span class="op">@</span><span class="va">h</span><span class="op">$</span><span class="va">h</span>,</span>
+<span>  lscv_converged <span class="op">=</span> <span class="va">kd_lscv</span><span class="op">@</span><span class="va">h</span><span class="op">$</span><span class="va">convergence</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        h_ref_m       h_lscv_m lscv_converged </span></span>
+<span><span class="co">#&gt;      1179.1127       117.9113         0.0000</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="task-2-fit-a-2-state-model" class="level2"><h2 class="anchored" data-anchor-id="task-2-fit-a-2-state-model">Task 2 — Fit a 2-state model</h2>
+</section><section id="brownian-bridge" class="level3"><h3 class="anchored" data-anchor-id="brownian-bridge">Brownian bridge</h3>
+<p>The bridge needs the <em>trajectory</em>, not just the points, and two variance parameters: <code>sig2</code>, the location error (we assume ~30 m for GPS), and <code>sig1</code>, the animal’s mobility, which <code><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelbb.html">liker()</a></code> estimates by maximum likelihood.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ltr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatLT/man/as.ltraj.html">as.ltraj</a></span><span class="op">(</span>xy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span>, date <span class="op">=</span> <span class="va">cilla</span><span class="op">$</span><span class="va">t</span>, id <span class="op">=</span> <span class="st">"Cilla"</span><span class="op">)</span></span>
+<span><span class="va">lik</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelbb.html">liker</a></span><span class="op">(</span><span class="va">ltr</span>, sig2 <span class="op">=</span> <span class="fl">30</span>, rangesig1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">100</span><span class="op">)</span>, plotit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">lik</span><span class="op">$</span><span class="va">Cilla</span><span class="op">$</span><span class="va">sig1</span></span>
+<span><span class="co">#&gt; [1] 4.765766</span></span>
 <span></span>
-<span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/moveHMM/man/fitHMM.html">fitHMM</a></span><span class="op">(</span></span>
-<span>  <span class="va">pd</span>, nbStates <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  <span class="co"># mu1, mu2, sd1, sd2, zeromass1, zeromass2</span></span>
-<span>  stepPar0  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">500</span>, <span class="fl">50</span>, <span class="fl">500</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span><span class="op">)</span>,</span>
-<span>  <span class="co"># angle mean1, mean2, concentration1, concentration2</span></span>
-<span>  anglePar0 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">m2</span><span class="op">$</span><span class="va">mle</span><span class="op">$</span><span class="va">stepPar</span></span>
-<span><span class="co">#&gt;                state 1      state 2</span></span>
-<span><span class="co">#&gt; mean      15.329068722 3.442721e+02</span></span>
-<span><span class="co">#&gt; sd        12.809771062 3.277368e+02</span></span>
-<span><span class="co">#&gt; zero-mass  0.004750669 6.629104e-09</span></span>
-<span><span class="va">m2</span><span class="op">$</span><span class="va">mle</span><span class="op">$</span><span class="va">anglePar</span></span>
-<span><span class="co">#&gt;                 state 1     state 2</span></span>
-<span><span class="co">#&gt; mean          3.0776184 -0.01864526</span></span>
-<span><span class="co">#&gt; concentration 0.3153941  0.76486144</span></span>
-<span><span class="va">m2</span><span class="op">$</span><span class="va">mle</span><span class="op">$</span><span class="va">gamma</span></span>
-<span><span class="co">#&gt;           [,1]      [,2]</span></span>
-<span><span class="co">#&gt; [1,] 0.5390064 0.4609936</span></span>
-<span><span class="co">#&gt; [2,] 0.1190586 0.8809414</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelbb.html">kernelbb</a></span><span class="op">(</span><span class="va">ltr</span>, sig1 <span class="op">=</span> <span class="va">lik</span><span class="op">$</span><span class="va">Cilla</span><span class="op">$</span><span class="va">sig1</span>, sig2 <span class="op">=</span> <span class="fl">30</span>, grid <span class="op">=</span> <span class="fl">300</span>, extent <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
+<span><span class="va">area_bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernel.area</a></span><span class="op">(</span><span class="va">bb</span>, percent <span class="op">=</span> <span class="fl">95</span>, unout <span class="op">=</span> <span class="st">"km2"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="your-turn" class="level3"><h3 class="anchored" data-anchor-id="your-turn">Your turn</h3>
-<p><strong>2a.</strong> Describe the two states in words. <strong>2b.</strong> What is the expected dwell time in each?</p>
+</section><section id="akde" class="level3"><h3 class="anchored" data-anchor-id="akde">AKDE</h3>
+<p><code>ctmm</code> fits a continuous-time movement model first. It wants Movebank-style columns and works in geographic coordinates.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/as.telemetry.html">as.telemetry</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>timestamp <span class="op">=</span> <span class="va">cilla</span><span class="op">$</span><span class="va">t</span>, location.long <span class="op">=</span> <span class="va">cilla</span><span class="op">$</span><span class="va">x</span>, location.lat <span class="op">=</span> <span class="va">cilla</span><span class="op">$</span><span class="va">y</span>,</span>
+<span>             individual.local.identifier <span class="op">=</span> <span class="st">"Cilla"</span><span class="op">)</span>,</span>
+<span>  timeformat <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">guess</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/variogram.fit.html">ctmm.guess</a></span><span class="op">(</span><span class="va">tel</span>, interactive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>   <span class="co"># not variogram.fit(): that opens a GUI</span></span>
+<span><span class="va">fit</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/ctmm.fit.html">ctmm.select</a></span><span class="op">(</span><span class="va">tel</span>, <span class="va">guess</span><span class="op">)</span></span>
+<span><span class="va">ak</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/akde.html">akde</a></span><span class="op">(</span><span class="va">tel</span>, <span class="va">fit</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $name</span></span>
+<span><span class="co">#&gt; [1] "OUF anisotropic"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $DOF</span></span>
+<span><span class="co">#&gt;       mean       area  diffusion      speed </span></span>
+<span><span class="co">#&gt;   12.31357   18.66457  723.22307 3395.27156 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $CI</span></span>
+<span><span class="co">#&gt;                                          low        est       high</span></span>
+<span><span class="co">#&gt; area (square kilometers)          286.134732 477.697785 717.553006</span></span>
+<span><span class="co">#&gt; τ[position] (days)                  3.843246   6.451817  10.830936</span></span>
+<span><span class="co">#&gt; τ[velocity] (minutes)              43.741209  46.707078  49.874048</span></span>
+<span><span class="co">#&gt; speed (kilometers/day)             15.443023  15.707215  15.971346</span></span>
+<span><span class="co">#&gt; diffusion (square kilometers/day)   7.233106   7.790621   8.368539</span></span>
+<span><span class="va">akde_ci</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ak</span>, units <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">CI</span> <span class="op">/</span> <span class="fl">1e6</span>   <span class="co"># m² -&gt; km²</span></span>
+<span><span class="va">akde_ci</span></span>
+<span><span class="co">#&gt;                           low      est high</span></span>
+<span><span class="co">#&gt; area (square meters) 241.2526 402.7677  605</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Do not use <code><a href="https://rdrr.io/pkg/ctmm/man/variogram.fit.html">variogram.fit()</a></code> in a script
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It opens an interactive slider window for choosing starting values by eye — great at the console, fatal in a rendered document. <code>ctmm.guess(..., interactive = FALSE)</code> gives the same starting values automatically.</p>
+</div>
+</div>
+</section><section id="your-turn" class="level3"><h3 class="anchored" data-anchor-id="your-turn">Your turn</h3>
+<p><strong>1a.</strong> Put all five 95% areas in one table. <strong>1b.</strong> Did LSCV converge?</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -745,82 +796,85 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">m2</span><span class="op">$</span><span class="va">mle</span><span class="op">$</span><span class="va">stepPar</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;           state 1 state 2</span></span>
-<span><span class="co">#&gt; mean       15.329 344.272</span></span>
-<span><span class="co">#&gt; sd         12.810 327.737</span></span>
-<span><span class="co">#&gt; zero-mass   0.005   0.000</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">m2</span><span class="op">$</span><span class="va">mle</span><span class="op">$</span><span class="va">anglePar</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;               state 1 state 2</span></span>
-<span><span class="co">#&gt; mean            3.078  -0.019</span></span>
-<span><span class="co">#&gt; concentration   0.315   0.765</span></span>
-<span></span>
-<span><span class="va">gam</span> <span class="op">&lt;-</span> <span class="va">m2</span><span class="op">$</span><span class="va">mle</span><span class="op">$</span><span class="va">gamma</span></span>
-<span><span class="va">dwell</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">gam</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">dwell</span>, <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 2.17 8.40</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">areas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  estimator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"MCP 95%"</span>, <span class="st">"KDE h_ref"</span>, <span class="st">"KDE LSCV"</span>, <span class="st">"Brownian bridge"</span>, <span class="st">"AKDE"</span><span class="op">)</span>,</span>
+<span>  area_km2  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">area_mcp</span>, <span class="va">area_href</span>, <span class="va">area_lscv</span>, <span class="va">area_bb</span>, <span class="va">akde_ci</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  low_km2   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">akde_ci</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  high_km2  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">akde_ci</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">areas</span></span>
+<span><span class="co">#&gt;         estimator area_km2 low_km2 high_km2</span></span>
+<span><span class="co">#&gt; 1         MCP 95%      274      NA       NA</span></span>
+<span><span class="co">#&gt; 2       KDE h_ref      290      NA       NA</span></span>
+<span><span class="co">#&gt; 3        KDE LSCV      106      NA       NA</span></span>
+<span><span class="co">#&gt; 4 Brownian bridge      110      NA       NA</span></span>
+<span><span class="co">#&gt; 5            AKDE      403     241      605</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><strong>State 1</strong> — mean step of about 15 m with very low angular concentration and a mean turning angle near π: the animal barely moves and reverses direction constantly. This is an <em>encamped</em> state: resting, ruminating, or grazing within a very small patch.</p>
-<p><strong>State 2</strong> — mean step of a few hundred metres, mean turning angle near 0 and higher concentration: <strong>directed movement</strong>.</p>
-<p>Dwell times: roughly 2 hours in the encamped state and about 8 hours in the moving state. Note that these are in <strong>hours</strong> only because the data are hourly — the units of a dwell time are always “number of sampling intervals”.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/moveHMM/man/viterbi.html">viterbi</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">states</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">states</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; states</span></span>
-<span><span class="co">#&gt;     1     2 </span></span>
-<span><span class="co">#&gt; 0.215 0.785</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A factor of about four between the smallest and largest estimate, for the same animal and the same fixes. LSCV <strong>did not converge</strong> — <code><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernelUD()</a></code> warned — and chose a bandwidth of about 100 m, which splits the range into fragments around clusters of consecutive fixes. Only AKDE comes with a confidence interval.</p>
 </div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
+</div>
+</div>
+<p><strong>1c.</strong> Show yourself the autocorrelation problem: thin the fixes and watch the KDE area.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Warning
+<span class="screen-reader-only">Note</span>Solution
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The model has given you <em>state 1</em> and <em>state 2</em>. Calling them “resting” and “travelling” is an <strong>interpretation</strong>, and everything above is consistent with several other stories. To make the labels a measurement rather than a guess you would need external evidence: accelerometer data, direct observation, or known activity patterns.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">thin_tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">6</span>, <span class="fl">12</span>, <span class="fl">24</span>, <span class="fl">48</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">k</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">k</span><span class="op">)</span></span>
+<span>  <span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernel.area</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernelUD</a></span><span class="op">(</span><span class="fu"><a href="https://edzer.github.io/sp/reference/SpatialPoints.html">SpatialPoints</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span><span class="va">keep</span>, <span class="op">]</span><span class="op">)</span>, h <span class="op">=</span> <span class="st">"href"</span>, grid <span class="op">=</span> <span class="fl">200</span><span class="op">)</span>,</span>
+<span>                   percent <span class="op">=</span> <span class="fl">95</span>, unout <span class="op">=</span> <span class="st">"km2"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>every_nth_fix <span class="op">=</span> <span class="va">k</span>, fixes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">keep</span><span class="op">)</span>, kde95_km2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">thin_tab</span></span>
+<span><span class="co">#&gt;   every_nth_fix fixes kde95_km2</span></span>
+<span><span class="co">#&gt; 1             1  3528       290</span></span>
+<span><span class="co">#&gt; 2             2  1764       306</span></span>
+<span><span class="co">#&gt; 3             6   588       331</span></span>
+<span><span class="co">#&gt; 4            12   294       357</span></span>
+<span><span class="co">#&gt; 5            24   147       369</span></span>
+<span><span class="co">#&gt; 6            48    74       389</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>If the fixes were independent draws from a fixed UD, the estimate would stabilise as you add data. Instead the densest data give the <strong>smallest</strong> range: every extra autocorrelated fix adds almost no new information but makes the estimator more confident. That is exactly the bias AKDE corrects.</p>
 </div>
 </div>
 </div>
-</div>
-</div>
-</section></section><section id="task-3-decode-and-map" class="level2"><h2 class="anchored" data-anchor-id="task-3-decode-and-map">Task 3 — Decode and map</h2>
+</section></section><section id="task-2-map-them-together" class="level2"><h2 class="anchored" data-anchor-id="task-2-map-them-together">Task 2 — Map them together</h2>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pd</span><span class="op">$</span><span class="va">state</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/moveHMM/man/viterbi.html">viterbi</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">contour_sf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">ud</span>, <span class="va">label</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/getverticeshr.html">getverticeshr</a></span><span class="op">(</span><span class="va">ud</span>, percent <span class="op">=</span> <span class="fl">95</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_set_crs</a></span><span class="op">(</span><span class="fl">32736</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>estimator <span class="op">=</span> <span class="va">label</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">estimator</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">one</span> <span class="op">&lt;-</span> <span class="va">pd</span><span class="op">[</span><span class="va">pd</span><span class="op">$</span><span class="va">ID</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">ID</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="op">]</span></span>
+<span><span class="va">contours</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">mcp95</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_set_crs</a></span><span class="op">(</span><span class="fl">32736</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>estimator <span class="op">=</span> <span class="st">"MCP 95%"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">estimator</span><span class="op">)</span>,</span>
+<span>  <span class="fu">contour_sf</span><span class="op">(</span><span class="va">kd_href</span>, <span class="st">"KDE h_ref"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">contour_sf</span><span class="op">(</span><span class="va">kd_lscv</span>, <span class="st">"KDE LSCV"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">contour_sf</span><span class="op">(</span><span class="va">bb</span>, <span class="st">"Brownian bridge"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/export.html">as.sf</a></span><span class="op">(</span><span class="va">ak</span>, level.UD <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="fl">32736</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"est"</span>, <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>estimator <span class="op">=</span> <span class="st">"AKDE"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">estimator</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">one</span><span class="op">$</span><span class="va">x</span>, <span class="va">one</span><span class="op">$</span><span class="va">y</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"grey70"</span>, asp <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Easting (m)"</span>, ylab <span class="op">=</span> <span class="st">"Northing (m)"</span>, main <span class="op">=</span> <span class="st">"Track coloured by state"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">one</span><span class="op">$</span><span class="va">x</span>, <span class="va">one</span><span class="op">$</span><span class="va">y</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#1f6f78"</span>, <span class="st">"#c1440e"</span><span class="op">)</span><span class="op">[</span><span class="va">one</span><span class="op">$</span><span class="va">state</span><span class="op">]</span>, pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"state 1 (encamped)"</span>, <span class="st">"state 2 (moving)"</span><span class="op">)</span>,</span>
-<span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#1f6f78"</span>, <span class="st">"#c1440e"</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">16</span>, bty <span class="op">=</span> <span class="st">"n"</span>, cex <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">one</span><span class="op">$</span><span class="va">step</span>, type <span class="op">=</span> <span class="st">"h"</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#1f6f78"</span>, <span class="st">"#c1440e"</span><span class="op">)</span><span class="op">[</span><span class="va">one</span><span class="op">$</span><span class="va">state</span><span class="op">]</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Step index"</span>, ylab <span class="op">=</span> <span class="st">"Step length (m)"</span>, main <span class="op">=</span> <span class="st">"Step length by state"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">cilla_utm</span>, size <span class="op">=</span> <span class="fl">0.1</span>, alpha <span class="op">=</span> <span class="fl">0.25</span>, colour <span class="op">=</span> <span class="st">"grey30"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">contours</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">estimator</span><span class="op">)</span>, fill <span class="op">=</span> <span class="cn">NA</span>, linewidth <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_colour_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"MCP 95%"</span> <span class="op">=</span> <span class="st">"grey20"</span>, <span class="st">"KDE h_ref"</span> <span class="op">=</span> <span class="st">"#1f6f78"</span>,</span>
+<span>                                 <span class="st">"KDE LSCV"</span> <span class="op">=</span> <span class="st">"#6fc3cd"</span>, <span class="st">"Brownian bridge"</span> <span class="op">=</span> <span class="st">"#b8860b"</span>,</span>
+<span>                                 <span class="st">"AKDE"</span> <span class="op">=</span> <span class="st">"#c1440e"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">coord_sf</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="fl">32736</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Cilla: five 95% home ranges"</span>, colour <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="816"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m2</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, plotCI <span class="op">=</span> <span class="cn">FALSE</span>, plotTracks <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Decoding states sequence... DONE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="720"></p>
 </figure>
 </div>
 </div>
@@ -831,35 +885,36 @@ Warning
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+<span class="screen-reader-only">Tip</span>To hand in
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The second plot is the one to inspect most carefully: it overlays the <strong>state-dependent densities</strong> on the histogram of your data. If the coloured curves do not add up to the shape of the histogram, the model has not described your data and nothing downstream is trustworthy.</p>
+<p>This map, and <strong>one paragraph</strong> explaining why the five estimates differ. For each estimator name the question it answers and the assumption it makes about the fixes. This comparison — not any single number — is the point of the session.</p>
 </div>
 </div>
-</section><section id="task-4-how-many-states" class="level2"><h2 class="anchored" data-anchor-id="task-4-how-many-states">Task 4 — How many states?</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/moveHMM/man/fitHMM.html">fitHMM</a></span><span class="op">(</span></span>
-<span>  <span class="va">pd</span>, nbStates <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  stepPar0  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">200</span>, <span class="fl">800</span>, <span class="fl">30</span>, <span class="fl">200</span>, <span class="fl">800</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>, <span class="fl">0.001</span><span class="op">)</span>,</span>
-<span>  anglePar0 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+</section><section id="task-3-variograms-is-there-a-home-range-at-all" class="level2"><h2 class="anchored" data-anchor-id="task-3-variograms-is-there-a-home-range-at-all">Task 3 — Variograms: is there a home range at all?</h2>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">gazelle</span><span class="op">)</span></span>
+<span><span class="va">gz</span> <span class="op">&lt;-</span> <span class="va">gazelle</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, AIC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span><span class="op">(</span><span class="va">m3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   states      AIC</span></span>
-<span><span class="co">#&gt; 1      2 151969.4</span></span>
-<span><span class="co">#&gt; 2      3 150777.9</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">m3</span><span class="op">$</span><span class="va">mle</span><span class="op">$</span><span class="va">stepPar</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#&gt;           state 1 state 2 state 3</span></span>
-<span><span class="co">#&gt; mean         17.1   187.3   569.1</span></span>
-<span><span class="co">#&gt; sd           14.9   138.5   398.7</span></span>
-<span><span class="co">#&gt; zero-mass     0.0     0.0     0.0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">vg_cilla</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/variogram.html">variogram</a></span><span class="op">(</span><span class="va">tel</span><span class="op">)</span></span>
+<span><span class="va">vg_gz</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/variogram.html">variogram</a></span><span class="op">(</span><span class="va">gz</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span><span class="op">(</span><span class="va">vg_cilla</span>, CTMM <span class="op">=</span> <span class="va">fit</span>, fraction <span class="op">=</span> <span class="fl">0.5</span>, main <span class="op">=</span> <span class="st">"Buffalo 'Cilla'"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span><span class="op">(</span><span class="va">vg_gz</span>, fraction <span class="op">=</span> <span class="fl">0.5</span>, main <span class="op">=</span> <span class="st">"Mongolian gazelle"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="your-turn-1" class="level3"><h3 class="anchored" data-anchor-id="your-turn-1">Your turn</h3>
-<p><strong>4a.</strong> AIC prefers 3 states. Should you report 3 states? <strong>4b.</strong> What would make you confident that a third state is real?</p>
+<p><strong>3a.</strong> Which variogram levels off? <strong>3b.</strong> Fit a model to the gazelle and compare its range-crossing time with the tracking duration.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -868,114 +923,70 @@ Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">m3</span><span class="op">$</span><span class="va">mle</span><span class="op">$</span><span class="va">anglePar</span>, <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt;               state 1 state 2 state 3</span></span>
-<span><span class="co">#&gt; mean             3.06     0.0   -0.05</span></span>
-<span><span class="co">#&gt; concentration    0.20     0.9    0.66</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">m3</span><span class="op">$</span><span class="va">mle</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 2.12 3.02 3.40</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/moveHMM/man/viterbi.html">viterbi</a></span><span class="op">(</span><span class="va">m3</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">pd</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     1     2     3 </span></span>
-<span><span class="co">#&gt; 0.253 0.415 0.332</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>AIC is <strong>lower</strong> for 3 states, and it would very likely keep falling for 4 and 5. That is what mixture models do: extra components always improve the fit to the shape of the data, whether or not they correspond to behaviours.</p>
-<p>Ask instead:</p>
-<ol type="1">
-<li>
-<strong>Are the states distinct?</strong> If two states have overlapping step-length distributions and similar turning angles, the model has split one behaviour in two.</li>
-<li>
-<strong>Are the dwell times plausible?</strong> A state occupied for a single step at a time is a statistical artefact, not a behaviour.</li>
-<li>
-<strong>Is any state rare?</strong> A state holding 2% of steps is usually absorbing outliers.</li>
-<li>
-<strong>Does it survive?</strong> Refit on a different individual, or a different season. A real behaviour recurs; an artefact does not.</li>
-</ol>
-<p>Here the third state sits between the other two, which is biologically reasonable for a large grazer (rest / graze / travel) — but you should say that you chose 3 for <em>that</em> reason, not because AIC said so.</p>
-<p><strong>Report the simplest model that answers your question and passes its checks</strong>, and state your criterion in the methods.</p>
-</div>
-</div>
-</div>
-</section></section><section id="task-5-check-the-residuals" class="level2"><h2 class="anchored" data-anchor-id="task-5-check-the-residuals">Task 5 — Check the residuals</h2>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/moveHMM/man/pseudoRes.html">pseudoRes</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html">qqnorm</a></span><span class="op">(</span><span class="va">pr</span><span class="op">$</span><span class="va">stepRes</span>, main <span class="op">=</span> <span class="st">"Step pseudo-residuals"</span>, pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html">adjustcolor</a></span><span class="op">(</span><span class="st">"#1f6f78"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html">qqline</a></span><span class="op">(</span><span class="va">pr</span><span class="op">$</span><span class="va">stepRes</span>, col <span class="op">=</span> <span class="st">"firebrick"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html">qqnorm</a></span><span class="op">(</span><span class="va">pr</span><span class="op">$</span><span class="va">angleRes</span>, main <span class="op">=</span> <span class="st">"Angle pseudo-residuals"</span>, pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html">adjustcolor</a></span><span class="op">(</span><span class="st">"#1f6f78"</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/qqnorm.html">qqline</a></span><span class="op">(</span><span class="va">pr</span><span class="op">$</span><span class="va">angleRes</span>, col <span class="op">=</span> <span class="st">"firebrick"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Reading a pseudo-residual plot
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>If the model describes the data, pseudo-residuals are standard normal and the points lie on the line. Departures tell you <em>where</em> the model fails:</p>
-<ul>
-<li>
-<strong>Heavy tails</strong> — the step-length distribution is wrong (try log-normal or Weibull), or outliers remain</li>
-<li>
-<strong>Systematic curvature</strong> — the wrong number of states, or a state whose distribution family does not match</li>
-<li>
-<strong>Structure when plotted against time</strong> — a covariate is missing: perhaps behaviour depends on time of day and you have not let it</li>
-</ul>
-<p>This is the HMM equivalent of plotting residuals in a regression, and it is skipped in far too many papers.</p>
-</div>
-</div>
-</div>
-</section><section id="task-6-a-different-kind-of-segmentation" class="level2"><h2 class="anchored" data-anchor-id="task-6-a-different-kind-of-segmentation">Task 6 — A different kind of segmentation</h2>
-<p>Leo the vulture needs <strong>change-point</strong> thinking, not state classification. The question is <em>when did migration start</em>, and the NSD profile from Class 4 is enough to answer it.</p>
-<div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">vul</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/vulture_leo.csv.gz"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="va">timestamp</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span>,</span>
-<span>            x <span class="op">=</span> <span class="va">location.long</span>, y <span class="op">=</span> <span class="va">location.lat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">t</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span>
+<p>Cilla’s variogram rises and then <strong>flattens</strong>: beyond a lag of a few days her positions are as far apart as they ever get. That asymptote <em>is</em> range residency, and the fitted model’s curve follows it.</p>
+<p>The gazelle’s variogram keeps climbing across much of the plot, with no clear plateau. Ignore the saw-teeth: the gazelle was located only every few days, on an irregular schedule, so at some time lags there are very few pairs of fixes and the estimate jumps. Read the overall trend, not the teeth.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_gz</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/ctmm.fit.html">ctmm.select</a></span><span class="op">(</span><span class="va">gz</span>, <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/variogram.fit.html">ctmm.guess</a></span><span class="op">(</span><span class="va">gz</span>, interactive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_gz</span><span class="op">)</span><span class="op">$</span><span class="va">CI</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="co">#&gt;                                   low          est         high</span></span>
+<span><span class="co">#&gt; area (square kilometers) 5.462251e+04 3.034354e+05 761303.53275</span></span>
+<span><span class="co">#&gt; τ[position] (months)     8.330046e-01 4.780132e+00     27.43041</span></span>
 <span></span>
-<span><span class="va">vt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/track.html">make_track</a></span><span class="op">(</span><span class="va">vul</span>, <span class="va">x</span>, <span class="va">y</span>, <span class="va">t</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/amt/man/transform_coords.html">transform_coords</a></span><span class="op">(</span>crs_to <span class="op">=</span> <span class="fl">6933</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">daily</span> <span class="op">&lt;-</span> <span class="va">vt</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>day <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="va">t_</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">day</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x_</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y_</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">day</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>disp_km <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">daily</span> <span class="op">&lt;-</span> <span class="va">daily</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>migrating <span class="op">=</span> <span class="va">disp_km</span> <span class="op">&gt;</span> <span class="fl">50</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">daily</span><span class="op">$</span><span class="va">day</span>, <span class="va">daily</span><span class="op">$</span><span class="va">disp_km</span>, type <span class="op">=</span> <span class="st">"h"</span>,</span>
-<span>     col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">daily</span><span class="op">$</span><span class="va">migrating</span>, <span class="st">"#c1440e"</span>, <span class="st">"grey65"</span><span class="op">)</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">""</span>, ylab <span class="op">=</span> <span class="st">"Daily displacement (km)"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Leo: daily displacement, migration days in red"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="fl">50</span>, col <span class="op">=</span> <span class="st">"firebrick"</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="864"></p>
-</figure>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>tracking_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">gz</span><span class="op">$</span><span class="va">t</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">86400</span><span class="op">)</span></span>
+<span><span class="co">#&gt; tracking_days </span></span>
+<span><span class="co">#&gt;      351.2088</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The gazelle’s estimated range-crossing time is months long, with a confidence interval whose upper end exceeds the whole study. In the time it was tracked, it crossed its “range” only a handful of times — perhaps not at all — so the area estimate spans an order of magnitude. More fixes per day would not help; only a much longer track could. For a nomadic species, the honest answer may be that a home range is the wrong summary.</p>
 </div>
 </div>
+</div>
+</section></section><section id="task-4-ground-truth" class="level2"><h2 class="anchored" data-anchor-id="task-4-ground-truth">Task 4 — Ground truth</h2>
+<p>In Session 5 we built a central-place walker. Because we wrote its rule, we can compute its <strong>true</strong> 95% home range by simulating it for a very long time.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">"R/simulators.R"</span><span class="op">)</span></span>
+<span><span class="va">true95</span> <span class="op">&lt;-</span> <span class="fu">truth_area</span><span class="op">(</span><span class="fl">0.95</span><span class="op">)</span></span>
+<span><span class="va">true95</span></span>
+<span><span class="co">#&gt; [1] 805.22</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now pretend it is a collared animal: sample it every hour for ~69 days and estimate its range.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">truth_animal</span><span class="op">(</span><span class="op">)</span>                           <span class="co"># 5,000 steps of 20 minutes</span></span>
+<span><span class="va">obs</span> <span class="op">&lt;-</span> <span class="va">sim</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span>, by <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="op">]</span>         <span class="co"># an hourly GPS fix</span></span>
+<span><span class="va">obs</span><span class="op">$</span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html">as.POSIXct</a></span><span class="op">(</span><span class="st">"2026-01-01"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">obs</span><span class="op">$</span><span class="va">step</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">20</span> <span class="op">*</span> <span class="fl">60</span></span>
+<span></span>
+<span><span class="va">sim_pts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edzer.github.io/sp/reference/SpatialPoints.html">SpatialPoints</a></span><span class="op">(</span><span class="va">obs</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">est</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>  MCP      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/mcp.html">mcp.area</a></span><span class="op">(</span><span class="va">sim_pts</span>, percent <span class="op">=</span> <span class="fl">95</span>, unout <span class="op">=</span> <span class="st">"km2"</span>, plotit <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>  KDE_href <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernel.area</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernelUD</a></span><span class="op">(</span><span class="va">sim_pts</span>, h <span class="op">=</span> <span class="st">"href"</span>, grid <span class="op">=</span> <span class="fl">200</span><span class="op">)</span>, percent <span class="op">=</span> <span class="fl">95</span>, unout <span class="op">=</span> <span class="st">"km2"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>  KDE_LSCV <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernel.area</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/warning.html">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/adehabitatHR/man/kernelUD.html">kernelUD</a></span><span class="op">(</span><span class="va">sim_pts</span>, h <span class="op">=</span> <span class="st">"LSCV"</span>, grid <span class="op">=</span> <span class="fl">200</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                         percent <span class="op">=</span> <span class="fl">95</span>, unout <span class="op">=</span> <span class="st">"km2"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># AKDE: park the simulated animal in UTM 36S so ctmm gets longitude/latitude</span></span>
+<span><span class="va">ll</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">obs</span><span class="op">$</span><span class="va">x</span> <span class="op">+</span> <span class="fl">4e5</span>, y <span class="op">=</span> <span class="va">obs</span><span class="op">$</span><span class="va">y</span> <span class="op">+</span> <span class="fl">7.3e6</span><span class="op">)</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">32736</span><span class="op">)</span>,</span>
+<span>  <span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sim_tel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/as.telemetry.html">as.telemetry</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>timestamp <span class="op">=</span> <span class="va">obs</span><span class="op">$</span><span class="va">t</span>, location.long <span class="op">=</span> <span class="va">ll</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>,</span>
+<span>                                   location.lat <span class="op">=</span> <span class="va">ll</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, individual.local.identifier <span class="op">=</span> <span class="st">"truth"</span><span class="op">)</span>,</span>
+<span>                        timeformat <span class="op">=</span> <span class="st">"auto"</span><span class="op">)</span></span>
+<span><span class="va">sim_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/ctmm.fit.html">ctmm.select</a></span><span class="op">(</span><span class="va">sim_tel</span>, <span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/variogram.fit.html">ctmm.guess</a></span><span class="op">(</span><span class="va">sim_tel</span>, interactive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sim_ci</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ctmm/man/akde.html">akde</a></span><span class="op">(</span><span class="va">sim_tel</span>, <span class="va">sim_fit</span><span class="op">)</span>, units <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">CI</span> <span class="op">/</span> <span class="fl">1e6</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">est</span>, AKDE <span class="op">=</span> <span class="va">sim_ci</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, AKDE_low <span class="op">=</span> <span class="va">sim_ci</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, AKDE_high <span class="op">=</span> <span class="va">sim_ci</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>        TRUTH <span class="op">=</span> <span class="va">true95</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       MCP  KDE_href  KDE_LSCV      AKDE  AKDE_low AKDE_high     TRUTH </span></span>
+<span><span class="co">#&gt;       661       800       491      1229       493      2295       805</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>One animal is one draw: an estimator can be lucky. The fair test repeats the experiment on many independent animals. That takes ~20 minutes, so it has been run for you by <code>R/hr_ground_truth.R</code>; the results are in <code>data/hr_ground_truth.csv</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">reps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data/hr_ground_truth.csv"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">reps</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 20</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="your-turn-2" class="level3"><h3 class="anchored" data-anchor-id="your-turn-2">Your turn</h3>
-<p><strong>6a.</strong> How many migration days per year, and in which months? <strong>6b.</strong> Why is a simple threshold acceptable here, when it would not be for the buffalo?</p>
+<p><strong>4a.</strong> For each estimator, plot estimate / truth across the replicates. <strong>4b.</strong> How often does AKDE’s 95% confidence interval contain the truth?</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -988,90 +999,98 @@ Tip
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">daily</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">migrating</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span>year <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html">year</a></span><span class="op">(</span><span class="va">day</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"migration_days"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 7 × 2</span></span>
-<span><span class="co">#&gt;    year migration_days</span></span>
-<span><span class="co">#&gt;   &lt;dbl&gt;          &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1  2007             57</span></span>
-<span><span class="co">#&gt; 2  2008             85</span></span>
-<span><span class="co">#&gt; 3  2009             80</span></span>
-<span><span class="co">#&gt; 4  2010             67</span></span>
-<span><span class="co">#&gt; 5  2011             40</span></span>
-<span><span class="co">#&gt; 6  2012             13</span></span>
-<span><span class="co">#&gt; 7  2013              5</span></span>
-<span></span>
-<span><span class="va">daily</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">migrating</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html">month</a></span><span class="op">(</span><span class="va">day</span>, label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, name <span class="op">=</span> <span class="st">"days"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 9 × 2</span></span>
-<span><span class="co">#&gt;   month  days</span></span>
-<span><span class="co">#&gt;   &lt;ord&gt; &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1 Jan       6</span></span>
-<span><span class="co">#&gt; 2 Feb       6</span></span>
-<span><span class="co">#&gt; 3 Mar      47</span></span>
-<span><span class="co">#&gt; 4 Apr      84</span></span>
-<span><span class="co">#&gt; 5 May       5</span></span>
-<span><span class="co">#&gt; 6 Sep      12</span></span>
-<span><span class="co">#&gt; 7 Oct     109</span></span>
-<span><span class="co">#&gt; 8 Nov      66</span></span>
-<span><span class="co">#&gt; 9 Dec      12</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Migration days cluster strongly in the <strong>spring and autumn</strong> months, exactly as the NSD sawtooth in Class 4 suggested.</p>
-<p><strong>Why a threshold is defensible here.</strong> The two behaviours are separated by roughly an order of magnitude: a resident vulture moves a few kilometres a day, a migrating one moves hundreds. The distribution of daily displacement is clearly bimodal with a wide, empty valley between the modes, so the exact threshold barely matters.</p>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">daily</span><span class="op">$</span><span class="va">disp_km</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>, breaks <span class="op">=</span> <span class="fl">50</span>, col <span class="op">=</span> <span class="st">"#1f6f78"</span>, border <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"log10(daily displacement km + 1)"</span>, main <span class="op">=</span> <span class="st">"Two clearly separated modes"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="fl">51</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"firebrick"</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">long</span> <span class="op">&lt;-</span> <span class="va">reps</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">MCP</span>, <span class="va">KDE_href</span>, <span class="va">KDE_LSCV</span>, <span class="va">BBMM</span>, <span class="va">AKDE</span><span class="op">)</span>,</span>
+<span>                      names_to <span class="op">=</span> <span class="st">"estimator"</span>, values_to <span class="op">=</span> <span class="st">"km2"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ratio <span class="op">=</span> <span class="va">km2</span> <span class="op">/</span> <span class="va">true95</span>,</span>
+<span>         estimator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">estimator</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"MCP"</span>, <span class="st">"KDE_href"</span>, <span class="st">"KDE_LSCV"</span>, <span class="st">"BBMM"</span>, <span class="st">"AKDE"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">long</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">estimator</span>, <span class="va">ratio</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">1</span>, linetype <span class="op">=</span> <span class="fl">2</span>, colour <span class="op">=</span> <span class="st">"firebrick"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#1f6f78"</span>, alpha <span class="op">=</span> <span class="fl">0.25</span>, outlier.shape <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.12</span>, size <span class="op">=</span> <span class="fl">1.6</span>, colour <span class="op">=</span> <span class="st">"#1f6f78"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Estimate / true area"</span>,</span>
+<span>       title <span class="op">=</span> <span class="st">"Twenty simulated animals, 69 days of hourly fixes each"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="624"></p>
+<figure class="figure"><p><img src="exercise_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="720"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>For the buffalo there is no such valley: resting, grazing and travelling produce overlapping step-length distributions with no gap to cut at. That is precisely when you need a model that assigns states probabilistically and uses the time dependence to resolve the overlap — an HMM.</p>
-<p><strong>The general rule:</strong> if a histogram of your metric shows a clean gap, a threshold is honest and transparent. If it does not, a threshold is an arbitrary decision dressed as a result.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">long</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">estimator</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>median_ratio <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">ratio</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>            spread_IQR   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">ratio</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 3</span></span>
+<span><span class="co">#&gt;   estimator median_ratio spread_IQR</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;            &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 MCP               0.87       0.31</span></span>
+<span><span class="co">#&gt; 2 KDE_href          0.98       0.31</span></span>
+<span><span class="co">#&gt; 3 KDE_LSCV          0.64       0.17</span></span>
+<span><span class="co">#&gt; 4 BBMM              0.42       0.08</span></span>
+<span><span class="co">#&gt; 5 AKDE              1.57       0.98</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>AKDE_CI_covers_truth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">reps</span><span class="op">$</span><span class="va">AKDE_low</span> <span class="op">&lt;=</span> <span class="va">reps</span><span class="op">$</span><span class="va">true95</span> <span class="op">&amp;</span> <span class="va">reps</span><span class="op">$</span><span class="va">AKDE_high</span> <span class="op">&gt;=</span> <span class="va">reps</span><span class="op">$</span><span class="va">true95</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; AKDE_CI_covers_truth </span></span>
+<span><span class="co">#&gt;                  0.9</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Every estimator fails in a characteristic way, and now you can see which way:</p>
+<ul>
+<li>
+<strong>MCP</strong> and <strong>KDE with LSCV</strong> sit mostly <strong>below</strong> the line — LSCV in every single replicate. LSCV’s tiny bandwidth fragments the utilisation distribution around clusters of autocorrelated fixes.</li>
+<li>
+<strong>The Brownian bridge</strong> sits far below, and tightly: about 40% of the true area, every time. It is not wrong — it answers a different question, where the animal <em>went</em> in 69 days, not where it <em>lives</em>.</li>
+<li>
+<strong>KDE with <span class="math inline">\(h_\text{ref}\)</span></strong> is close to the truth on average. That is not luck: <span class="math inline">\(h_\text{ref}\)</span> is the optimal bandwidth for a single, roughly circular hump, which is exactly what this central-place walker produces. Real ranges such as Cilla’s are lumpy and multimodal, and there <span class="math inline">\(h_\text{ref}\)</span> over-smooths. A method that works on the animal it assumes can fail on the animal you have.</li>
+<li>
+<strong>AKDE</strong> is the surprise. Its point estimates run <strong>high</strong> and vary a lot from animal to animal — yet its 95% confidence interval contains the truth in about 90% of replicates, close to what it promises.</li>
+</ul>
+<p>Why? 69 days is only about seven range-crossing times, so the effective sample size is tiny, and AKDE says so: its intervals are wide <em>because the data are thin</em>. The other estimators are just as uncertain; they simply do not tell you. AKDE’s correction also assumes a continuous-time Gaussian movement model, and our walker is not one — even the most principled estimator rests on a movement model, and misspecifying it costs accuracy.</p>
+<p>So the lesson is not “AKDE wins”. It is:</p>
+<ol type="1">
+<li>
+<strong>no estimator is right in general</strong> — each is right for a question and an assumption;</li>
+<li>
+<strong>an honest interval beats a precise-looking number</strong>;</li>
+<li>
+<strong>simulation with a known truth</strong> is how you find out which failure you are exposed to — try it with longer tracks (more range crossings) and see how the picture changes.</li>
+</ol>
 </div>
 </div>
 </div>
 </section></section><section id="self-check" class="level2"><h2 class="anchored" data-anchor-id="self-check">Self-check</h2>
 <div class="quiz">
-<p>Your 2-state HMM assigns 97% of steps to state 1 and 3% to state 2, and state 2 has a mean step length of 12 km. What has probably happened?</p>
+<p>You double the fix rate of your collars from hourly to every 30 minutes, for the same 3 months. What happens to AKDE’s confidence interval on the home-range area?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">The animal genuinely travels 3% of the time</label></li>
-<li><label><input type="checkbox" checked="">State 2 is absorbing location errors rather than describing a behaviour</label></li>
-<li><label><input type="checkbox">The model needs more states</label></li>
-<li><label><input type="checkbox">The sampling interval is too short</label></li>
+<li><label><input type="checkbox">It halves</label></li>
+<li><label><input type="checkbox">It narrows by a factor of √2</label></li>
+<li><label><input type="checkbox" checked="">It barely changes, because the effective sample size depends on how many times the animal crossed its range</label></li>
+<li><label><input type="checkbox">It widens</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>A rare state with an extreme mean is the classic signature of a model mopping up <strong>outliers</strong>. Twelve kilometres in one step is implausible for most terrestrial mammals at an hourly interval, and the HMM has done what it was asked to do: found the mixture that best fits the data, including the bad points.</p>
-<p>Clean first, then model. Find the offending steps, look at them on a map, decide whether they are real, and remove them (or the affected bursts) before refitting. This is why Task 1 drops the 63 km steps.</p>
-<p>More states would not help — you would simply get more outlier-absorbing states.</p>
+<p>AKDE’s effective sample size is roughly the tracking duration divided by the range-crossing time. Sampling faster adds fixes, but not range crossings. To narrow the interval you must track for <strong>longer</strong>, not more often.</p>
 </div>
 </div>
 <div class="quiz">
-<p>You want to know whether buffalo are more likely to start moving when it is hot. What do you change in <code><a href="https://rdrr.io/pkg/moveHMM/man/fitHMM.html">fitHMM()</a></code>?</p>
+<p>Which estimator would you use to map the corridors an animal actually used during a 2-week dispersal event?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">Add temperature to <code>stepPar0</code></label></li>
-<li><label><input type="checkbox" checked="">Pass <code>formula = ~ temperature</code> so the covariate acts on the transition probabilities</label></li>
-<li><label><input type="checkbox">Fit separate models for hot and cold days</label></li>
-<li><label><input type="checkbox">Nothing — HMMs cannot include covariates</label></li>
+<li><label><input type="checkbox">AKDE</label></li>
+<li><label><input type="checkbox" checked="">A Brownian bridge</label></li>
+<li><label><input type="checkbox">MCP</label></li>
+<li><label><input type="checkbox">KDE with LSCV</label></li>
 </ul>
 <div class="quiz-feedback">
-<p>The question is about <strong>switching between behaviours</strong>, and switching is governed by the transition probability matrix. <code>formula = ~ temperature</code> makes the transition probabilities a (multinomial-logit) function of temperature, which is exactly the hypothesis.</p>
-<p>Putting a covariate on the <em>state-dependent distributions</em> instead would ask a different question — “does the animal travel faster when it is hot”, given that it is already travelling.</p>
-<p>Fitting separate models for hot and cold days throws away the transitions between them and gives you no test of the difference.</p>
-<p>This is where Class 5 and Class 6 join up: annotate each fix with the contemporaneous covariate, then let it drive the transitions.</p>
+<p>A dispersal event is non-stationary by definition, so a <em>range</em> distribution is meaningless; you want the <strong>occurrence</strong> distribution — where the animal went — which is exactly what the Brownian bridge estimates.</p>
 </div>
 </div>
-</section><section id="before-class-7" class="level2"><h2 class="anchored" data-anchor-id="before-class-7">Before Class 7</h2>
+</section><section id="before-session-7" class="level2"><h2 class="anchored" data-anchor-id="before-session-7">Before Session 7</h2>
 <ul>
-<li>
-<strong>Read Fieberg et al.&nbsp;(2021)</strong>, <em>J Anim Ecol</em> 90:1027–1043. Genuinely the most useful paper in this course.</li>
-<li>Make sure <code><a href="https://github.com/jmsigner/amt">library(amt)</a></code> and <code><a href="https://github.com/therneau/survival">library(survival)</a></code> both load.</li>
+<li>Fieberg et al.&nbsp;(2021), <em>J Anim Ecol</em> 90:1027–1043.</li>
+<li>Make sure <code><a href="https://github.com/therneau/survival">library(survival)</a></code> loads.</li>
 </ul>
 
 
@@ -1586,13 +1605,13 @@ Tip
     }
   });
   </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="../../classes/class-06/slides.html" class="pagination-link" aria-label="Slides · Theme 4">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Slides · Theme 4</span>
+      <a href="../../classes/class-06/slides.html" class="pagination-link" aria-label="Slides — MCP → KDE → BBMM → AKDE">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Slides — MCP → KDE → BBMM → AKDE</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../classes/class-07/slides.html" class="pagination-link" aria-label="Slides · Theme 5">
-        <span class="nav-page-text">Slides · Theme 5</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../classes/class-07/slides.html" class="pagination-link" aria-label="Slides — RSF and SSF">
+        <span class="nav-page-text">Slides — RSF and SSF</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

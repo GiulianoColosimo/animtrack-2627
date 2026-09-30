@@ -236,7 +236,9 @@ positions are as far apart as they ever get. That asymptote *is* range
 residency, and the fitted model's curve follows it.
 
 The gazelle's variogram keeps climbing across much of the plot, with no clear
-plateau.
+plateau. Ignore the saw-teeth: the gazelle was located only every few days, on
+an irregular schedule, so at some time lags there are very few pairs of fixes
+and the estimate jumps. Read the overall trend, not the teeth.
 
 ```{r}
 #| cache: true
@@ -345,20 +347,37 @@ c(AKDE_CI_covers_truth = mean(reps$AKDE_low <= reps$true95 & reps$AKDE_high >= r
 
 Every estimator fails in a characteristic way, and now you can see which way:
 
-- **MCP** and **LSCV** sit below the line — too small, for the reasons in the
-  slides (convexity cuts both ways; LSCV fragments the UD).
-- **The Brownian bridge** is far below the line — not because it is wrong, but
-  because it answers a different question: where the animal *went* in 69
-  days, not where it *lives*.
-- **KDE with $h_\text{ref}$** can land close to the truth for this animal —
-  its over-smoothing happens to offset the autocorrelation bias. That is luck
-  of the geometry, not a property you can rely on: compare its performance on
-  Cilla, whose range is far from a single bivariate normal.
-- **AKDE** is the only estimator whose uncertainty is stated, and its
-  confidence interval should contain the truth in most replicates.
+- **MCP** and **KDE with LSCV** sit mostly **below** the line — LSCV in every
+  single replicate. LSCV's tiny bandwidth fragments the utilisation
+  distribution around clusters of autocorrelated fixes.
+- **The Brownian bridge** sits far below, and tightly: about 40% of the true
+  area, every time. It is not wrong — it answers a different question, where
+  the animal *went* in 69 days, not where it *lives*.
+- **KDE with $h_\text{ref}$** is close to the truth on average. That is not
+  luck: $h_\text{ref}$ is the optimal bandwidth for a single, roughly
+  circular hump, which is exactly what this central-place walker produces.
+  Real ranges such as Cilla's are lumpy and multimodal, and there
+  $h_\text{ref}$ over-smooths. A method that works on the animal it assumes
+  can fail on the animal you have.
+- **AKDE** is the surprise. Its point estimates run **high** and vary a lot
+  from animal to animal — yet its 95% confidence interval contains the truth
+  in about 90% of replicates, close to what it promises.
 
-Estimators are not "right" or "wrong" in general. They are right or wrong
-*for a question*, and simulation with a known truth is how you find out which.
+Why? 69 days is only about seven range-crossing times, so the effective sample
+size is tiny, and AKDE says so: its intervals are wide *because the data are
+thin*. The other estimators are just as uncertain; they simply do not tell
+you. AKDE's correction also assumes a continuous-time Gaussian movement model,
+and our walker is not one — even the most principled estimator rests on a
+movement model, and misspecifying it costs accuracy.
+
+So the lesson is not "AKDE wins". It is:
+
+1. **no estimator is right in general** — each is right for a question and an
+   assumption;
+2. **an honest interval beats a precise-looking number**;
+3. **simulation with a known truth** is how you find out which failure you
+   are exposed to — try it with longer tracks (more range crossings) and see
+   how the picture changes.
 :::
 
 ## Self-check

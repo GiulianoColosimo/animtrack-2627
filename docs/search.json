@@ -482,14 +482,14 @@
   {
     "objectID": "classes/class-06/exercise.html",
     "href": "classes/class-06/exercise.html",
-    "title": "Exercise 6 — Fitting a hidden Markov model",
+    "title": "Practical 6 — Home ranges, four ways",
     "section": "",
-    "text": "Goals. Prepare a track for moveHMM; fit a 2-state model; read its output properly; decode and map the states; compare 2 and 3 states; check pseudo-residuals; and segment Leo’s migration a different way.\nTime: ~55 minutes. Packages: moveHMM, amt, dplyr, tidyr, lubridate.\nlibrary(moveHMM)\nlibrary(amt)\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(lubridate)",
+    "text": "Goals. Estimate one buffalo’s home range with MCP, KDE (two bandwidths), a Brownian bridge and AKDE; map them together and explain why they differ; use variograms to tell a resident from a nomad; and test every estimator against a simulated animal whose true home range we know.\nTime: ~70 minutes. Packages: adehabitatHR, adehabitatLT, ctmm, amt, sf, dplyr, ggplot2.\nlibrary(adehabitatHR)\nlibrary(adehabitatLT)\nlibrary(ctmm)\nlibrary(amt)\nlibrary(sf)\nlibrary(dplyr)\nlibrary(ggplot2)",
     "crumbs": [
       "Home",
-      "Classes",
-      "Class 6 — Segmentation & HMMs",
-      "Exercise · Fitting an HMM"
+      "Sessions",
+      "6 · Home ranges",
+      "Practical"
     ]
   },
   {
@@ -573,14 +573,14 @@
   {
     "objectID": "classes/class-06/exercise.html#self-check",
     "href": "classes/class-06/exercise.html#self-check",
-    "title": "Exercise 6 — Fitting a hidden Markov model",
+    "title": "Practical 6 — Home ranges, four ways",
     "section": "Self-check",
-    "text": "Self-check\n\nYour 2-state HMM assigns 97% of steps to state 1 and 3% to state 2, and state 2 has a mean step length of 12 km. What has probably happened?\n\nThe animal genuinely travels 3% of the time\nState 2 is absorbing location errors rather than describing a behaviour\nThe model needs more states\nThe sampling interval is too short\n\n\nA rare state with an extreme mean is the classic signature of a model mopping up outliers. Twelve kilometres in one step is implausible for most terrestrial mammals at an hourly interval, and the HMM has done what it was asked to do: found the mixture that best fits the data, including the bad points.\nClean first, then model. Find the offending steps, look at them on a map, decide whether they are real, and remove them (or the affected bursts) before refitting. This is why Task 1 drops the 63 km steps.\nMore states would not help — you would simply get more outlier-absorbing states.\n\n\n\nYou want to know whether buffalo are more likely to start moving when it is hot. What do you change in fitHMM()?\n\nAdd temperature to stepPar0\nPass formula = ~ temperature so the covariate acts on the transition probabilities\nFit separate models for hot and cold days\nNothing — HMMs cannot include covariates\n\n\nThe question is about switching between behaviours, and switching is governed by the transition probability matrix. formula = ~ temperature makes the transition probabilities a (multinomial-logit) function of temperature, which is exactly the hypothesis.\nPutting a covariate on the state-dependent distributions instead would ask a different question — “does the animal travel faster when it is hot”, given that it is already travelling.\nFitting separate models for hot and cold days throws away the transitions between them and gives you no test of the difference.\nThis is where Class 5 and Class 6 join up: annotate each fix with the contemporaneous covariate, then let it drive the transitions.",
+    "text": "Self-check\n\nYou double the fix rate of your collars from hourly to every 30 minutes, for the same 3 months. What happens to AKDE’s confidence interval on the home-range area?\n\nIt halves\nIt narrows by a factor of √2\nIt barely changes, because the effective sample size depends on how many times the animal crossed its range\nIt widens\n\n\nAKDE’s effective sample size is roughly the tracking duration divided by the range-crossing time. Sampling faster adds fixes, but not range crossings. To narrow the interval you must track for longer, not more often.\n\n\n\nWhich estimator would you use to map the corridors an animal actually used during a 2-week dispersal event?\n\nAKDE\nA Brownian bridge\nMCP\nKDE with LSCV\n\n\nA dispersal event is non-stationary by definition, so a range distribution is meaningless; you want the occurrence distribution — where the animal went — which is exactly what the Brownian bridge estimates.",
     "crumbs": [
       "Home",
-      "Classes",
-      "Class 6 — Segmentation & HMMs",
-      "Exercise · Fitting an HMM"
+      "Sessions",
+      "6 · Home ranges",
+      "Practical"
     ]
   },
   {
@@ -5691,6 +5691,84 @@
       "Sessions",
       "6 · Home ranges",
       "Slides — MCP → KDE → BBMM → AKDE"
+    ]
+  },
+  {
+    "objectID": "classes/class-06/exercise.html#setup-one-buffalo",
+    "href": "classes/class-06/exercise.html#setup-one-buffalo",
+    "title": "Practical 6 — Home ranges, four ways",
+    "section": "Setup — one buffalo",
+    "text": "Setup — one buffalo\n\nbuffalo &lt;- read.csv(\"data/buffalo_kruger.csv.gz\") |&gt;\n  transmute(id = individual.local.identifier, t = as.POSIXct(timestamp, tz = \"UTC\"),\n            x = location.long, y = location.lat) |&gt;\n  filter(!is.na(x), !is.na(y)) |&gt;\n  distinct(id, t, .keep_all = TRUE) |&gt;\n  arrange(id, t)\n\ncilla &lt;- buffalo |&gt; filter(id == \"Cilla\")\n\n# Projected coordinates (UTM 36S) for adehabitatHR, which assumes a plane\ncilla_utm &lt;- st_as_sf(cilla, coords = c(\"x\", \"y\"), crs = 4326) |&gt;\n  st_transform(32736)\nxy &lt;- st_coordinates(cilla_utm)\npts &lt;- SpatialPoints(xy, proj4string = CRS(\"EPSG:32736\"))\n\nnrow(cilla)\n#&gt; [1] 3528\nrange(cilla$t)\n#&gt; [1] \"2005-07-14 04:35:00 UTC\" \"2005-12-07 22:16:00 UTC\"\n\n\n\n\n\n\n\nNote\n\n\n\nadehabitatHR predates sf and expects sp objects — hence SpatialPoints(). This is the “messy history” from Session 2 in practice.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "6 · Home ranges",
+      "Practical"
+    ]
+  },
+  {
+    "objectID": "classes/class-06/exercise.html#task-1-five-estimates-of-one-home-range",
+    "href": "classes/class-06/exercise.html#task-1-five-estimates-of-one-home-range",
+    "title": "Practical 6 — Home ranges, four ways",
+    "section": "Task 1 — Five estimates of one home range",
+    "text": "Task 1 — Five estimates of one home range\nMCP and KDE\n\nmcp95 &lt;- mcp(pts, percent = 95)\narea_mcp &lt;- mcp.area(pts, percent = 95, unout = \"km2\", plotit = FALSE)[[1]]\n\nkd_href &lt;- kernelUD(pts, h = \"href\", grid = 300, extent = 1)\nkd_lscv &lt;- kernelUD(pts, h = \"LSCV\", grid = 300, extent = 1)\n\narea_href &lt;- kernel.area(kd_href, percent = 95, unout = \"km2\")[[1]]\narea_lscv &lt;- kernel.area(kd_lscv, percent = 95, unout = \"km2\")[[1]]\n\nc(h_ref_m = kd_href@h$h, h_lscv_m = kd_lscv@h$h,\n  lscv_converged = kd_lscv@h$convergence)\n#&gt;        h_ref_m       h_lscv_m lscv_converged \n#&gt;      1179.1127       117.9113         0.0000\n\nBrownian bridge\nThe bridge needs the trajectory, not just the points, and two variance parameters: sig2, the location error (we assume ~30 m for GPS), and sig1, the animal’s mobility, which liker() estimates by maximum likelihood.\n\nltr &lt;- as.ltraj(xy = as.data.frame(xy), date = cilla$t, id = \"Cilla\")\nlik &lt;- liker(ltr, sig2 = 30, rangesig1 = c(1, 100), plotit = FALSE)\nlik$Cilla$sig1\n#&gt; [1] 4.765766\n\nbb &lt;- kernelbb(ltr, sig1 = lik$Cilla$sig1, sig2 = 30, grid = 300, extent = 0.3)\narea_bb &lt;- kernel.area(bb, percent = 95, unout = \"km2\")[[1]]\n\nAKDE\nctmm fits a continuous-time movement model first. It wants Movebank-style columns and works in geographic coordinates.\n\ntel &lt;- as.telemetry(\n  data.frame(timestamp = cilla$t, location.long = cilla$x, location.lat = cilla$y,\n             individual.local.identifier = \"Cilla\"),\n  timeformat = \"auto\")\n\nguess &lt;- ctmm.guess(tel, interactive = FALSE)   # not variogram.fit(): that opens a GUI\nfit   &lt;- ctmm.select(tel, guess)\nak    &lt;- akde(tel, fit)\n\nsummary(fit)\n#&gt; $name\n#&gt; [1] \"OUF anisotropic\"\n#&gt; \n#&gt; $DOF\n#&gt;       mean       area  diffusion      speed \n#&gt;   12.31357   18.66457  723.22307 3395.27156 \n#&gt; \n#&gt; $CI\n#&gt;                                          low        est       high\n#&gt; area (square kilometers)          286.134732 477.697785 717.553006\n#&gt; τ[position] (days)                  3.843246   6.451817  10.830936\n#&gt; τ[velocity] (minutes)              43.741209  46.707078  49.874048\n#&gt; speed (kilometers/day)             15.443023  15.707215  15.971346\n#&gt; diffusion (square kilometers/day)   7.233106   7.790621   8.368539\nakde_ci &lt;- summary(ak, units = FALSE)$CI / 1e6   # m² -&gt; km²\nakde_ci\n#&gt;                           low      est high\n#&gt; area (square meters) 241.2526 402.7677  605\n\n\n\n\n\n\n\nWarningDo not use variogram.fit() in a script\n\n\n\nIt opens an interactive slider window for choosing starting values by eye — great at the console, fatal in a rendered document. ctmm.guess(..., interactive = FALSE) gives the same starting values automatically.\n\n\nYour turn\n1a. Put all five 95% areas in one table. 1b. Did LSCV converge?\n\n\n\n\n\n\nNoteSolution\n\n\n\n\n\n\nareas &lt;- data.frame(\n  estimator = c(\"MCP 95%\", \"KDE h_ref\", \"KDE LSCV\", \"Brownian bridge\", \"AKDE\"),\n  area_km2  = round(c(area_mcp, area_href, area_lscv, area_bb, akde_ci[2])),\n  low_km2   = c(NA, NA, NA, NA, round(akde_ci[1])),\n  high_km2  = c(NA, NA, NA, NA, round(akde_ci[3]))\n)\nareas\n#&gt;         estimator area_km2 low_km2 high_km2\n#&gt; 1         MCP 95%      274      NA       NA\n#&gt; 2       KDE h_ref      290      NA       NA\n#&gt; 3        KDE LSCV      106      NA       NA\n#&gt; 4 Brownian bridge      110      NA       NA\n#&gt; 5            AKDE      403     241      605\n\nA factor of about four between the smallest and largest estimate, for the same animal and the same fixes. LSCV did not converge — kernelUD() warned — and chose a bandwidth of about 100 m, which splits the range into fragments around clusters of consecutive fixes. Only AKDE comes with a confidence interval.\n\n\n\n1c. Show yourself the autocorrelation problem: thin the fixes and watch the KDE area.\n\n\n\n\n\n\nNoteSolution\n\n\n\n\n\n\nthin_tab &lt;- lapply(c(1, 2, 6, 12, 24, 48), function(k) {\n  keep &lt;- seq(1, nrow(xy), by = k)\n  a &lt;- kernel.area(kernelUD(SpatialPoints(xy[keep, ]), h = \"href\", grid = 200),\n                   percent = 95, unout = \"km2\")[[1]]\n  data.frame(every_nth_fix = k, fixes = length(keep), kde95_km2 = round(a))\n}) |&gt; bind_rows()\nthin_tab\n#&gt;   every_nth_fix fixes kde95_km2\n#&gt; 1             1  3528       290\n#&gt; 2             2  1764       306\n#&gt; 3             6   588       331\n#&gt; 4            12   294       357\n#&gt; 5            24   147       369\n#&gt; 6            48    74       389\n\nIf the fixes were independent draws from a fixed UD, the estimate would stabilise as you add data. Instead the densest data give the smallest range: every extra autocorrelated fix adds almost no new information but makes the estimator more confident. That is exactly the bias AKDE corrects.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "6 · Home ranges",
+      "Practical"
+    ]
+  },
+  {
+    "objectID": "classes/class-06/exercise.html#task-2-map-them-together",
+    "href": "classes/class-06/exercise.html#task-2-map-them-together",
+    "title": "Practical 6 — Home ranges, four ways",
+    "section": "Task 2 — Map them together",
+    "text": "Task 2 — Map them together\n\ncontour_sf &lt;- function(ud, label) {\n  st_as_sf(getverticeshr(ud, percent = 95)) |&gt;\n    st_set_crs(32736) |&gt; mutate(estimator = label) |&gt; select(estimator)\n}\n\ncontours &lt;- bind_rows(\n  st_as_sf(mcp95) |&gt; st_set_crs(32736) |&gt; mutate(estimator = \"MCP 95%\") |&gt; select(estimator),\n  contour_sf(kd_href, \"KDE h_ref\"),\n  contour_sf(kd_lscv, \"KDE LSCV\"),\n  contour_sf(bb, \"Brownian bridge\"),\n  as.sf(ak, level.UD = 0.95) |&gt; st_transform(32736) |&gt;\n    filter(grepl(\"est\", name)) |&gt; mutate(estimator = \"AKDE\") |&gt; select(estimator)\n)\n\nggplot() +\n  geom_sf(data = cilla_utm, size = 0.1, alpha = 0.25, colour = \"grey30\") +\n  geom_sf(data = contours, aes(colour = estimator), fill = NA, linewidth = 0.8) +\n  scale_colour_manual(values = c(\"MCP 95%\" = \"grey20\", \"KDE h_ref\" = \"#1f6f78\",\n                                 \"KDE LSCV\" = \"#6fc3cd\", \"Brownian bridge\" = \"#b8860b\",\n                                 \"AKDE\" = \"#c1440e\")) +\n  coord_sf(crs = 32736) +\n  labs(title = \"Cilla: five 95% home ranges\", colour = NULL) +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\n\n\n\n\nTipTo hand in\n\n\n\nThis map, and one paragraph explaining why the five estimates differ. For each estimator name the question it answers and the assumption it makes about the fixes. This comparison — not any single number — is the point of the session.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "6 · Home ranges",
+      "Practical"
+    ]
+  },
+  {
+    "objectID": "classes/class-06/exercise.html#task-3-variograms-is-there-a-home-range-at-all",
+    "href": "classes/class-06/exercise.html#task-3-variograms-is-there-a-home-range-at-all",
+    "title": "Practical 6 — Home ranges, four ways",
+    "section": "Task 3 — Variograms: is there a home range at all?",
+    "text": "Task 3 — Variograms: is there a home range at all?\n\ndata(gazelle)\ngz &lt;- gazelle[[1]]\n\nvg_cilla &lt;- variogram(tel)\nvg_gz    &lt;- variogram(gz)\n\npar(mfrow = c(1, 2))\nplot(vg_cilla, CTMM = fit, fraction = 0.5, main = \"Buffalo 'Cilla'\")\nplot(vg_gz, fraction = 0.5, main = \"Mongolian gazelle\")\n\n\n\n\n\n\npar(mfrow = c(1, 1))\n\nYour turn\n3a. Which variogram levels off? 3b. Fit a model to the gazelle and compare its range-crossing time with the tracking duration.\n\n\n\n\n\n\nNoteSolution\n\n\n\n\n\nCilla’s variogram rises and then flattens: beyond a lag of a few days her positions are as far apart as they ever get. That asymptote is range residency, and the fitted model’s curve follows it.\nThe gazelle’s variogram keeps climbing across much of the plot, with no clear plateau. Ignore the saw-teeth: the gazelle was located only every few days, on an irregular schedule, so at some time lags there are very few pairs of fixes and the estimate jumps. Read the overall trend, not the teeth.\n\nfit_gz &lt;- ctmm.select(gz, ctmm.guess(gz, interactive = FALSE))\nsummary(fit_gz)$CI[c(1, 2), ]\n#&gt;                                   low          est         high\n#&gt; area (square kilometers) 5.462251e+04 3.034354e+05 761303.53275\n#&gt; τ[position] (months)     8.330046e-01 4.780132e+00     27.43041\n\nc(tracking_days = as.numeric(diff(range(gz$t))) / 86400)\n#&gt; tracking_days \n#&gt;      351.2088\n\nThe gazelle’s estimated range-crossing time is months long, with a confidence interval whose upper end exceeds the whole study. In the time it was tracked, it crossed its “range” only a handful of times — perhaps not at all — so the area estimate spans an order of magnitude. More fixes per day would not help; only a much longer track could. For a nomadic species, the honest answer may be that a home range is the wrong summary.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "6 · Home ranges",
+      "Practical"
+    ]
+  },
+  {
+    "objectID": "classes/class-06/exercise.html#task-4-ground-truth",
+    "href": "classes/class-06/exercise.html#task-4-ground-truth",
+    "title": "Practical 6 — Home ranges, four ways",
+    "section": "Task 4 — Ground truth",
+    "text": "Task 4 — Ground truth\nIn Session 5 we built a central-place walker. Because we wrote its rule, we can compute its true 95% home range by simulating it for a very long time.\n\nsource(\"R/simulators.R\")\ntrue95 &lt;- truth_area(0.95)\ntrue95\n#&gt; [1] 805.22\n\nNow pretend it is a collared animal: sample it every hour for ~69 days and estimate its range.\n\nsim &lt;- truth_animal()                           # 5,000 steps of 20 minutes\nobs &lt;- sim[seq(1, nrow(sim), by = 3), ]         # an hourly GPS fix\nobs$t &lt;- as.POSIXct(\"2026-01-01\", tz = \"UTC\") + (obs$step - 1) * 20 * 60\n\nsim_pts &lt;- SpatialPoints(obs[, c(\"x\", \"y\")])\nest &lt;- c(\n  MCP      = mcp.area(sim_pts, percent = 95, unout = \"km2\", plotit = FALSE)[[1]],\n  KDE_href = kernel.area(kernelUD(sim_pts, h = \"href\", grid = 200), percent = 95, unout = \"km2\")[[1]],\n  KDE_LSCV = kernel.area(suppressWarnings(kernelUD(sim_pts, h = \"LSCV\", grid = 200)),\n                         percent = 95, unout = \"km2\")[[1]]\n)\n\n# AKDE: park the simulated animal in UTM 36S so ctmm gets longitude/latitude\nll &lt;- st_coordinates(st_transform(\n  st_as_sf(data.frame(x = obs$x + 4e5, y = obs$y + 7.3e6), coords = c(\"x\", \"y\"), crs = 32736),\n  4326))\nsim_tel &lt;- as.telemetry(data.frame(timestamp = obs$t, location.long = ll[, 1],\n                                   location.lat = ll[, 2], individual.local.identifier = \"truth\"),\n                        timeformat = \"auto\")\nsim_fit &lt;- ctmm.select(sim_tel, ctmm.guess(sim_tel, interactive = FALSE))\nsim_ci  &lt;- summary(akde(sim_tel, sim_fit), units = FALSE)$CI / 1e6\n\nround(c(est, AKDE = sim_ci[2], AKDE_low = sim_ci[1], AKDE_high = sim_ci[3],\n        TRUTH = true95))\n#&gt;       MCP  KDE_href  KDE_LSCV      AKDE  AKDE_low AKDE_high     TRUTH \n#&gt;       661       800       491      1229       493      2295       805\n\nOne animal is one draw: an estimator can be lucky. The fair test repeats the experiment on many independent animals. That takes ~20 minutes, so it has been run for you by R/hr_ground_truth.R; the results are in data/hr_ground_truth.csv.\n\nreps &lt;- read.csv(\"data/hr_ground_truth.csv\")\nnrow(reps)\n#&gt; [1] 20\n\nYour turn\n4a. For each estimator, plot estimate / truth across the replicates. 4b. How often does AKDE’s 95% confidence interval contain the truth?\n\n\n\n\n\n\nNoteSolution\n\n\n\n\n\n\nlong &lt;- reps |&gt;\n  tidyr::pivot_longer(c(MCP, KDE_href, KDE_LSCV, BBMM, AKDE),\n                      names_to = \"estimator\", values_to = \"km2\") |&gt;\n  mutate(ratio = km2 / true95,\n         estimator = factor(estimator, c(\"MCP\", \"KDE_href\", \"KDE_LSCV\", \"BBMM\", \"AKDE\")))\n\nggplot(long, aes(estimator, ratio)) +\n  geom_hline(yintercept = 1, linetype = 2, colour = \"firebrick\") +\n  geom_boxplot(fill = \"#1f6f78\", alpha = 0.25, outlier.shape = NA) +\n  geom_jitter(width = 0.12, size = 1.6, colour = \"#1f6f78\") +\n  labs(x = NULL, y = \"Estimate / true area\",\n       title = \"Twenty simulated animals, 69 days of hourly fixes each\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\nlong |&gt;\n  group_by(estimator) |&gt;\n  summarise(median_ratio = round(median(ratio), 2),\n            spread_IQR   = round(IQR(ratio), 2), .groups = \"drop\")\n#&gt; # A tibble: 5 × 3\n#&gt;   estimator median_ratio spread_IQR\n#&gt;   &lt;fct&gt;            &lt;dbl&gt;      &lt;dbl&gt;\n#&gt; 1 MCP               0.87       0.31\n#&gt; 2 KDE_href          0.98       0.31\n#&gt; 3 KDE_LSCV          0.64       0.17\n#&gt; 4 BBMM              0.42       0.08\n#&gt; 5 AKDE              1.57       0.98\n\nc(AKDE_CI_covers_truth = mean(reps$AKDE_low &lt;= reps$true95 & reps$AKDE_high &gt;= reps$true95))\n#&gt; AKDE_CI_covers_truth \n#&gt;                  0.9\n\nEvery estimator fails in a characteristic way, and now you can see which way:\n\n\nMCP and KDE with LSCV sit mostly below the line — LSCV in every single replicate. LSCV’s tiny bandwidth fragments the utilisation distribution around clusters of autocorrelated fixes.\n\nThe Brownian bridge sits far below, and tightly: about 40% of the true area, every time. It is not wrong — it answers a different question, where the animal went in 69 days, not where it lives.\n\nKDE with \\(h_\\text{ref}\\) is close to the truth on average. That is not luck: \\(h_\\text{ref}\\) is the optimal bandwidth for a single, roughly circular hump, which is exactly what this central-place walker produces. Real ranges such as Cilla’s are lumpy and multimodal, and there \\(h_\\text{ref}\\) over-smooths. A method that works on the animal it assumes can fail on the animal you have.\n\nAKDE is the surprise. Its point estimates run high and vary a lot from animal to animal — yet its 95% confidence interval contains the truth in about 90% of replicates, close to what it promises.\n\nWhy? 69 days is only about seven range-crossing times, so the effective sample size is tiny, and AKDE says so: its intervals are wide because the data are thin. The other estimators are just as uncertain; they simply do not tell you. AKDE’s correction also assumes a continuous-time Gaussian movement model, and our walker is not one — even the most principled estimator rests on a movement model, and misspecifying it costs accuracy.\nSo the lesson is not “AKDE wins”. It is:\n\n\nno estimator is right in general — each is right for a question and an assumption;\n\nan honest interval beats a precise-looking number;\n\nsimulation with a known truth is how you find out which failure you are exposed to — try it with longer tracks (more range crossings) and see how the picture changes.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "6 · Home ranges",
+      "Practical"
+    ]
+  },
+  {
+    "objectID": "classes/class-06/exercise.html#before-session-7",
+    "href": "classes/class-06/exercise.html#before-session-7",
+    "title": "Practical 6 — Home ranges, four ways",
+    "section": "Before Session 7",
+    "text": "Before Session 7\n\nFieberg et al. (2021), J Anim Ecol 90:1027–1043.\nMake sure library(survival) loads.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "6 · Home ranges",
+      "Practical"
     ]
   }
 ]
