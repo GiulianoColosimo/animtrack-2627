@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-09-30">
+  <meta name="dcterms.date" content="2026-10-06">
   <title>Animal Tracking – From fixes to trajectories</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-09-30</p>
+  <p class="date">2026-10-06</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -281,8 +281,10 @@ Giuliano Colosimo
 <p>Turning angles are <strong>circular</strong> data: −179° and +179° are 2° apart, not 358°. Never take an arithmetic mean of angles.</p>
 </div>
 </section>
-<section class="slide level2">
+<section id="steps-and-turns-of-a-real-buffalo" class="slide level2">
+<h2>Steps and turns of a real buffalo</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Cilla, hourly steps. Short steps dominate; turning angles concentrate near 0° (keep going). The bars at −180° and +180° are the same reversal, split in two by the axis.</p>
 </section>
 <section id="location-error-why-you-cannot-connect-the-dots" class="slide level2">
 <h2>Location error: why you cannot connect the dots</h2>
@@ -298,8 +300,10 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section class="slide level2">
+<section id="what-error-looks-like" class="slide level2">
+<h2>What error looks like</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Left: real data, 24 hours either side of a corrupt fix. Right: simulated — 48 hourly fixes of a motionless collar with 15 m error. It “walks” 1 km a day and turns at random.</p>
 </section></section>
 <section>
 <section id="getting-data" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -513,6 +517,11 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
+<section id="gaps-at-a-glance" class="slide level2">
+<h2>Gaps at a glance</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>One tick per fix. Queen’s collar went silent for 105 days in mid-2005; Pepper’s schedule frays into gaps through late 2006.</p>
+</section>
 <section id="two-ways-to-hold-a-trajectory" class="slide level2">
 <h2>Two ways to hold a trajectory</h2>
 <div class="columns">
@@ -530,6 +539,11 @@ Giuliano Colosimo
 <p>The two “regularise” functions do opposite things. One keeps only what you observed; the other manufactures positions you did not observe.</p>
 </div>
 </div>
+</section>
+<section id="selecting-versus-interpolating" class="slide level2">
+<h2>Selecting versus interpolating</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Toni across a 9-hour gap. Selection ends the burst at the gap; interpolation fills it with evenly spaced positions on a straight line the buffalo almost certainly did not walk.</p>
 </section>
 <section id="truncation-the-start-and-the-end" class="slide level2">
 <h2>Truncation: the start and the end</h2>
@@ -686,9 +700,6 @@ Giuliano Colosimo
 <p>And no, you cannot read the fix success rate off the mean. Success rate is the proportion of <em>scheduled attempts</em> that returned a location, which you get by dividing each gap by the modal interval and counting the misses.</p>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
 </section></section>
 <section>
 <section id="attaching-the-environment" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -708,8 +719,10 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section class="slide level2">
+<section id="decorated-versus-annotated" class="slide level2">
+<h2>Decorated versus annotated</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Queen in 2005. One February image says she lived in green vegetation all year. Matched in time, NDVI halves by September — and the months with no composite nearby are honestly blank.</p>
 </section>
 <section id="doing-it-in-time" class="slide level2">
 <h2>Doing it in time</h2>
@@ -724,9 +737,6 @@ Giuliano Colosimo
 <div class="fragment">
 <p><code>Movebank Env-DATA</code> does this for you, including interpolation in time, for dozens of products. Use it for real projects — but understand what it is doing first, which is what today’s exercise is for.</p>
 </div>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="quiz-3" class="slide level2">
 <h2>Quiz</h2>
@@ -745,9 +755,6 @@ Giuliano Colosimo
 <p>Fix: use a time series and match each fix to the contemporaneous layer.</p>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="todays-practical" class="slide level2">
 <h2>Today’s practical</h2>

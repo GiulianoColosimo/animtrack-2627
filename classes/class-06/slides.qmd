@@ -23,6 +23,36 @@ execute:
   echo: true
 ---
 
+```{r}
+#| include: false
+library(sp)
+library(sf)
+library(terra)
+library(adehabitatHR)
+library(adehabitatLT)
+library(ctmm)
+source("R/slide_helpers.R")
+source("R/simulators.R")
+
+cilla <- subset(read_buffalo(), id == "Cilla")
+xy  <- as.matrix(cilla[, c("x", "y")])
+pts <- SpatialPoints(xy)
+
+# 95% contour of an adehabitatHR UD, drawn with sf so holes stay holes
+draw_contour <- function(ud, p, ...) {
+  plot(st_geometry(st_as_sf(getverticeshr(ud, percent = p))), add = TRUE, ...)
+}
+blank_map <- function(main, xlim = range(xy[, 1]), ylim = range(xy[, 2])) {
+  plot(NA, xlim = xlim, ylim = ylim, asp = 1, axes = FALSE, xlab = "", ylab = "", main = main)
+}
+
+mcp95   <- mcp(pts, percent = 95)
+kd_href <- kernelUD(pts, h = "href", grid = 300, extent = 1)
+kd_lscv <- suppressWarnings(kernelUD(pts, h = "LSCV", grid = 300, extent = 1))
+lim95   <- bbox(getverticeshr(kd_href, percent = 95))
+xl <- range(lim95[1, ], xy[, 1]); yl <- range(lim95[2, ], xy[, 2])
+```
+
 ## Today
 
 ::: {.paradigm}
@@ -81,24 +111,29 @@ know.
 
 ## From polygons to distributions
 
-::: {.columns}
-::: {.column width="50%"}
-### Territorial polygon
-A boundary: inside or outside.
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+px <- as(kd_href, "SpatialPixelsDataFrame")
+ud <- rast(data.frame(coordinates(px), ud = px$ud), type = "xyz")
+ud[ud < 0.02 * global(ud, "max")[[1]]] <- NA
 
-Every part of the area counts the same.
+par(mfrow = c(1, 2)); map_par()
+blank_map("Polygon: inside or outside", xl, yl)
+plot(st_geometry(st_as_sf(mcp95)), add = TRUE, col = adjustcolor(teal, 0.35), border = teal, lwd = 3)
+points(xy, pch = 16, cex = 0.3, col = adjustcolor(ink, 0.3))
+scale_bar(5)
+blank_map("Utilisation distribution: how much time, where", xl, yl)
+image(ud, col = hcl.colors(60, "YlGnBu", rev = TRUE), add = TRUE)
+draw_contour(kd_href, 50, border = ink, lwd = 2.5)
+draw_contour(kd_href, 95, border = ink, lwd = 2.5, lty = 2)
+legend("bottomright", c("50%", "95%"), lty = c(1, 2), lwd = 2.5, bty = "n", cex = 1.4)
+```
 
-MCP is this idea.
-:::
-::: {.column width="50%"}
-### Utilisation distribution (UD)
-A probability density: *how much* time is spent *where*.
-
-Core areas and rarely used edges are distinguished.
-
-The 95% contour is one summary of it.
-:::
-:::
+The same buffalo, Cilla. On the left every part of the area counts the same;
+on the right, core areas and rarely used edges are distinguished.
 
 . . .
 
@@ -128,7 +163,7 @@ The smallest convex polygon containing $x$% of the fixes.
 
 - **Convex** — includes land never used
 - Sensitive to outliers and sample size
-- Area grows with the number of fixes; no asymptote
+- Area depends on how long you tracked
 - No density information
 :::
 :::
@@ -136,6 +171,37 @@ The smallest convex polygon containing $x$% of the fixes.
 . . .
 
 Report it for comparability with old studies. Never as your only estimate.
+
+---
+
+## MCP on a real buffalo
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+a95  <- mcp.area(pts, percent = 95,  unout = "km2", plotit = FALSE)[[1]]
+a100 <- mcp.area(pts, percent = 100, unout = "km2", plotit = FALSE)[[1]]
+days <- as.numeric(difftime(cilla$t, cilla$t[1], units = "days"))
+dd   <- seq(5, floor(max(days)), by = 5)
+grow <- sapply(dd, function(k)
+  mcp.area(SpatialPoints(xy[days <= k, ]), percent = 95, unout = "km2", plotit = FALSE)[[1]])
+
+layout(matrix(1:2, 1), widths = c(1, 1.25))
+map_par()
+blank_map(sprintf("MCP 95%%: %.0f km²   (100%%: %.0f km²)", a95, a100))
+plot(st_geometry(st_as_sf(mcp(pts, percent = 100))), add = TRUE, border = ink, lty = 2, lwd = 2)
+plot(st_geometry(st_as_sf(mcp95)), add = TRUE, col = adjustcolor(teal, 0.15), border = teal, lwd = 3)
+points(xy, pch = 16, cex = 0.35, col = adjustcolor(ink, 0.35))
+scale_bar(5)
+slide_par()
+plot(dd, grow, type = "o", pch = 16, lwd = 3, col = teal, ylim = c(0, max(grow) * 1.05),
+     xlab = "Days tracked", ylab = "MCP 95% (km²)", main = "Area depends on duration")
+```
+
+Left: the 95% MCP (solid) and 100% MCP (dashed) contain large stretches the
+animal hardly used. Right: the same estimate from the first 5, 10, 15… days.
 
 # 3 · Kernel density estimation {background-color="#14525a"}
 
@@ -157,14 +223,51 @@ distribution** (Worton 1989).
 
 ---
 
+## How a kernel works
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+set.seed(4)
+x0 <- c(rnorm(6, 3, 0.8), rnorm(4, 7.5, 0.5))
+g  <- seq(-1, 11, length.out = 500)
+par(mfrow = c(1, 2)); slide_par()
+for (h in c(0.25, 1.2)) {
+  bumps <- sapply(x0, function(m) dnorm(g, m, h) / length(x0))
+  plot(g, rowSums(bumps), type = "n", ylim = c(0, max(rowSums(bumps)) * 1.08), yaxt = "n",
+       xlab = "Position", ylab = "Density", main = sprintf("bandwidth h = %s", h))
+  matlines(g, bumps, lty = 1, col = adjustcolor(teal, 0.6), lwd = 1.5)
+  lines(g, rowSums(bumps), lwd = 4, col = rust)
+  rug(x0, lwd = 3, ticksize = 0.06, col = ink)
+}
+```
+
+Ten fixes (ticks) in one dimension. Each gets a bump (thin lines); their sum
+(thick line) is the estimated UD. Same fixes, two bandwidths, two stories.
+
+---
+
 ## Same buffalo, two bandwidths
 
-For the buffalo Cilla (hourly fixes, 5 months):
+The buffalo Cilla, hourly fixes over 5 months, 95% contours:
 
-| Bandwidth | $h$ | 95% KDE area |
-|:--|--:|--:|
-| $h_\text{ref}$ | ~1.2 km | ~290 km² |
-| $h_\text{LSCV}$ | ~0.1 km | ~100 km² — *did not converge* |
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.4
+#| fig-align: center
+par(mfrow = c(1, 2)); map_par()
+for (k in list(list(kd_href, "h_ref = %.1f km: %.0f km²"),
+               list(kd_lscv, "h_LSCV = %.1f km: %.0f km², did not converge"))) {
+  a <- kernel.area(k[[1]], percent = 95, unout = "km2")[[1]]
+  blank_map(sprintf(k[[2]], k[[1]]@h$h / 1000, a), xl, yl)
+  draw_contour(k[[1]], 95, col = adjustcolor(teal, 0.35), border = teal, lwd = 2)
+  points(xy, pch = 16, cex = 0.25, col = adjustcolor(ink, 0.3))
+}
+scale_bar(5)
+```
 
 . . .
 
@@ -228,6 +331,38 @@ apart) and modern GPS studies (thousands, an hour apart) are not comparable.
 
 ---
 
+## Same number of fixes, different information
+
+```{r}
+#| echo: false
+#| cache: true
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+set.seed(5)
+long    <- do.call(simulate_bcrw, c(list(n = 60000), truth_rule))   # 20-min steps
+true_ud <- kernelUD(SpatialPoints(long[seq(1, 60000, by = 10), c("x", "y")]), h = "href", grid = 200)
+lim <- range(long$x, long$y)
+
+par(mfrow = c(1, 2)); map_par()
+for (k in list(list(long[20001:21000, ], "1,000 fixes, every 20 min (2 weeks)"),
+               list(long[seq(1, 60000, length.out = 1000), ], "1,000 fixes, every 20 h (2.3 years)"))) {
+  blank_map(k[[2]], lim, lim)
+  draw_contour(true_ud, 95, border = rust, lwd = 3, lty = 2)
+  est <- kernelUD(SpatialPoints(k[[1]][, c("x", "y")]), h = "href", grid = 200)
+  draw_contour(est, 95, col = adjustcolor(teal, 0.25), border = teal, lwd = 2.5)
+  points(k[[1]]$x, k[[1]]$y, pch = 16, cex = 0.4, col = adjustcolor(ink, 0.5))
+  if (k[[2]] == "1,000 fixes, every 20 min (2 weeks)")
+    legend("bottomright", c("true 95% range", "KDE 95%"), col = c(rust, teal),
+           lty = c(2, 1), lwd = 3, bty = "n", cex = 1.3)
+}
+```
+
+The central-place animal from Session 5, whose true range (dashed) we know.
+Two weeks of dense fixes describe two weeks of the animal, not its range.
+
+---
+
 ## Brownian bridges: use the path
 
 Horne et al. (2007): between two consecutive fixes the animal was *somewhere*
@@ -276,6 +411,46 @@ fixes you collected.
 
 ---
 
+## Where it went, where it lives
+
+```{r}
+#| echo: false
+#| cache: true
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+ltr <- as.ltraj(xy = as.data.frame(xy), date = cilla$t, id = "Cilla")
+lik <- liker(ltr, sig2 = 30, rangesig1 = c(1, 100), plotit = FALSE)
+bb  <- kernelbb(ltr, sig1 = lik$Cilla$sig1, sig2 = 30, grid = 300, extent = 0.3)
+a_bb <- kernel.area(bb, percent = 95, unout = "km2")[[1]]
+
+tel <- as.telemetry(data.frame(timestamp = cilla$t, location.long = cilla$lon,
+                               location.lat = cilla$lat, individual.local.identifier = "Cilla"),
+                    timeformat = "auto")
+fit <- ctmm.select(tel, ctmm.guess(tel, interactive = FALSE))
+ak  <- akde(tel, fit)
+ci  <- summary(ak, units = FALSE)$CI / 1e6
+ak_sf <- st_transform(as.sf(ak, level.UD = 0.95), 32736)
+bx <- st_bbox(ak_sf)
+
+par(mfrow = c(1, 2)); map_par()
+blank_map(sprintf("Brownian bridge: %.0f km²", a_bb), bx[c(1, 3)], bx[c(2, 4)])
+draw_contour(bb, 95, col = adjustcolor(gold, 0.3), border = gold, lwd = 2)
+lines(xy, col = adjustcolor(ink, 0.4), lwd = 0.6)
+scale_bar(5)
+blank_map(sprintf("AKDE: %.0f km² (95%% CI %.0f–%.0f)", ci[2], ci[1], ci[3]), bx[c(1, 3)], bx[c(2, 4)])
+plot(st_geometry(ak_sf[grepl("est", ak_sf$name), ]), add = TRUE,
+     col = adjustcolor(rust, 0.25), border = rust, lwd = 3)
+plot(st_geometry(ak_sf[!grepl("est", ak_sf$name), ]), add = TRUE, border = rust, lwd = 1.5, lty = 2)
+points(xy, pch = 16, cex = 0.25, col = adjustcolor(ink, 0.3))
+```
+
+Cilla again, on the same scale. The bridge hugs the path she travelled; AKDE
+estimates the range she would use given time, with its confidence interval
+(dashed).
+
+---
+
 ## The variogram
 
 The **semi-variance** as a function of time lag: how far apart, on average,
@@ -297,6 +472,31 @@ two positions $\Delta t$ apart are.
 Look at the variogram **before** estimating any home range. No asymptote, no
 home range.
 :::
+
+---
+
+## Two variograms
+
+```{r}
+#| echo: false
+#| cache: true
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+data(gazelle)
+gz     <- gazelle[[1]]
+fit_gz <- ctmm.select(gz, ctmm.guess(gz, interactive = FALSE))
+
+par(mfrow = c(1, 2)); slide_par(mar = c(6.2, 7, 3.2, 1), mgp = c(4.8, 0.8, 0))
+plot(variogram(tel), CTMM = fit, fraction = 0.5, col.CTMM = rust, lwd = 3,
+     main = "Buffalo Cilla: levels off")
+plot(variogram(gz, dt = c(25, 259) %#% "hour"), CTMM = fit_gz, fraction = 0.65,
+     col.CTMM = rust, lwd = 3, main = "Gazelle: no clear asymptote")
+```
+
+Black: data. Red: fitted model. Cilla's range-crossing time is ~6 days, so her
+3,500 fixes are worth ~19 independent ones. The gazelle's is ~5 months: two or
+three crossings in a year.
 
 ---
 

@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-09-30">
+  <meta name="dcterms.date" content="2026-10-06">
   <title>Animal Tracking – Habitat selection on the move</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-09-30</p>
+  <p class="date">2026-10-06</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -258,8 +258,10 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section class="slide level2">
+<section id="used-and-available-for-one-fisher" class="slide level2">
+<h2>Used and available, for one fisher</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Green: forest. Almost every fix is in forest — but so is almost everything available. The signal is in the comparison: outside forest, Lupe turns up 5 times less often than availability predicts.</p>
 </section>
 <section id="johnsons-four-orders-1980" class="slide level2">
 <h2>Johnson’s four orders (1980)</h2>
@@ -304,9 +306,6 @@ Giuliano Colosimo
 <p>The <strong>same animal</strong> can show opposite results at different orders. A deer may place its home range in forest (2nd order) yet prefer clearings within it (3rd order). Always state your order — it is the definition of “available”.</p>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="quiz" class="slide level2">
 <h2>Quiz</h2>
@@ -374,6 +373,11 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
+<section id="availability-three-ways" class="slide level2">
+<h2>Availability, three ways</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The same fisher (red). Each panel zooms into the dashed box of the previous one: the study area, the home range, and eight steps with their control steps (grey).</p>
+</section>
 <section id="the-rsf" class="slide level2">
 <h2>The RSF</h2>
 <p><span class="math display">\[w(\mathbf{x}) = \exp(\beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_k x_k)\]</span></p>
@@ -383,9 +387,6 @@ Giuliano Colosimo
 <li class="fragment">There is <strong>no intercept you can interpret</strong> — it absorbs the arbitrary number of available points you drew</li>
 <li class="fragment">Only <strong>relative</strong> statements are licensed: “twice as likely as”, never “40% probability of use”</li>
 </ul>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="usedavailable-is-not-casecontrol" class="slide level2">
 <h2>Used–available is not case–control</h2>
@@ -399,9 +400,6 @@ Giuliano Colosimo
 <span id="cb1-2"><a></a><span class="fu">glm</span>(case_ <span class="sc">~</span> elevation <span class="sc">+</span> grassland, <span class="at">data =</span> d,</span>
 <span id="cb1-3"><a></a>    <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">weights =</span> d<span class="sc">$</span>w)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>
@@ -433,8 +431,10 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section class="slide level2">
+<section id="do-the-coefficients-stabilise" class="slide level2">
+<h2>Do the coefficients stabilise?</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Lupe’s forest coefficient and 95% CI, refitted with more and more available points. The estimate settles by about ten per fix; the interval hardly narrows, because the information is in the 774 used fixes.</p>
 </section></section>
 <section>
 <section id="step-selection-functions" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -455,9 +455,6 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section class="slide level2">
-
-</section>
 <section id="the-design" class="slide level2">
 <h2>The design</h2>
 <p>For each observed step:</p>
@@ -471,8 +468,10 @@ Giuliano Colosimo
 <p>Because the comparison is <em>within</em> a stratum, everything constant at that moment — time of day, season, the animal’s internal state, its identity — cancels out. That is a remarkably clean piece of control.</p>
 </div>
 </section>
-<section class="slide level2">
+<section id="one-stratum" class="slide level2">
+<h2>One stratum</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Square: where the fisher was. Dotted: the steps that brought it there. The model asks only how the used step differs from its own controls.</p>
 </section>
 <section id="conditional-logistic-regression" class="slide level2">
 <h2>Conditional logistic regression</h2>
@@ -491,9 +490,6 @@ P(\text{step } j \text{ chosen}) =
 <span id="cb2-2"><a></a>                 <span class="fu">strata</span>(step_id_),</span>
 <span id="cb2-3"><a></a>         <span class="at">data =</span> d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="fortin-et-al.-2005" class="slide level2">
 <h2>Fortin et al.&nbsp;(2005)</h2>
@@ -545,9 +541,6 @@ P(\text{step } j \text{ chosen}) =
 </div>
 </div>
 </section>
-<section class="slide level2">
-
-</section>
 <section id="how-issa-does-it" class="slide level2">
 <h2>How iSSA does it</h2>
 <p>Include the movement variables as covariates in the conditional model:</p>
@@ -561,9 +554,6 @@ P(\text{step } j \text{ chosen}) =
 <span id="cb3-2"><a></a>                 sl_ <span class="sc">+</span> <span class="fu">log</span>(sl_) <span class="sc">+</span> <span class="fu">cos</span>(ta_) <span class="sc">+</span></span>
 <span id="cb3-3"><a></a>                 <span class="fu">strata</span>(step_id_), <span class="at">data =</span> d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="reading-the-movement-coefficients" class="slide level2">
 <h2>Reading the movement coefficients</h2>
@@ -600,8 +590,10 @@ P(\text{step } j \text{ chosen}) =
 </div>
 </div>
 </section>
-<section class="slide level2">
+<section id="tentative-and-realised-kernels" class="slide level2">
+<h2>Tentative and realised kernels</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Grey: the distributions Lupe’s control steps were drawn from. Red: the movement kernel after the iSSA correction. For this fisher the correction is small (mean step 147 → 154 m); it is large when habitat strongly shapes how far an animal moves.</p>
 </section>
 <section id="interactions-where-it-gets-interesting" class="slide level2">
 <h2>Interactions: where it gets interesting</h2>
@@ -616,9 +608,6 @@ P(\text{step } j \text{ chosen}) =
 <li class="fragment"><code>_end</code> covariates capture <strong>selection</strong> — which habitat it moves <em>into</em></li>
 <li class="fragment">Mixing them up is the single most common error in iSSA papers</li>
 </ul>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="quiz-3" class="slide level2">
 <h2>Quiz</h2>
@@ -656,6 +645,11 @@ P(\text{step } j \text{ chosen}) =
 </div>
 </div>
 </section>
+<section id="a-redistribution-kernel-built" class="slide level2">
+<h2>A redistribution kernel, built</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The simulated animal of today’s practical (β = 1.5) in a 1.8 km window. Square: where it is; arrow: its last step. Movement says how far and which way; selection tilts the kernel towards better habitat.</p>
+</section>
 <section id="relative-selection-strength" class="slide level2">
 <h2>Relative selection strength</h2>
 <p>The natural effect size for an SSF (Avgar et al.&nbsp;2017; Fieberg et al.&nbsp;2021):</p>
@@ -680,9 +674,6 @@ P(\text{step } j \text{ chosen}) =
 <li class="fragment"><strong>Zero-length steps</strong> break the gamma distribution — <code>amt</code> warns and replaces them</li>
 </ul>
 </section>
-<section class="slide level2">
-
-</section>
 <section id="multiple-animals-again" class="slide level2">
 <h2>Multiple animals, again</h2>
 <ul>
@@ -690,9 +681,6 @@ P(\text{step } j \text{ chosen}) =
 <li class="fragment"><strong>Mixed conditional models</strong>: Muff et al.&nbsp;(2020) show how to fit these in <code>glmmTMB</code> with random slopes and a fixed large variance on the stratum intercepts</li>
 <li class="fragment">A random intercept alone is <strong>not</strong> enough — it does not let individuals differ in selection, which is usually the biology you care about</li>
 </ul>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="validation" class="slide level2">
 <h2>Validation</h2>
@@ -704,9 +692,6 @@ P(\text{step } j \text{ chosen}) =
 <div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>amt<span class="sc">::</span><span class="fu">simulate_path</span>(...)   <span class="co"># redistribution kernel from the fitted iSSA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="quiz-4" class="slide level2">
 <h2>Quiz</h2>
@@ -778,9 +763,6 @@ P(\text{step } j \text{ chosen}) =
 <p>If your data are regularly sampled and you care about <em>how</em> the animal moves through the landscape, use iSSA. If your sampling is sparse or irregular, and your question is about broad-scale range placement, an RSF is the honest choice.</p>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="todays-practical" class="slide level2">
 <h2>Today’s practical</h2>
@@ -1132,6 +1114,44 @@ P(\text{step } j \text{ chosen}) =
       if (window.Reveal && window.Reveal.on) window.Reveal.on("slidechanged", initAll);
     })();
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

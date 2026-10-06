@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-09-30">
+  <meta name="dcterms.date" content="2026-10-06">
   <title>Animal Tracking – Spatial data in R: the survival kit</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-09-30</p>
+  <p class="date">2026-10-06</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -275,6 +275,11 @@ Giuliano Colosimo
 <p>Movement analysis is nearly always <strong>points (or steps) sampling rasters</strong>. That one sentence describes Sessions 3 and 7.</p>
 </div>
 </div>
+</section>
+<section id="the-same-place-both-ways" class="slide level2">
+<h2>The same place, both ways</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Cilla’s fixes, one week of her track and her range as vectors; the terrain under them as a raster.</p>
 </section>
 <section id="choosing-the-model" class="slide level2">
 <h2>Choosing the model</h2>
@@ -357,6 +362,11 @@ Giuliano Colosimo
 <p>Euclidean distance on longitude/latitude is meaningless. You either <strong>project</strong> to a metric CRS, or compute <strong>great-circle</strong> distances on the ellipsoid. <code>sf</code> does the second automatically for EPSG:4326 — which is safe, but slower, and does not fix your <em>plots</em>.</p>
 </div>
 </div>
+</section>
+<section id="one-degree-is-not-one-distance" class="slide level2">
+<h2>One degree is not one distance</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Every circle has an 800 km radius on the ground. Plotted as if degrees were metres, they stretch east–west — badly at high latitudes.</p>
 </section>
 <section id="projected-coordinates" class="slide level2">
 <h2>Projected coordinates</h2>
@@ -484,6 +494,11 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
+<section id="the-same-circles-two-projections" class="slide level2">
+<h2>The same circles, two projections</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Every red disc covers the same 2.5 million km². Web Mercator inflates them towards the poles; an equal-area projection keeps their areas equal, at the cost of their shapes.</p>
+</section>
 <section id="quiz" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
@@ -547,9 +562,6 @@ Giuliano Colosimo
 <p>Write new code in <code>sf</code> + <code>terra</code>. Recognise <code>sp</code> + <code>raster</code> when you read it.</p>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
 </section></section>
 <section>
 <section id="sf-vector-data" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -669,7 +681,7 @@ Geodetic CRS:  WGS 84
 <div class="column" style="width:50%;">
 <h3 id="st_crsx---32736"><code>st_crs(x) &lt;- 32736</code></h3>
 <p><em>“These numbers were always UTM; I am just writing down the label.”</em></p>
-<p>If the numbers are actually degrees, you have now <strong>lied</strong> to R. The points land near the origin off West Africa.</p>
+<p>If the numbers are actually degrees, you have now <strong>lied</strong> to R. Your buffalo are now in Antarctica (next slide).</p>
 </div><div class="column" style="width:50%;">
 <h3 id="st_transformx-32736"><code>st_transform(x, 32736)</code></h3>
 <p><em>“These numbers are in the current CRS; compute the corresponding UTM coordinates.”</em></p>
@@ -680,6 +692,24 @@ Geodetic CRS:  WGS 84
 <p>Assign a CRS only when the data arrived <strong>without</strong> one and you know what it should be. Otherwise, transform.</p>
 </div>
 </div>
+</section>
+<section id="where-the-mislabelled-buffalo-went" class="slide level2">
+<h2>Where the mislabelled buffalo went</h2>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center" width="595"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<p><code>(31.76, −24.54)</code> read as <strong>metres</strong> in UTM 36S is a spot 31 m east and 24 m south of the zone’s false origin: 500 km west of the 33°E meridian and 10,000 km south of the equator.</p>
+<p>That is (57°W, 85.5°S) — the Antarctic ice sheet. No error, no warning.</p>
+</div></div>
 </section>
 <section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>
@@ -826,9 +856,6 @@ max value   :    24</code></pre>
 <p>The same silent failure happens if the CRS of either object is missing (<code>crs(r) &lt;- ""</code>). Lesson: <strong>keep your data in objects that carry their CRS</strong>, and never strip coordinates down to a bare matrix just to pass them along.</p>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
 </section></section>
 <section>
 <section id="where-rasters-come-from" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -851,8 +878,10 @@ max value   :    24</code></pre>
 </div>
 </div></div>
 </section>
-<section class="slide level2">
+<section id="spectral-signatures" class="slide level2">
+<h2>Spectral signatures</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-9-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Schematic curves. Vegetation is dark in the red and bright in the near infrared; soil and water are not. NDVI measures exactly that contrast.</p>
 </section>
 <section id="ndvi" class="slide level2">
 <h2>NDVI</h2>
@@ -875,8 +904,10 @@ max value   :    24</code></pre>
 </div>
 </div>
 </section>
-<section class="slide level2">
+<section id="kruger-wet-and-dry" class="slide level2">
+<h2>Kruger, wet and dry</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-10-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>MODIS NDVI at 250 m, the same landscape six months apart (dots: Cilla’s fixes). An NDVI value is only meaningful together with its date.</p>
 </section>
 <section id="you-cannot-have-all-four" class="slide level2">
 <h2>You cannot have all four</h2>
@@ -892,8 +923,10 @@ max value   :    24</code></pre>
 </div>
 </div>
 </section>
-<section class="slide level2">
+<section id="pixel-size-changes-the-landscape" class="slide level2">
+<h2>Pixel size changes the landscape</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-11-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The same February NDVI around Cilla’s range at MODIS resolution, then averaged to ~1 km and ~5 km. At 5 km every fix gets nearly the same value.</p>
 </section>
 <section id="the-missions-you-will-actually-use" class="slide level2">
 <h2>The missions you will actually use</h2>
@@ -964,9 +997,6 @@ max value   :    24</code></pre>
 <p><strong>Match the pixel to the animal and to your positional error.</strong> A 10 m Sentinel pixel is wasted on an Argos fix with 5 km error — and a 500 m MODIS pixel is useless for a dormouse.</p>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="quiz-3" class="slide level2">
 <h2>Quiz</h2>

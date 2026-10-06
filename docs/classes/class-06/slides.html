@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-09-30">
+  <meta name="dcterms.date" content="2026-10-06">
   <title>Animal Tracking – Home ranges and space use</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -149,7 +149,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-09-30</p>
+  <p class="date">2026-10-06</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -195,18 +195,8 @@ Giuliano Colosimo
 </section>
 <section id="from-polygons-to-distributions" class="slide level2">
 <h2>From polygons to distributions</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<h3 id="territorial-polygon">Territorial polygon</h3>
-<p>A boundary: inside or outside.</p>
-<p>Every part of the area counts the same.</p>
-<p>MCP is this idea.</p>
-</div><div class="column" style="width:50%;">
-<h3 id="utilisation-distribution-ud">Utilisation distribution (UD)</h3>
-<p>A probability density: <em>how much</em> time is spent <em>where</em>.</p>
-<p>Core areas and rarely used edges are distinguished.</p>
-<p>The 95% contour is one summary of it.</p>
-</div></div>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The same buffalo, Cilla. On the left every part of the area counts the same; on the right, core areas and rarely used edges are distinguished.</p>
 <div class="fragment">
 <div class="keyidea">
 <p>The UD is the object; “the home range” is a contour you draw on it. Say which contour, and which estimator produced the UD.</p>
@@ -234,13 +224,18 @@ Giuliano Colosimo
 <ul>
 <li><strong>Convex</strong> — includes land never used</li>
 <li>Sensitive to outliers and sample size</li>
-<li>Area grows with the number of fixes; no asymptote</li>
+<li>Area depends on how long you tracked</li>
 <li>No density information</li>
 </ul>
 </div></div>
 <div class="fragment">
 <p>Report it for comparability with old studies. Never as your only estimate.</p>
 </div>
+</section>
+<section id="mcp-on-a-real-buffalo" class="slide level2">
+<h2>MCP on a real buffalo</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Left: the 95% MCP (solid) and 100% MCP (dashed) contain large stretches the animal hardly used. Right: the same estimate from the first 5, 10, 15… days.</p>
 </section></section>
 <section>
 <section id="kernel-density-estimation" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -259,31 +254,16 @@ Giuliano Colosimo
 </ul></li>
 </ul>
 </section>
+<section id="how-a-kernel-works" class="slide level2">
+<h2>How a kernel works</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Ten fixes (ticks) in one dimension. Each gets a bump (thin lines); their sum (thick line) is the estimated UD. Same fixes, two bandwidths, two stories.</p>
+</section>
 <section id="same-buffalo-two-bandwidths" class="slide level2">
 <h2>Same buffalo, two bandwidths</h2>
-<p>For the buffalo Cilla (hourly fixes, 5 months):</p>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th style="text-align: left;">Bandwidth</th>
-<th style="text-align: right;"><span class="math inline">\(h\)</span></th>
-<th style="text-align: right;">95% KDE area</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><span class="math inline">\(h_\text{ref}\)</span></td>
-<td style="text-align: right;">~1.2 km</td>
-<td style="text-align: right;">~290 km²</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><span class="math inline">\(h_\text{LSCV}\)</span></td>
-<td style="text-align: right;">~0.1 km</td>
-<td style="text-align: right;">~100 km² — <em>did not converge</em></td>
-</tr>
-</tbody>
-</table>
-<div class="fragment">
+<p>The buffalo Cilla, hourly fixes over 5 months, 95% contours:</p>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><div class="fragment">
 <div class="keyidea">
 <p>A factor of three from one analyst’s choice. Report the bandwidth selector — and check whether LSCV actually converged. <code>adehabitatHR</code> warns you; papers rarely do.</p>
 </div>
@@ -327,6 +307,11 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
+<section id="same-number-of-fixes-different-information" class="slide level2">
+<h2>Same number of fixes, different information</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The central-place animal from Session 5, whose true range (dashed) we know. Two weeks of dense fixes describe two weeks of the animal, not its range.</p>
+</section>
 <section id="brownian-bridges-use-the-path" class="slide level2">
 <h2>Brownian bridges: use the path</h2>
 <p>Horne et al.&nbsp;(2007): between two consecutive fixes the animal was <em>somewhere</em> on a random bridge connecting them.</p>
@@ -357,6 +342,11 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
+<section id="where-it-went-where-it-lives" class="slide level2">
+<h2>Where it went, where it lives</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Cilla again, on the same scale. The bridge hugs the path she travelled; AKDE estimates the range she would use given time, with its confidence interval (dashed).</p>
+</section>
 <section id="the-variogram" class="slide level2">
 <h2>The variogram</h2>
 <p>The <strong>semi-variance</strong> as a function of time lag: how far apart, on average, two positions <span class="math inline">\(\Delta t\)</span> apart are.</p>
@@ -371,6 +361,11 @@ Giuliano Colosimo
 <p>Look at the variogram <strong>before</strong> estimating any home range. No asymptote, no home range.</p>
 </div>
 </div>
+</section>
+<section id="two-variograms" class="slide level2">
+<h2>Two variograms</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-8-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Black: data. Red: fitted model. Cilla’s range-crossing time is ~6 days, so her 3,500 fixes are worth ~19 independent ones. The gazelle’s is ~5 months: two or three crossings in a year.</p>
 </section>
 <section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>
@@ -822,6 +817,44 @@ Giuliano Colosimo
       if (window.Reveal && window.Reveal.on) window.Reveal.on("slidechanged", initAll);
     })();
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

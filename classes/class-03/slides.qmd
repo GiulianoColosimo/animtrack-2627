@@ -23,6 +23,18 @@ execute:
   echo: true
 ---
 
+```{r}
+#| include: false
+library(amt)
+library(adehabitatLT)
+library(terra)
+library(dplyr)
+library(lubridate)
+source("R/slide_helpers.R")
+buf <- read_buffalo()
+trk <- make_track(buf, x, y, t, id = id, crs = 32736)
+```
+
 ## Today
 
 ::: {.paradigm}
@@ -107,6 +119,30 @@ Never take an arithmetic mean of angles.
 
 ---
 
+## Steps and turns of a real buffalo
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+cilla_st <- trk |> filter(id == "Cilla") |>
+  track_resample(rate = hours(1), tolerance = minutes(10)) |>
+  filter_min_n_burst(min_n = 3) |>
+  steps_by_burst()
+par(mfrow = c(1, 2)); slide_par()
+hist(cilla_st$sl_[cilla_st$sl_ < 2500], breaks = 50, col = teal, border = "white",
+     xlab = "Hourly step length (m)", ylab = "Steps", main = "Many short steps, a long tail")
+ta <- cilla_st$ta_[!is.na(cilla_st$ta_)] * 180 / pi
+hist(ta, breaks = seq(-180, 180, by = 15), col = teal, border = "white", xaxt = "n",
+     xlab = "Turning angle (degrees)", ylab = "Steps", main = "Turning angles")
+axis(1, at = seq(-180, 180, 90))
+```
+
+Cilla, hourly steps. Short steps dominate; turning angles concentrate near 0°
+(keep going). The bars at −180° and +180° are the same reversal, split in two
+by the axis.
+
 ---
 
 ## Location error: why you cannot connect the dots
@@ -129,6 +165,39 @@ sprints. Neither is behaviour. Both reach your models unless you look first.
 :::
 
 ---
+
+## What error looks like
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+toni <- buf[buf$id == "Toni", ]
+k <- which(toni$t == as.POSIXct("2006-04-20 18:10:00", tz = "UTC"))
+win <- toni[(k - 24):(k + 24), ]
+set.seed(2)
+still <- data.frame(x = rnorm(48, 0, 15), y = rnorm(48, 0, 15))   # a collar on a fence post
+
+layout(matrix(1:2, 1), widths = c(1.25, 1))
+map_par()
+plot(win$x / 1000, win$y / 1000, type = "n", asp = 1, axes = FALSE, xlab = "", ylab = "",
+     main = "Toni: one fix, 63 km away")
+lines(win$x / 1000, win$y / 1000, col = rust, lwd = 2)
+points(win$x / 1000, win$y / 1000, pch = 16, cex = 1, col = ink)
+points(toni$x[k] / 1000, toni$y[k] / 1000, pch = 21, bg = rust, cex = 2.5)
+text(toni$x[k] / 1000, toni$y[k] / 1000, "out and back in two hours:\n62 km/h for a buffalo",
+     pos = 1, cex = 1.4, offset = 1.2)
+scale_bar(10, unit = 1)
+slide_par(mar = c(4.6, 5.6, 3.2, 1))
+plot(still$x, still$y, type = "o", pch = 16, col = teal, asp = 1, lwd = 1.5,
+     xlab = "metres", ylab = "metres", main = "A collar that never moved")
+points(0, 0, pch = 4, cex = 3, lwd = 4, col = rust)
+```
+
+Left: real data, 24 hours either side of a corrupt fix. Right: simulated —
+48 hourly fixes of a motionless collar with 15 m error. It "walks" 1 km a day
+and turns at random.
 
 # 2 · Getting data {background-color="#14525a"}
 
@@ -362,6 +431,35 @@ at the maximum.
 
 ---
 
+## Gaps at a glance
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.4
+#| fig-align: center
+ids <- rev(sort(unique(buf$id)))
+par(mar = c(3, 7, 1, 1), cex.axis = 1.4, las = 1)
+plot(range(buf$t), c(0.5, length(ids) + 0.5), type = "n", yaxt = "n", xaxt = "n",
+     xlab = "", ylab = "", bty = "n")
+axis.POSIXct(1, at = seq(as.POSIXct("2005-01-01", tz = "UTC"), as.POSIXct("2007-01-01", tz = "UTC"),
+                         by = "3 months"), format = "%b %Y")
+axis(2, at = seq_along(ids), labels = ids, tick = FALSE)
+for (i in seq_along(ids)) {
+  d <- buf[buf$id == ids[i], ]
+  segments(d$t, i - 0.3, d$t, i + 0.3, col = adjustcolor(teal, 0.25))
+  g <- which(diff(as.numeric(d$t)) > 86400)
+  if (length(g)) rect(d$t[g], i - 0.38, d$t[g + 1], i + 0.38, col = adjustcolor(rust, 0.6), border = NA)
+}
+legend("topright", c("a fix", "a gap of more than a day"), fill = c(teal, rust),
+       border = NA, bty = "n", cex = 1.3, horiz = TRUE)
+```
+
+One tick per fix. Queen's collar went silent for 105 days in mid-2005; Pepper's
+schedule frays into gaps through late 2006.
+
+---
+
 ## Two ways to hold a trajectory
 
 ::: {.columns}
@@ -386,6 +484,43 @@ A tidy tibble. Steps, angles and covariates are computed when you ask.
 The two "regularise" functions do opposite things. One keeps only what you
 observed; the other manufactures positions you did not observe.
 :::
+
+---
+
+## Selecting versus interpolating
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+gap_t <- as.POSIXct("2006-03-10 05:14:00", tz = "UTC")          # Toni: a 9-hour gap
+seg <- trk |> filter(id == "Toni", t_ > gap_t - hours(16), t_ < gap_t + hours(10))
+sel <- seg |> track_resample(rate = hours(1), tolerance = minutes(10))
+ltr <- as.ltraj(xy = as.data.frame(seg[, c("x_", "y_")]), date = seg$t_, id = "Toni")
+itp <- ld(redisltraj(ltr, 3600, type = "time"))
+invented <- !(itp$date %in% seg$t_)
+
+par(mfrow = c(1, 2)); map_par()
+lim_x <- range(seg$x_); lim_y <- range(seg$y_)
+plot(NA, xlim = lim_x, ylim = lim_y, asp = 1, axes = FALSE, xlab = "", ylab = "",
+     main = "track_resample(): two bursts")
+for (b in unique(sel$burst_)) with(sel[sel$burst_ == b, ], {
+  lines(x_, y_, lwd = 3, col = c(teal, gold)[b]); points(x_, y_, pch = 16, cex = 1.6, col = c(teal, gold)[b])
+})
+scale_bar(0.5)
+plot(NA, xlim = lim_x, ylim = lim_y, asp = 1, axes = FALSE, xlab = "", ylab = "",
+     main = "redisltraj(): one smooth path")
+lines(itp$x, itp$y, lwd = 3, col = "grey60")
+points(itp$x[!invented], itp$y[!invented], pch = 16, cex = 1.6, col = teal)
+points(itp$x[invented], itp$y[invented], pch = 21, bg = rust, cex = 1.8)
+legend("bottomright", c("observed fix", "invented position"), pch = c(16, 21), col = c(teal, ink),
+       pt.bg = c(NA, rust), pt.cex = 1.8, bty = "n", cex = 1.3)
+```
+
+Toni across a 9-hour gap. Selection ends the burst at the gap; interpolation
+fills it with evenly spaced positions on a straight line the buffalo almost
+certainly did not walk.
 
 ---
 
@@ -538,8 +673,6 @@ dividing each gap by the modal interval and counting the misses.
 :::
 :::
 
----
-
 # 5 · Attaching the environment {background-color="#14525a"}
 
 ---
@@ -565,6 +698,36 @@ analysis does not, you have thrown away the mechanism.
 
 ---
 
+## Decorated versus annotated
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+ndvi <- project(rast("data/kruger_ndvi_2005.tif"), "EPSG:32736")
+time(ndvi) <- as.POSIXct(c("2005-02-02", "2005-09-14"), tz = "UTC")
+queen <- trk |> filter(id == "Queen", year(t_) == 2005)
+static <- terra::extract(ndvi[[1]], as.matrix(queen[, c("x_", "y_")]))[, 1]
+matched <- queen |>
+  extract_covariates_var_time(ndvi, when = "any", max_time = days(45), name_covar = "ndvi")
+
+slide_par(mar = c(3.2, 5.6, 1, 1))
+plot(queen$t_, static, pch = 16, cex = 0.5, col = adjustcolor("grey50", 0.4), ylim = c(0, 0.9),
+     xlim = as.POSIXct(c("2005-01-01", "2005-12-31"), tz = "UTC"),
+     xlab = "", ylab = "NDVI at the fix", xaxt = "n")
+axis.POSIXct(1, at = seq(as.POSIXct("2005-01-01", tz = "UTC"), by = "2 months", length.out = 7),
+             format = "%b")
+points(matched$t_, matched$ndvi, pch = 16, cex = 0.6, col = adjustcolor(teal, 0.6))
+abline(v = time(ndvi), lty = 2, lwd = 2, col = rust)
+legend("topright", c("February image for every fix", "nearest composite, within 45 days"),
+       pch = 16, col = c("grey50", teal), bty = "n", cex = 1.3, pt.cex = 1.5)
+```
+
+Queen in 2005. One February image says she lived in green vegetation all
+year. Matched in time, NDVI halves by September — and the months with no
+composite nearby are honestly blank.
+
 ---
 
 ## Doing it in time
@@ -585,8 +748,6 @@ trk$ndvi <- vals[cbind(seq_len(nrow(vals)), idx)]
 `Movebank Env-DATA` does this for you, including interpolation in time, for
 dozens of products. Use it for real projects — but understand what it is doing
 first, which is what today's exercise is for.
-
----
 
 ---
 
@@ -617,8 +778,6 @@ no preference for places that are green on average.
 Fix: use a time series and match each fix to the contemporaneous layer.
 :::
 :::
-
----
 
 ---
 

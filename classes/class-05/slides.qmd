@@ -23,6 +23,14 @@ execute:
   echo: true
 ---
 
+```{r}
+#| include: false
+library(amt)
+library(dplyr)
+source("R/slide_helpers.R")
+source("R/simulators.R")
+```
+
 ## Today
 
 ::: {.paradigm}
@@ -135,6 +143,47 @@ Linear MSD means the typical distance from the start grows only as
 $\sqrt{t}$. A random walker four times as long gets only twice as far.
 :::
 
+---
+
+## Diffusion, seen from above
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+set.seed(10)
+walks <- lapply(1:300, function(i) simulate_crw(1000, kappa = 0))
+el2   <- 2 * 3 * 250^2                     # E[l²] for gamma(shape 2, scale 250)
+at    <- c(10, 100, 1000)
+cols  <- c(rust, gold, teal)
+
+layout(matrix(1:2, 1), widths = c(1, 1.2))
+map_par()
+lim <- c(-1, 1) * 2.6 * sqrt(1000 * el2) / 1000
+plot(NA, xlim = lim, ylim = lim, asp = 1, axes = FALSE, xlab = "", ylab = "",
+     main = "300 walkers after 10, 100, 1000 steps")
+for (k in 3:1) {
+  p <- t(sapply(walks, function(w) unlist(w[at[k], c("x", "y")]))) / 1000
+  points(p, pch = 16, cex = 0.7, col = adjustcolor(cols[k], 0.6))
+  symbols(0, 0, circles = sqrt(at[k] * el2) / 1000, inches = FALSE, add = TRUE,
+          fg = cols[k], lwd = 3)
+}
+points(0, 0, pch = 17, cex = 1.6)
+legend("bottomright", paste(at, "steps"), col = cols, pch = 16, bty = "n", cex = 1.3)
+slide_par()
+n_seq <- seq(10, 1000, by = 10)
+msd_n <- sapply(n_seq, function(n) mean(sapply(walks, function(w) w$x[n]^2 + w$y[n]^2))) / 1e6
+plot(n_seq, msd_n, pch = 16, col = teal, xlab = "Steps", ylab = "MSD (km²)",
+     main = "MSD grows linearly")
+abline(0, el2 / 1e6, lwd = 3, col = rust)
+legend("topleft", c("simulated", "n E[l²]"), pch = c(16, NA), lty = c(NA, 1), lwd = 3,
+       col = c(teal, rust), bty = "n", cex = 1.3)
+```
+
+Circles: the root of the expected MSD. Ten times more steps, only $\sqrt{10}
+\approx 3.2$ times further.
+
 # 3 · Correlated random walks {background-color="#14525a"}
 
 ---
@@ -152,6 +201,36 @@ $$\phi_t = \phi_{t-1} + \theta_t, \qquad \theta_t \sim \text{von Mises}(0, \kapp
 - Two parameters for steps, one for turns: the same ingredients as the step
   selection functions of Session 7 and the hidden Markov models of Session 8
 :::
+
+---
+
+## The two ingredients
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+par(mfrow = c(1, 2)); slide_par()
+sl <- seq(0, 2500, length.out = 400)
+plot(NA, xlim = range(sl), ylim = c(0, 0.0021), yaxt = "n",
+     xlab = "Step length (m)", ylab = "Density", main = "Gamma steps, mean 500 m")
+shapes <- c(1, 2, 5); scols <- c(gold, teal, rust)
+for (i in 1:3) lines(sl, dgamma(sl, shape = shapes[i], scale = 500 / shapes[i]), lwd = 4, col = scols[i])
+legend("topright", paste("shape =", shapes), col = scols, lwd = 4, bty = "n", cex = 1.3)
+
+th <- seq(-pi, pi, length.out = 400)
+kap <- c(0, 1, 4, 10); kcols <- c("grey50", gold, teal, rust)
+plot(NA, xlim = c(-180, 180), ylim = c(0, 1.3), xaxt = "n",
+     xlab = "Turning angle (degrees)", ylab = "Density", main = "von Mises turns")
+axis(1, at = seq(-180, 180, 90))
+for (i in 1:4) lines(th * 180 / pi, exp(kap[i] * cos(th)) / (2 * pi * besselI(kap[i], 0)),
+                     lwd = 4, col = kcols[i])
+legend("topright", paste("κ =", kap), col = kcols, lwd = 4, bty = "n", cex = 1.3)
+```
+
+Every random walk in this session, and every SSF and HMM later, is built
+from one distribution of each kind.
 
 ---
 
@@ -245,6 +324,44 @@ migrations.
 
 ---
 
+## Drift beats spread, eventually
+
+```{r}
+#| echo: false
+#| cache: true
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+set.seed(12)
+goal <- c(1e8, 0)                                   # far to the east: a fixed bearing
+reps <- lapply(1:120, function(i) simulate_bcrw(600, goal = goal, w = 0.1, kappa = 2,
+                                                start = c(0, 0), heading0 = runif(1, -pi, pi)))
+X <- sapply(reps, `[[`, "x") / 1000; Y <- sapply(reps, `[[`, "y") / 1000
+
+layout(matrix(1:2, 1), widths = c(1.2, 1))
+map_par()
+plot(NA, xlim = range(X[, 1:25]), ylim = range(Y[, 1:25]), asp = 1, axes = FALSE,
+     xlab = "", ylab = "", main = "25 walkers, weak bias to the east")
+for (j in 1:25) lines(X[, j], Y[, j], col = adjustcolor(teal, 0.5))
+points(0, 0, pch = 17, cex = 1.6, col = rust)
+slide_par()
+drift  <- rowMeans(X)
+spread <- apply(Y, 1, sd)
+plot(1:600, drift, type = "l", lwd = 4, col = rust, ylim = c(0, max(drift, spread)),
+     xlab = "Steps", ylab = "km", main = "Advection vs diffusion")
+lines(1:600, spread, lwd = 4, col = teal)
+cross <- which(drift > spread)[1]
+abline(v = cross, lty = 2, lwd = 2)
+legend("topleft", c("mean progress east: grows like t", "sideways spread: grows like √t"),
+       col = c(rust, teal), lwd = 4, bty = "n", cex = 1.3)
+```
+
+A weak pull towards the east (bias weight 0.1). For the first
+`r round(cross, -1)` steps the random spread is larger than the progress;
+after that, drift wins for good.
+
+---
+
 ## Central places
 
 A BCRW whose goal is its own **home** produces something new: the animal
@@ -265,6 +382,40 @@ In the practical this central-place walker becomes our **ground-truth
 animal**: we know its true home range, so in Session 6 we can check which
 estimator gets it right.
 :::
+
+---
+
+## A home range from one rule
+
+```{r}
+#| echo: false
+#| cache: true
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+truth <- truth_animal()
+set.seed(5)
+long <- do.call(simulate_bcrw, c(list(n = 60000), truth_rule))
+kd   <- MASS::kde2d(long$x / 1000, long$y / 1000, n = 150, lims = c(-25, 25, -25, 25))
+lev  <- sort(kd$z, decreasing = TRUE)
+c95  <- lev[which(cumsum(lev) / sum(lev) >= 0.95)[1]]
+
+par(mfrow = c(1, 2)); map_par()
+plot(truth$x / 1000, truth$y / 1000, type = "l", asp = 1, axes = FALSE, xlab = "", ylab = "",
+     col = adjustcolor(teal, 0.6), xlim = c(-25, 25), ylim = c(-25, 25),
+     main = "5,000 steps of the ground-truth animal")
+points(0, 0, pch = 17, cex = 1.8, col = rust)
+scale_bar(10, unit = 1)
+z <- kd$z; z[z < max(z) * 0.01] <- NA
+image(kd$x, kd$y, z, col = hcl.colors(60, "YlGnBu", rev = TRUE), asp = 1, axes = FALSE,
+      xlab = "", ylab = "", xlim = c(-25, 25), ylim = c(-25, 25),
+      main = "Its long-run UD (60,000 steps)")
+contour(kd$x, kd$y, kd$z, levels = c95, drawlabels = FALSE, add = TRUE, lwd = 3, lty = 2)
+points(0, 0, pch = 17, cex = 1.8, col = rust)
+```
+
+No memory, no map, no boundary — only a weak pull towards home. Dashed: the
+true 95% range, about 800 km², which Session 6 tries to recover.
 
 ---
 
@@ -334,6 +485,54 @@ Different mechanisms produce indistinguishable step-length distributions.
 
 ---
 
+## Two ways to make a heavy tail
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+set.seed(4)
+samples <- list(
+  "exponential"           = rexp(2000, 1 / 300) + 50,
+  "power law, μ = 2"      = 50 * runif(2000)^(-1),
+  "two exponential modes" = c(rexp(1500, 1 / 60), rexp(500, 1 / 1500)) + 10)
+tcols <- c("grey50", gold, rust)
+
+layout(matrix(1:2, 1), widths = c(1.1, 1))
+slide_par()
+plot(NA, xlim = c(10, 2e5), ylim = c(5e-4, 1), log = "xy", xaxt = "n", yaxt = "n",
+     xlab = "Step length l (m)", ylab = "P(step > l)", main = "Tails on log–log axes")
+axis(1, at = 10^(1:5), labels = c("10", "100", "1 km", "10 km", "100 km"))
+axis(2, at = 10^(0:-3), labels = c("1", "0.1", "0.01", "0.001"))
+for (i in 1:3) {
+  x <- sort(samples[[i]])
+  lines(x, 1 - (seq_along(x) - 1) / length(x), lwd = 4, col = tcols[i])
+}
+legend("bottomleft", names(samples), col = tcols, lwd = 4, bty = "n", cex = 1.3)
+
+# a composite walk: switching between searching and travelling
+n <- 600; state <- integer(n); state[1] <- 1
+for (i in 2:n) state[i] <- if (runif(1) < c(0.04, 0.2)[state[i - 1]]) 3 - state[i - 1] else state[i - 1]
+sl <- rexp(n, 1 / c(60, 1500)[state])
+hd <- cumsum(ifelse(state == 1, runif(n, -pi, pi), rvm(n, 0, 6)))
+x <- cumsum(sl * cos(hd)) / 1000; y <- cumsum(sl * sin(hd)) / 1000
+map_par()
+plot(x, y, type = "n", asp = 1, axes = FALSE, xlab = "", ylab = "",
+     main = "A two-mode walk: no power law anywhere")
+segments(head(x, -1), head(y, -1), x[-1], y[-1], lwd = 2,
+         col = c(teal, rust)[state[-1]])
+points(x[state == 1], y[state == 1], pch = 16, cex = 0.8, col = teal)
+legend("bottomright", c("searching", "travelling"), col = c(teal, rust), lwd = 3,
+       bty = "n", cex = 1.3)
+```
+
+Grey: one exponential. Gold: a true power law. Red: two exponential modes, no
+power law anywhere — yet heavy-tailed enough that a power law beats a single
+exponential by thousands of AIC units.
+
+---
+
 ## Quiz
 
 ::: {.quiz}
@@ -379,6 +578,57 @@ belong to a distinct behavioural state (Session 8).
 The null must match the animal in everything **except** the mechanism. A null
 with the wrong step lengths is a straw man, and rejecting it proves nothing.
 :::
+
+---
+
+## The recipe, applied
+
+```{r}
+#| echo: false
+#| cache: true
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+buffalo <- read.csv("data/buffalo_kruger.csv.gz") |>
+  transmute(id = individual.local.identifier, t = as.POSIXct(timestamp, tz = "UTC"),
+            x = location.long, y = location.lat) |>
+  filter(!is.na(x)) |>
+  distinct(id, t, .keep_all = TRUE)
+trk <- make_track(buffalo, x, y, t, id = id, crs = 4326) |>
+  transform_coords(crs_to = 32736)
+rg <- function(x, y) sqrt(mean((x - mean(x))^2 + (y - mean(y))^2)) / 1000
+
+null_test <- function(animal, n_sim = 300) {           # exactly as in the practical
+  hourly <- trk |> filter(id == animal) |>
+    track_resample(rate = lubridate::hours(1), tolerance = lubridate::minutes(10)) |>
+    filter_min_n_burst(min_n = 3)
+  st <- hourly |> steps_by_burst() |> filter(sl_ > 0, sl_ < 10000)
+  g  <- fit_distr(st$sl_, "gamma")
+  vm <- fit_distr(st$ta_[!is.na(st$ta_)], "vonmises")
+  longest <- hourly |> filter(burst_ == names(which.max(table(burst_))))
+  n <- nrow(longest)
+  sim <- replicate(n_sim, {
+    d <- simulate_crw(n, shape = g$params$shape, scale = g$params$scale, kappa = vm$params$kappa)
+    rg(d$x, d$y)
+  })
+  list(id = animal, days = round(n / 24), obs = rg(longest$x_, longest$y_), sim = sim)
+}
+set.seed(7)
+tests <- lapply(unique(trk$id), null_test)
+show  <- tests[sapply(tests, `[[`, "id") %in% c("Gabs", "Toni")]
+
+par(mfrow = c(1, 2)); slide_par()
+for (k in show) {
+  pct <- round(100 * mean(k$sim < k$obs))
+  hist(k$sim, breaks = 30, col = adjustcolor(teal, 0.5), border = "white",
+       xlim = range(k$sim, k$obs), xlab = "Radius of gyration (km)", ylab = "Simulated CRWs",
+       main = sprintf("%s: %d days, percentile %d", k$id, k$days, pct))
+  abline(v = k$obs, lwd = 5, col = rust)
+}
+```
+
+Grey-green: 300 CRWs with the buffalo's own steps and turns. Red line: the
+buffalo. Only the longer track is clearly more confined than its null.
 
 ---
 

@@ -23,6 +23,21 @@ execute:
   echo: true
 ---
 
+```{r}
+#| include: false
+library(amt)
+library(adehabitatLT)
+library(bcpa)
+library(dplyr)
+library(lubridate)
+source("R/slide_helpers.R")
+source("R/simulators.R")
+buf <- read_buffalo()
+trk <- make_track(buf, x, y, t, id = id, crs = 32736)
+cilla <- trk |> filter(id == "Cilla")
+leo <- read_leo()
+```
+
 ## Today
 
 ::: {.paradigm}
@@ -84,6 +99,34 @@ that a typical step is much longer than your GPS error.
 :::
 
 ---
+
+## The coastline paradox, in a buffalo
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+rates <- c(1, 2, 3, 6, 12, 24)
+by_rate <- do.call(rbind, lapply(rates, function(h) {
+  st <- cilla |> track_resample(rate = hours(h), tolerance = minutes(10)) |>
+    filter_min_n_burst(min_n = 2) |> steps_by_burst()
+  data.frame(h = h, km_day = sum(st$sl_) / 1000 / sum(as.numeric(st$dt_, units = "days")),
+             mean_step = mean(st$sl_))
+}))
+par(mfrow = c(1, 2)); slide_par()
+plot(by_rate$h, by_rate$km_day, log = "x", type = "o", pch = 16, cex = 1.6, lwd = 3, col = teal,
+     xaxt = "n", ylim = c(0, max(by_rate$km_day) * 1.1),
+     xlab = "Fix interval (hours)", ylab = "km per day", main = "Daily distance shrinks")
+axis(1, at = rates)
+plot(by_rate$h, by_rate$mean_step / 1000, log = "x", type = "o", pch = 16, cex = 1.6, lwd = 3,
+     col = rust, xaxt = "n", ylim = c(0, max(by_rate$mean_step) / 1000 * 1.1),
+     xlab = "Fix interval (hours)", ylab = "Mean step (km)", main = "Mean step grows")
+axis(1, at = rates)
+```
+
+The same buffalo, Cilla, resampled to coarser and coarser intervals. Neither
+number is a property of the animal alone.
 
 ---
 
@@ -157,6 +200,30 @@ a cheap and surprisingly effective way to classify movement strategies.
 
 ---
 
+## Four shapes
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.3
+#| fig-align: center
+tt <- 0:365
+shapes <- list(
+  "Nomad"     = 40 * tt,
+  "Resident"  = 9000 * (1 - exp(-tt / 20)),
+  "Disperser" = 14000 / (1 + exp((150 - tt) / 10)),
+  "Migrant"   = 14000 / (1 + exp((90 - tt) / 8)) - 14000 / (1 + exp((270 - tt) / 8)))
+par(mfrow = c(1, 4)); par(cex = 1)
+slide_par(mar = c(3.2, 1.2, 3.2, 0.6), cex.main = 1.8)
+for (k in names(shapes)) {
+  plot(tt, shapes[[k]], type = "l", lwd = 5, col = teal, ylim = c(0, 15000), yaxt = "n",
+       xaxt = "n", xlab = "", ylab = "", main = k)
+  mtext("time", side = 1, line = 1, cex = 1.4)
+}
+```
+
+NSD against time for the four strategies of Bunnefeld et al. (2011).
+
 ---
 
 ## Classifying strategies from NSD
@@ -178,6 +245,43 @@ The fitted **parameters** are the biology: $\sqrt{\delta}$ is the migration
 distance, $\theta_1$ and $\theta_2$ the departure and return dates. Never
 report the winning model without looking at them.
 :::
+
+---
+
+## A real migrant: Leo
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+y07 <- leo[leo$t >= as.POSIXct("2007-06-01", tz = "UTC") & leo$t < as.POSIXct("2008-06-01", tz = "UTC"), ]
+day <- as.Date(y07$t)
+dd  <- aggregate(cbind(x, y) ~ day, data = data.frame(day, x = y07$x, y = y07$y), FUN = mean)
+d   <- data.frame(t = as.numeric(dd$day - dd$day[1]),
+                  nsd = ((dd$x - dd$x[1])^2 + (dd$y - dd$y[1])^2) / 1e6)
+D <- max(d$nsd)
+mig <- nls(nsd ~ dd / (1 + exp((th1 - t) / ph1)) - dd / (1 + exp((th2 - t) / ph2)), d,
+           start = list(dd = D, th1 = d$t[which.max(d$nsd > D / 2)], ph1 = 5,
+                        th2 = d$t[nrow(d) - which.max(rev(d$nsd) > D / 2) + 1], ph2 = 5),
+           control = nls.control(maxiter = 500, warnOnly = TRUE))
+cf <- coef(mig)
+dates <- dd$day[1] + round(cf[c("th1", "th2")])
+
+slide_par(mar = c(3.2, 6.4, 1, 1))
+plot(dd$day, d$nsd / 1e6, pch = 16, col = adjustcolor(teal, 0.6), cex = 1.1,
+     xlab = "", ylab = "NSD (million km²)", xaxt = "n")
+axis.Date(1, at = seq(as.Date("2007-06-01"), as.Date("2008-06-01"), by = "2 months"), format = "%b %Y")
+lines(dd$day, fitted(mig) / 1e6, lwd = 4, col = rust)
+abline(v = dates, lty = 2, lwd = 2)
+text(dates, max(d$nsd) / 1e6 * 0.15, format(dates, "%d %b"), pos = c(4, 2), cex = 1.4)
+text(mean(dates), max(d$nsd) / 1e6 * 0.55, sprintf("√δ = %s km", format(round(sqrt(cf[["dd"]])), big.mark = ",")),
+     cex = 1.6, col = rust)
+```
+
+Daily NSD of the vulture Leo, June 2007 to May 2008, and the fitted migrant
+model. The parameters read as biology: a migration distance in thousands of
+kilometres, a departure date and a return date.
 
 ---
 
@@ -259,6 +363,48 @@ patches it responds to?
 
 ---
 
+## First-passage time, drawn
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+set.seed(21)
+legs <- list(); pos <- c(0, 0); h <- 0
+for (k in 1:6) {
+  searching <- k %% 2 == 0
+  w <- simulate_crw(if (searching) 80 else 30, scale = if (searching) 25 else 200,
+                    kappa = if (searching) 0.3 else 6, start = pos, heading0 = h)
+  w$mode <- if (searching) "search" else "travel"
+  legs[[k]] <- w; pos <- unlist(tail(w[, c("x", "y")], 1)); h <- tail(w$heading, 1)
+}
+path <- do.call(rbind, legs)
+path$t <- as.POSIXct("2026-01-01", tz = "UTC") + (seq_len(nrow(path)) - 1) * 3600
+r <- 400
+f <- fpt(as.ltraj(path[, c("x", "y")], date = path$t, id = "sim"), radii = r, units = "hours")[[1]][, 1]
+
+layout(matrix(1:2, 1), widths = c(1, 1.3))
+map_par()
+plot(path$x, path$y, type = "l", asp = 1, axes = FALSE, xlab = "", ylab = "", col = "grey50",
+     main = sprintf("Circles of radius %d m", r))
+for (i in c(which(path$mode == "search")[40], which(path$mode == "travel")[45])) {
+  symbols(path$x[i], path$y[i], circles = r, inches = FALSE, add = TRUE, lwd = 3,
+          fg = if (path$mode[i] == "search") rust else teal)
+  points(path$x[i], path$y[i], pch = 16, cex = 1.8, col = if (path$mode[i] == "search") rust else teal)
+}
+scale_bar(1)
+slide_par()
+plot(seq_along(f), f, type = "h", lwd = 2, col = ifelse(path$mode == "search", rust, teal),
+     xlab = "Fix", ylab = "Hours to leave the circle", main = "First-passage time along the path")
+legend("topright", c("searching", "travelling"), col = c(rust, teal), lwd = 4, bty = "n", cex = 1.3)
+```
+
+A simulated animal alternating travel and intensive search. Inside a patch it
+takes many hours to leave a 400 m circle; in transit, one or two.
+
+---
+
 ## Quiz
 
 ::: {.quiz}
@@ -306,8 +452,6 @@ An animal is not doing one thing all day.
 **Segment first, then analyse.** Almost every method in this course assumes a
 homogeneous process. Segmentation is how you earn that assumption.
 :::
-
----
 
 ---
 
@@ -365,8 +509,6 @@ HMM, EMbC, state-space models.
 foraging or travelling?" is a state question. Choose the tool that matches the
 question.
 
----
-
 # 4 · Simple segmentation {background-color="#14525a"}
 
 ---
@@ -398,6 +540,34 @@ question.
 
 ---
 
+## An honest threshold, and a dishonest one
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+dl <- aggregate(cbind(x, y) ~ day, data = data.frame(day = as.Date(leo$t), x = leo$x, y = leo$y), FUN = mean)
+leo_km <- sqrt(diff(dl$x)^2 + diff(dl$y)^2) / 1000
+cilla_kmh <- cilla |> track_resample(rate = hours(1), tolerance = minutes(10)) |>
+  filter_min_n_burst(min_n = 2) |> steps_by_burst() |>
+  mutate(v = (sl_ / 1000) / as.numeric(dt_, units = "hours")) |> pull(v)
+
+par(mfrow = c(1, 2)); slide_par()
+hist(log10(leo_km + 1), breaks = 50, col = teal, border = "white", xaxt = "n",
+     xlab = "Daily displacement (km)", ylab = "Days", main = "Leo: two modes")
+axis(1, at = log10(c(1, 10, 100, 1000) + 1), labels = c(1, 10, 100, 1000))
+abline(v = log10(51), lwd = 4, lty = 2, col = rust)
+hist(log10(cilla_kmh + 0.001), breaks = 50, col = teal, border = "white", xaxt = "n",
+     xlab = "Hourly speed (km/h)", ylab = "Hours", main = "Cilla: no empty valley")
+axis(1, at = log10(c(0.01, 0.1, 1, 10) + 0.001), labels = c(0.01, 0.1, 1, 10))
+```
+
+Left: Leo's migration days (> 50 km, dashed) form a separate mode. Right: the
+buffalo's speeds are a continuum with no gap; any cut-off is arbitrary.
+
+---
+
 ## Behavioural change-point analysis
 
 BCPA (Gurarie et al. 2009) looks for places where the **statistical
@@ -419,6 +589,35 @@ BCPA tells you **where** the process changes. It does not tell you what the
 animal was doing, and it cannot know whether a change is behavioural or a
 change in your collar's schedule.
 :::
+
+---
+
+## BCPA on Cilla
+
+```{r}
+#| echo: false
+#| cache: true
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+win <- cilla |> arrange(t_) |> filter(t_ < min(t_) + days(25))
+vt  <- GetVT(MakeTrack(win$x_, win$y_, win$t_))
+set.seed(1)
+ws  <- WindowSweep(vt, "V*cos(Theta)", windowsize = 50, progress = FALSE, K = 2)
+cps <- ChangePointSummary(ws, clusterwidth = 3)
+ph  <- cps$phases
+slide_par(mar = c(3.2, 6, 1, 1))
+plot(vt$T.POSIX, vt$V * cos(vt$Theta) / 1000, type = "l", col = "grey60",
+     xlab = "", ylab = "V cos(θ)  (km/h)")
+abline(v = cps$breaks$middle.POSIX, col = rust, lty = 2, lwd = 1.5)
+to_time <- function(z) as.POSIXct(approx(vt$T.mid, as.numeric(vt$T.POSIX), xout = z, rule = 2)$y,
+                                   origin = "1970-01-01", tz = "UTC")
+segments(to_time(ph$t0), ph$mu.hat / 1000, to_time(ph$t1), ph$mu.hat / 1000, lwd = 5, col = teal)
+```
+
+Persistence velocity over the first 25 days of hourly fixes (grey), the
+`r nrow(cps$breaks)` change points BCPA finds with a 50-fix window (dashed),
+and the mean of each of the `r nrow(ph)` phases (teal).
 
 ---
 

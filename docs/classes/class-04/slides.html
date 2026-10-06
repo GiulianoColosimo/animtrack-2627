@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-09-30">
+  <meta name="dcterms.date" content="2026-10-06">
   <title>Animal Tracking – Quantifying movement</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -149,7 +149,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-09-30</p>
+  <p class="date">2026-10-06</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -195,8 +195,10 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section class="slide level2">
+<section id="the-coastline-paradox-in-a-buffalo" class="slide level2">
+<h2>The coastline paradox, in a buffalo</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The same buffalo, Cilla, resampled to coarser and coarser intervals. Neither number is a property of the animal alone.</p>
 </section>
 <section id="straightness-and-sinuosity" class="slide level2">
 <h2>Straightness and sinuosity</h2>
@@ -244,8 +246,10 @@ Giuliano Colosimo
 <p>Fitting these shapes as competing non-linear models (Bunnefeld et al.&nbsp;2011) is a cheap and surprisingly effective way to classify movement strategies.</p>
 </div>
 </section>
-<section class="slide level2">
+<section id="four-shapes" class="slide level2">
+<h2>Four shapes</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>NSD against time for the four strategies of Bunnefeld et al.&nbsp;(2011).</p>
 </section>
 <section id="classifying-strategies-from-nsd" class="slide level2">
 <h2>Classifying strategies from NSD</h2>
@@ -291,6 +295,11 @@ Giuliano Colosimo
 <p>The fitted <strong>parameters</strong> are the biology: <span class="math inline">\(\sqrt{\delta}\)</span> is the migration distance, <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span> the departure and return dates. Never report the winning model without looking at them.</p>
 </div>
 </div>
+</section>
+<section id="a-real-migrant-leo" class="slide level2">
+<h2>A real migrant: Leo</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Daily NSD of the vulture Leo, June 2007 to May 2008, and the fitted migrant model. The parameters read as biology: a migration distance in thousands of kilometres, a departure date and a return date.</p>
 </section>
 <section id="quiz" class="slide level2">
 <h2>Quiz</h2>
@@ -344,6 +353,11 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
+<section id="first-passage-time-drawn" class="slide level2">
+<h2>First-passage time, drawn</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>A simulated animal alternating travel and intensive search. Inside a patch it takes many hours to leave a 400 m circle; in transit, one or two.</p>
+</section>
 <section id="quiz-2" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
@@ -379,9 +393,6 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section class="slide level2">
-
-</section>
 <section id="encamped-versus-transit" class="slide level2">
 <h2>Encamped versus transit</h2>
 <p>The simplest useful classification has two modes:</p>
@@ -416,9 +427,6 @@ Giuliano Colosimo
 <div class="fragment">
 <p>“Migration started on 14 September” is a change-point question. “Was this step foraging or travelling?” is a state question. Choose the tool that matches the question.</p>
 </div>
-</section>
-<section class="slide level2">
-
 </section></section>
 <section>
 <section id="simple-segmentation" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -483,6 +491,11 @@ Giuliano Colosimo
 <li class="fragment">Without that valley, the threshold is an arbitrary decision dressed up as a result</li>
 </ul>
 </section>
+<section id="an-honest-threshold-and-a-dishonest-one" class="slide level2">
+<h2>An honest threshold, and a dishonest one</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Left: Leo’s migration days (&gt; 50 km, dashed) form a separate mode. Right: the buffalo’s speeds are a continuum with no gap; any cut-off is arbitrary.</p>
+</section>
 <section id="behavioural-change-point-analysis" class="slide level2">
 <h2>Behavioural change-point analysis</h2>
 <p>BCPA (Gurarie et al.&nbsp;2009) looks for places where the <strong>statistical properties</strong> of the movement change.</p>
@@ -497,6 +510,11 @@ Giuliano Colosimo
 <p>BCPA tells you <strong>where</strong> the process changes. It does not tell you what the animal was doing, and it cannot know whether a change is behavioural or a change in your collar’s schedule.</p>
 </div>
 </div>
+</section>
+<section id="bcpa-on-cilla" class="slide level2">
+<h2>BCPA on Cilla</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Persistence velocity over the first 25 days of hourly fixes (grey), the 28 change points BCPA finds with a 50-fix window (dashed), and the mean of each of the 29 phases (teal).</p>
 </section>
 <section id="quiz-3" class="slide level2">
 <h2>Quiz</h2>
@@ -865,6 +883,44 @@ Giuliano Colosimo
       if (window.Reveal && window.Reveal.on) window.Reveal.on("slidechanged", initAll);
     })();
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

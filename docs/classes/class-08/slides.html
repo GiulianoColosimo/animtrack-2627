@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-09-30">
+  <meta name="dcterms.date" content="2026-10-06">
   <title>Animal Tracking – Hidden Markov models and synthesis</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-09-30</p>
+  <p class="date">2026-10-06</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -256,8 +256,10 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section class="slide level2">
+<section id="the-story-simulated" class="slide level2">
+<h2>The story, simulated</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Teal: an encamped state, short steps and random turns. Red: a travelling state, long and directed. The HMM sees only the path and has to work out the colours.</p>
 </section>
 <section id="what-you-get-out" class="slide level2">
 <h2>What you get out</h2>
@@ -275,8 +277,10 @@ Giuliano Colosimo
 <span id="cb1-5"><a></a><span class="fu">viterbi</span>(m)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section class="slide level2">
+<section id="two-states-in-real-buffalo" class="slide level2">
+<h2>Two states in real buffalo</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Cilla and Toni, hourly. Grey: all their steps. Coloured: the two fitted state distributions, weighted by how often each state occurs; dashed: their sum.</p>
 </section>
 <section id="why-the-markov-part-matters" class="slide level2">
 <h2>Why the Markov part matters</h2>
@@ -291,8 +295,10 @@ Giuliano Colosimo
 <p>That formula is the bridge between Session 3’s environmental annotation and this one.</p>
 </div>
 </section>
-<section class="slide level2">
+<section id="flicker-versus-persistence" class="slide level2">
+<h2>Flicker versus persistence</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The same steps labelled two ways: a fixed threshold (dashed line) switches 35 times; the HMM, which knows that behaviour persists, 27 times.</p>
 </section>
 <section id="quiz" class="slide level2">
 <h2>Quiz</h2>
@@ -332,11 +338,23 @@ Giuliano Colosimo
 <section id="a-diel-rhythm-estimated" class="slide level2">
 <h2>A diel rhythm, estimated</h2>
 <p>For two Kruger buffalo, a 2-state HMM with a daily cosinor on the transitions (hourly fixes, local time):</p>
+<div class="columns">
+<div class="column" style="width:58%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center" width="633"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:42%;">
 <table class="caption-top">
 <thead>
 <tr class="header">
 <th style="text-align: left;">Local time</th>
-<th style="text-align: right;">P(moving state)</th>
+<th style="text-align: right;">P(moving)</th>
 </tr>
 </thead>
 <tbody>
@@ -358,6 +376,7 @@ Giuliano Colosimo
 </tr>
 </tbody>
 </table>
+</div></div>
 <div class="fragment">
 <div class="keyidea">
 <p>The covariate is on the <strong>switching</strong>, not on the step lengths: the buffalo do not walk differently in the afternoon, they are more likely to <em>be</em> walking. You fit this model in today’s practical.</p>
@@ -383,9 +402,6 @@ Giuliano Colosimo
 </div>
 </div>
 </section>
-<section class="slide level2">
-
-</section>
 <section id="problem-2-how-many-states" class="slide level2">
 <h2>Problem 2 — how many states?</h2>
 <ul>
@@ -398,9 +414,6 @@ Giuliano Colosimo
 <p>Choose the number of states from <strong>biology and the question</strong>, then check the fit. Pseudo-residuals and state-dependent distribution plots tell you far more than a table of AICs. Two or three states are almost always enough for what a tracking dataset can actually resolve.</p>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>
@@ -431,9 +444,6 @@ Giuliano Colosimo
 <p>State the evidence for your labels, or call them “state 1” and “state 2” and describe them by their parameters.</p>
 </div>
 </section>
-<section class="slide level2">
-
-</section>
 <section id="quiz-2" class="slide level2">
 <h2>Quiz</h2>
 <div class="quiz">
@@ -460,8 +470,10 @@ Giuliano Colosimo
 <li class="fragment">Plot the state-dependent densities over the histogram of your data. If they do not look like your data, nothing downstream is trustworthy</li>
 </ul>
 </section>
-<section class="slide level2">
+<section id="what-checking-looks-like" class="slide level2">
+<h2>What checking looks like</h2>
 
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The two-state buffalo model. Points on the line mean the model describes the data; the bent tails of the step residuals say two states do not capture the full range of step lengths.</p>
 </section></section>
 <section>
 <section id="the-frontier" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -563,8 +575,8 @@ Giuliano Colosimo
 <li class="fragment"><strong>Infer</strong> behavioural states, and supply the evidence for their names <em>(8)</em></li>
 </ol>
 </section>
-<section id="the-five-habits-worth-keeping" class="slide level2">
-<h2>The five habits worth keeping</h2>
+<section id="six-habits-worth-keeping" class="slide level2">
+<h2>Six habits worth keeping</h2>
 <ul>
 <li class="fragment"><strong>Look at the data before modelling it.</strong> Plot coordinates against time. Plot step length against time gap. Every dataset in this course had a defect you could see in one plot.</li>
 <li class="fragment"><strong>Count what you remove</strong>, at every step, and put the table in the paper.</li>
@@ -589,9 +601,6 @@ Giuliano Colosimo
 <p>The paragraph on limitations is worth more marks than the analysis. Anyone can run <code>fit_issf()</code>. Knowing what it cannot tell you is the skill.</p>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
 </section>
 <section id="mini-project-pitches" class="slide level2">
 <h2>Mini-project pitches</h2>
@@ -932,6 +941,44 @@ Giuliano Colosimo
       if (window.Reveal && window.Reveal.on) window.Reveal.on("slidechanged", initAll);
     })();
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

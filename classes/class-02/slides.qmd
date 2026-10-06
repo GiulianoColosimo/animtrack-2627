@@ -23,6 +23,17 @@ execute:
   echo: true
 ---
 
+```{r}
+#| include: false
+library(sf)
+library(terra)
+source("R/slide_helpers.R")
+world <- spData::world
+ndvi  <- project(rast("data/kruger_ndvi_2005.tif"), "EPSG:32736")
+cilla <- subset(read_buffalo(), id == "Cilla")
+ndvi_cols <- hcl.colors(60, "BrBG")[20:60]
+```
+
 ## Today
 
 ::: {.paradigm}
@@ -94,6 +105,41 @@ Fast maths, no notion of individual objects.
 Movement analysis is nearly always **points (or steps) sampling rasters**.
 That one sentence describes Sessions 3 and 7.
 :::
+
+---
+
+## The same place, both ways
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+xy  <- as.matrix(cilla[, c("x", "y")])
+hr  <- st_convex_hull(st_union(st_as_sf(cilla, coords = c("x", "y"), crs = 32736)))
+day <- cilla[cilla$t >= as.POSIXct("2005-09-01", tz = "UTC") &
+             cilla$t <  as.POSIXct("2005-09-08", tz = "UTC"), ]
+elev <- project(rast("data/kruger_elevation.tif"), "EPSG:32736")
+elev <- crop(elev, ext(vect(hr)) + 6000)
+
+par(mfrow = c(1, 2)); map_par()
+plot(xy, type = "n", asp = 1, axes = FALSE, xlab = "", ylab = "", main = "Vector: points, a line, a polygon",
+     xlim = ext(elev)[1:2], ylim = ext(elev)[3:4])
+plot(hr, add = TRUE, col = adjustcolor(teal, 0.15), border = teal, lwd = 3)
+points(xy, pch = 16, cex = 0.25, col = adjustcolor(ink, 0.25))
+lines(day$x, day$y, lwd = 3, col = rust)
+legend("bottomright", c("fixes", "one week's track", "the range (MCP)"), pch = c(16, NA, 15),
+       lty = c(NA, 1, NA), lwd = c(NA, 4, NA), col = c(ink, rust, adjustcolor(teal, 0.4)),
+       pt.cex = c(1, 1, 2.5), bty = "n", cex = 1.3)
+scale_bar(5)
+plot(elev, col = hcl.colors(50, "Terrain"), axes = FALSE, box = FALSE, mar = c(0.5, 0.5, 3.2, 4),
+     main = "Raster: elevation (m), ~1 km cells", cex.main = 1.8, font.main = 1,
+     plg = list(cex = 1.2))
+points(xy, pch = 16, cex = 0.25, col = adjustcolor(ink, 0.25))
+```
+
+Cilla's fixes, one week of her track and her range as vectors; the terrain
+under them as a raster.
 
 ---
 
@@ -172,6 +218,37 @@ but slower, and does not fix your *plots*.
 
 ---
 
+## One degree is not one distance
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+layout(matrix(1:2, 1), widths = c(1, 1.3))
+slide_par()
+lat <- 0:85
+plot(lat, 111.32 * cos(lat * pi / 180), type = "l", lwd = 4, col = teal, xlim = c(0, 100),
+     xlab = "Latitude (degrees)", ylab = "km per degree of longitude", main = "Longitude shrinks")
+pts <- c(Kruger = 24, Switzerland = 46)
+points(pts, 111.32 * cos(pts * pi / 180), pch = 16, cex = 2, col = rust)
+text(pts, 111.32 * cos(pts * pi / 180), sprintf("%s: %.0f km", names(pts), 111.32 * cos(pts * pi / 180)),
+     pos = 4, cex = 1.4, offset = 0.8)
+map_par()
+lats <- c(0, 24, 46, 66)
+circ <- st_buffer(st_sfc(lapply(lats, function(l) st_point(c(0, l))), crs = 4326), 800000)
+plot(NA, xlim = c(-20, 20), ylim = c(-8, 74), asp = 1, axes = FALSE, xlab = "", ylab = "",
+     main = "800 km circles, drawn in degrees")
+abline(h = lats, col = faint, lty = 3)
+plot(circ, add = TRUE, col = adjustcolor(teal, 0.3), border = teal, lwd = 3)
+text(20, lats, paste0(lats, "°"), cex = 1.4, pos = 4, xpd = NA)
+```
+
+Every circle has an 800 km radius on the ground. Plotted as if degrees were
+metres, they stretch east–west — badly at high latitudes.
+
+---
+
 ## Projected coordinates
 
 ![Every projection preserves some properties and destroys others](../../assets/figures/projected_coordinates.jpg){width="62%" fig-align="center"}
@@ -245,6 +322,36 @@ compute a home range.
 
 ---
 
+## The same circles, two projections
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+centres <- expand.grid(lon = seq(-150, 150, by = 50), lat = c(-60, -30, 0, 30, 60))
+circles <- st_buffer(st_as_sf(centres, coords = c("lon", "lat"), crs = 4326), 900000)
+s2 <- sf_use_s2(); suppressMessages(sf_use_s2(FALSE))     # planar crop of the world map
+land <- suppressWarnings(st_crop(world, st_bbox(c(xmin = -180, xmax = 180, ymin = -75, ymax = 78),
+                                                crs = 4326)))
+suppressMessages(sf_use_s2(s2))
+
+par(mfrow = c(1, 2)); map_par()
+for (k in list(list("EPSG:3857", "Web Mercator (EPSG:3857)"),
+               list("EPSG:6933", "Equal-area (EPSG:6933)"))) {
+  w <- st_transform(land, k[[1]])
+  plot(st_geometry(w), col = "grey92", border = "grey75", main = k[[2]])
+  plot(st_transform(circles, k[[1]])$geometry, add = TRUE, col = adjustcolor(rust, 0.35),
+       border = rust, lwd = 1.5)
+}
+```
+
+Every red disc covers the same 2.5 million km². Web Mercator inflates them
+towards the poles; an equal-area projection keeps their areas equal, at the
+cost of their shapes.
+
+---
+
 ## Quiz
 
 ::: {.quiz}
@@ -294,8 +401,6 @@ coordinates — they assume a plane.
 ::: {.keyidea}
 Write new code in `sf` + `terra`. Recognise `sp` + `raster` when you read it.
 :::
-
----
 
 # 4 · `sf` — vector data {background-color="#14525a"}
 
@@ -367,8 +472,8 @@ Note the geometry column survives `select()` without being named — it is
 ### `st_crs(x) <- 32736`
 *"These numbers were always UTM; I am just writing down the label."*
 
-If the numbers are actually degrees, you have now **lied** to R. The points
-land near the origin off West Africa.
+If the numbers are actually degrees, you have now **lied** to R. Your buffalo
+are now in Antarctica (next slide).
 :::
 ::: {.column width="50%"}
 ### `st_transform(x, 32736)`
@@ -384,6 +489,40 @@ The numbers **change**. This is almost always what you want.
 ::: {.keyidea}
 Assign a CRS only when the data arrived **without** one and you know what it
 should be. Otherwise, transform.
+:::
+
+---
+
+## Where the mislabelled buffalo went
+
+::: {.columns}
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 6.2
+#| fig-height: 5.6
+#| fig-align: center
+ortho <- "+proj=ortho +lat_0=-45 +lon_0=0"
+vis   <- st_buffer(st_sfc(st_point(c(0, -45)), crs = 4326), 9.9e6)   # the visible hemisphere
+globe <- st_transform(suppressWarnings(st_intersection(st_make_valid(world), vis)), ortho)
+right <- st_sfc(st_point(c(31.76, -24.54)), crs = 4326)
+wrong <- st_sfc(st_point(c(31.76, -24.54)), crs = 32736)    # degrees, labelled as metres
+
+par(mar = c(0, 0, 0, 0))
+plot(st_geometry(globe), col = "grey92", border = "grey70")
+plot(st_transform(st_boundary(vis), ortho), add = TRUE, col = "grey50")
+p <- st_coordinates(st_transform(c(st_transform(right, 4326), st_transform(wrong, 4326)), ortho))
+points(p, pch = 21, bg = c(teal, rust), cex = 3.5, lwd = 2)
+text(p, c("Kruger", "where R\nthinks they are"), pos = c(2, 4), cex = 1.9, offset = 1.1)
+```
+:::
+::: {.column width="45%"}
+`(31.76, −24.54)` read as **metres** in UTM 36S is a spot 31 m east and 24 m
+south of the zone's false origin: 500 km west of the 33°E meridian and
+10,000 km south of the equator.
+
+That is (57°W, 85.5°S) — the Antarctic ice sheet. No error, no warning.
+:::
 :::
 
 ---
@@ -526,8 +665,6 @@ and never strip coordinates down to a bare matrix just to pass them along.
 :::
 :::
 
----
-
 # 6 · Where rasters come from {background-color="#14525a"}
 
 ---
@@ -555,6 +692,33 @@ published.
 
 ---
 
+## Spectral signatures
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+wl <- seq(400, 1000, by = 2)
+veg  <- 3 + 7 * exp(-((wl - 550) / 35)^2) + 47 * plogis((wl - 715) / 12)
+soil <- 8 + 22 * (wl - 400) / 600
+water <- 8 * exp(-(wl - 400) / 150)
+slide_par(mar = c(4.6, 5.6, 1, 1))
+plot(NA, xlim = c(400, 1000), ylim = c(0, 55), xlab = "Wavelength (nm)", ylab = "Reflectance (%)")
+rect(630, -5, 690, 60, col = adjustcolor("red", 0.12), border = NA)
+rect(780, -5, 900, 60, col = adjustcolor("darkred", 0.12), border = NA)
+text(c(660, 840), 54, c("Red", "Near infrared"), cex = 1.4)
+lines(wl, veg, lwd = 5, col = "forestgreen")
+lines(wl, soil, lwd = 5, col = gold)
+lines(wl, water, lwd = 5, col = "steelblue")
+text(c(990, 990, 990), c(veg[301] - 4, soil[301] + 3, water[301] + 3),
+     c("green vegetation", "bare soil", "water"), pos = 2, cex = 1.4,
+     col = c("forestgreen", gold, "steelblue"))
+```
+
+Schematic curves. Vegetation is dark in the red and bright in the near
+infrared; soil and water are not. NDVI measures exactly that contrast.
+
 ---
 
 ## NDVI
@@ -576,6 +740,27 @@ biomass. In rainforest it is nearly flat and nearly useless.
 :::
 
 ---
+
+## Kruger, wet and dry
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+means <- global(ndvi, "mean", na.rm = TRUE)[[1]]
+par(mfrow = c(1, 2))
+for (i in 1:2) {
+  plot(ndvi[[i]], col = ndvi_cols, range = c(-0.1, 0.9), axes = FALSE, box = FALSE,
+       mar = c(0.5, 0.5, 3.2, 5), plg = list(cex = 1.2),
+       main = sprintf("%s 2005 — mean NDVI %.2f", c("February", "September")[i], means[i]),
+       cex.main = 1.8, font.main = 1)
+  points(cilla$x, cilla$y, pch = 16, cex = 0.15, col = adjustcolor(ink, 0.3))
+}
+```
+
+MODIS NDVI at 250 m, the same landscape six months apart (dots: Cilla's
+fixes). An NDVI value is only meaningful together with its date.
 
 ---
 
@@ -601,6 +786,28 @@ which means a narrower swath and a longer revisit.
 
 ---
 
+## Pixel size changes the landscape
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+box <- ext(c(range(cilla$x) + c(-4000, 4000), range(cilla$y) + c(-4000, 4000)))
+wet <- crop(ndvi[[1]], box)
+par(mfrow = c(1, 3)); par(cex = 1)
+for (f in c(1, 4, 20)) {
+  r <- if (f == 1) wet else aggregate(wet, f, na.rm = TRUE)
+  plot(r, col = ndvi_cols, range = c(0.2, 0.9), axes = FALSE, box = FALSE, legend = FALSE,
+       mar = c(0.5, 0.5, 3.2, 0.5), main = sprintf("%s m pixels", format(round(res(r)[1], -1), big.mark = ",")),
+       cex.main = 1.6, font.main = 1)
+  points(cilla$x, cilla$y, pch = 16, cex = 0.2, col = adjustcolor(ink, 0.35))
+}
+```
+
+The same February NDVI around Cilla's range at MODIS resolution, then
+averaged to ~1 km and ~5 km. At 5 km every fix gets nearly the same value.
+
 ---
 
 ## The missions you will actually use
@@ -620,8 +827,6 @@ which means a narrower swath and a longer revisit.
 Sentinel pixel is wasted on an Argos fix with 5 km error — and a 500 m MODIS
 pixel is useless for a dormouse.
 :::
-
----
 
 ---
 

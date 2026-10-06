@@ -23,6 +23,37 @@ execute:
   echo: true
 ---
 
+```{r}
+#| include: false
+library(amt)
+library(terra)
+library(dplyr)
+library(lubridate)
+source("R/slide_helpers.R")
+
+data(amt_fisher)
+cov    <- get_amt_fisher_covars()
+forest <- cov$landuse %in% c(40:100, 160:170)          # GlobCover forest classes
+covs   <- c(forest, resample(cov$elevation, forest), resample(cov$popden, forest))
+names(covs) <- c("forest", "elevation", "popden")
+lupe <- amt_fisher |>
+  filter(name == "Lupe") |>
+  track_resample(rate = minutes(10), tolerance = minutes(2)) |>
+  filter_min_n_burst(min_n = 3)
+
+set.seed(2)
+ssf_dat <- lupe |>
+  steps_by_burst() |>
+  random_steps(n_control = 10) |>
+  extract_covariates(covs, where = "both")
+
+forest_cols <- c("grey93", "#a9cfa4")
+show_forest <- function(box, main) {
+  plot(crop(covs$forest, box), col = forest_cols, legend = FALSE, axes = FALSE, box = FALSE,
+       mar = c(0.5, 0.5, 3.2, 0.5), main = main, cex.main = 1.8, font.main = 1)
+}
+```
+
 ## Today
 
 ::: {.paradigm}
@@ -76,6 +107,34 @@ disagreements about availability.
 
 ---
 
+## Used and available, for one fisher
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+set.seed(1)
+ua <- lupe |> random_points(n = nrow(lupe) * 10) |> extract_covariates(covs)
+box <- ext(vect(cbind(ua$x_, ua$y_))) + 300
+
+layout(matrix(1:2, 1), widths = c(1.2, 1))
+show_forest(box, "Lupe: used (red) and available (grey)")
+avail <- ua[!ua$case_, ][sample(sum(!ua$case_), 1500), ]
+points(avail$x_, avail$y_, pch = 16, cex = 0.4, col = "grey45")
+points(lupe$x_, lupe$y_, pch = 16, cex = 0.6, col = rust)
+scale_bar(1)
+slide_par(mar = c(4.6, 5.6, 3.2, 1))
+share <- 100 * c(used = mean(!ua$forest[ua$case_]), available = mean(!ua$forest[!ua$case_]))
+bp <- barplot(share, col = c(rust, "grey60"), border = NA, ylim = c(0, max(share) * 1.25),
+              ylab = "% of points outside forest", main = "Outside forest")
+text(bp, share, sprintf("%.1f%%", share), pos = 3, cex = 1.6)
+```
+
+Green: forest. Almost every fix is in forest — but so is almost everything
+available. The signal is in the comparison: outside forest, Lupe turns up
+`r round(share[2] / share[1])` times less often than availability predicts.
+
 ---
 
 ## Johnson's four orders (1980)
@@ -93,8 +152,6 @@ The **same animal** can show opposite results at different orders. A deer may
 place its home range in forest (2nd order) yet prefer clearings within it
 (3rd order). Always state your order — it is the definition of "available".
 :::
-
----
 
 ---
 
@@ -151,6 +208,39 @@ RSF or an SSF and reports **relative** selection.
 
 ---
 
+## Availability, three ways
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+set.seed(3)
+whole  <- spatSample(covs$forest, 600, method = "random", xy = TRUE, na.rm = TRUE)
+hr_box <- ext(vect(cbind(lupe$x_, lupe$y_))) + 300
+few    <- ssf_dat |> filter(step_id_ %in% unique(step_id_)[60:67])
+step_box <- ext(vect(rbind(cbind(few$x1_, few$y1_), cbind(few$x2_, few$y2_)))) + 150
+
+par(mfrow = c(1, 3)); par(cex = 1)
+show_forest(ext(covs), "2nd order: study area")
+points(whole$x, whole$y, pch = 16, cex = 0.5, col = "grey40")
+plot(as.polygons(hr_box), add = TRUE, border = ink, lwd = 2, lty = 2)
+points(lupe$x_, lupe$y_, pch = 16, cex = 0.4, col = rust)
+show_forest(hr_box, "3rd order: home range")
+points(avail$x_, avail$y_, pch = 16, cex = 0.4, col = "grey40")
+points(lupe$x_, lupe$y_, pch = 16, cex = 0.5, col = rust)
+plot(as.polygons(step_box), add = TRUE, border = ink, lwd = 2, lty = 2)
+show_forest(step_box, "SSF: each step")
+with(few[!few$case_, ], segments(x1_, y1_, x2_, y2_, col = "grey40", lwd = 1.5))
+with(few[few$case_, ], { segments(x1_, y1_, x2_, y2_, col = rust, lwd = 4); points(x1_, y1_, pch = 16, col = rust, cex = 1.3) })
+```
+
+The same fisher (red). Each panel zooms into the dashed box of the previous
+one: the study area, the home range, and eight steps with their control steps
+(grey).
+
+---
+
 ## The RSF
 
 $$w(\mathbf{x}) = \exp(\beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_k x_k)$$
@@ -165,8 +255,6 @@ true probability by an unknown constant.
 - Only **relative** statements are licensed: "twice as likely as", never
   "40% probability of use"
 :::
-
----
 
 ---
 
@@ -189,8 +277,6 @@ d$w <- ifelse(d$case_, 1, 5000)
 glm(case_ ~ elevation + grassland, data = d,
     family = binomial(), weights = d$w)
 ```
-
----
 
 ---
 
@@ -244,6 +330,37 @@ different questions.
 
 ---
 
+## Do the coefficients stabilise?
+
+```{r}
+#| echo: false
+#| cache: true
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+ks <- c(1, 2, 5, 10, 20, 50)
+stab <- do.call(rbind, lapply(ks, function(k) {
+  set.seed(k)
+  d <- lupe |> random_points(n = nrow(lupe) * k) |> extract_covariates(covs) |>
+    mutate(w = ifelse(case_, 1, 5000), forest = as.numeric(forest))
+  m <- glm(case_ ~ forest + scale(elevation) + scale(popden), data = d,
+           family = binomial(), weights = w)
+  data.frame(k = k, b = coef(m)[["forest"]], se = summary(m)$coefficients["forest", 2])
+}))
+slide_par(mar = c(4.6, 6, 1, 1))
+plot(stab$k, stab$b, log = "x", pch = 16, cex = 2, col = teal, xaxt = "n",
+     ylim = range(stab$b - 2 * stab$se, stab$b + 2 * stab$se),
+     xlab = "Available points per used point", ylab = "RSF coefficient: forest")
+axis(1, at = ks)
+arrows(stab$k, stab$b - 1.96 * stab$se, stab$k, stab$b + 1.96 * stab$se, angle = 90,
+       code = 3, length = 0.06, lwd = 3, col = teal)
+abline(h = tail(stab$b, 1), lty = 2, col = "grey50")
+```
+
+Lupe's forest coefficient and 95% CI, refitted with more and more available
+points. The estimate settles by about ten per fix; the interval hardly
+narrows, because the information is in the 774 used fixes.
+
 # 3 · Step selection functions {background-color="#14525a"}
 
 ---
@@ -269,8 +386,6 @@ have gone?
 
 ---
 
----
-
 ## The design
 
 For each observed step:
@@ -291,6 +406,36 @@ moment — time of day, season, the animal's internal state, its identity —
 cancels out. That is a remarkably clean piece of control.
 
 ---
+
+## One stratum
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.8
+#| fig-align: center
+st1 <- ssf_dat |> filter(step_id_ == unique(step_id_)[63])
+prev <- ssf_dat |> filter(case_, step_id_ %in% unique(ssf_dat$step_id_)[60:62])
+b1 <- ext(vect(rbind(cbind(st1$x2_, st1$y2_), cbind(prev$x1_, prev$y1_)))) + 120
+
+layout(matrix(1:2, 1), widths = c(1.25, 1))
+show_forest(b1, "1 used step + 10 control steps")
+with(prev, segments(x1_, y1_, x2_, y2_, col = ink, lwd = 2, lty = 3))
+with(st1[!st1$case_, ], { segments(x1_, y1_, x2_, y2_, col = "grey35", lwd = 2); points(x2_, y2_, pch = 1, cex = 1.6, lwd = 2) })
+with(st1[st1$case_, ], { segments(x1_, y1_, x2_, y2_, col = rust, lwd = 5); points(x2_, y2_, pch = 16, col = rust, cex = 2.2) })
+points(st1$x1_[1], st1$y1_[1], pch = 15, cex = 2.2)
+scale_bar(0.1, pos = c(0.25, 0.06))
+par(mar = c(1, 1, 3.2, 1))
+plot.new(); title("What the model compares", cex.main = 1.8, font.main = 1)
+tab <- st1 |> arrange(desc(case_)) |>
+  transmute(step = ifelse(case_, "used", "control"), sl = round(sl_), forest = ifelse(forest_end == 1, "yes", "no"))
+text(0.05, seq(0.9, 0.9 - 0.075 * nrow(tab), length.out = nrow(tab) + 1)[-1] + 0.075,
+     sprintf("%-8s %5d m   forest: %s", tab$step, tab$sl, tab$forest), adj = 0, family = "mono", cex = 1.35,
+     col = ifelse(tab$step == "used", rust, ink))
+```
+
+Square: where the fisher was. Dotted: the steps that brought it there. The
+model asks only how the used step differs from its own controls.
 
 ---
 
@@ -317,8 +462,6 @@ fit_issf(case_ ~ elevation_end + sl_ + log(sl_) +
                  strata(step_id_),
          data = d)
 ```
-
----
 
 ---
 
@@ -397,8 +540,6 @@ estimating the movement kernel and the selection coefficients
 
 ---
 
----
-
 ## How iSSA does it
 
 Include the movement variables as covariates in the conditional model:
@@ -418,8 +559,6 @@ fit_issf(case_ ~ elevation_end + grassland_end +
                  sl_ + log(sl_) + cos(ta_) +
                  strata(step_id_), data = d)
 ```
-
----
 
 ---
 
@@ -443,6 +582,43 @@ by hand.
 
 ---
 
+## Tentative and realised kernels
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+issf <- fit_issf(ssf_dat, case_ ~ forest_end + elevation_end + popden_end +
+                   sl_ + log(sl_) + cos(ta_) + strata(step_id_), model = TRUE)
+sl0 <- sl_distr(ssf_dat); ta0 <- ta_distr(ssf_dat)
+sl1 <- update_gamma(sl0, beta_sl = coef(issf)[["sl_"]], beta_log_sl = coef(issf)[["log(sl_)"]])
+ta1 <- update_vonmises(ta0, beta_cos_ta = coef(issf)[["cos(ta_)"]])
+dvm <- function(th, k) exp(k * cos(th)) / (2 * pi * besselI(k, 0))
+
+par(mfrow = c(1, 2)); slide_par()
+x <- seq(1, 800, length.out = 400)
+plot(x, dgamma(x, sl0$params$shape, scale = sl0$params$scale), type = "l", lwd = 4, col = "grey60",
+     yaxt = "n", xlab = "Step length (m)", ylab = "Density", main = "Step lengths",
+     ylim = c(0, max(dgamma(x, sl1$params$shape, scale = sl1$params$scale),
+                     dgamma(x, sl0$params$shape, scale = sl0$params$scale))))
+lines(x, dgamma(x, sl1$params$shape, scale = sl1$params$scale), lwd = 4, col = rust)
+legend("topright", c("tentative (from the data)", "realised (iSSA)"), col = c("grey60", rust),
+       lwd = 4, bty = "n", cex = 1.3)
+th <- seq(-pi, pi, length.out = 400)
+plot(th * 180 / pi, dvm(th, ta0$params$kappa), type = "l", lwd = 4, col = "grey60", xaxt = "n",
+     ylim = c(0, max(dvm(0, c(ta0$params$kappa, ta1$params$kappa))) * 1.1),
+     xlab = "Turning angle (degrees)", ylab = "Density", main = "Turning angles")
+axis(1, at = seq(-180, 180, 90))
+lines(th * 180 / pi, dvm(th, ta1$params$kappa), lwd = 4, col = rust)
+```
+
+Grey: the distributions Lupe's control steps were drawn from. Red: the
+movement kernel after the iSSA correction. For this fisher the correction is
+small (mean step `r round(prod(unlist(sl0$params)))` →
+`r round(prod(unlist(sl1$params)))` m); it is large when habitat strongly
+shapes how far an animal moves.
+
 ---
 
 ## Interactions: where it gets interesting
@@ -463,8 +639,6 @@ case_ ~ grassland_end +
 - `_end` covariates capture **selection** — which habitat it moves *into*
 - Mixing them up is the single most common error in iSSA papers
 :::
-
----
 
 ---
 
@@ -523,6 +697,45 @@ built in.
 
 ---
 
+## A redistribution kernel, built
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.5
+#| fig-align: center
+source("R/simulators.R")
+hab <- simulate_habitat()                                 # the practical's simulated landscape
+slope <- terra::terrain(hab, "slope", unit = "radians")
+core  <- crop(slope, ext(-5000, 5000, -5000, 5000))
+x0 <- as.numeric(xyFromCell(core, which.max(values(core))))
+asp <- as.numeric(terra::extract(terra::terrain(hab, "aspect", unit = "radians"), rbind(x0)))
+h0  <- pi / 2 - asp + pi / 2                 # heading: along the habitat gradient's contour
+
+cell <- 25; half <- 900
+mids <- seq(-half + cell / 2, half - cell / 2, by = cell)
+g    <- expand.grid(dx = mids, dy = mids)
+r    <- sqrt(g$dx^2 + g$dy^2); th <- atan2(g$dy, g$dx) - h0
+move <- matrix(dgamma(r, shape = 2, scale = 150) * dvm(th, 1) / pmax(r, 1), length(mids))
+sel  <- matrix(exp(1.5 * terra::extract(hab, cbind(x0[1] + g$dx, x0[2] + g$dy))[, 1]), length(mids))
+show <- function(z, main) {
+  image(mids, mids, z / sum(z), col = hcl.colors(60, "YlOrRd", rev = TRUE), asp = 1,
+        axes = FALSE, xlab = "", ylab = "", main = main)
+  points(0, 0, pch = 15, cex = 1.8)
+  arrows(-250 * cos(h0), -250 * sin(h0), 0, 0, lwd = 3, length = 0.12)
+}
+par(mfrow = c(1, 3)); par(cex = 1); map_par(cex.main = 1.6)
+show(move, "Movement kernel")
+show(sel, "× selection")
+show(move * sel, "= where it goes next")
+```
+
+The simulated animal of today's practical (β = 1.5) in a 1.8 km window.
+Square: where it is; arrow: its last step. Movement says how far and which
+way; selection tilts the kernel towards better habitat.
+
+---
+
 ## Relative selection strength
 
 The natural effect size for an SSF (Avgar et al. 2017; Fieberg et al. 2021):
@@ -556,8 +769,6 @@ $$\text{RSS}(x_1, x_2) = \exp\big(\beta\,(x_1 - x_2)\big)$$
 
 ---
 
----
-
 ## Multiple animals, again
 
 ::: {.incremental}
@@ -569,8 +780,6 @@ $$\text{RSS}(x_1, x_2) = \exp\big(\beta\,(x_1 - x_2)\big)$$
 - A random intercept alone is **not** enough — it does not let individuals
   differ in selection, which is usually the biology you care about
 :::
-
----
 
 ---
 
@@ -590,8 +799,6 @@ $$\text{RSS}(x_1, x_2) = \exp\big(\beta\,(x_1 - x_2)\big)$$
 ```r
 amt::simulate_path(...)   # redistribution kernel from the fitted iSSA
 ```
-
----
 
 ---
 
@@ -642,8 +849,6 @@ through the landscape, use iSSA. If your sampling is sparse or irregular, and
 your question is about broad-scale range placement, an RSF is the honest
 choice.
 :::
-
----
 
 ---
 
