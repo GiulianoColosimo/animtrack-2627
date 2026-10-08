@@ -123,7 +123,6 @@ website:
     right: "Built with [Quarto](https://quarto.org/)."
     background: dark
 
-bibliography: comprehensive_database.bib
 csl: apa_5th_edition.csl
 
 format:

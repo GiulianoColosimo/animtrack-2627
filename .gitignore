@@ -19,6 +19,11 @@ Thumbs.db
 .~lock.*#
 *~
 
+# --- Kept on disk but private: the course program drafts and the full bibliography ---
+program.odt
+program.pdf
+comprehensive_database.bib
+
 # --- Data too large or too derived to version ---
 data/raw/
 
