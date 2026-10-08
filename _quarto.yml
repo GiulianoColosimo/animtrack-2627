@@ -6,6 +6,8 @@ project:
     - "*.qmd"
     - "classes/**/*.qmd"
     - "!README.md"
+  resources:
+    - .nojekyll             # tells GitHub Pages to serve docs/ as-is, without Jekyll
 
 execute:
   freeze: auto              # cache R results; CI/Pages never needs to run R
