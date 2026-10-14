@@ -81,7 +81,7 @@ a wrong answer now is information, a wrong answer in June is a problem.
 Almost every process a conservation biologist cares about is a movement
 process in disguise:
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - **Gene flow** — dispersal distances set population connectivity
 - **Disease spread** — contact rates are an outcome of where animals go
 - **Population persistence** — can individuals reach the next patch?
@@ -89,9 +89,9 @@ process in disguise:
 - **Protected-area design** — a reserve that does not contain the movements
   it was drawn for does not work
 - **Climate response** — range shifts are dispersal events, one individual at a time
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 If you cannot describe how an organism moves, you cannot predict how it will
@@ -114,7 +114,7 @@ The constraint has moved. It used to be *getting* locations. It is now
 Nathan *et al.* (2008) reduced the whole field to **four questions** about
 every movement path:
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 1. **Why move?** — the *internal state*. Hunger, thirst, reproduction, fear.
    The motivation.
 2. **How to move?** — the *motion capacity*. Legs, wings, fins; the
@@ -123,9 +123,9 @@ every movement path:
    cues, orientation.
 4. **What external factors?** — the environment. Landscape, weather,
    predators, other individuals, people.
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 $U_t = f(\Omega, \Phi, r_t, w_t)$ — the observed path is the *joint outcome* of
@@ -153,15 +153,15 @@ course is an attempt to reason *upwards* from the path to the boxes above it.
 
 ## Why move? The ecological drivers
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - **Foraging** — resources are patchy and deplete; staying costs as much as leaving
 - **Dispersal** — leaving the natal area: avoids inbreeding and competition with kin
 - **Migration** — seasonal, round-trip tracking of resources across large distances
 - **Predator avoidance** — moving away from risk, or towards refuges
 - **Reproduction** — finding mates, defending territories, provisioning young
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 These map onto different *scales* of movement: foraging steps in minutes,
@@ -175,15 +175,15 @@ of them — which is why one trajectory usually hides several processes.
 
 Every movement decision balances **gain** against **cost**:
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - **Energy** — travelling costs calories; a richer patch further away may not pay
 - **Risk** — the best food is often where predators are; the *landscape of fear*
   (Laundré et al. 2001) can matter as much as the landscape of food
 - **Information** — exploring costs now but may pay later
 - **Time** — a day spent travelling is a day not spent feeding or breeding
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 When a model says an animal "selects" a habitat, it is summarising the net
@@ -246,7 +246,9 @@ Gives you the **pattern**: density in space.
 :::
 :::
 
-. . .
+<!-- :::
+
+. . .  -->
 
 This course is almost entirely **Lagrangian** — but remember the two are
 linked: a distribution is what you get when you integrate movement over time.
@@ -266,7 +268,9 @@ linked: a distribution is what you get when you integrate movement over time.
 | **Fix success rate** | Fraction of attempts that produced a location |
 | **Deployment** | One tag, on one animal, over one period |
 
-. . .
+<!-- :::
+
+. . .  -->
 
 ::: {.keyidea}
 A track is **not** the path the animal walked. It is a *sample* of that path.
@@ -357,7 +361,9 @@ themselves an ecological signal.
 | 📈 | Accelerometers / IMU | No — *behaviour* | €€ |
 | 🔊 | Acoustic telemetry | Receiver range | €€€ |
 
-. . .
+<!-- :::
+
+. . .  -->
 
 ::: {.keyidea}
 There is no best technology. There is only the best technology **for this
@@ -439,16 +445,16 @@ else reaches insects and the smallest bats.
 
 ## What triangulation actually costs you
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - Each bearing has error; the location error is the **intersection polygon**
   of two noisy bearings, and it grows fast with distance
 - Data arrive **when a human is in the field** — so nights, storms and
   weekends are systematically under-sampled
 - A few dozen to a few hundred fixes per animal, unevenly spaced
 - Cheap tags, expensive *fieldwork*
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 The bat dataset we will use in Session 3 is exactly this: 17 individuals,
@@ -463,12 +469,14 @@ data"**.
 
 ![The GPS constellation](../../assets/figures/gps_constellation.gif){width="42%" fig-align="center"}
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - Each satellite broadcasts its position and a very precise time
 - Distance to a satellite = (signal travel time) × c
 - **3 satellites** fix a position in principle; a **4th** is needed to solve
   the receiver's clock error — and more give altitude and redundancy
-:::
+<!-- :::
+
+. . .  -->
 
 ---
 
@@ -496,7 +504,7 @@ data"**.
 
 ## Getting the data off the animal
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - **Store-on-board** — cheapest, best battery use, but you must **recapture**
   the animal. Lose the animal, lose everything.
 - **VHF/UHF download** — get close, pull the data over the air
@@ -505,9 +513,9 @@ data"**.
 - **Iridium / Argos uplink** — global, live, expensive, small data volumes
 - **Drop-off collars** — timed or remotely triggered release, then go and find
   the collar. Elegant, and one more thing that can fail.
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 Ask *"how will I get the data back?"* **before** you buy the tags. This is the
@@ -550,7 +558,7 @@ Fish, sharks, invertebrates.
 
 ## Biologging: sensors that are not locations
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - **Tri-axial accelerometers** — the workhorse. At 10–50 Hz you can classify
   feeding, resting, flying, and estimate energy expenditure (ODBA)
 - **Magnetometers + gyroscopes** — heading and body rotation; combined with
@@ -558,9 +566,9 @@ Fish, sharks, invertebrates.
 - **Pressure / depth** — dive profiles
 - **Temperature, heart rate, gut temperature** — physiology in the wild
 - **Proximity tags** — who was near whom, and for how long: social networks
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 The frontier is not more locations. It is **locations plus sensors**: knowing
@@ -672,7 +680,7 @@ geolocator or accelerometer — nothing that transmits a position.
 
 ## Tag effects are real
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - The **3–5% rule** (tag ≤ 3% of body mass for flying animals, ≤ 5% for
   terrestrial ones) is a *convention*, not a finding. Portugal & White (2018)
   showed miniaturisation has not made published studies lighter relative to
@@ -682,9 +690,9 @@ geolocator or accelerometer — nothing that transmits a position.
 - Documented effects: reduced breeding success, higher energy expenditure,
   altered diving, changed social status, injury at the attachment site.
 - Effects are often **delayed** — and studies are rarely designed to detect them.
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 A tagged animal is, to some degree, a *modified* animal. The honest position
@@ -695,7 +703,7 @@ is to minimise, measure and report the effect — not to assume it away.
 
 ## Ethics and permits: the checklist
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 1. **Is the question worth it?** Would existing data answer it?
 2. **3 Rs** — replace, reduce, refine. The smallest sample that can answer the question.
 3. **Ethics approval** and national/regional permits, *before* fieldwork.
@@ -705,7 +713,9 @@ is to minimise, measure and report the effect — not to assume it away.
 6. **Data sensitivity** — for poached species, publishing exact coordinates can
    be lethal. Movebank supports embargo and coarsening.
 7. **Report the effects you observed**, including the animals you lost.
-:::
+<!-- :::
+
+. . .  -->
 
 ---
 
@@ -773,7 +783,7 @@ The spatial version is famous in geography (Openshaw 1984): results change
 with the size of the spatial units you aggregate into. Tracking has its own
 temporal version.
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - **Path length** shrinks as the interval grows — every straight segment cuts
   corners the animal actually walked
 - **Speed** is really *distance per interval*: the same animal is "slower"
@@ -781,9 +791,9 @@ temporal version.
 - **Tortuosity** and **turning angles** change — fine sampling shows wiggles,
   coarse sampling shows randomness
 - **Behaviours shorter than the interval become invisible**
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 There is no "true" speed or step length independent of the fix interval. Choose
@@ -797,14 +807,14 @@ sampled at different rates.
 
 Four numbers you fix before the first capture:
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 1. **Fix interval** — set by the fastest behaviour you need to resolve
 2. **Duration** — set by the slowest process (seasonal selection needs a year)
 3. **Number of animals** — set by the *population* question; individuals vary
 4. **Battery** — the budget that forces 1 × 2 × 3 into a compromise
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 Interval × duration × number of animals ≈ constant for a given budget. A study
@@ -867,16 +877,16 @@ given sampling interval**, and must be reported that way.
 
 ## Bias 1 — Fix success is not random
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - GPS fixes fail under **dense canopy**, in **steep terrain**, in **burrows**,
   underwater
 - So the fixes you *have* are biased towards open habitat
 - Then you fit a habitat-selection model and conclude the animal prefers
   open habitat
 - **You have measured your collar, not your animal**
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 Fixes are missing *because of* the covariate you are modelling. This is
@@ -888,7 +898,7 @@ collars in each habitat type, and model fix success explicitly.
 
 ## Bias 2 — Location error is structured
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - Error is **not** independent white noise: it is correlated in time and
   correlated with habitat
 - A bad fix can place an animal hundreds of metres away, producing an
@@ -896,9 +906,9 @@ collars in each habitat type, and model fix success explicitly.
 - Naïvely, that spike inflates your speed distribution and your home range
 - Filtering on speed is the standard fix, but a threshold that is too
   aggressive deletes real fast movement
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 Keep the DOP / satellite-count columns. They are your evidence about which
 fixes to distrust. We use them in Session 3.
@@ -907,7 +917,7 @@ fixes to distrust. We use them in Session 3.
 
 ## Bias 3 — The sample of animals
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - Tagged animals are the ones you could **catch**: often bolder, often in
   accessible places, often adults, often one sex
 - Sample sizes are small — 6 buffalo, 1 vulture. Individual variation is
@@ -915,9 +925,9 @@ fixes to distrust. We use them in Session 3.
 - Tags fail unevenly: animals in rough habitat lose collars more often,
   so late in a study your sample has drifted
 - Publication bias: dispersal studies report the animals that were *found*
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ::: {.keyidea}
 Three questions for every tracking paper you read, including yours:
@@ -958,16 +968,16 @@ model accordingly.
 
 [movebank.org](https://www.movebank.org) — the field's shared repository.
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - Thousands of studies, billions of locations; many openly licensed
 - A **controlled vocabulary**: `timestamp`, `location-long`, `location-lat`,
   `individual-local-identifier` — always the same names, always UTC, always WGS84
 - **Env-DATA**: upload a track, get it annotated with weather, NDVI, land
   cover, elevation. We do this by hand in Sessions 2–3 so you understand what it does.
 - R access through the `move2` package
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 Our three datasets all come from there — see the [Datasets page](../../data.qmd).
 
@@ -1041,7 +1051,7 @@ properly is Session 2.
 
 ## Recap
 
-::: {.incremental}
+<!-- ::: {.incremental} -->
 - The **paradigm**: internal state, motion capacity, navigation, external
   factors → path. We only ever observe the path
 - Animals move to forage, disperse, migrate, avoid predators and breed — each
@@ -1051,9 +1061,9 @@ properly is Session 2.
 - The **fix interval** shapes the path you see — the modifiable temporal unit
   problem
 - Three biases: **fix success**, **location error**, **which animals you caught**
-:::
+<!-- :::
 
-. . .
+. . .  -->
 
 ### Before Session 2
 
@@ -1068,4 +1078,10 @@ properly is Session 2.
 
 [giuliano.colosimo@uniroma2.it](mailto:giuliano.colosimo@uniroma2.it)
 
+<!-- :::
+
 Slides, code and data: [github.com/GiulianoColosimo/animtrack-2627](https://github.com/GiulianoColosimo/animtrack-2627)
+
+-->
+
+

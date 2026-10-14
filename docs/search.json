@@ -1417,7 +1417,7 @@
     "href": "classes/class-01/slides.html#movement-is-the-link-between-an-animal-and-its-environment",
     "title": "Why animals move, and how we watch them",
     "section": "Movement is the link between an animal and its environment",
-    "text": "Movement is the link between an animal and its environment\nAlmost every process a conservation biologist cares about is a movement process in disguise:\n\nGene flow — dispersal distances set population connectivity\nDisease spread — contact rates are an outcome of where animals go\nPopulation persistence — can individuals reach the next patch?\nHuman–wildlife conflict — where do animals and people overlap, and when?\nProtected-area design — a reserve that does not contain the movements it was drawn for does not work\nClimate response — range shifts are dispersal events, one individual at a time\n\n\n\nIf you cannot describe how an organism moves, you cannot predict how it will respond to a changing landscape.",
+    "text": "Movement is the link between an animal and its environment\nAlmost every process a conservation biologist cares about is a movement process in disguise:\n\n\nGene flow — dispersal distances set population connectivity\nDisease spread — contact rates are an outcome of where animals go\nPopulation persistence — can individuals reach the next patch?\nHuman–wildlife conflict — where do animals and people overlap, and when?\nProtected-area design — a reserve that does not contain the movements it was drawn for does not work\nClimate response — range shifts are dispersal events, one individual at a time \n\n\nIf you cannot describe how an organism moves, you cannot predict how it will respond to a changing landscape.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1443,7 +1443,7 @@
     "href": "classes/class-01/slides.html#the-movement-ecology-paradigm",
     "title": "Why animals move, and how we watch them",
     "section": "The movement ecology paradigm",
-    "text": "The movement ecology paradigm\nNathan et al. (2008) reduced the whole field to four questions about every movement path:\n\nWhy move? — the internal state. Hunger, thirst, reproduction, fear. The motivation.\nHow to move? — the motion capacity. Legs, wings, fins; the biomechanical envelope.\nWhen and where to move? — the navigation capacity. Memory, senses, cues, orientation.\nWhat external factors? — the environment. Landscape, weather, predators, other individuals, people.\n\n\n\n\\(U_t = f(\\Omega, \\Phi, r_t, w_t)\\) — the observed path is the joint outcome of all four. This is why a track is hard to interpret: many different combinations produce similar-looking paths.",
+    "text": "The movement ecology paradigm\nNathan et al. (2008) reduced the whole field to four questions about every movement path:\n\n\nWhy move? — the internal state. Hunger, thirst, reproduction, fear. The motivation.\nHow to move? — the motion capacity. Legs, wings, fins; the biomechanical envelope.\nWhen and where to move? — the navigation capacity. Memory, senses, cues, orientation.\nWhat external factors? — the environment. Landscape, weather, predators, other individuals, people. \n\n\n\\(U_t = f(\\Omega, \\Phi, r_t, w_t)\\) — the observed path is the joint outcome of all four. This is why a track is hard to interpret: many different combinations produce similar-looking paths.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1469,7 +1469,7 @@
     "href": "classes/class-01/slides.html#why-move-the-ecological-drivers",
     "title": "Why animals move, and how we watch them",
     "section": "Why move? The ecological drivers",
-    "text": "Why move? The ecological drivers\n\nForaging — resources are patchy and deplete; staying costs as much as leaving\nDispersal — leaving the natal area: avoids inbreeding and competition with kin\nMigration — seasonal, round-trip tracking of resources across large distances\nPredator avoidance — moving away from risk, or towards refuges\nReproduction — finding mates, defending territories, provisioning young\n\n\n\nThese map onto different scales of movement: foraging steps in minutes, dispersal once in a lifetime, migration once a year. The same animal does all of them — which is why one trajectory usually hides several processes.",
+    "text": "Why move? The ecological drivers\n\n\nForaging — resources are patchy and deplete; staying costs as much as leaving\nDispersal — leaving the natal area: avoids inbreeding and competition with kin\nMigration — seasonal, round-trip tracking of resources across large distances\nPredator avoidance — moving away from risk, or towards refuges\nReproduction — finding mates, defending territories, provisioning young \n\n\nThese map onto different scales of movement: foraging steps in minutes, dispersal once in a lifetime, migration once a year. The same animal does all of them — which is why one trajectory usually hides several processes.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1482,7 +1482,7 @@
     "href": "classes/class-01/slides.html#movement-is-a-trade-off",
     "title": "Why animals move, and how we watch them",
     "section": "Movement is a trade-off",
-    "text": "Movement is a trade-off\nEvery movement decision balances gain against cost:\n\nEnergy — travelling costs calories; a richer patch further away may not pay\nRisk — the best food is often where predators are; the landscape of fear (Laundré et al. 2001) can matter as much as the landscape of food\nInformation — exploring costs now but may pay later\nTime — a day spent travelling is a day not spent feeding or breeding\n\n\n\nWhen a model says an animal “selects” a habitat, it is summarising the net outcome of all these trade-offs. Sessions 7 and 8 are about disentangling them.",
+    "text": "Movement is a trade-off\nEvery movement decision balances gain against cost:\n\n\nEnergy — travelling costs calories; a richer patch further away may not pay\nRisk — the best food is often where predators are; the landscape of fear (Laundré et al. 2001) can matter as much as the landscape of food\nInformation — exploring costs now but may pay later\nTime — a day spent travelling is a day not spent feeding or breeding \n\n\nWhen a model says an animal “selects” a habitat, it is summarising the net outcome of all these trade-offs. Sessions 7 and 8 are about disentangling them.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1638,7 +1638,7 @@
     "href": "classes/class-01/slides.html#what-triangulation-actually-costs-you",
     "title": "Why animals move, and how we watch them",
     "section": "What triangulation actually costs you",
-    "text": "What triangulation actually costs you\n\nEach bearing has error; the location error is the intersection polygon of two noisy bearings, and it grows fast with distance\nData arrive when a human is in the field — so nights, storms and weekends are systematically under-sampled\nA few dozen to a few hundred fixes per animal, unevenly spaced\nCheap tags, expensive fieldwork\n\n\n\nThe bat dataset we will use in Session 3 is exactly this: 17 individuals, 1,740 fixes in total, wildly irregular. Most methods in this course assume regular sampling. Part of your training is learning to say “not with these data”.",
+    "text": "What triangulation actually costs you\n\n\nEach bearing has error; the location error is the intersection polygon of two noisy bearings, and it grows fast with distance\nData arrive when a human is in the field — so nights, storms and weekends are systematically under-sampled\nA few dozen to a few hundred fixes per animal, unevenly spaced\nCheap tags, expensive fieldwork \n\n\nThe bat dataset we will use in Session 3 is exactly this: 17 individuals, 1,740 fixes in total, wildly irregular. Most methods in this course assume regular sampling. Part of your training is learning to say “not with these data”.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1651,7 +1651,7 @@
     "href": "classes/class-01/slides.html#gps-trilateration",
     "title": "Why animals move, and how we watch them",
     "section": "GPS: trilateration",
-    "text": "GPS: trilateration\n\nThe GPS constellation\nEach satellite broadcasts its position and a very precise time\nDistance to a satellite = (signal travel time) × c\n3 satellites fix a position in principle; a 4th is needed to solve the receiver’s clock error — and more give altitude and redundancy",
+    "text": "GPS: trilateration\n\n\nThe GPS constellation\nEach satellite broadcasts its position and a very precise time\nDistance to a satellite = (signal travel time) × c\n3 satellites fix a position in principle; a 4th is needed to solve the receiver’s clock error — and more give altitude and redundancy",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1677,7 +1677,7 @@
     "href": "classes/class-01/slides.html#getting-the-data-off-the-animal",
     "title": "Why animals move, and how we watch them",
     "section": "Getting the data off the animal",
-    "text": "Getting the data off the animal\n\nStore-on-board — cheapest, best battery use, but you must recapture the animal. Lose the animal, lose everything.\nVHF/UHF download — get close, pull the data over the air\nGSM / SMS — near-live data wherever there is mobile coverage. Fails in exactly the remote places you care about.\nIridium / Argos uplink — global, live, expensive, small data volumes\nDrop-off collars — timed or remotely triggered release, then go and find the collar. Elegant, and one more thing that can fail.\n\n\n\nAsk “how will I get the data back?” before you buy the tags. This is the question most first projects get wrong.",
+    "text": "Getting the data off the animal\n\n\nStore-on-board — cheapest, best battery use, but you must recapture the animal. Lose the animal, lose everything.\nVHF/UHF download — get close, pull the data over the air\nGSM / SMS — near-live data wherever there is mobile coverage. Fails in exactly the remote places you care about.\nIridium / Argos uplink — global, live, expensive, small data volumes\nDrop-off collars — timed or remotely triggered release, then go and find the collar. Elegant, and one more thing that can fail. \n\n\nAsk “how will I get the data back?” before you buy the tags. This is the question most first projects get wrong.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1703,7 +1703,7 @@
     "href": "classes/class-01/slides.html#biologging-sensors-that-are-not-locations",
     "title": "Why animals move, and how we watch them",
     "section": "Biologging: sensors that are not locations",
-    "text": "Biologging: sensors that are not locations\n\nTri-axial accelerometers — the workhorse. At 10–50 Hz you can classify feeding, resting, flying, and estimate energy expenditure (ODBA)\nMagnetometers + gyroscopes — heading and body rotation; combined with accelerometers gives dead reckoning: a fine-scale path between GPS fixes\nPressure / depth — dive profiles\nTemperature, heart rate, gut temperature — physiology in the wild\nProximity tags — who was near whom, and for how long: social networks\n\n\n\nThe frontier is not more locations. It is locations plus sensors: knowing where and what the animal was doing there. Session 8 is the statistical version of this question when all you have is the trajectory.",
+    "text": "Biologging: sensors that are not locations\n\n\nTri-axial accelerometers — the workhorse. At 10–50 Hz you can classify feeding, resting, flying, and estimate energy expenditure (ODBA)\nMagnetometers + gyroscopes — heading and body rotation; combined with accelerometers gives dead reckoning: a fine-scale path between GPS fixes\nPressure / depth — dive profiles\nTemperature, heart rate, gut temperature — physiology in the wild\nProximity tags — who was near whom, and for how long: social networks \n\n\nThe frontier is not more locations. It is locations plus sensors: knowing where and what the animal was doing there. Session 8 is the statistical version of this question when all you have is the trajectory.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1768,7 +1768,7 @@
     "href": "classes/class-01/slides.html#tag-effects-are-real",
     "title": "Why animals move, and how we watch them",
     "section": "Tag effects are real",
-    "text": "Tag effects are real\n\nThe 3–5% rule (tag ≤ 3% of body mass for flying animals, ≤ 5% for terrestrial ones) is a convention, not a finding. Portugal & White (2018) showed miniaturisation has not made published studies lighter relative to body mass — researchers just tag smaller animals.\nFor flying and diving animals, drag and shape matter more than mass. A streamlined 3% package can beat a bluff 1.5% one.\nDocumented effects: reduced breeding success, higher energy expenditure, altered diving, changed social status, injury at the attachment site.\nEffects are often delayed — and studies are rarely designed to detect them.\n\n\n\nA tagged animal is, to some degree, a modified animal. The honest position is to minimise, measure and report the effect — not to assume it away.",
+    "text": "Tag effects are real\n\n\nThe 3–5% rule (tag ≤ 3% of body mass for flying animals, ≤ 5% for terrestrial ones) is a convention, not a finding. Portugal & White (2018) showed miniaturisation has not made published studies lighter relative to body mass — researchers just tag smaller animals.\nFor flying and diving animals, drag and shape matter more than mass. A streamlined 3% package can beat a bluff 1.5% one.\nDocumented effects: reduced breeding success, higher energy expenditure, altered diving, changed social status, injury at the attachment site.\nEffects are often delayed — and studies are rarely designed to detect them. \n\n\nA tagged animal is, to some degree, a modified animal. The honest position is to minimise, measure and report the effect — not to assume it away.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1781,7 +1781,7 @@
     "href": "classes/class-01/slides.html#ethics-and-permits-the-checklist",
     "title": "Why animals move, and how we watch them",
     "section": "Ethics and permits: the checklist",
-    "text": "Ethics and permits: the checklist\n\nIs the question worth it? Would existing data answer it?\n3 Rs — replace, reduce, refine. The smallest sample that can answer the question.\nEthics approval and national/regional permits, before fieldwork. In Italy: ISPRA and regional authorisations; EU Directive 2010/63 where applicable.\nCapture and handling protocol, anaesthesia where required, trained personnel.\nAttachment — weak links and planned drop-offs so nothing is worn forever.\nData sensitivity — for poached species, publishing exact coordinates can be lethal. Movebank supports embargo and coarsening.\nReport the effects you observed, including the animals you lost.",
+    "text": "Ethics and permits: the checklist\n\n\nIs the question worth it? Would existing data answer it?\n3 Rs — replace, reduce, refine. The smallest sample that can answer the question.\nEthics approval and national/regional permits, before fieldwork. In Italy: ISPRA and regional authorisations; EU Directive 2010/63 where applicable.\nCapture and handling protocol, anaesthesia where required, trained personnel.\nAttachment — weak links and planned drop-offs so nothing is worn forever.\nData sensitivity — for poached species, publishing exact coordinates can be lethal. Movebank supports embargo and coarsening.\nReport the effects you observed, including the animals you lost.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1820,7 +1820,7 @@
     "href": "classes/class-01/slides.html#the-modifiable-temporal-unit-problem",
     "title": "Why animals move, and how we watch them",
     "section": "The modifiable temporal unit problem",
-    "text": "The modifiable temporal unit problem\nThe spatial version is famous in geography (Openshaw 1984): results change with the size of the spatial units you aggregate into. Tracking has its own temporal version.\n\nPath length shrinks as the interval grows — every straight segment cuts corners the animal actually walked\nSpeed is really distance per interval: the same animal is “slower” when sampled more coarsely\nTortuosity and turning angles change — fine sampling shows wiggles, coarse sampling shows randomness\nBehaviours shorter than the interval become invisible\n\n\n\nThere is no “true” speed or step length independent of the fix interval. Choose the interval from the question, and never compare metrics across studies sampled at different rates.",
+    "text": "The modifiable temporal unit problem\nThe spatial version is famous in geography (Openshaw 1984): results change with the size of the spatial units you aggregate into. Tracking has its own temporal version.\n\n\nPath length shrinks as the interval grows — every straight segment cuts corners the animal actually walked\nSpeed is really distance per interval: the same animal is “slower” when sampled more coarsely\nTortuosity and turning angles change — fine sampling shows wiggles, coarse sampling shows randomness\nBehaviours shorter than the interval become invisible \n\n\nThere is no “true” speed or step length independent of the fix interval. Choose the interval from the question, and never compare metrics across studies sampled at different rates.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1833,7 +1833,7 @@
     "href": "classes/class-01/slides.html#designing-a-deployment",
     "title": "Why animals move, and how we watch them",
     "section": "Designing a deployment",
-    "text": "Designing a deployment\nFour numbers you fix before the first capture:\n\nFix interval — set by the fastest behaviour you need to resolve\nDuration — set by the slowest process (seasonal selection needs a year)\nNumber of animals — set by the population question; individuals vary\nBattery — the budget that forces 1 × 2 × 3 into a compromise\n\n\n\nInterval × duration × number of animals ≈ constant for a given budget. A study of foraging decisions and a study of seasonal range shifts need different collars, or at least different schedules.",
+    "text": "Designing a deployment\nFour numbers you fix before the first capture:\n\n\nFix interval — set by the fastest behaviour you need to resolve\nDuration — set by the slowest process (seasonal selection needs a year)\nNumber of animals — set by the population question; individuals vary\nBattery — the budget that forces 1 × 2 × 3 into a compromise \n\n\nInterval × duration × number of animals ≈ constant for a given budget. A study of foraging decisions and a study of seasonal range shifts need different collars, or at least different schedules.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1872,7 +1872,7 @@
     "href": "classes/class-01/slides.html#bias-1-fix-success-is-not-random",
     "title": "Why animals move, and how we watch them",
     "section": "Bias 1 — Fix success is not random",
-    "text": "Bias 1 — Fix success is not random\n\nGPS fixes fail under dense canopy, in steep terrain, in burrows, underwater\nSo the fixes you have are biased towards open habitat\nThen you fit a habitat-selection model and conclude the animal prefers open habitat\nYou have measured your collar, not your animal\n\n\n\nFixes are missing because of the covariate you are modelling. This is missing-not-at-random, the nastiest kind. Mitigation: stationary test collars in each habitat type, and model fix success explicitly.",
+    "text": "Bias 1 — Fix success is not random\n\n\nGPS fixes fail under dense canopy, in steep terrain, in burrows, underwater\nSo the fixes you have are biased towards open habitat\nThen you fit a habitat-selection model and conclude the animal prefers open habitat\nYou have measured your collar, not your animal \n\n\nFixes are missing because of the covariate you are modelling. This is missing-not-at-random, the nastiest kind. Mitigation: stationary test collars in each habitat type, and model fix success explicitly.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1885,7 +1885,7 @@
     "href": "classes/class-01/slides.html#bias-2-location-error-is-structured",
     "title": "Why animals move, and how we watch them",
     "section": "Bias 2 — Location error is structured",
-    "text": "Bias 2 — Location error is structured\n\nError is not independent white noise: it is correlated in time and correlated with habitat\nA bad fix can place an animal hundreds of metres away, producing an implausible step out and an implausible step back — a spike\nNaïvely, that spike inflates your speed distribution and your home range\nFiltering on speed is the standard fix, but a threshold that is too aggressive deletes real fast movement\n\n\nKeep the DOP / satellite-count columns. They are your evidence about which fixes to distrust. We use them in Session 3.",
+    "text": "Bias 2 — Location error is structured\n\n\nError is not independent white noise: it is correlated in time and correlated with habitat\nA bad fix can place an animal hundreds of metres away, producing an implausible step out and an implausible step back — a spike\nNaïvely, that spike inflates your speed distribution and your home range\nFiltering on speed is the standard fix, but a threshold that is too aggressive deletes real fast movement \n\nKeep the DOP / satellite-count columns. They are your evidence about which fixes to distrust. We use them in Session 3.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1898,7 +1898,7 @@
     "href": "classes/class-01/slides.html#bias-3-the-sample-of-animals",
     "title": "Why animals move, and how we watch them",
     "section": "Bias 3 — The sample of animals",
-    "text": "Bias 3 — The sample of animals\n\nTagged animals are the ones you could catch: often bolder, often in accessible places, often adults, often one sex\nSample sizes are small — 6 buffalo, 1 vulture. Individual variation is large, and \\(n=1\\) tells you about that individual\nTags fail unevenly: animals in rough habitat lose collars more often, so late in a study your sample has drifted\nPublication bias: dispersal studies report the animals that were found\n\n\n\nThree questions for every tracking paper you read, including yours: Which animals? Which fixes? What is missing, and why?",
+    "text": "Bias 3 — The sample of animals\n\n\nTagged animals are the ones you could catch: often bolder, often in accessible places, often adults, often one sex\nSample sizes are small — 6 buffalo, 1 vulture. Individual variation is large, and \\(n=1\\) tells you about that individual\nTags fail unevenly: animals in rough habitat lose collars more often, so late in a study your sample has drifted\nPublication bias: dispersal studies report the animals that were found \n\n\nThree questions for every tracking paper you read, including yours: Which animals? Which fixes? What is missing, and why?",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1924,7 +1924,7 @@
     "href": "classes/class-01/slides.html#movebank",
     "title": "Why animals move, and how we watch them",
     "section": "Movebank",
-    "text": "Movebank\nmovebank.org — the field’s shared repository.\n\nThousands of studies, billions of locations; many openly licensed\nA controlled vocabulary: timestamp, location-long, location-lat, individual-local-identifier — always the same names, always UTC, always WGS84\nEnv-DATA: upload a track, get it annotated with weather, NDVI, land cover, elevation. We do this by hand in Sessions 2–3 so you understand what it does.\nR access through the move2 package\n\n\nOur three datasets all come from there — see the Datasets page.",
+    "text": "Movebank\nmovebank.org — the field’s shared repository.\n\n\nThousands of studies, billions of locations; many openly licensed\nA controlled vocabulary: timestamp, location-long, location-lat, individual-local-identifier — always the same names, always UTC, always WGS84\nEnv-DATA: upload a track, get it annotated with weather, NDVI, land cover, elevation. We do this by hand in Sessions 2–3 so you understand what it does.\nR access through the move2 package \n\nOur three datasets all come from there — see the Datasets page.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1963,7 +1963,7 @@
     "href": "classes/class-01/slides.html#recap",
     "title": "Why animals move, and how we watch them",
     "section": "Recap",
-    "text": "Recap\n\nThe paradigm: internal state, motion capacity, navigation, external factors → path. We only ever observe the path\nAnimals move to forage, disperse, migrate, avoid predators and breed — each a trade-off between gain and cost\nTechnology choice is driven by body mass and data recovery; the 3–5% rule is a convention, not a guarantee\nThe fix interval shapes the path you see — the modifiable temporal unit problem\nThree biases: fix success, location error, which animals you caught\n\n\nBefore Session 2\n\nFinish the setup page — sf and terra must install cleanly\nRead Nathan et al. (2008), PNAS 105:19052 — it is 8 pages",
+    "text": "Recap\n\n\nThe paradigm: internal state, motion capacity, navigation, external factors → path. We only ever observe the path\nAnimals move to forage, disperse, migrate, avoid predators and breed — each a trade-off between gain and cost\nTechnology choice is driven by body mass and data recovery; the 3–5% rule is a convention, not a guarantee\nThe fix interval shapes the path you see — the modifiable temporal unit problem\nThree biases: fix success, location error, which animals you caught \n\nBefore Session 2\n\nFinish the setup page — sf and terra must install cleanly\nRead Nathan et al. (2008), PNAS 105:19052 — it is 8 pages",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1976,7 +1976,7 @@
     "href": "classes/class-01/slides.html#section",
     "title": "Why animals move, and how we watch them",
     "section": "",
-    "text": "Questions?\ngiuliano.colosimo@uniroma2.it\nSlides, code and data: github.com/GiulianoColosimo/animtrack-2627",
+    "text": "Questions?\ngiuliano.colosimo@uniroma2.it",
     "crumbs": [
       "Home",
       "Sessions",
