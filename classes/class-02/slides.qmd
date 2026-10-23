@@ -169,15 +169,12 @@ animal is from it. Choose by the operation you need, not by what the thing
 The Earth is a lumpy ellipsoid. Maps and computer screens are flat. Getting
 from one to the other requires choices, and **every choice distorts something**.
 
-. . .
-
 A CRS answers three questions:
 
-::: {.incremental}
 1. **What shape is the Earth?** — the *ellipsoid* (e.g. WGS84, GRS80)
 2. **How is that shape tied to the actual planet?** — the *datum*
 3. **How do we flatten it?** — the *projection* (or none, if we keep angles)
-:::
+
 
 ---
 
@@ -193,14 +190,14 @@ file gives you — usually **WGS84, EPSG:4326**.
 
 ## Why you cannot do arithmetic with degrees
 
-::: {.incremental}
+
 - One degree of **latitude** ≈ 111 km everywhere
 - One degree of **longitude** ≈ 111 km × cos(latitude)
   - at the equator: 111 km
   - at 24° (Kruger): ~102 km
   - at 46° (Switzerland): ~77 km
   - at the pole: 0 km
-:::
+
 
 . . .
 
@@ -261,16 +258,14 @@ metres, they stretch east–west — badly at high latitudes.
 
 ## UTM: the practical default
 
-::: {.incremental}
+
 - The world is cut into **60 zones**, each 6° of longitude wide
 - Each zone gets its own transverse Mercator projection, so distortion inside
   a zone is small (< 0.1%)
 - Coordinates in **metres**: easting and northing
 - Kruger is in zone **36S** → EPSG:**32736**
 - Switzerland is in zone **32N** → EPSG:**32632**
-:::
 
-. . .
 
 ::: {.keyidea}
 UTM works beautifully **inside one zone**. Leo the vulture crosses many zones
@@ -292,7 +287,6 @@ No projection preserves everything, so pick the property your analysis needs:
 | Directions, turning angles | angles / shape | conformal: UTM (locally) |
 | A continent-scale migration | area, usually | LAEA centred on the flyway |
 
-. . .
 
 ::: {.keyidea}
 Inside one UTM zone the distortions are under 0.1%, so UTM does all three well
@@ -312,7 +306,6 @@ enough. The choice only becomes real when your animal leaves the zone.
 | **3035** | ETRS89 / LAEA Europe — equal-area, continental | metres |
 | **6933** | WGS84 / NSIDC EASE-Grid 2.0 Global — equal-area, global | metres |
 
-. . .
 
 ::: {.callout-warning appearance="simple"}
 **3857 is a trap.** It is conformal, wildly non-equal-area, and areas near the
@@ -359,9 +352,9 @@ You have buffalo fixes in EPSG:4326 and you want the area of a 95% home range
 polygon, in km². What is the right sequence?
 
 - [ ] Compute the polygon in 4326, then convert degrees² to km²
-- [x] Transform the points to EPSG:32736, compute the polygon, read the area in m²
 - [ ] Transform to EPSG:3857, compute the polygon, read the area in m²
 - [ ] Compute the polygon in 4326 — `sf` handles it automatically
+- [x] Transform the points to EPSG:32736, compute the polygon, read the area in m²
 
 ::: {.quiz-feedback}
 Project **first**, to a CRS whose units are metres and which is appropriate
@@ -388,15 +381,12 @@ coordinates — they assume a plane.
 | 2016 → | **`sf`** | | `sf` (GDAL, GEOS, PROJ built in) |
 | 2020 → | | **`terra`** | `terra` |
 
-::: {.incremental}
+
 - `rgdal`, `rgeos` and `maptools` were **retired from CRAN in October 2023**;
   `raster` now runs on top of `terra`
 - Most Stack Overflow answers and many published scripts still use `sp`/`raster`
 - Some movement packages — `adehabitatLT`, `adehabitatHR` — still expect `sp`
   objects. You will convert with `as(x, "Spatial")` or `sf::as_Spatial()`
-:::
-
-. . .
 
 ::: {.keyidea}
 Write new code in `sf` + `terra`. Recognise `sp` + `raster` when you read it.
@@ -442,7 +432,6 @@ pts_sf |>
   select(id, label)
 ```
 
-. . .
 
 Note the geometry column survives `select()` without being named — it is
 "sticky". Use `st_drop_geometry()` when you genuinely want a plain data frame.
@@ -484,7 +473,6 @@ The numbers **change**. This is almost always what you want.
 :::
 :::
 
-. . .
 
 ::: {.keyidea}
 Assign a CRS only when the data arrived **without** one and you know what it
@@ -534,8 +522,8 @@ Your colleague sends a CSV of coordinates like `x = 375051, y = 7285726` and
 says "they're from Kruger". What are they, and what do you do?
 
 - [ ] Longitude/latitude — use `crs = 4326`
-- [x] UTM 36S metres — set `crs = 32736` with `st_as_sf()`, do not transform
 - [ ] Web Mercator — set `crs = 3857`
+- [x] UTM 36S metres — set `crs = 32736` with `st_as_sf()`, do not transform
 - [ ] Impossible to know
 
 ::: {.quiz-feedback}
@@ -574,15 +562,12 @@ r
 ---
 
 ## What defines a raster
-::: {.incremental}
+
 - **Extent** — xmin, xmax, ymin, ymax
 - **Resolution** — cell size in CRS units. `res(r)`
 - **Dimensions** — rows × columns × layers. `dim(r)`
 - **CRS** — same concept as for vectors
 - **Values** — one per cell per layer, possibly `NA`
-:::
-
-. . .
 
 A multi-layer raster (`SpatRaster` with several layers) is how you store a
 **time series**: one NDVI layer per 16-day composite, stacked. That is
@@ -603,7 +588,6 @@ exactly what we need in Session 3.
 | `global()`, `zonal()` | summaries |
 | `writeRaster()` | save, usually GeoTIFF |
 
-. . .
 
 ::: {.keyidea}
 `extract()` is the bridge between the movement world and the environment
@@ -616,16 +600,13 @@ world. Almost everything from Session 3 onwards passes through it.
 
 Before `extract()`, three things must line up:
 
-::: {.incremental}
 1. **Same CRS.** If both objects *carry* a CRS, `terra` transforms for you and
    warns. If either lacks one — a bare coordinate matrix — it assumes they match.
 2. **Overlapping extents.** Non-overlap gives you a column of `NA`, not an error.
 3. **Appropriate resolution.** Extracting a 1 km NDVI cell for a fix with 10 m
    GPS error is fine. Extracting a 10 m Sentinel pixel for an Argos fix with
    5 km error is self-deception.
-:::
 
-. . .
 
 ::: {.keyidea}
 **Match the resolution of your environmental data to the error of your
@@ -725,14 +706,12 @@ infrared; soil and water are not. NDVI measures exactly that contrast.
 
 $$\text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}$$
 
-::: {.incremental}
+
 - Ranges −1 to +1. Water < 0; bare soil/rock ~0.1–0.2; sparse vegetation
   ~0.2–0.4; dense green vegetation 0.6–0.9
 - A **proxy** for green biomass and primary productivity
 - Normalised, so it partly cancels illumination and viewing-angle effects
-:::
 
-. . .
 
 ::: {.callout-warning appearance="simple"}
 **It saturates.** Above ~0.8 — closed canopy — NDVI stops responding to extra
@@ -766,7 +745,6 @@ fixes). An NDVI value is only meaningful together with its date.
 
 ## You cannot have all four
 
-::: {.incremental}
 - **Spatial** — pixel size. 10 m (Sentinel-2) … 500 m (MODIS) … 25 km (some
   climate products)
 - **Temporal** — revisit time. 5 days (Sentinel-2) vs **daily** (MODIS) vs
@@ -774,9 +752,7 @@ fixes). An NDVI value is only meaningful together with its date.
 - **Spectral** — number and width of bands. 4 broad bands vs 200 narrow
   (hyperspectral)
 - **Radiometric** — bit depth; how finely brightness is quantised
-:::
 
-. . .
 
 ::: {.keyidea}
 They trade off against each other: a detector collecting light from a small
@@ -820,7 +796,6 @@ averaged to ~1 km and ~5 km. At 5 km every fix gets nearly the same value.
 | **Sentinel-1** (SAR) | 10 m | 6–12 days | 2014 | Cloud-free, structure, water |
 | **GEDI** (LiDAR) | 25 m footprint | sampled | 2019 | Canopy height |
 
-. . .
 
 ::: {.keyidea}
 **Match the pixel to the animal and to your positional error.** A 10 m
@@ -876,7 +851,7 @@ measure greenness — it is the right answer to a different question.
 
 ## Recap
 
-::: {.incremental}
+
 - **Vector** = objects with coordinates; **raster** = a grid of values
 - A **CRS** = ellipsoid + datum + projection. Degrees are **angles**
 - Choose the projection for the analysis: equidistant for steps, **equal-area**
@@ -885,9 +860,7 @@ measure greenness — it is the right answer to a different question.
 - `st_crs()` **labels**; `st_transform()` **converts**
 - Satellites measure bands; NDVI is a red/NIR contrast. **Match the pixel to
   your positional error**
-:::
 
-. . .
 
 ### Before Session 3
 

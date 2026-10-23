@@ -530,7 +530,7 @@ question most first projects get wrong.
 ### Argos
 Satellites measure the **Doppler shift** of the tag's transmission.
 
-Error classes 3 → B: **~250 m to >10 km**.
+Error **~250 m to >10 km**.
 
 Global, works at sea, decades of history. Still standard for sea turtles,
 seabirds, pinnipeds.

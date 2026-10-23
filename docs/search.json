@@ -1690,7 +1690,7 @@
     "href": "classes/class-01/slides.html#argos-geolocators-and-the-aquatic-world",
     "title": "Why animals move, and how we watch them",
     "section": "Argos, geolocators, and the aquatic world",
-    "text": "Argos, geolocators, and the aquatic world\n\n\nArgos\nSatellites measure the Doppler shift of the tag’s transmission.\nError classes 3 → B: ~250 m to &gt;10 km.\nGlobal, works at sea, decades of history. Still standard for sea turtles, seabirds, pinnipeds.\n\nGeolocators (GLS)\nLog light level. Day length → latitude; time of local noon → longitude.\nError 100–200 km. Useless near equinox.\nBut: ~0.3 g. For small migratory birds it is the only option.\n\nAcoustic telemetry\nTag pings; fixed hydrophones listen.\nYou get detections at receivers, not positions — a network problem, not a trajectory problem.\nFish, sharks, invertebrates.",
+    "text": "Argos, geolocators, and the aquatic world\n\n\nArgos\nSatellites measure the Doppler shift of the tag’s transmission.\nError ~250 m to &gt;10 km.\nGlobal, works at sea, decades of history. Still standard for sea turtles, seabirds, pinnipeds.\n\nGeolocators (GLS)\nLog light level. Day length → latitude; time of local noon → longitude.\nError 100–200 km. Useless near equinox.\nBut: ~0.3 g. For small migratory birds it is the only option.\n\nAcoustic telemetry\nTag pings; fixed hydrophones listen.\nYou get detections at receivers, not positions — a network problem, not a trajectory problem.\nFish, sharks, invertebrates.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2054,7 +2054,7 @@
     "href": "classes/class-02/slides.html#the-problem",
     "title": "Spatial data in R: the survival kit",
     "section": "The problem",
-    "text": "The problem\nThe Earth is a lumpy ellipsoid. Maps and computer screens are flat. Getting from one to the other requires choices, and every choice distorts something.\n\nA CRS answers three questions:\n\nWhat shape is the Earth? — the ellipsoid (e.g. WGS84, GRS80)\nHow is that shape tied to the actual planet? — the datum\nHow do we flatten it? — the projection (or none, if we keep angles)",
+    "text": "The problem\nThe Earth is a lumpy ellipsoid. Maps and computer screens are flat. Getting from one to the other requires choices, and every choice distorts something.\nA CRS answers three questions:\n\nWhat shape is the Earth? — the ellipsoid (e.g. WGS84, GRS80)\nHow is that shape tied to the actual planet? — the datum\nHow do we flatten it? — the projection (or none, if we keep angles)",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2119,7 +2119,7 @@
     "href": "classes/class-02/slides.html#utm-the-practical-default",
     "title": "Spatial data in R: the survival kit",
     "section": "UTM: the practical default",
-    "text": "UTM: the practical default\n\nThe world is cut into 60 zones, each 6° of longitude wide\nEach zone gets its own transverse Mercator projection, so distortion inside a zone is small (&lt; 0.1%)\nCoordinates in metres: easting and northing\nKruger is in zone 36S → EPSG:32736\nSwitzerland is in zone 32N → EPSG:32632\n\n\n\nUTM works beautifully inside one zone. Leo the vulture crosses many zones and 47° of latitude, so no single UTM zone fits him. For continental-scale tracks use an equal-area CRS suited to the region — or work in geographic coordinates with geodesic distances.",
+    "text": "UTM: the practical default\n\nThe world is cut into 60 zones, each 6° of longitude wide\nEach zone gets its own transverse Mercator projection, so distortion inside a zone is small (&lt; 0.1%)\nCoordinates in metres: easting and northing\nKruger is in zone 36S → EPSG:32736\nSwitzerland is in zone 32N → EPSG:32632\n\n\nUTM works beautifully inside one zone. Leo the vulture crosses many zones and 47° of latitude, so no single UTM zone fits him. For continental-scale tracks use an equal-area CRS suited to the region — or work in geographic coordinates with geodesic distances.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2132,7 +2132,7 @@
     "href": "classes/class-02/slides.html#choose-the-projection-for-the-analysis",
     "title": "Spatial data in R: the survival kit",
     "section": "Choose the projection for the analysis",
-    "text": "Choose the projection for the analysis\nNo projection preserves everything, so pick the property your analysis needs:\n\n\n\n\n\n\n\n\nYou will compute…\nPreserve…\nTypical choice\n\n\n\n\nStep lengths, distances\ndistance\nlocal UTM zone, or azimuthal equidistant centred on the study area\n\n\nHome-range areas, densities\narea\nAlbers or Lambert equal-area (LAEA)\n\n\nDirections, turning angles\nangles / shape\nconformal: UTM (locally)\n\n\nA continent-scale migration\narea, usually\nLAEA centred on the flyway\n\n\n\n\n\nInside one UTM zone the distortions are under 0.1%, so UTM does all three well enough. The choice only becomes real when your animal leaves the zone.",
+    "text": "Choose the projection for the analysis\nNo projection preserves everything, so pick the property your analysis needs:\n\n\n\n\n\n\n\n\nYou will compute…\nPreserve…\nTypical choice\n\n\n\n\nStep lengths, distances\ndistance\nlocal UTM zone, or azimuthal equidistant centred on the study area\n\n\nHome-range areas, densities\narea\nAlbers or Lambert equal-area (LAEA)\n\n\nDirections, turning angles\nangles / shape\nconformal: UTM (locally)\n\n\nA continent-scale migration\narea, usually\nLAEA centred on the flyway\n\n\n\n\nInside one UTM zone the distortions are under 0.1%, so UTM does all three well enough. The choice only becomes real when your animal leaves the zone.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2145,7 +2145,7 @@
     "href": "classes/class-02/slides.html#epsg-codes-the-vocabulary-you-need",
     "title": "Spatial data in R: the survival kit",
     "section": "EPSG codes — the vocabulary you need",
-    "text": "EPSG codes — the vocabulary you need\n\n\n\n\n\n\n\n\nEPSG\nWhat\nUnits\n\n\n\n\n4326\nWGS84 geographic — GPS, Movebank\ndegrees\n\n\n3857\nWeb Mercator — Google/OSM basemaps. Never for analysis\nmetres\n\n\n32736\nUTM zone 36S — Kruger\nmetres\n\n\n32632\nUTM zone 32N — Switzerland, Italy\nmetres\n\n\n3035\nETRS89 / LAEA Europe — equal-area, continental\nmetres\n\n\n6933\nWGS84 / NSIDC EASE-Grid 2.0 Global — equal-area, global\nmetres\n\n\n\n\n\n\n\n\n\n\n3857 is a trap. It is conformal, wildly non-equal-area, and areas near the poles are inflated by orders of magnitude. Use it to display tiles, never to compute a home range.",
+    "text": "EPSG codes — the vocabulary you need\n\n\n\n\n\n\n\n\nEPSG\nWhat\nUnits\n\n\n\n\n4326\nWGS84 geographic — GPS, Movebank\ndegrees\n\n\n3857\nWeb Mercator — Google/OSM basemaps. Never for analysis\nmetres\n\n\n32736\nUTM zone 36S — Kruger\nmetres\n\n\n32632\nUTM zone 32N — Switzerland, Italy\nmetres\n\n\n3035\nETRS89 / LAEA Europe — equal-area, continental\nmetres\n\n\n6933\nWGS84 / NSIDC EASE-Grid 2.0 Global — equal-area, global\nmetres\n\n\n\n\n\n\n\n\n\n3857 is a trap. It is conformal, wildly non-equal-area, and areas near the poles are inflated by orders of magnitude. Use it to display tiles, never to compute a home range.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2171,7 +2171,7 @@
     "href": "classes/class-02/slides.html#quiz",
     "title": "Spatial data in R: the survival kit",
     "section": "Quiz",
-    "text": "Quiz\n\nYou have buffalo fixes in EPSG:4326 and you want the area of a 95% home range polygon, in km². What is the right sequence?\n\nCompute the polygon in 4326, then convert degrees² to km²\nTransform the points to EPSG:32736, compute the polygon, read the area in m²\nTransform to EPSG:3857, compute the polygon, read the area in m²\nCompute the polygon in 4326 — sf handles it automatically\n\n\nProject first, to a CRS whose units are metres and which is appropriate for the region — UTM 36S for Kruger. Then all the geometry operations are ordinary plane geometry and areas come out in m².\nThere is no fixed conversion from degrees² to km²: the factor depends on latitude. Web Mercator (3857) has units of metres but is not equal-area, so areas are systematically wrong. And while sf can compute geodesic lengths and areas on 4326, kernel-density home-range estimators need projected coordinates — they assume a plane.",
+    "text": "Quiz\n\nYou have buffalo fixes in EPSG:4326 and you want the area of a 95% home range polygon, in km². What is the right sequence?\n\nCompute the polygon in 4326, then convert degrees² to km²\nTransform to EPSG:3857, compute the polygon, read the area in m²\nCompute the polygon in 4326 — sf handles it automatically\nTransform the points to EPSG:32736, compute the polygon, read the area in m²\n\n\nProject first, to a CRS whose units are metres and which is appropriate for the region — UTM 36S for Kruger. Then all the geometry operations are ordinary plane geometry and areas come out in m².\nThere is no fixed conversion from degrees² to km²: the factor depends on latitude. Web Mercator (3857) has units of metres but is not equal-area, so areas are systematically wrong. And while sf can compute geodesic lengths and areas on 4326, kernel-density home-range estimators need projected coordinates — they assume a plane.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2184,7 +2184,7 @@
     "href": "classes/class-02/slides.html#why-your-old-tutorial-no-longer-runs",
     "title": "Spatial data in R: the survival kit",
     "section": "Why your old tutorial no longer runs",
-    "text": "Why your old tutorial no longer runs\n\n\n\nEra\nVector\nRaster\nGeometry engine\n\n\n\n\n2005–2023\nsp\nraster\nrgdal, rgeos\n\n\n2016 →\nsf\n\nsf (GDAL, GEOS, PROJ built in)\n\n\n2020 →\n\nterra\nterra\n\n\n\n\nrgdal, rgeos and maptools were retired from CRAN in October 2023; raster now runs on top of terra\nMost Stack Overflow answers and many published scripts still use sp/raster\nSome movement packages — adehabitatLT, adehabitatHR — still expect sp objects. You will convert with as(x, \"Spatial\") or sf::as_Spatial()\n\n\n\nWrite new code in sf + terra. Recognise sp + raster when you read it.",
+    "text": "Why your old tutorial no longer runs\n\n\n\nEra\nVector\nRaster\nGeometry engine\n\n\n\n\n2005–2023\nsp\nraster\nrgdal, rgeos\n\n\n2016 →\nsf\n\nsf (GDAL, GEOS, PROJ built in)\n\n\n2020 →\n\nterra\nterra\n\n\n\n\nrgdal, rgeos and maptools were retired from CRAN in October 2023; raster now runs on top of terra\nMost Stack Overflow answers and many published scripts still use sp/raster\nSome movement packages — adehabitatLT, adehabitatHR — still expect sp objects. You will convert with as(x, \"Spatial\") or sf::as_Spatial()\n\n\nWrite new code in sf + terra. Recognise sp + raster when you read it.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2210,7 +2210,7 @@
     "href": "classes/class-02/slides.html#everything-else-is-dplyr",
     "title": "Spatial data in R: the survival kit",
     "section": "Everything else is dplyr",
-    "text": "Everything else is dplyr\nBecause it is a data frame, all your usual verbs work, and the geometry comes along for the ride.\n\n```{r}\nlibrary(dplyr)\n\npts_sf |&gt;\n  mutate(label = toupper(id)) |&gt;\n  filter(lat &gt; -24.52) |&gt;\n  select(id, label)\n```\n\nSimple feature collection with 1 feature and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 31.8 ymin: -24.5 xmax: 31.8 ymax: -24.5\nGeodetic CRS:  WGS 84\n  id label           geometry\n1  b     B POINT (31.8 -24.5)\n\n\n\nNote the geometry column survives select() without being named — it is “sticky”. Use st_drop_geometry() when you genuinely want a plain data frame.",
+    "text": "Everything else is dplyr\nBecause it is a data frame, all your usual verbs work, and the geometry comes along for the ride.\n\n```{r}\nlibrary(dplyr)\n\npts_sf |&gt;\n  mutate(label = toupper(id)) |&gt;\n  filter(lat &gt; -24.52) |&gt;\n  select(id, label)\n```\n\nSimple feature collection with 1 feature and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 31.8 ymin: -24.5 xmax: 31.8 ymax: -24.5\nGeodetic CRS:  WGS 84\n  id label           geometry\n1  b     B POINT (31.8 -24.5)\n\n\nNote the geometry column survives select() without being named — it is “sticky”. Use st_drop_geometry() when you genuinely want a plain data frame.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2236,7 +2236,7 @@
     "href": "classes/class-02/slides.html#st_crs-vs-st_transform-the-classic-bug",
     "title": "Spatial data in R: the survival kit",
     "section": "st_crs() vs st_transform() — the classic bug",
-    "text": "st_crs() vs st_transform() — the classic bug\n\n\nst_crs(x) &lt;- 32736\n“These numbers were always UTM; I am just writing down the label.”\nIf the numbers are actually degrees, you have now lied to R. Your buffalo are now in Antarctica (next slide).\n\nst_transform(x, 32736)\n“These numbers are in the current CRS; compute the corresponding UTM coordinates.”\nThe numbers change. This is almost always what you want.\n\n\n\nAssign a CRS only when the data arrived without one and you know what it should be. Otherwise, transform.",
+    "text": "st_crs() vs st_transform() — the classic bug\n\n\nst_crs(x) &lt;- 32736\n“These numbers were always UTM; I am just writing down the label.”\nIf the numbers are actually degrees, you have now lied to R. Your buffalo are now in Antarctica (next slide).\n\nst_transform(x, 32736)\n“These numbers are in the current CRS; compute the corresponding UTM coordinates.”\nThe numbers change. This is almost always what you want.\n\n\nAssign a CRS only when the data arrived without one and you know what it should be. Otherwise, transform.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2262,7 +2262,7 @@
     "href": "classes/class-02/slides.html#quiz-1",
     "title": "Spatial data in R: the survival kit",
     "section": "Quiz",
-    "text": "Quiz\n\nYour colleague sends a CSV of coordinates like x = 375051, y = 7285726 and says “they’re from Kruger”. What are they, and what do you do?\n\nLongitude/latitude — use crs = 4326\nUTM 36S metres — set crs = 32736 with st_as_sf(), do not transform\nWeb Mercator — set crs = 3857\nImpossible to know\n\n\nMagnitudes give it away. Longitude and latitude are bounded by ±180 and ±90, so six- and seven-digit values cannot be degrees. Values of that size in metres with a large northing are classic UTM, and Kruger is zone 36S (EPSG:32736) — the 7,285,726 m northing is the southern-hemisphere false northing at ~24.5°S.\nBecause the numbers are already UTM, you declare the CRS when building the sf object (crs = 32736) rather than transforming. Transforming would treat metres as degrees.\nSanity check afterwards: st_transform(x, 4326) and confirm you land at roughly 31.8°E, 24.5°S.",
+    "text": "Quiz\n\nYour colleague sends a CSV of coordinates like x = 375051, y = 7285726 and says “they’re from Kruger”. What are they, and what do you do?\n\nLongitude/latitude — use crs = 4326\nWeb Mercator — set crs = 3857\nUTM 36S metres — set crs = 32736 with st_as_sf(), do not transform\nImpossible to know\n\n\nMagnitudes give it away. Longitude and latitude are bounded by ±180 and ±90, so six- and seven-digit values cannot be degrees. Values of that size in metres with a large northing are classic UTM, and Kruger is zone 36S (EPSG:32736) — the 7,285,726 m northing is the southern-hemisphere false northing at ~24.5°S.\nBecause the numbers are already UTM, you declare the CRS when building the sf object (crs = 32736) rather than transforming. Transforming would treat metres as degrees.\nSanity check afterwards: st_transform(x, 4326) and confirm you land at roughly 31.8°E, 24.5°S.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2288,7 +2288,7 @@
     "href": "classes/class-02/slides.html#what-defines-a-raster",
     "title": "Spatial data in R: the survival kit",
     "section": "What defines a raster",
-    "text": "What defines a raster\n\nExtent — xmin, xmax, ymin, ymax\nResolution — cell size in CRS units. res(r)\nDimensions — rows × columns × layers. dim(r)\nCRS — same concept as for vectors\nValues — one per cell per layer, possibly NA\n\n\nA multi-layer raster (SpatRaster with several layers) is how you store a time series: one NDVI layer per 16-day composite, stacked. That is exactly what we need in Session 3.",
+    "text": "What defines a raster\n\nExtent — xmin, xmax, ymin, ymax\nResolution — cell size in CRS units. res(r)\nDimensions — rows × columns × layers. dim(r)\nCRS — same concept as for vectors\nValues — one per cell per layer, possibly NA\n\nA multi-layer raster (SpatRaster with several layers) is how you store a time series: one NDVI layer per 16-day composite, stacked. That is exactly what we need in Session 3.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2301,7 +2301,7 @@
     "href": "classes/class-02/slides.html#the-terra-functions-you-will-use",
     "title": "Spatial data in R: the survival kit",
     "section": "The terra functions you will use",
-    "text": "The terra functions you will use\n\n\n\nFunction\nWhat it does\n\n\n\n\nrast()\ncreate or read a raster\n\n\ncrop() / mask()\ncut to an extent / to a polygon\n\n\nproject()\nreproject (note: not st_transform)\n\n\nextract()\nsample raster values at points — the key operation\n\n\naggregate() / resample()\nchange resolution\n\n\nterrain()\nslope, aspect, from elevation\n\n\ndistance()\ndistance-to-feature surface\n\n\nglobal(), zonal()\nsummaries\n\n\nwriteRaster()\nsave, usually GeoTIFF\n\n\n\n\n\nextract() is the bridge between the movement world and the environment world. Almost everything from Session 3 onwards passes through it.",
+    "text": "The terra functions you will use\n\n\n\nFunction\nWhat it does\n\n\n\n\nrast()\ncreate or read a raster\n\n\ncrop() / mask()\ncut to an extent / to a polygon\n\n\nproject()\nreproject (note: not st_transform)\n\n\nextract()\nsample raster values at points — the key operation\n\n\naggregate() / resample()\nchange resolution\n\n\nterrain()\nslope, aspect, from elevation\n\n\ndistance()\ndistance-to-feature surface\n\n\nglobal(), zonal()\nsummaries\n\n\nwriteRaster()\nsave, usually GeoTIFF\n\n\n\n\nextract() is the bridge between the movement world and the environment world. Almost everything from Session 3 onwards passes through it.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2314,7 +2314,7 @@
     "href": "classes/class-02/slides.html#rasters-and-vectors-must-agree",
     "title": "Spatial data in R: the survival kit",
     "section": "Rasters and vectors must agree",
-    "text": "Rasters and vectors must agree\nBefore extract(), three things must line up:\n\nSame CRS. If both objects carry a CRS, terra transforms for you and warns. If either lacks one — a bare coordinate matrix — it assumes they match.\nOverlapping extents. Non-overlap gives you a column of NA, not an error.\nAppropriate resolution. Extracting a 1 km NDVI cell for a fix with 10 m GPS error is fine. Extracting a 10 m Sentinel pixel for an Argos fix with 5 km error is self-deception.\n\n\n\nMatch the resolution of your environmental data to the error of your locations. A pixel finer than your positional error adds noise, not information.",
+    "text": "Rasters and vectors must agree\nBefore extract(), three things must line up:\n\nSame CRS. If both objects carry a CRS, terra transforms for you and warns. If either lacks one — a bare coordinate matrix — it assumes they match.\nOverlapping extents. Non-overlap gives you a column of NA, not an error.\nAppropriate resolution. Extracting a 1 km NDVI cell for a fix with 10 m GPS error is fine. Extracting a 10 m Sentinel pixel for an Argos fix with 5 km error is self-deception.\n\n\nMatch the resolution of your environmental data to the error of your locations. A pixel finer than your positional error adds noise, not information.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2366,7 +2366,7 @@
     "href": "classes/class-02/slides.html#ndvi",
     "title": "Spatial data in R: the survival kit",
     "section": "NDVI",
-    "text": "NDVI\n\\[\\text{NDVI} = \\frac{\\text{NIR} - \\text{Red}}{\\text{NIR} + \\text{Red}}\\]\n\nRanges −1 to +1. Water &lt; 0; bare soil/rock ~0.1–0.2; sparse vegetation ~0.2–0.4; dense green vegetation 0.6–0.9\nA proxy for green biomass and primary productivity\nNormalised, so it partly cancels illumination and viewing-angle effects\n\n\n\n\n\n\n\n\nIt saturates. Above ~0.8 — closed canopy — NDVI stops responding to extra biomass. In rainforest it is nearly flat and nearly useless.",
+    "text": "NDVI\n\\[\\text{NDVI} = \\frac{\\text{NIR} - \\text{Red}}{\\text{NIR} + \\text{Red}}\\]\n\nRanges −1 to +1. Water &lt; 0; bare soil/rock ~0.1–0.2; sparse vegetation ~0.2–0.4; dense green vegetation 0.6–0.9\nA proxy for green biomass and primary productivity\nNormalised, so it partly cancels illumination and viewing-angle effects\n\n\n\n\n\n\n\nIt saturates. Above ~0.8 — closed canopy — NDVI stops responding to extra biomass. In rainforest it is nearly flat and nearly useless.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2392,7 +2392,7 @@
     "href": "classes/class-02/slides.html#you-cannot-have-all-four",
     "title": "Spatial data in R: the survival kit",
     "section": "You cannot have all four",
-    "text": "You cannot have all four\n\nSpatial — pixel size. 10 m (Sentinel-2) … 500 m (MODIS) … 25 km (some climate products)\nTemporal — revisit time. 5 days (Sentinel-2) vs daily (MODIS) vs 16 days (Landsat)\nSpectral — number and width of bands. 4 broad bands vs 200 narrow (hyperspectral)\nRadiometric — bit depth; how finely brightness is quantised\n\n\n\nThey trade off against each other: a detector collecting light from a small patch, in a narrow band, gets few photons — so it needs a longer dwell time, which means a narrower swath and a longer revisit.",
+    "text": "You cannot have all four\n\nSpatial — pixel size. 10 m (Sentinel-2) … 500 m (MODIS) … 25 km (some climate products)\nTemporal — revisit time. 5 days (Sentinel-2) vs daily (MODIS) vs 16 days (Landsat)\nSpectral — number and width of bands. 4 broad bands vs 200 narrow (hyperspectral)\nRadiometric — bit depth; how finely brightness is quantised\n\n\nThey trade off against each other: a detector collecting light from a small patch, in a narrow band, gets few photons — so it needs a longer dwell time, which means a narrower swath and a longer revisit.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2418,7 +2418,7 @@
     "href": "classes/class-02/slides.html#the-missions-you-will-actually-use",
     "title": "Spatial data in R: the survival kit",
     "section": "The missions you will actually use",
-    "text": "The missions you will actually use\n\n\n\n\n\n\n\n\n\n\nMission\nSpatial\nTemporal\nSince\nGood for\n\n\n\n\nMODIS (Terra/Aqua)\n250–500 m\nDaily\n2000\nLong consistent NDVI series\n\n\nVIIRS\n375–750 m\nDaily\n2012\nMODIS successor\n\n\nLandsat 5/7/8/9\n30 m\n16 days\n1984\nLong-term landscape change\n\n\nSentinel-2\n10–20 m\n5 days\n2015\nFine-grained habitat\n\n\nSentinel-1 (SAR)\n10 m\n6–12 days\n2014\nCloud-free, structure, water\n\n\nGEDI (LiDAR)\n25 m footprint\nsampled\n2019\nCanopy height\n\n\n\n\n\nMatch the pixel to the animal and to your positional error. A 10 m Sentinel pixel is wasted on an Argos fix with 5 km error — and a 500 m MODIS pixel is useless for a dormouse.",
+    "text": "The missions you will actually use\n\n\n\n\n\n\n\n\n\n\nMission\nSpatial\nTemporal\nSince\nGood for\n\n\n\n\nMODIS (Terra/Aqua)\n250–500 m\nDaily\n2000\nLong consistent NDVI series\n\n\nVIIRS\n375–750 m\nDaily\n2012\nMODIS successor\n\n\nLandsat 5/7/8/9\n30 m\n16 days\n1984\nLong-term landscape change\n\n\nSentinel-2\n10–20 m\n5 days\n2015\nFine-grained habitat\n\n\nSentinel-1 (SAR)\n10 m\n6–12 days\n2014\nCloud-free, structure, water\n\n\nGEDI (LiDAR)\n25 m footprint\nsampled\n2019\nCanopy height\n\n\n\n\nMatch the pixel to the animal and to your positional error. A 10 m Sentinel pixel is wasted on an Argos fix with 5 km error — and a 500 m MODIS pixel is useless for a dormouse.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2457,7 +2457,7 @@
     "href": "classes/class-02/slides.html#recap",
     "title": "Spatial data in R: the survival kit",
     "section": "Recap",
-    "text": "Recap\n\nVector = objects with coordinates; raster = a grid of values\nA CRS = ellipsoid + datum + projection. Degrees are angles\nChoose the projection for the analysis: equidistant for steps, equal-area for home ranges\nsf + terra today; sp + raster in old code\nst_crs() labels; st_transform() converts\nSatellites measure bands; NDVI is a red/NIR contrast. Match the pixel to your positional error\n\n\nBefore Session 3\n\nRead Geocomputation with R, ch. 2 and 7\nMake sure library(amt) and library(adehabitatLT) both load",
+    "text": "Recap\n\nVector = objects with coordinates; raster = a grid of values\nA CRS = ellipsoid + datum + projection. Degrees are angles\nChoose the projection for the analysis: equidistant for steps, equal-area for home ranges\nsf + terra today; sp + raster in old code\nst_crs() labels; st_transform() converts\nSatellites measure bands; NDVI is a red/NIR contrast. Match the pixel to your positional error\n\nBefore Session 3\n\nRead Geocomputation with R, ch. 2 and 7\nMake sure library(amt) and library(adehabitatLT) both load",
     "crumbs": [
       "Home",
       "Sessions",

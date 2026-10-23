@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-06">
+  <meta name="dcterms.date" content="2026-10-23">
   <title>Animal Tracking – Spatial data in R: the survival kit</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-06</p>
+  <p class="date">2026-10-23</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -329,14 +329,12 @@ Giuliano Colosimo
 <section id="the-problem" class="slide level2">
 <h2>The problem</h2>
 <p>The Earth is a lumpy ellipsoid. Maps and computer screens are flat. Getting from one to the other requires choices, and <strong>every choice distorts something</strong>.</p>
-<div class="fragment">
 <p>A CRS answers three questions:</p>
 <ol type="1">
-<li class="fragment"><strong>What shape is the Earth?</strong> — the <em>ellipsoid</em> (e.g.&nbsp;WGS84, GRS80)</li>
-<li class="fragment"><strong>How is that shape tied to the actual planet?</strong> — the <em>datum</em></li>
-<li class="fragment"><strong>How do we flatten it?</strong> — the <em>projection</em> (or none, if we keep angles)</li>
+<li><strong>What shape is the Earth?</strong> — the <em>ellipsoid</em> (e.g.&nbsp;WGS84, GRS80)</li>
+<li><strong>How is that shape tied to the actual planet?</strong> — the <em>datum</em></li>
+<li><strong>How do we flatten it?</strong> — the <em>projection</em> (or none, if we keep angles)</li>
 </ol>
-</div>
 </section>
 <section id="geographic-coordinates" class="slide level2">
 <h2>Geographic coordinates</h2>
@@ -346,13 +344,13 @@ Giuliano Colosimo
 <section id="why-you-cannot-do-arithmetic-with-degrees" class="slide level2">
 <h2>Why you cannot do arithmetic with degrees</h2>
 <ul>
-<li class="fragment">One degree of <strong>latitude</strong> ≈ 111 km everywhere</li>
-<li class="fragment">One degree of <strong>longitude</strong> ≈ 111 km × cos(latitude)
+<li>One degree of <strong>latitude</strong> ≈ 111 km everywhere</li>
+<li>One degree of <strong>longitude</strong> ≈ 111 km × cos(latitude)
 <ul>
-<li class="fragment">at the equator: 111 km</li>
-<li class="fragment">at 24° (Kruger): ~102 km</li>
-<li class="fragment">at 46° (Switzerland): ~77 km</li>
-<li class="fragment">at the pole: 0 km</li>
+<li>at the equator: 111 km</li>
+<li>at 24° (Kruger): ~102 km</li>
+<li>at 46° (Switzerland): ~77 km</li>
+<li>at the pole: 0 km</li>
 </ul></li>
 </ul>
 <div class="fragment">
@@ -376,16 +374,14 @@ Giuliano Colosimo
 <section id="utm-the-practical-default" class="slide level2">
 <h2>UTM: the practical default</h2>
 <ul>
-<li class="fragment">The world is cut into <strong>60 zones</strong>, each 6° of longitude wide</li>
-<li class="fragment">Each zone gets its own transverse Mercator projection, so distortion inside a zone is small (&lt; 0.1%)</li>
-<li class="fragment">Coordinates in <strong>metres</strong>: easting and northing</li>
-<li class="fragment">Kruger is in zone <strong>36S</strong> → EPSG:<strong>32736</strong></li>
-<li class="fragment">Switzerland is in zone <strong>32N</strong> → EPSG:<strong>32632</strong></li>
+<li>The world is cut into <strong>60 zones</strong>, each 6° of longitude wide</li>
+<li>Each zone gets its own transverse Mercator projection, so distortion inside a zone is small (&lt; 0.1%)</li>
+<li>Coordinates in <strong>metres</strong>: easting and northing</li>
+<li>Kruger is in zone <strong>36S</strong> → EPSG:<strong>32736</strong></li>
+<li>Switzerland is in zone <strong>32N</strong> → EPSG:<strong>32632</strong></li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>UTM works beautifully <strong>inside one zone</strong>. Leo the vulture crosses many zones and 47° of latitude, so no single UTM zone fits him. For continental-scale tracks use an equal-area CRS suited to the region — or work in geographic coordinates with geodesic distances.</p>
-</div>
 </div>
 </section>
 <section id="choose-the-projection-for-the-analysis" class="slide level2">
@@ -427,10 +423,8 @@ Giuliano Colosimo
 </tr>
 </tbody>
 </table>
-<div class="fragment">
 <div class="keyidea">
 <p>Inside one UTM zone the distortions are under 0.1%, so UTM does all three well enough. The choice only becomes real when your animal leaves the zone.</p>
-</div>
 </div>
 </section>
 <section id="epsg-codes-the-vocabulary-you-need" class="slide level2">
@@ -481,7 +475,6 @@ Giuliano Colosimo
 </tr>
 </tbody>
 </table>
-<div class="fragment">
 <div class="callout callout-warning callout-style-simple">
 <div class="callout-body">
 <div class="callout-icon-container">
@@ -489,7 +482,6 @@ Giuliano Colosimo
 </div>
 <div class="callout-content">
 <p><strong>3857 is a trap.</strong> It is conformal, wildly non-equal-area, and areas near the poles are inflated by orders of magnitude. Use it to <em>display</em> tiles, never to compute a home range.</p>
-</div>
 </div>
 </div>
 </div>
@@ -505,9 +497,9 @@ Giuliano Colosimo
 <p>You have buffalo fixes in EPSG:4326 and you want the area of a 95% home range polygon, in km². What is the right sequence?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">Compute the polygon in 4326, then convert degrees² to km²</label></li>
-<li><label><input type="checkbox" checked="">Transform the points to EPSG:32736, compute the polygon, read the area in m²</label></li>
 <li><label><input type="checkbox">Transform to EPSG:3857, compute the polygon, read the area in m²</label></li>
 <li><label><input type="checkbox">Compute the polygon in 4326 — <code>sf</code> handles it automatically</label></li>
+<li><label><input type="checkbox" checked="">Transform the points to EPSG:32736, compute the polygon, read the area in m²</label></li>
 </ul>
 <div class="quiz-feedback">
 <p>Project <strong>first</strong>, to a CRS whose units are metres and which is appropriate for the region — UTM 36S for Kruger. Then all the geometry operations are ordinary plane geometry and areas come out in m².</p>
@@ -553,14 +545,12 @@ Giuliano Colosimo
 </tbody>
 </table>
 <ul>
-<li class="fragment"><code>rgdal</code>, <code>rgeos</code> and <code>maptools</code> were <strong>retired from CRAN in October 2023</strong>; <code>raster</code> now runs on top of <code>terra</code></li>
-<li class="fragment">Most Stack Overflow answers and many published scripts still use <code>sp</code>/<code>raster</code></li>
-<li class="fragment">Some movement packages — <code>adehabitatLT</code>, <code>adehabitatHR</code> — still expect <code>sp</code> objects. You will convert with <code>as(x, "Spatial")</code> or <code>sf::as_Spatial()</code></li>
+<li><code>rgdal</code>, <code>rgeos</code> and <code>maptools</code> were <strong>retired from CRAN in October 2023</strong>; <code>raster</code> now runs on top of <code>terra</code></li>
+<li>Most Stack Overflow answers and many published scripts still use <code>sp</code>/<code>raster</code></li>
+<li>Some movement packages — <code>adehabitatLT</code>, <code>adehabitatHR</code> — still expect <code>sp</code> objects. You will convert with <code>as(x, "Spatial")</code> or <code>sf::as_Spatial()</code></li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>Write new code in <code>sf</code> + <code>terra</code>. Recognise <code>sp</code> + <code>raster</code> when you read it.</p>
-</div>
 </div>
 </section></section>
 <section>
@@ -618,9 +608,7 @@ Geodetic CRS:  WGS 84
 1  b     B POINT (31.8 -24.5)</code></pre>
 </div>
 </div>
-<div class="fragment">
 <p>Note the geometry column survives <code>select()</code> without being named — it is “sticky”. Use <code>st_drop_geometry()</code> when you genuinely want a plain data frame.</p>
-</div>
 </section>
 <section id="the-functions-you-will-actually-use" class="slide level2">
 <h2>The functions you will actually use</h2>
@@ -687,10 +675,8 @@ Geodetic CRS:  WGS 84
 <p><em>“These numbers are in the current CRS; compute the corresponding UTM coordinates.”</em></p>
 <p>The numbers <strong>change</strong>. This is almost always what you want.</p>
 </div></div>
-<div class="fragment">
 <div class="keyidea">
 <p>Assign a CRS only when the data arrived <strong>without</strong> one and you know what it should be. Otherwise, transform.</p>
-</div>
 </div>
 </section>
 <section id="where-the-mislabelled-buffalo-went" class="slide level2">
@@ -717,8 +703,8 @@ Geodetic CRS:  WGS 84
 <p>Your colleague sends a CSV of coordinates like <code>x = 375051, y = 7285726</code> and says “they’re from Kruger”. What are they, and what do you do?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">Longitude/latitude — use <code>crs = 4326</code></label></li>
-<li><label><input type="checkbox" checked="">UTM 36S metres — set <code>crs = 32736</code> with <code>st_as_sf()</code>, do not transform</label></li>
 <li><label><input type="checkbox">Web Mercator — set <code>crs = 3857</code></label></li>
+<li><label><input type="checkbox" checked="">UTM 36S metres — set <code>crs = 32736</code> with <code>st_as_sf()</code>, do not transform</label></li>
 <li><label><input type="checkbox">Impossible to know</label></li>
 </ul>
 <div class="quiz-feedback">
@@ -761,15 +747,13 @@ max value   :    24</code></pre>
 <section id="what-defines-a-raster" class="slide level2">
 <h2>What defines a raster</h2>
 <ul>
-<li class="fragment"><strong>Extent</strong> — xmin, xmax, ymin, ymax</li>
-<li class="fragment"><strong>Resolution</strong> — cell size in CRS units. <code>res(r)</code></li>
-<li class="fragment"><strong>Dimensions</strong> — rows × columns × layers. <code>dim(r)</code></li>
-<li class="fragment"><strong>CRS</strong> — same concept as for vectors</li>
-<li class="fragment"><strong>Values</strong> — one per cell per layer, possibly <code>NA</code></li>
+<li><strong>Extent</strong> — xmin, xmax, ymin, ymax</li>
+<li><strong>Resolution</strong> — cell size in CRS units. <code>res(r)</code></li>
+<li><strong>Dimensions</strong> — rows × columns × layers. <code>dim(r)</code></li>
+<li><strong>CRS</strong> — same concept as for vectors</li>
+<li><strong>Values</strong> — one per cell per layer, possibly <code>NA</code></li>
 </ul>
-<div class="fragment">
 <p>A multi-layer raster (<code>SpatRaster</code> with several layers) is how you store a <strong>time series</strong>: one NDVI layer per 16-day composite, stacked. That is exactly what we need in Session 3.</p>
-</div>
 </section>
 <section id="the-terra-functions-you-will-use" class="slide level2">
 <h2>The <code>terra</code> functions you will use</h2>
@@ -819,24 +803,20 @@ max value   :    24</code></pre>
 </tr>
 </tbody>
 </table>
-<div class="fragment">
 <div class="keyidea">
 <p><code>extract()</code> is the bridge between the movement world and the environment world. Almost everything from Session 3 onwards passes through it.</p>
-</div>
 </div>
 </section>
 <section id="rasters-and-vectors-must-agree" class="slide level2">
 <h2>Rasters and vectors must agree</h2>
 <p>Before <code>extract()</code>, three things must line up:</p>
 <ol type="1">
-<li class="fragment"><strong>Same CRS.</strong> If both objects <em>carry</em> a CRS, <code>terra</code> transforms for you and warns. If either lacks one — a bare coordinate matrix — it assumes they match.</li>
-<li class="fragment"><strong>Overlapping extents.</strong> Non-overlap gives you a column of <code>NA</code>, not an error.</li>
-<li class="fragment"><strong>Appropriate resolution.</strong> Extracting a 1 km NDVI cell for a fix with 10 m GPS error is fine. Extracting a 10 m Sentinel pixel for an Argos fix with 5 km error is self-deception.</li>
+<li><strong>Same CRS.</strong> If both objects <em>carry</em> a CRS, <code>terra</code> transforms for you and warns. If either lacks one — a bare coordinate matrix — it assumes they match.</li>
+<li><strong>Overlapping extents.</strong> Non-overlap gives you a column of <code>NA</code>, not an error.</li>
+<li><strong>Appropriate resolution.</strong> Extracting a 1 km NDVI cell for a fix with 10 m GPS error is fine. Extracting a 10 m Sentinel pixel for an Argos fix with 5 km error is self-deception.</li>
 </ol>
-<div class="fragment">
 <div class="keyidea">
 <p><strong>Match the resolution of your environmental data to the error of your locations.</strong> A pixel finer than your positional error adds noise, not information.</p>
-</div>
 </div>
 </section>
 <section id="quiz-2" class="slide level2">
@@ -887,11 +867,10 @@ max value   :    24</code></pre>
 <h2>NDVI</h2>
 <p><span class="math display">\[\text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}\]</span></p>
 <ul>
-<li class="fragment">Ranges −1 to +1. Water &lt; 0; bare soil/rock ~0.1–0.2; sparse vegetation ~0.2–0.4; dense green vegetation 0.6–0.9</li>
-<li class="fragment">A <strong>proxy</strong> for green biomass and primary productivity</li>
-<li class="fragment">Normalised, so it partly cancels illumination and viewing-angle effects</li>
+<li>Ranges −1 to +1. Water &lt; 0; bare soil/rock ~0.1–0.2; sparse vegetation ~0.2–0.4; dense green vegetation 0.6–0.9</li>
+<li>A <strong>proxy</strong> for green biomass and primary productivity</li>
+<li>Normalised, so it partly cancels illumination and viewing-angle effects</li>
 </ul>
-<div class="fragment">
 <div class="callout callout-warning callout-style-simple">
 <div class="callout-body">
 <div class="callout-icon-container">
@@ -899,7 +878,6 @@ max value   :    24</code></pre>
 </div>
 <div class="callout-content">
 <p><strong>It saturates.</strong> Above ~0.8 — closed canopy — NDVI stops responding to extra biomass. In rainforest it is nearly flat and nearly useless.</p>
-</div>
 </div>
 </div>
 </div>
@@ -912,15 +890,13 @@ max value   :    24</code></pre>
 <section id="you-cannot-have-all-four" class="slide level2">
 <h2>You cannot have all four</h2>
 <ul>
-<li class="fragment"><strong>Spatial</strong> — pixel size. 10 m (Sentinel-2) … 500 m (MODIS) … 25 km (some climate products)</li>
-<li class="fragment"><strong>Temporal</strong> — revisit time. 5 days (Sentinel-2) vs <strong>daily</strong> (MODIS) vs 16 days (Landsat)</li>
-<li class="fragment"><strong>Spectral</strong> — number and width of bands. 4 broad bands vs 200 narrow (hyperspectral)</li>
-<li class="fragment"><strong>Radiometric</strong> — bit depth; how finely brightness is quantised</li>
+<li><strong>Spatial</strong> — pixel size. 10 m (Sentinel-2) … 500 m (MODIS) … 25 km (some climate products)</li>
+<li><strong>Temporal</strong> — revisit time. 5 days (Sentinel-2) vs <strong>daily</strong> (MODIS) vs 16 days (Landsat)</li>
+<li><strong>Spectral</strong> — number and width of bands. 4 broad bands vs 200 narrow (hyperspectral)</li>
+<li><strong>Radiometric</strong> — bit depth; how finely brightness is quantised</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>They trade off against each other: a detector collecting light from a small patch, in a narrow band, gets few photons — so it needs a longer dwell time, which means a narrower swath and a longer revisit.</p>
-</div>
 </div>
 </section>
 <section id="pixel-size-changes-the-landscape" class="slide level2">
@@ -992,10 +968,8 @@ max value   :    24</code></pre>
 </tr>
 </tbody>
 </table>
-<div class="fragment">
 <div class="keyidea">
 <p><strong>Match the pixel to the animal and to your positional error.</strong> A 10 m Sentinel pixel is wasted on an Argos fix with 5 km error — and a 500 m MODIS pixel is useless for a dormouse.</p>
-</div>
 </div>
 </section>
 <section id="quiz-3" class="slide level2">
@@ -1031,14 +1005,13 @@ max value   :    24</code></pre>
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li class="fragment"><strong>Vector</strong> = objects with coordinates; <strong>raster</strong> = a grid of values</li>
-<li class="fragment">A <strong>CRS</strong> = ellipsoid + datum + projection. Degrees are <strong>angles</strong></li>
-<li class="fragment">Choose the projection for the analysis: equidistant for steps, <strong>equal-area</strong> for home ranges</li>
-<li class="fragment"><code>sf</code> + <code>terra</code> today; <code>sp</code> + <code>raster</code> in old code</li>
-<li class="fragment"><code>st_crs()</code> <strong>labels</strong>; <code>st_transform()</code> <strong>converts</strong></li>
-<li class="fragment">Satellites measure bands; NDVI is a red/NIR contrast. <strong>Match the pixel to your positional error</strong></li>
+<li><strong>Vector</strong> = objects with coordinates; <strong>raster</strong> = a grid of values</li>
+<li>A <strong>CRS</strong> = ellipsoid + datum + projection. Degrees are <strong>angles</strong></li>
+<li>Choose the projection for the analysis: equidistant for steps, <strong>equal-area</strong> for home ranges</li>
+<li><code>sf</code> + <code>terra</code> today; <code>sp</code> + <code>raster</code> in old code</li>
+<li><code>st_crs()</code> <strong>labels</strong>; <code>st_transform()</code> <strong>converts</strong></li>
+<li>Satellites measure bands; NDVI is a red/NIR contrast. <strong>Match the pixel to your positional error</strong></li>
 </ul>
-<div class="fragment">
 <h3 id="before-session-3">Before Session 3</h3>
 <ul>
 <li>Read <a href="https://r.geocompx.org/">Geocomputation with R, ch.&nbsp;2 and 7</a></li>
@@ -1046,7 +1019,6 @@ max value   :    24</code></pre>
 </ul>
 
 
-</div>
 </section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
