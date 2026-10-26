@@ -166,3 +166,18 @@ $code-block-font-size: 0.85em;        // ONE size for every code block in every 
 ----------------------------------------------------------------*/
 .reveal .slides img { max-height: 430px; height: auto; object-fit: contain; }
 .reveal .slides .columns img { max-height: 400px; }
+
+/* ---------------------------------------------------------------
+   Image credits: the one deliberate exception to the single body
+   size. A small, muted line directly under the figure it credits —
+   the source of a photograph, or "own R code" for a drawn figure.
+   Written in the .qmd as  [text]{.credit}  on a line of its own.
+----------------------------------------------------------------*/
+.reveal .slides p:has(> span.credit) {
+  font-size: 0.6em;
+  line-height: 1.2;
+  margin: 0.2em 0 0.6em;
+  text-align: center;
+}
+.reveal .slides span.credit { color: #6b6f73; }
+.reveal .slides span.credit a { color: inherit; text-decoration: underline; }

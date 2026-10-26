@@ -149,6 +149,9 @@ axis(1, at = c(-180, 0, 180))
 lines(th * 180 / pi, exp(kap[2] * cos(th)) / (2 * pi * besselI(kap[2], 0)), lwd = 4, col = rust)
 ```
 
+[Figure produced with own R code · simulated data]{.credit}
+
+
 Teal: an encamped state, short steps and random turns. Red: a travelling
 state, long and directed. The HMM sees only the path and has to work out the
 colours.
@@ -209,6 +212,9 @@ segments(head(one$x, -1), head(one$y, -1), one$x[-1], one$y[-1], lwd = 3,
 scale_bar(1)
 ```
 
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
+
 Cilla and Toni, hourly. Grey: all their steps. Coloured: the two fitted
 state distributions, weighted by how often each state occurs; dashed: their
 sum.
@@ -260,6 +266,9 @@ rect(seq_along(thr) - 0.5, 1.1, seq_along(thr) + 0.5, 1.9, col = c(teal, rust)[t
 rect(seq_along(w$state) - 0.5, 0.1, seq_along(w$state) + 0.5, 0.9, col = c(teal, rust)[w$state], border = NA)
 axis(2, at = c(1.5, 0.5), labels = c("threshold", "HMM"), tick = FALSE, las = 1, cex.axis = 1.35)
 ```
+
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
 
 The same steps labelled two ways: a fixed threshold (dashed line) switches
 `r switches[["threshold"]]` times; the HMM, which knows that behaviour
@@ -340,6 +349,9 @@ plot(0:23, diel, type = "o", pch = 16, cex = 1.4, lwd = 4, col = rust, xaxt = "n
      ylim = c(0.6, 0.9), xlab = "Local hour", ylab = "P(moving state)")
 axis(1, at = seq(0, 24, 6))
 ```
+
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
 :::
 ::: {.column width="42%"}
 | Local time | P(moving) |
@@ -517,6 +529,9 @@ for (k in list(list(pr$stepRes, "Step pseudo-residuals"), list(pr$angleRes, "Ang
   qqline(k[[1]], col = rust, lwd = 3)
 }
 ```
+
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
 
 The two-state buffalo model. Points on the line mean the model describes the
 data; the bent tails of the step residuals say two states do not capture the

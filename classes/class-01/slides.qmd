@@ -104,6 +104,8 @@ respond to a changing landscape.
 
 ![Trend of "movement-related" package downloads from CRAN](../../assets/figures/cran_movement_packages.jpg){width="72%" fig-align="center"}
 
+[Figure produced with own R code · data: CRAN downloads from the Posit mirror, via `cranlogs`]{.credit}
+
 The constraint has moved. It used to be *getting* locations. It is now
 *knowing what to do with them*.
 
@@ -315,6 +317,9 @@ legend("topright", c("what the animal walked (unknown)", "what the track records
        lty = c(3, 1), lwd = c(2, 4), col = c("grey50", ink), bty = "n", cex = 1.4)
 ```
 
+[Figure produced with own R code · schematic]{.credit}
+
+
 Nine fixes, two bursts, seven steps. The dotted path is what happened; the
 straight lines are what we analyse.
 
@@ -378,9 +383,13 @@ decides for you.
 ::: {.columns}
 ::: {.column width="50%"}
 ![*Cyclura carinata* with coloured bead tags](../../assets/figures/iguana_beads.jpg){width="100%"}
+
+[Photo: Giuliano Colosimo]{.credit}
 :::
 ::: {.column width="50%"}
 ![A Passive Integrated Transponder (PIT)](../../assets/figures/pit_tag.jpg){width="100%"}
+
+[Photo: Giuliano Colosimo]{.credit}
 :::
 :::
 
@@ -394,12 +403,16 @@ demographic work.
 
 ::: {.columns}
 ::: {.column width="46%"}
-![Toe-clipping combinations (Waichman 1992)](../../assets/figures/toe_clipping.jpg){width="100%"}
+![Toe-clipping combinations](../../assets/figures/toe_clipping.jpg){width="100%"}
+
+[Source: Waichman A. (1992) Herpetological Review 23:19–21]{.credit}
 
 Effective, permanent — and now ethically contested. Increasingly replaced.
 :::
 ::: {.column width="54%"}
 ![*Bombina* spot patterns are unique](../../assets/figures/morpho_pattern.jpg){width="100%"}
+
+[Photo: marioeffe, [Natura Mediterraneo forum](https://www.naturamediterraneo.com/forum/topic.asp?TOPIC_ID=273624)]{.credit}
 
 Natural markings cost the animal nothing. Photo-ID software now does the
 matching at scale.
@@ -410,7 +423,9 @@ matching at scale.
 
 ## Photo-identification at scale
 
-![Automated recognition of individual iguanas. Image courtesy of Nathalie Duporge](../../assets/figures/photo_id_software.jpg){width="62%" fig-align="center"}
+![Automated recognition of individual iguanas](../../assets/figures/photo_id_software.jpg){width="62%" fig-align="center"}
+
+[Image courtesy of Nathalie Duporge]{.credit}
 
 Pattern-matching algorithms turn a shoebox of photographs into a
 capture–recapture dataset — for whale sharks, giraffes, newts, iguanas.
@@ -419,7 +434,9 @@ capture–recapture dataset — for whale sharks, giraffes, newts, iguanas.
 
 ## Genetic tagging
 
-![Species and locations where genetic tagging has delivered demographic insight (after Lamb et al. 2019)](../../assets/figures/genetic_tagging.jpg){width="66%" fig-align="center"}
+![Species and locations where genetic tagging has delivered demographic insight](../../assets/figures/genetic_tagging.jpg){width="66%" fig-align="center"}
+
+[Source: after Lamb et al. (2019) Ecological Applications 29:e01876, [doi:10.1002/eap.1876](https://doi.org/10.1002/eap.1876)]{.credit}
 
 Hair snags, scats, feathers: the animal is never handled. Biased towards
 mid-to-large mobile mammals, because that is where the money and the conflict are.
@@ -431,9 +448,13 @@ mid-to-large mobile mammals, because that is where the money and the conflict ar
 ::: {.columns}
 ::: {.column width="50%"}
 ![Implanted transmitter, *Chilabothrus chrysogaster*](../../assets/figures/boa_transmitter.jpg){width="100%"}
+
+[Photo: Giuliano Colosimo]{.credit}
 :::
 ::: {.column width="50%"}
 ![Tracking on foot with a Yagi antenna](../../assets/figures/vhf_antenna.jpg){width="100%"}
+
+[Photo: Giuliano Colosimo]{.credit}
 :::
 :::
 
@@ -469,6 +490,8 @@ data"**.
 
 ![The GPS constellation](../../assets/figures/gps_constellation.gif){width="42%" fig-align="center"}
 
+[Animation: El pak, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:ConstellationGPS.gif), public domain]{.credit}
+
 <!-- ::: {.incremental} -->
 - Each satellite broadcasts its position and a very precise time
 - Distance to a satellite = (signal travel time) × c
@@ -497,6 +520,8 @@ data"**.
 :::
 ::: {.column width="45%"}
 ![A male *Conolophus marthae* with a Wireless Sensor Node: GPS, temperature and UV](../../assets/figures/iguana_wsn.jpg){width="100%"}
+
+[Photo: Giuliano Colosimo]{.credit}
 :::
 :::
 
@@ -670,6 +695,9 @@ segments(tags$g / 0.05, seq_len(nrow(tags)), 1e6, seq_len(nrow(tags)), lwd = 14,
 segments(tags$g / 0.03, seq_len(nrow(tags)), 1e6, seq_len(nrow(tags)), lwd = 14, col = teal, lend = 1)
 ```
 
+[Figure produced with own R code · tag masses from the trade-off table]{.credit}
+
+
 Bars: animals heavy enough for each tag under the 5% rule (light) and the 3%
 rule for flyers (dark). The 22 g passerine of the quiz can carry a PIT, VHF,
 geolocator or accelerometer — nothing that transmits a position.
@@ -773,6 +801,9 @@ for (k in c(1, 60, 360)) {
 par(op)
 ```
 
+[Figure produced with own R code · simulated data]{.credit}
+
+
 The **same** two days of simulated movement (grey), sampled at three rates.
 
 ---
@@ -839,6 +870,9 @@ bp <- barplot(rev(days), horiz = TRUE, col = teal, border = NA, xlim = c(0, 1600
               xlab = "Deployment (days)", names.arg = rev(names(days)))
 text(rev(days), bp, c("3.7 years", "11 months", "5.5 months", "4 weeks"), pos = 4, cex = 1.5)
 ```
+
+[Figure produced with own R code · illustrative battery budget]{.credit}
+
 
 An illustrative battery worth 8,000 fixes. Fine sampling buys detail and costs
 duration — nearly a month at 5 minutes, nearly a year at 1 hour.
@@ -1023,6 +1057,9 @@ plot(st_geometry(utm32), col = "grey93", border = "grey70",
 points(bat_xy, pch = 16, cex = 0.6, col = adjustcolor(teal, 0.7))
 scale_bar(50)
 ```
+
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); turkey vulture Leo, Bildstein et al. (Movebank); parti-coloured bats, Safi et al. (Movebank); country outlines from Natural Earth, via `spData`]{.credit}
+
 
 Hourly GPS on a resident grazer; six years of GPS on a migrant crossing two
 continents; a few hand-collected VHF fixes per bat per night.

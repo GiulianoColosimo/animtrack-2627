@@ -125,6 +125,9 @@ plot(by_rate$h, by_rate$mean_step / 1000, log = "x", type = "o", pch = 16, cex =
 axis(1, at = rates)
 ```
 
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
+
 The same buffalo, Cilla, resampled to coarser and coarser intervals. Neither
 number is a property of the animal alone.
 
@@ -222,6 +225,9 @@ for (k in names(shapes)) {
 }
 ```
 
+[Figure produced with own R code · schematic curves]{.credit}
+
+
 NSD against time for the four strategies of Bunnefeld et al. (2011).
 
 ---
@@ -278,6 +284,9 @@ text(dates, max(d$nsd) / 1e6 * 0.15, format(dates, "%d %b"), pos = c(4, 2), cex 
 text(mean(dates), max(d$nsd) / 1e6 * 0.55, sprintf("√δ = %s km", format(round(sqrt(cf[["dd"]])), big.mark = ",")),
      cex = 1.6, col = rust)
 ```
+
+[Figure produced with own R code · data: turkey vulture Leo, Bildstein et al. (Movebank)]{.credit}
+
 
 Daily NSD of the vulture Leo, June 2007 to May 2008, and the fitted migrant
 model. The parameters read as biology: a migration distance in thousands of
@@ -399,6 +408,9 @@ plot(seq_along(f), f, type = "h", lwd = 2, col = ifelse(path$mode == "search", r
      xlab = "Fix", ylab = "Hours to leave the circle", main = "First-passage time along the path")
 legend("topright", c("searching", "travelling"), col = c(rust, teal), lwd = 4, bty = "n", cex = 1.3)
 ```
+
+[Figure produced with own R code · simulated data]{.credit}
+
 
 A simulated animal alternating travel and intensive search. Inside a patch it
 takes many hours to leave a 400 m circle; in transit, one or two.
@@ -563,6 +575,9 @@ hist(log10(cilla_kmh + 0.001), breaks = 50, col = teal, border = "white", xaxt =
 axis(1, at = log10(c(0.01, 0.1, 1, 10) + 0.001), labels = c(0.01, 0.1, 1, 10))
 ```
 
+[Figure produced with own R code · data: turkey vulture Leo, Bildstein et al. (Movebank); Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
+
 Left: Leo's migration days (> 50 km, dashed) form a separate mode. Right: the
 buffalo's speeds are a continuum with no gap; any cut-off is arbitrary.
 
@@ -614,6 +629,9 @@ to_time <- function(z) as.POSIXct(approx(vt$T.mid, as.numeric(vt$T.POSIX), xout 
                                    origin = "1970-01-01", tz = "UTC")
 segments(to_time(ph$t0), ph$mu.hat / 1000, to_time(ph$t1), ph$mu.hat / 1000, lwd = 5, col = teal)
 ```
+
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
 
 Persistence velocity over the first 25 days of hourly fixes (grey), the
 `r nrow(cps$breaks)` change points BCPA finds with a 50-fix window (dashed),

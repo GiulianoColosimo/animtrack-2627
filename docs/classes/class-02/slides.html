@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-23">
+  <meta name="dcterms.date" content="2026-10-26">
   <title>Animal Tracking – Spatial data in R: the survival kit</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -96,7 +96,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-fd96417eda74ebb0be446d6413f2e761.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-3ac394b1d208f7e66508159e07493236.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-23</p>
+  <p class="date">2026-10-26</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -279,7 +279,8 @@ Giuliano Colosimo
 <section id="the-same-place-both-ways" class="slide level2">
 <h2>The same place, both ways</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Cilla’s fixes, one week of her track and her range as vectors; the terrain under them as a raster.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank); SRTM elevation</span></p>
+<p>Cilla’s fixes, one week of her track and her range as vectors; the terrain under them as a raster.</p>
 </section>
 <section id="choosing-the-model" class="slide level2">
 <h2>Choosing the model</h2>
@@ -339,7 +340,8 @@ Giuliano Colosimo
 <section id="geographic-coordinates" class="slide level2">
 <h2>Geographic coordinates</h2>
 
-<img data-src="../../assets/figures/geographic_coordinates.jpg" style="width:55.0%" class="r-stretch quarto-figure-center"><p class="caption">Longitude and latitude are <em>angles</em>, not distances</p><p>Latitude: angle north/south of the equator. Longitude: angle east/west of Greenwich. Units are <strong>degrees</strong>. This is what every GPS and every Movebank file gives you — usually <strong>WGS84, EPSG:4326</strong>.</p>
+<img data-src="../../assets/figures/geographic_coordinates.jpg" style="width:55.0%" class="r-stretch quarto-figure-center"><p class="caption">Longitude and latitude are <em>angles</em>, not distances</p><p><span class="credit">Image: Peter Mercator, <a href="https://commons.wikimedia.org/wiki/File:Latitude_and_longitude_graticule_on_a_sphere.svg">Wikimedia Commons</a>, public domain</span></p>
+<p>Latitude: angle north/south of the equator. Longitude: angle east/west of Greenwich. Units are <strong>degrees</strong>. This is what every GPS and every Movebank file gives you — usually <strong>WGS84, EPSG:4326</strong>.</p>
 </section>
 <section id="why-you-cannot-do-arithmetic-with-degrees" class="slide level2">
 <h2>Why you cannot do arithmetic with degrees</h2>
@@ -364,12 +366,14 @@ Giuliano Colosimo
 <section id="one-degree-is-not-one-distance" class="slide level2">
 <h2>One degree is not one distance</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Every circle has an 800 km radius on the ground. Plotted as if degrees were metres, they stretch east–west — badly at high latitudes.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code</span></p>
+<p>Every circle has an 800 km radius on the ground. Plotted as if degrees were metres, they stretch east–west — badly at high latitudes.</p>
 </section>
 <section id="projected-coordinates" class="slide level2">
 <h2>Projected coordinates</h2>
 
-<img data-src="../../assets/figures/projected_coordinates.jpg" style="width:62.0%" class="r-stretch quarto-figure-center"><p class="caption">Every projection preserves some properties and destroys others</p><p><strong>Conformal</strong> keeps angles/shape (Mercator, UTM). <strong>Equal-area</strong> keeps area (Albers, Mollweide). <strong>Equidistant</strong> keeps distances from a point. <em>No projection keeps everything.</em></p>
+<img data-src="../../assets/figures/projected_coordinates.jpg" style="width:62.0%" class="r-stretch quarto-figure-center"><p class="caption">Every projection preserves some properties and destroys others</p><p><span class="credit">Image: cmglee, US government, Clindberg, Palosirkka, <a href="https://commons.wikimedia.org/wiki/File:Comparison_of_cartography_surface_development.svg">Wikimedia Commons</a>, CC BY-SA 4.0</span></p>
+<p><strong>Conformal</strong> keeps angles/shape (Mercator, UTM). <strong>Equal-area</strong> keeps area (Albers, Mollweide). <strong>Equidistant</strong> keeps distances from a point. <em>No projection keeps everything.</em></p>
 </section>
 <section id="utm-the-practical-default" class="slide level2">
 <h2>UTM: the practical default</h2>
@@ -489,7 +493,8 @@ Giuliano Colosimo
 <section id="the-same-circles-two-projections" class="slide level2">
 <h2>The same circles, two projections</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Every red disc covers the same 2.5 million km². Web Mercator inflates them towards the poles; an equal-area projection keeps their areas equal, at the cost of their shapes.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: country outlines from Natural Earth, via <code>spData</code></span></p>
+<p>Every red disc covers the same 2.5 million km². Web Mercator inflates them towards the poles; an equal-area projection keeps their areas equal, at the cost of their shapes.</p>
 </section>
 <section id="quiz" class="slide level2">
 <h2>Quiz</h2>
@@ -692,6 +697,7 @@ Geodetic CRS:  WGS 84
 </div>
 </div>
 </div>
+<p><span class="credit">Figure produced with own R code · data: country outlines from Natural Earth, via <code>spData</code></span></p>
 </div><div class="column" style="width:45%;">
 <p><code>(31.76, −24.54)</code> read as <strong>metres</strong> in UTM 36S is a spot 31 m east and 24 m south of the zone’s false origin: 500 km west of the 33°E meridian and 10,000 km south of the equator.</p>
 <p>That is (57°W, 85.5°S) — the Antarctic ice sheet. No error, no warning.</p>
@@ -861,7 +867,8 @@ max value   :    24</code></pre>
 <section id="spectral-signatures" class="slide level2">
 <h2>Spectral signatures</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-9-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Schematic curves. Vegetation is dark in the red and bright in the near infrared; soil and water are not. NDVI measures exactly that contrast.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-9-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · schematic curves</span></p>
+<p>Schematic curves. Vegetation is dark in the red and bright in the near infrared; soil and water are not. NDVI measures exactly that contrast.</p>
 </section>
 <section id="ndvi" class="slide level2">
 <h2>NDVI</h2>
@@ -885,7 +892,8 @@ max value   :    24</code></pre>
 <section id="kruger-wet-and-dry" class="slide level2">
 <h2>Kruger, wet and dry</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-10-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>MODIS NDVI at 250 m, the same landscape six months apart (dots: Cilla’s fixes). An NDVI value is only meaningful together with its date.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-10-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: MODIS MOD13Q1 NDVI; Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>MODIS NDVI at 250 m, the same landscape six months apart (dots: Cilla’s fixes). An NDVI value is only meaningful together with its date.</p>
 </section>
 <section id="you-cannot-have-all-four" class="slide level2">
 <h2>You cannot have all four</h2>
@@ -902,7 +910,8 @@ max value   :    24</code></pre>
 <section id="pixel-size-changes-the-landscape" class="slide level2">
 <h2>Pixel size changes the landscape</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-11-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The same February NDVI around Cilla’s range at MODIS resolution, then averaged to ~1 km and ~5 km. At 5 km every fix gets nearly the same value.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-11-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: MODIS MOD13Q1 NDVI; Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>The same February NDVI around Cilla’s range at MODIS resolution, then averaged to ~1 km and ~5 km. At 5 km every fix gets nearly the same value.</p>
 </section>
 <section id="the-missions-you-will-actually-use" class="slide level2">
 <h2>The missions you will actually use</h2>

@@ -1430,7 +1430,7 @@
     "href": "classes/class-01/slides.html#the-data-deluge",
     "title": "Why animals move, and how we watch them",
     "section": "The data deluge",
-    "text": "The data deluge\n\nTrend of “movement-related” package downloads from CRANThe constraint has moved. It used to be getting locations. It is now knowing what to do with them.",
+    "text": "The data deluge\n\nTrend of “movement-related” package downloads from CRANFigure produced with own R code · data: CRAN downloads from the Posit mirror, via cranlogs\nThe constraint has moved. It used to be getting locations. It is now knowing what to do with them.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1534,7 +1534,7 @@
     "href": "classes/class-01/slides.html#the-vocabulary-in-one-picture",
     "title": "Why animals move, and how we watch them",
     "section": "The vocabulary, in one picture",
-    "text": "The vocabulary, in one picture\n\nNine fixes, two bursts, seven steps. The dotted path is what happened; the straight lines are what we analyse.",
+    "text": "The vocabulary, in one picture\n\nFigure produced with own R code · schematic\nNine fixes, two bursts, seven steps. The dotted path is what happened; the straight lines are what we analyse.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1573,7 +1573,7 @@
     "href": "classes/class-01/slides.html#marking-individuals-the-cheap-and-enduring-methods",
     "title": "Why animals move, and how we watch them",
     "section": "Marking individuals: the cheap and enduring methods",
-    "text": "Marking individuals: the cheap and enduring methods\n\n\n\n\n\nCyclura carinata with coloured bead tags\n\n\n\n\n\n\nA Passive Integrated Transponder (PIT)\n\n\n\nMarks give you recaptures, not tracks — two or more points separated by a long, unobserved interval. Cheap, long-lasting, and still the backbone of demographic work.",
+    "text": "Marking individuals: the cheap and enduring methods\n\n\n\n\n\nCyclura carinata with coloured bead tags\n\n\nPhoto: Giuliano Colosimo\n\n\n\n\nA Passive Integrated Transponder (PIT)\n\n\nPhoto: Giuliano Colosimo\n\nMarks give you recaptures, not tracks — two or more points separated by a long, unobserved interval. Cheap, long-lasting, and still the backbone of demographic work.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1586,7 +1586,7 @@
     "href": "classes/class-01/slides.html#marking-from-mutilation-to-photographs",
     "title": "Why animals move, and how we watch them",
     "section": "Marking: from mutilation to photographs",
-    "text": "Marking: from mutilation to photographs\n\n\n\n\n\nToe-clipping combinations (Waichman 1992)\n\n\nEffective, permanent — and now ethically contested. Increasingly replaced.\n\n\n\n\nBombina spot patterns are unique\n\n\nNatural markings cost the animal nothing. Photo-ID software now does the matching at scale.",
+    "text": "Marking: from mutilation to photographs\n\n\n\n\n\nToe-clipping combinations\n\n\nSource: Waichman A. (1992) Herpetological Review 23:19–21\nEffective, permanent — and now ethically contested. Increasingly replaced.\n\n\n\n\nBombina spot patterns are unique\n\n\nPhoto: marioeffe, Natura Mediterraneo forum\nNatural markings cost the animal nothing. Photo-ID software now does the matching at scale.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1599,7 +1599,7 @@
     "href": "classes/class-01/slides.html#photo-identification-at-scale",
     "title": "Why animals move, and how we watch them",
     "section": "Photo-identification at scale",
-    "text": "Photo-identification at scale\n\nAutomated recognition of individual iguanas. Image courtesy of Nathalie DuporgePattern-matching algorithms turn a shoebox of photographs into a capture–recapture dataset — for whale sharks, giraffes, newts, iguanas.",
+    "text": "Photo-identification at scale\n\nAutomated recognition of individual iguanasImage courtesy of Nathalie Duporge\nPattern-matching algorithms turn a shoebox of photographs into a capture–recapture dataset — for whale sharks, giraffes, newts, iguanas.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1612,7 +1612,7 @@
     "href": "classes/class-01/slides.html#genetic-tagging",
     "title": "Why animals move, and how we watch them",
     "section": "Genetic tagging",
-    "text": "Genetic tagging\n\nSpecies and locations where genetic tagging has delivered demographic insight (after Lamb et al. 2019)Hair snags, scats, feathers: the animal is never handled. Biased towards mid-to-large mobile mammals, because that is where the money and the conflict are.",
+    "text": "Genetic tagging\n\nSpecies and locations where genetic tagging has delivered demographic insightSource: after Lamb et al. (2019) Ecological Applications 29:e01876, doi:10.1002/eap.1876\nHair snags, scats, feathers: the animal is never handled. Biased towards mid-to-large mobile mammals, because that is where the money and the conflict are.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1625,7 +1625,7 @@
     "href": "classes/class-01/slides.html#vhf-radio-telemetry",
     "title": "Why animals move, and how we watch them",
     "section": "VHF radio-telemetry",
-    "text": "VHF radio-telemetry\n\n\n\n\n\nImplanted transmitter, Chilabothrus chrysogaster\n\n\n\n\n\n\nTracking on foot with a Yagi antenna\n\n\n\nThe tag emits a pulse; you find it. A location comes from homing in or from triangulation of ≥2 bearings. Tags go down to 0.2 g — nothing else reaches insects and the smallest bats.",
+    "text": "VHF radio-telemetry\n\n\n\n\n\nImplanted transmitter, Chilabothrus chrysogaster\n\n\nPhoto: Giuliano Colosimo\n\n\n\n\nTracking on foot with a Yagi antenna\n\n\nPhoto: Giuliano Colosimo\n\nThe tag emits a pulse; you find it. A location comes from homing in or from triangulation of ≥2 bearings. Tags go down to 0.2 g — nothing else reaches insects and the smallest bats.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1651,7 +1651,7 @@
     "href": "classes/class-01/slides.html#gps-trilateration",
     "title": "Why animals move, and how we watch them",
     "section": "GPS: trilateration",
-    "text": "GPS: trilateration\n\n\nThe GPS constellation\nEach satellite broadcasts its position and a very precise time\nDistance to a satellite = (signal travel time) × c\n3 satellites fix a position in principle; a 4th is needed to solve the receiver’s clock error — and more give altitude and redundancy",
+    "text": "GPS: trilateration\n\nThe GPS constellationAnimation: El pak, Wikimedia Commons, public domain\n\n\nEach satellite broadcasts its position and a very precise time\nDistance to a satellite = (signal travel time) × c\n3 satellites fix a position in principle; a 4th is needed to solve the receiver’s clock error — and more give altitude and redundancy",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1664,7 +1664,7 @@
     "href": "classes/class-01/slides.html#gps-in-practice-on-an-animal",
     "title": "Why animals move, and how we watch them",
     "section": "GPS in practice, on an animal",
-    "text": "GPS in practice, on an animal\n\n\nWhat you get\n\nHorizontal error typically 5–30 m under open sky\nA quality flag: number of satellites, DOP (dilution of precision), 2D vs 3D fix\nOptional altitude, speed, temperature, activity\n\nWhat it costs\n\nA cold start (no recent almanac) can take minutes and drain the battery\nCanopy, canyons, burrows and water block the signal\nEnergy scales with fix rate — this is the central design trade-off\n\n\n\n\n\nA male Conolophus marthae with a Wireless Sensor Node: GPS, temperature and UV",
+    "text": "GPS in practice, on an animal\n\n\nWhat you get\n\nHorizontal error typically 5–30 m under open sky\nA quality flag: number of satellites, DOP (dilution of precision), 2D vs 3D fix\nOptional altitude, speed, temperature, activity\n\nWhat it costs\n\nA cold start (no recent almanac) can take minutes and drain the battery\nCanopy, canyons, burrows and water block the signal\nEnergy scales with fix rate — this is the central design trade-off\n\n\n\n\n\nA male Conolophus marthae with a Wireless Sensor Node: GPS, temperature and UV\n\n\nPhoto: Giuliano Colosimo",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1755,7 +1755,7 @@
     "href": "classes/class-01/slides.html#which-tags-can-this-animal-carry",
     "title": "Why animals move, and how we watch them",
     "section": "Which tags can this animal carry?",
-    "text": "Which tags can this animal carry?\n\nBars: animals heavy enough for each tag under the 5% rule (light) and the 3% rule for flyers (dark). The 22 g passerine of the quiz can carry a PIT, VHF, geolocator or accelerometer — nothing that transmits a position.",
+    "text": "Which tags can this animal carry?\n\nFigure produced with own R code · tag masses from the trade-off table\nBars: animals heavy enough for each tag under the 5% rule (light) and the 3% rule for flyers (dark). The 22 g passerine of the quiz can carry a PIT, VHF, geolocator or accelerometer — nothing that transmits a position.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1807,7 +1807,7 @@
     "href": "classes/class-01/slides.html#the-fix-interval-decides-what-path-you-see",
     "title": "Why animals move, and how we watch them",
     "section": "The fix interval decides what path you see",
-    "text": "The fix interval decides what path you see\n\nThe same two days of simulated movement (grey), sampled at three rates.",
+    "text": "The fix interval decides what path you see\n\nFigure produced with own R code · simulated data\nThe same two days of simulated movement (grey), sampled at three rates.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1846,7 +1846,7 @@
     "href": "classes/class-01/slides.html#one-battery-many-designs",
     "title": "Why animals move, and how we watch them",
     "section": "One battery, many designs",
-    "text": "One battery, many designs\n\nAn illustrative battery worth 8,000 fixes. Fine sampling buys detail and costs duration — nearly a month at 5 minutes, nearly a year at 1 hour.",
+    "text": "One battery, many designs\n\nFigure produced with own R code · illustrative battery budget\nAn illustrative battery worth 8,000 fixes. Fine sampling buys detail and costs duration — nearly a month at 5 minutes, nearly a year at 1 hour.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -1937,7 +1937,7 @@
     "href": "classes/class-01/slides.html#meet-the-animals",
     "title": "Why animals move, and how we watch them",
     "section": "Meet the animals",
-    "text": "Meet the animals\n\nHourly GPS on a resident grazer; six years of GPS on a migrant crossing two continents; a few hand-collected VHF fixes per bat per night.",
+    "text": "Meet the animals\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); turkey vulture Leo, Bildstein et al. (Movebank); parti-coloured bats, Safi et al. (Movebank); country outlines from Natural Earth, via spData\nHourly GPS on a resident grazer; six years of GPS on a migrant crossing two continents; a few hand-collected VHF fixes per bat per night.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2028,7 +2028,7 @@
     "href": "classes/class-02/slides.html#the-same-place-both-ways",
     "title": "Spatial data in R: the survival kit",
     "section": "The same place, both ways",
-    "text": "The same place, both ways\n\nCilla’s fixes, one week of her track and her range as vectors; the terrain under them as a raster.",
+    "text": "The same place, both ways\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); SRTM elevation\nCilla’s fixes, one week of her track and her range as vectors; the terrain under them as a raster.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2067,7 +2067,7 @@
     "href": "classes/class-02/slides.html#geographic-coordinates",
     "title": "Spatial data in R: the survival kit",
     "section": "Geographic coordinates",
-    "text": "Geographic coordinates\n\nLongitude and latitude are angles, not distancesLatitude: angle north/south of the equator. Longitude: angle east/west of Greenwich. Units are degrees. This is what every GPS and every Movebank file gives you — usually WGS84, EPSG:4326.",
+    "text": "Geographic coordinates\n\nLongitude and latitude are angles, not distancesImage: Peter Mercator, Wikimedia Commons, public domain\nLatitude: angle north/south of the equator. Longitude: angle east/west of Greenwich. Units are degrees. This is what every GPS and every Movebank file gives you — usually WGS84, EPSG:4326.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2093,7 +2093,7 @@
     "href": "classes/class-02/slides.html#one-degree-is-not-one-distance",
     "title": "Spatial data in R: the survival kit",
     "section": "One degree is not one distance",
-    "text": "One degree is not one distance\n\nEvery circle has an 800 km radius on the ground. Plotted as if degrees were metres, they stretch east–west — badly at high latitudes.",
+    "text": "One degree is not one distance\n\nFigure produced with own R code\nEvery circle has an 800 km radius on the ground. Plotted as if degrees were metres, they stretch east–west — badly at high latitudes.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2106,7 +2106,7 @@
     "href": "classes/class-02/slides.html#projected-coordinates",
     "title": "Spatial data in R: the survival kit",
     "section": "Projected coordinates",
-    "text": "Projected coordinates\n\nEvery projection preserves some properties and destroys othersConformal keeps angles/shape (Mercator, UTM). Equal-area keeps area (Albers, Mollweide). Equidistant keeps distances from a point. No projection keeps everything.",
+    "text": "Projected coordinates\n\nEvery projection preserves some properties and destroys othersImage: cmglee, US government, Clindberg, Palosirkka, Wikimedia Commons, CC BY-SA 4.0\nConformal keeps angles/shape (Mercator, UTM). Equal-area keeps area (Albers, Mollweide). Equidistant keeps distances from a point. No projection keeps everything.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2158,7 +2158,7 @@
     "href": "classes/class-02/slides.html#the-same-circles-two-projections",
     "title": "Spatial data in R: the survival kit",
     "section": "The same circles, two projections",
-    "text": "The same circles, two projections\n\nEvery red disc covers the same 2.5 million km². Web Mercator inflates them towards the poles; an equal-area projection keeps their areas equal, at the cost of their shapes.",
+    "text": "The same circles, two projections\n\nFigure produced with own R code · data: country outlines from Natural Earth, via spData\nEvery red disc covers the same 2.5 million km². Web Mercator inflates them towards the poles; an equal-area projection keeps their areas equal, at the cost of their shapes.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2249,7 +2249,7 @@
     "href": "classes/class-02/slides.html#where-the-mislabelled-buffalo-went",
     "title": "Spatial data in R: the survival kit",
     "section": "Where the mislabelled buffalo went",
-    "text": "Where the mislabelled buffalo went\n\n\n\n\n\n\n\n\n\n\n\n\n(31.76, −24.54) read as metres in UTM 36S is a spot 31 m east and 24 m south of the zone’s false origin: 500 km west of the 33°E meridian and 10,000 km south of the equator.\nThat is (57°W, 85.5°S) — the Antarctic ice sheet. No error, no warning.",
+    "text": "Where the mislabelled buffalo went\n\n\n\n\n\n\n\n\n\n\n\nFigure produced with own R code · data: country outlines from Natural Earth, via spData\n\n(31.76, −24.54) read as metres in UTM 36S is a spot 31 m east and 24 m south of the zone’s false origin: 500 km west of the 33°E meridian and 10,000 km south of the equator.\nThat is (57°W, 85.5°S) — the Antarctic ice sheet. No error, no warning.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2353,7 +2353,7 @@
     "href": "classes/class-02/slides.html#spectral-signatures",
     "title": "Spatial data in R: the survival kit",
     "section": "Spectral signatures",
-    "text": "Spectral signatures\n\nSchematic curves. Vegetation is dark in the red and bright in the near infrared; soil and water are not. NDVI measures exactly that contrast.",
+    "text": "Spectral signatures\n\nFigure produced with own R code · schematic curves\nSchematic curves. Vegetation is dark in the red and bright in the near infrared; soil and water are not. NDVI measures exactly that contrast.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2379,7 +2379,7 @@
     "href": "classes/class-02/slides.html#kruger-wet-and-dry",
     "title": "Spatial data in R: the survival kit",
     "section": "Kruger, wet and dry",
-    "text": "Kruger, wet and dry\n\nMODIS NDVI at 250 m, the same landscape six months apart (dots: Cilla’s fixes). An NDVI value is only meaningful together with its date.",
+    "text": "Kruger, wet and dry\n\nFigure produced with own R code · data: MODIS MOD13Q1 NDVI; Kruger buffalo, Getz et al. (Movebank)\nMODIS NDVI at 250 m, the same landscape six months apart (dots: Cilla’s fixes). An NDVI value is only meaningful together with its date.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2405,7 +2405,7 @@
     "href": "classes/class-02/slides.html#pixel-size-changes-the-landscape",
     "title": "Spatial data in R: the survival kit",
     "section": "Pixel size changes the landscape",
-    "text": "Pixel size changes the landscape\n\nThe same February NDVI around Cilla’s range at MODIS resolution, then averaged to ~1 km and ~5 km. At 5 km every fix gets nearly the same value.",
+    "text": "Pixel size changes the landscape\n\nFigure produced with own R code · data: MODIS MOD13Q1 NDVI; Kruger buffalo, Getz et al. (Movebank)\nThe same February NDVI around Cilla’s range at MODIS resolution, then averaged to ~1 km and ~5 km. At 5 km every fix gets nearly the same value.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2522,7 +2522,7 @@
     "href": "classes/class-03/slides.html#steps-and-turns-of-a-real-buffalo",
     "title": "From fixes to trajectories",
     "section": "Steps and turns of a real buffalo",
-    "text": "Steps and turns of a real buffalo\n\nCilla, hourly steps. Short steps dominate; turning angles concentrate near 0° (keep going). The bars at −180° and +180° are the same reversal, split in two by the axis.",
+    "text": "Steps and turns of a real buffalo\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nCilla, hourly steps. Short steps dominate; turning angles concentrate near 0° (keep going). The bars at −180° and +180° are the same reversal, split in two by the axis.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2548,7 +2548,7 @@
     "href": "classes/class-03/slides.html#what-error-looks-like",
     "title": "From fixes to trajectories",
     "section": "What error looks like",
-    "text": "What error looks like\n\nLeft: real data, 24 hours either side of a corrupt fix. Right: simulated — 48 hourly fixes of a motionless collar with 15 m error. It “walks” 1 km a day and turns at random.",
+    "text": "What error looks like\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); right panel simulated\nLeft: real data, 24 hours either side of a corrupt fix. Right: simulated — 48 hourly fixes of a motionless collar with 15 m error. It “walks” 1 km a day and turns at random.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2678,7 +2678,7 @@
     "href": "classes/class-03/slides.html#gaps-at-a-glance",
     "title": "From fixes to trajectories",
     "section": "Gaps at a glance",
-    "text": "Gaps at a glance\n\nOne tick per fix. Queen’s collar went silent for 105 days in mid-2005; Pepper’s schedule frays into gaps through late 2006.",
+    "text": "Gaps at a glance\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nOne tick per fix. Queen’s collar went silent for 105 days in mid-2005; Pepper’s schedule frays into gaps through late 2006.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2704,7 +2704,7 @@
     "href": "classes/class-03/slides.html#selecting-versus-interpolating",
     "title": "From fixes to trajectories",
     "section": "Selecting versus interpolating",
-    "text": "Selecting versus interpolating\n\nToni across a 9-hour gap. Selection ends the burst at the gap; interpolation fills it with evenly spaced positions on a straight line the buffalo almost certainly did not walk.",
+    "text": "Selecting versus interpolating\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nToni across a 9-hour gap. Selection ends the burst at the gap; interpolation fills it with evenly spaced positions on a straight line the buffalo almost certainly did not walk.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2808,7 +2808,7 @@
     "href": "classes/class-03/slides.html#decorated-versus-annotated",
     "title": "From fixes to trajectories",
     "section": "Decorated versus annotated",
-    "text": "Decorated versus annotated\n\nQueen in 2005. One February image says she lived in green vegetation all year. Matched in time, NDVI halves by September — and the months with no composite nearby are honestly blank.",
+    "text": "Decorated versus annotated\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); MODIS MOD13Q1 NDVI\nQueen in 2005. One February image says she lived in green vegetation all year. Matched in time, NDVI halves by September — and the months with no composite nearby are honestly blank.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2912,7 +2912,7 @@
     "href": "classes/class-04/slides.html#the-coastline-paradox-in-a-buffalo",
     "title": "Quantifying movement",
     "section": "The coastline paradox, in a buffalo",
-    "text": "The coastline paradox, in a buffalo\n\nThe same buffalo, Cilla, resampled to coarser and coarser intervals. Neither number is a property of the animal alone.",
+    "text": "The coastline paradox, in a buffalo\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nThe same buffalo, Cilla, resampled to coarser and coarser intervals. Neither number is a property of the animal alone.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2964,7 +2964,7 @@
     "href": "classes/class-04/slides.html#four-shapes",
     "title": "Quantifying movement",
     "section": "Four shapes",
-    "text": "Four shapes\n\nNSD against time for the four strategies of Bunnefeld et al. (2011).",
+    "text": "Four shapes\n\nFigure produced with own R code · schematic curves\nNSD against time for the four strategies of Bunnefeld et al. (2011).",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2990,7 +2990,7 @@
     "href": "classes/class-04/slides.html#a-real-migrant-leo",
     "title": "Quantifying movement",
     "section": "A real migrant: Leo",
-    "text": "A real migrant: Leo\n\nDaily NSD of the vulture Leo, June 2007 to May 2008, and the fitted migrant model. The parameters read as biology: a migration distance in thousands of kilometres, a departure date and a return date.",
+    "text": "A real migrant: Leo\n\nFigure produced with own R code · data: turkey vulture Leo, Bildstein et al. (Movebank)\nDaily NSD of the vulture Leo, June 2007 to May 2008, and the fitted migrant model. The parameters read as biology: a migration distance in thousands of kilometres, a departure date and a return date.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3042,7 +3042,7 @@
     "href": "classes/class-04/slides.html#first-passage-time-drawn",
     "title": "Quantifying movement",
     "section": "First-passage time, drawn",
-    "text": "First-passage time, drawn\n\nA simulated animal alternating travel and intensive search. Inside a patch it takes many hours to leave a 400 m circle; in transit, one or two.",
+    "text": "First-passage time, drawn\n\nFigure produced with own R code · simulated data\nA simulated animal alternating travel and intensive search. Inside a patch it takes many hours to leave a 400 m circle; in transit, one or two.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3133,7 +3133,7 @@
     "href": "classes/class-04/slides.html#an-honest-threshold-and-a-dishonest-one",
     "title": "Quantifying movement",
     "section": "An honest threshold, and a dishonest one",
-    "text": "An honest threshold, and a dishonest one\n\nLeft: Leo’s migration days (&gt; 50 km, dashed) form a separate mode. Right: the buffalo’s speeds are a continuum with no gap; any cut-off is arbitrary.",
+    "text": "An honest threshold, and a dishonest one\n\nFigure produced with own R code · data: turkey vulture Leo, Bildstein et al. (Movebank); Kruger buffalo, Getz et al. (Movebank)\nLeft: Leo’s migration days (&gt; 50 km, dashed) form a separate mode. Right: the buffalo’s speeds are a continuum with no gap; any cut-off is arbitrary.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3159,7 +3159,7 @@
     "href": "classes/class-04/slides.html#bcpa-on-cilla",
     "title": "Quantifying movement",
     "section": "BCPA on Cilla",
-    "text": "BCPA on Cilla\n\nPersistence velocity over the first 25 days of hourly fixes (grey), the 28 change points BCPA finds with a 50-fix window (dashed), and the mean of each of the 29 phases (teal).",
+    "text": "BCPA on Cilla\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nPersistence velocity over the first 25 days of hourly fixes (grey), the 28 change points BCPA finds with a 50-fix window (dashed), and the mean of each of the 29 phases (teal).",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3263,7 +3263,7 @@
     "href": "classes/class-05/slides.html#four-canonical-walks",
     "title": "Movement models and simulation",
     "section": "Four canonical walks",
-    "text": "Four canonical walks\n\nSame number of steps. Red triangle: start. Cross: the goal of the biased walk.",
+    "text": "Four canonical walks\n\nFigure produced with own R code · simulated data\nSame number of steps. Red triangle: start. Cross: the goal of the biased walk.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3289,7 +3289,7 @@
     "href": "classes/class-05/slides.html#diffusion-seen-from-above",
     "title": "Movement models and simulation",
     "section": "Diffusion, seen from above",
-    "text": "Diffusion, seen from above\n\nCircles: the root of the expected MSD. Ten times more steps, only \\(\\sqrt{10}\n\\approx 3.2\\) times further.",
+    "text": "Diffusion, seen from above\n\nFigure produced with own R code · simulated data\nCircles: the root of the expected MSD. Ten times more steps, only \\(\\sqrt{10}\n\\approx 3.2\\) times further.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3315,7 +3315,7 @@
     "href": "classes/class-05/slides.html#the-two-ingredients",
     "title": "Movement models and simulation",
     "section": "The two ingredients",
-    "text": "The two ingredients\n\nEvery random walk in this session, and every SSF and HMM later, is built from one distribution of each kind.",
+    "text": "The two ingredients\n\nFigure produced with own R code · theoretical distributions\nEvery random walk in this session, and every SSF and HMM later, is built from one distribution of each kind.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3328,7 +3328,7 @@
     "href": "classes/class-05/slides.html#the-scales-of-movement",
     "title": "Movement models and simulation",
     "section": "The scales of movement",
-    "text": "The scales of movement\n\nShort lags: persistence makes a CRW ballistic (MSD ∝ t²). Long lags: it forgets its direction and becomes diffusive (MSD ∝ t). The crossover is the scale of the animal’s directional memory.",
+    "text": "The scales of movement\n\nFigure produced with own R code · simulated data\nShort lags: persistence makes a CRW ballistic (MSD ∝ t²). Long lags: it forgets its direction and becomes diffusive (MSD ∝ t). The crossover is the scale of the animal’s directional memory.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3367,7 +3367,7 @@
     "href": "classes/class-05/slides.html#drift-beats-spread-eventually",
     "title": "Movement models and simulation",
     "section": "Drift beats spread, eventually",
-    "text": "Drift beats spread, eventually\n\nA weak pull towards the east (bias weight 0.1). For the first 170 steps the random spread is larger than the progress; after that, drift wins for good.",
+    "text": "Drift beats spread, eventually\n\nFigure produced with own R code · simulated data\nA weak pull towards the east (bias weight 0.1). For the first 170 steps the random spread is larger than the progress; after that, drift wins for good.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3393,7 +3393,7 @@
     "href": "classes/class-05/slides.html#a-home-range-from-one-rule",
     "title": "Movement models and simulation",
     "section": "A home range from one rule",
-    "text": "A home range from one rule\n\nNo memory, no map, no boundary — only a weak pull towards home. Dashed: the true 95% range, about 800 km², which Session 6 tries to recover.",
+    "text": "A home range from one rule\n\nFigure produced with own R code · simulated data\nNo memory, no map, no boundary — only a weak pull towards home. Dashed: the true 95% range, about 800 km², which Session 6 tries to recover.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3445,7 +3445,7 @@
     "href": "classes/class-05/slides.html#two-ways-to-make-a-heavy-tail",
     "title": "Movement models and simulation",
     "section": "Two ways to make a heavy tail",
-    "text": "Two ways to make a heavy tail\n\nGrey: one exponential. Gold: a true power law. Red: two exponential modes, no power law anywhere — yet heavy-tailed enough that a power law beats a single exponential by thousands of AIC units.",
+    "text": "Two ways to make a heavy tail\n\nFigure produced with own R code · simulated data\nGrey: one exponential. Gold: a true power law. Red: two exponential modes, no power law anywhere — yet heavy-tailed enough that a power law beats a single exponential by thousands of AIC units.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3484,7 +3484,7 @@
     "href": "classes/class-05/slides.html#the-recipe-applied",
     "title": "Movement models and simulation",
     "section": "The recipe, applied",
-    "text": "The recipe, applied\n\nGrey-green: 300 CRWs with the buffalo’s own steps and turns. Red line: the buffalo. Only the longer track is clearly more confined than its null.",
+    "text": "The recipe, applied\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); null model simulated\nGrey-green: 300 CRWs with the buffalo’s own steps and turns. Red line: the buffalo. Only the longer track is clearly more confined than its null.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3588,7 +3588,7 @@
     "href": "classes/class-06/slides.html#from-polygons-to-distributions",
     "title": "Home ranges and space use",
     "section": "From polygons to distributions",
-    "text": "From polygons to distributions\n\nThe same buffalo, Cilla. On the left every part of the area counts the same; on the right, core areas and rarely used edges are distinguished.\n\n\nThe UD is the object; “the home range” is a contour you draw on it. Say which contour, and which estimator produced the UD.",
+    "text": "From polygons to distributions\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nThe same buffalo, Cilla. On the left every part of the area counts the same; on the right, core areas and rarely used edges are distinguished.\n\n\nThe UD is the object; “the home range” is a contour you draw on it. Say which contour, and which estimator produced the UD.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3614,7 +3614,7 @@
     "href": "classes/class-06/slides.html#mcp-on-a-real-buffalo",
     "title": "Home ranges and space use",
     "section": "MCP on a real buffalo",
-    "text": "MCP on a real buffalo\n\nLeft: the 95% MCP (solid) and 100% MCP (dashed) contain large stretches the animal hardly used. Right: the same estimate from the first 5, 10, 15… days.",
+    "text": "MCP on a real buffalo\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nLeft: the 95% MCP (solid) and 100% MCP (dashed) contain large stretches the animal hardly used. Right: the same estimate from the first 5, 10, 15… days.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3640,7 +3640,7 @@
     "href": "classes/class-06/slides.html#how-a-kernel-works",
     "title": "Home ranges and space use",
     "section": "How a kernel works",
-    "text": "How a kernel works\n\nTen fixes (ticks) in one dimension. Each gets a bump (thin lines); their sum (thick line) is the estimated UD. Same fixes, two bandwidths, two stories.",
+    "text": "How a kernel works\n\nFigure produced with own R code · simulated data\nTen fixes (ticks) in one dimension. Each gets a bump (thin lines); their sum (thick line) is the estimated UD. Same fixes, two bandwidths, two stories.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3653,7 +3653,7 @@
     "href": "classes/class-06/slides.html#same-buffalo-two-bandwidths",
     "title": "Home ranges and space use",
     "section": "Same buffalo, two bandwidths",
-    "text": "Same buffalo, two bandwidths\nThe buffalo Cilla, hourly fixes over 5 months, 95% contours:\n\n\n\nA factor of three from one analyst’s choice. Report the bandwidth selector — and check whether LSCV actually converged. adehabitatHR warns you; papers rarely do.",
+    "text": "Same buffalo, two bandwidths\nThe buffalo Cilla, hourly fixes over 5 months, 95% contours:\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\n\n\nA factor of three from one analyst’s choice. Report the bandwidth selector — and check whether LSCV actually converged. adehabitatHR warns you; papers rarely do.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3692,7 +3692,7 @@
     "href": "classes/class-06/slides.html#same-number-of-fixes-different-information",
     "title": "Home ranges and space use",
     "section": "Same number of fixes, different information",
-    "text": "Same number of fixes, different information\n\nThe central-place animal from Session 5, whose true range (dashed) we know. Two weeks of dense fixes describe two weeks of the animal, not its range.",
+    "text": "Same number of fixes, different information\n\nFigure produced with own R code · simulated data\nThe central-place animal from Session 5, whose true range (dashed) we know. Two weeks of dense fixes describe two weeks of the animal, not its range.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3731,7 +3731,7 @@
     "href": "classes/class-06/slides.html#where-it-went-where-it-lives",
     "title": "Home ranges and space use",
     "section": "Where it went, where it lives",
-    "text": "Where it went, where it lives\n\nCilla again, on the same scale. The bridge hugs the path she travelled; AKDE estimates the range she would use given time, with its confidence interval (dashed).",
+    "text": "Where it went, where it lives\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nCilla again, on the same scale. The bridge hugs the path she travelled; AKDE estimates the range she would use given time, with its confidence interval (dashed).",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3757,7 +3757,7 @@
     "href": "classes/class-06/slides.html#two-variograms",
     "title": "Home ranges and space use",
     "section": "Two variograms",
-    "text": "Two variograms\n\nBlack: data. Red: fitted model. Cilla’s range-crossing time is ~6 days, so her 3,500 fixes are worth ~19 independent ones. The gazelle’s is ~5 months: two or three crossings in a year.",
+    "text": "Two variograms\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); Mongolian gazelle, ctmm example data\nBlack: data. Red: fitted model. Cilla’s range-crossing time is ~6 days, so her 3,500 fixes are worth ~19 independent ones. The gazelle’s is ~5 months: two or three crossings in a year.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3900,7 +3900,7 @@
     "href": "classes/class-07/slides.html#used-and-available-for-one-fisher",
     "title": "Habitat selection on the move",
     "section": "Used and available, for one fisher",
-    "text": "Used and available, for one fisher\n\nGreen: forest. Almost every fix is in forest — but so is almost everything available. The signal is in the comparison: outside forest, Lupe turns up 5 times less often than availability predicts.",
+    "text": "Used and available, for one fisher\n\nFigure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via amt\nGreen: forest. Almost every fix is in forest — but so is almost everything available. The signal is in the comparison: outside forest, Lupe turns up 5 times less often than availability predicts.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3952,7 +3952,7 @@
     "href": "classes/class-07/slides.html#availability-three-ways",
     "title": "Habitat selection on the move",
     "section": "Availability, three ways",
-    "text": "Availability, three ways\n\nThe same fisher (red). Each panel zooms into the dashed box of the previous one: the study area, the home range, and eight steps with their control steps (grey).",
+    "text": "Availability, three ways\n\nFigure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via amt\nThe same fisher (red). Each panel zooms into the dashed box of the previous one: the study area, the home range, and eight steps with their control steps (grey).",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4017,7 +4017,7 @@
     "href": "classes/class-07/slides.html#do-the-coefficients-stabilise",
     "title": "Habitat selection on the move",
     "section": "Do the coefficients stabilise?",
-    "text": "Do the coefficients stabilise?\n\nLupe’s forest coefficient and 95% CI, refitted with more and more available points. The estimate settles by about ten per fix; the interval hardly narrows, because the information is in the 774 used fixes.",
+    "text": "Do the coefficients stabilise?\n\nFigure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via amt\nLupe’s forest coefficient and 95% CI, refitted with more and more available points. The estimate settles by about ten per fix; the interval hardly narrows, because the information is in the 774 used fixes.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4056,7 +4056,7 @@
     "href": "classes/class-07/slides.html#one-stratum",
     "title": "Habitat selection on the move",
     "section": "One stratum",
-    "text": "One stratum\n\nSquare: where the fisher was. Dotted: the steps that brought it there. The model asks only how the used step differs from its own controls.",
+    "text": "One stratum\n\nFigure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via amt\nSquare: where the fisher was. Dotted: the steps that brought it there. The model asks only how the used step differs from its own controls.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4147,7 +4147,7 @@
     "href": "classes/class-07/slides.html#tentative-and-realised-kernels",
     "title": "Habitat selection on the move",
     "section": "Tentative and realised kernels",
-    "text": "Tentative and realised kernels\n\nGrey: the distributions Lupe’s control steps were drawn from. Red: the movement kernel after the iSSA correction. For this fisher the correction is small (mean step 147 → 154 m); it is large when habitat strongly shapes how far an animal moves.",
+    "text": "Tentative and realised kernels\n\nFigure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via amt\nGrey: the distributions Lupe’s control steps were drawn from. Red: the movement kernel after the iSSA correction. For this fisher the correction is small (mean step 147 → 154 m); it is large when habitat strongly shapes how far an animal moves.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4199,7 +4199,7 @@
     "href": "classes/class-07/slides.html#a-redistribution-kernel-built",
     "title": "Habitat selection on the move",
     "section": "A redistribution kernel, built",
-    "text": "A redistribution kernel, built\n\nThe simulated animal of today’s practical (β = 1.5) in a 1.8 km window. Square: where it is; arrow: its last step. Movement says how far and which way; selection tilts the kernel towards better habitat.",
+    "text": "A redistribution kernel, built\n\nFigure produced with own R code · simulated data\nThe simulated animal of today’s practical (β = 1.5) in a 1.8 km window. Square: where it is; arrow: its last step. Movement says how far and which way; selection tilts the kernel towards better habitat.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4368,7 +4368,7 @@
     "href": "classes/class-08/slides.html#the-story-simulated",
     "title": "Hidden Markov models and synthesis",
     "section": "The story, simulated",
-    "text": "The story, simulated\n\nTeal: an encamped state, short steps and random turns. Red: a travelling state, long and directed. The HMM sees only the path and has to work out the colours.",
+    "text": "The story, simulated\n\nFigure produced with own R code · simulated data\nTeal: an encamped state, short steps and random turns. Red: a travelling state, long and directed. The HMM sees only the path and has to work out the colours.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4394,7 +4394,7 @@
     "href": "classes/class-08/slides.html#two-states-in-real-buffalo",
     "title": "Hidden Markov models and synthesis",
     "section": "Two states in real buffalo",
-    "text": "Two states in real buffalo\n\nCilla and Toni, hourly. Grey: all their steps. Coloured: the two fitted state distributions, weighted by how often each state occurs; dashed: their sum.",
+    "text": "Two states in real buffalo\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nCilla and Toni, hourly. Grey: all their steps. Coloured: the two fitted state distributions, weighted by how often each state occurs; dashed: their sum.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4420,7 +4420,7 @@
     "href": "classes/class-08/slides.html#flicker-versus-persistence",
     "title": "Hidden Markov models and synthesis",
     "section": "Flicker versus persistence",
-    "text": "Flicker versus persistence\n\nThe same steps labelled two ways: a fixed threshold (dashed line) switches 35 times; the HMM, which knows that behaviour persists, 27 times.",
+    "text": "Flicker versus persistence\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nThe same steps labelled two ways: a fixed threshold (dashed line) switches 35 times; the HMM, which knows that behaviour persists, 27 times.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4459,7 +4459,7 @@
     "href": "classes/class-08/slides.html#a-diel-rhythm-estimated",
     "title": "Hidden Markov models and synthesis",
     "section": "A diel rhythm, estimated",
-    "text": "A diel rhythm, estimated\nFor two Kruger buffalo, a 2-state HMM with a daily cosinor on the transitions (hourly fixes, local time):\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLocal time\nP(moving)\n\n\n\n\n05:00\n~0.69\n\n\n11:00\n~0.80\n\n\n15:00–18:00\n~0.86\n\n\n23:00\n~0.78\n\n\n\n\n\n\nThe covariate is on the switching, not on the step lengths: the buffalo do not walk differently in the afternoon, they are more likely to be walking. You fit this model in today’s practical.",
+    "text": "A diel rhythm, estimated\nFor two Kruger buffalo, a 2-state HMM with a daily cosinor on the transitions (hourly fixes, local time):\n\n\n\n\n\n\n\n\n\n\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\n\n\n\n\nLocal time\nP(moving)\n\n\n\n\n05:00\n~0.69\n\n\n11:00\n~0.80\n\n\n15:00–18:00\n~0.86\n\n\n23:00\n~0.78\n\n\n\n\n\n\nThe covariate is on the switching, not on the step lengths: the buffalo do not walk differently in the afternoon, they are more likely to be walking. You fit this model in today’s practical.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4550,7 +4550,7 @@
     "href": "classes/class-08/slides.html#what-checking-looks-like",
     "title": "Hidden Markov models and synthesis",
     "section": "What checking looks like",
-    "text": "What checking looks like\n\nThe two-state buffalo model. Points on the line mean the model describes the data; the bent tails of the step residuals say two states do not capture the full range of step lengths.",
+    "text": "What checking looks like\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nThe two-state buffalo model. Points on the line mean the model describes the data; the bent tails of the step residuals say two states do not capture the full range of step lengths.",
     "crumbs": [
       "Home",
       "Sessions",

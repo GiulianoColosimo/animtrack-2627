@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-06">
+  <meta name="dcterms.date" content="2026-10-26">
   <title>Animal Tracking – From fixes to trajectories</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -96,7 +96,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-fd96417eda74ebb0be446d6413f2e761.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-3ac394b1d208f7e66508159e07493236.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-06</p>
+  <p class="date">2026-10-26</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -284,7 +284,8 @@ Giuliano Colosimo
 <section id="steps-and-turns-of-a-real-buffalo" class="slide level2">
 <h2>Steps and turns of a real buffalo</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Cilla, hourly steps. Short steps dominate; turning angles concentrate near 0° (keep going). The bars at −180° and +180° are the same reversal, split in two by the axis.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>Cilla, hourly steps. Short steps dominate; turning angles concentrate near 0° (keep going). The bars at −180° and +180° are the same reversal, split in two by the axis.</p>
 </section>
 <section id="location-error-why-you-cannot-connect-the-dots" class="slide level2">
 <h2>Location error: why you cannot connect the dots</h2>
@@ -303,7 +304,8 @@ Giuliano Colosimo
 <section id="what-error-looks-like" class="slide level2">
 <h2>What error looks like</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Left: real data, 24 hours either side of a corrupt fix. Right: simulated — 48 hourly fixes of a motionless collar with 15 m error. It “walks” 1 km a day and turns at random.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank); right panel simulated</span></p>
+<p>Left: real data, 24 hours either side of a corrupt fix. Right: simulated — 48 hourly fixes of a motionless collar with 15 m error. It “walks” 1 km a day and turns at random.</p>
 </section></section>
 <section>
 <section id="getting-data" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -520,7 +522,8 @@ Giuliano Colosimo
 <section id="gaps-at-a-glance" class="slide level2">
 <h2>Gaps at a glance</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>One tick per fix. Queen’s collar went silent for 105 days in mid-2005; Pepper’s schedule frays into gaps through late 2006.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>One tick per fix. Queen’s collar went silent for 105 days in mid-2005; Pepper’s schedule frays into gaps through late 2006.</p>
 </section>
 <section id="two-ways-to-hold-a-trajectory" class="slide level2">
 <h2>Two ways to hold a trajectory</h2>
@@ -543,7 +546,8 @@ Giuliano Colosimo
 <section id="selecting-versus-interpolating" class="slide level2">
 <h2>Selecting versus interpolating</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Toni across a 9-hour gap. Selection ends the burst at the gap; interpolation fills it with evenly spaced positions on a straight line the buffalo almost certainly did not walk.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>Toni across a 9-hour gap. Selection ends the burst at the gap; interpolation fills it with evenly spaced positions on a straight line the buffalo almost certainly did not walk.</p>
 </section>
 <section id="truncation-the-start-and-the-end" class="slide level2">
 <h2>Truncation: the start and the end</h2>
@@ -722,7 +726,8 @@ Giuliano Colosimo
 <section id="decorated-versus-annotated" class="slide level2">
 <h2>Decorated versus annotated</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Queen in 2005. One February image says she lived in green vegetation all year. Matched in time, NDVI halves by September — and the months with no composite nearby are honestly blank.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank); MODIS MOD13Q1 NDVI</span></p>
+<p>Queen in 2005. One February image says she lived in green vegetation all year. Matched in time, NDVI halves by September — and the months with no composite nearby are honestly blank.</p>
 </section>
 <section id="doing-it-in-time" class="slide level2">
 <h2>Doing it in time</h2>

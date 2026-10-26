@@ -131,6 +131,9 @@ bp <- barplot(share, col = c(rust, "grey60"), border = NA, ylim = c(0, max(share
 text(bp, share, sprintf("%.1f%%", share), pos = 3, cex = 1.6)
 ```
 
+[Figure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via `amt`]{.credit}
+
+
 Green: forest. Almost every fix is in forest — but so is almost everything
 available. The signal is in the comparison: outside forest, Lupe turns up
 `r round(share[2] / share[1])` times less often than availability predicts.
@@ -234,6 +237,9 @@ show_forest(step_box, "SSF: each step")
 with(few[!few$case_, ], segments(x1_, y1_, x2_, y2_, col = "grey40", lwd = 1.5))
 with(few[few$case_, ], { segments(x1_, y1_, x2_, y2_, col = rust, lwd = 4); points(x1_, y1_, pch = 16, col = rust, cex = 1.3) })
 ```
+
+[Figure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via `amt`]{.credit}
+
 
 The same fisher (red). Each panel zooms into the dashed box of the previous
 one: the study area, the home range, and eight steps with their control steps
@@ -357,6 +363,9 @@ arrows(stab$k, stab$b - 1.96 * stab$se, stab$k, stab$b + 1.96 * stab$se, angle =
 abline(h = tail(stab$b, 1), lty = 2, col = "grey50")
 ```
 
+[Figure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via `amt`]{.credit}
+
+
 Lupe's forest coefficient and 95% CI, refitted with more and more available
 points. The estimate settles by about ten per fix; the interval hardly
 narrows, because the information is in the 774 used fixes.
@@ -433,6 +442,9 @@ text(0.05, seq(0.9, 0.9 - 0.075 * nrow(tab), length.out = nrow(tab) + 1)[-1] + 0
      sprintf("%-8s %5d m   forest: %s", tab$step, tab$sl, tab$forest), adj = 0, family = "mono", cex = 1.35,
      col = ifelse(tab$step == "used", rust, ink))
 ```
+
+[Figure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via `amt`]{.credit}
+
 
 Square: where the fisher was. Dotted: the steps that brought it there. The
 model asks only how the used step differs from its own controls.
@@ -613,6 +625,9 @@ axis(1, at = seq(-180, 180, 90))
 lines(th * 180 / pi, dvm(th, ta1$params$kappa), lwd = 4, col = rust)
 ```
 
+[Figure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via `amt`]{.credit}
+
+
 Grey: the distributions Lupe's control steps were drawn from. Red: the
 movement kernel after the iSSA correction. For this fisher the correction is
 small (mean step `r round(prod(unlist(sl0$params)))` →
@@ -729,6 +744,9 @@ show(move, "Movement kernel")
 show(sel, "× selection")
 show(move * sel, "= where it goes next")
 ```
+
+[Figure produced with own R code · simulated data]{.credit}
+
 
 The simulated animal of today's practical (β = 1.5) in a 1.8 km window.
 Square: where it is; arrow: its last step. Movement says how far and which

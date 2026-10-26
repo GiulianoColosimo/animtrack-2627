@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-06">
+  <meta name="dcterms.date" content="2026-10-26">
   <title>Animal Tracking – Movement models and simulation</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -30,7 +30,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-fd96417eda74ebb0be446d6413f2e761.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-3ac394b1d208f7e66508159e07493236.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -149,7 +149,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-06</p>
+  <p class="date">2026-10-26</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -198,7 +198,8 @@ Giuliano Colosimo
 <section id="four-canonical-walks" class="slide level2">
 <h2>Four canonical walks</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1248"><p>Same number of steps. Red triangle: start. Cross: the goal of the biased walk.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1248"><p><span class="credit">Figure produced with own R code · simulated data</span></p>
+<p>Same number of steps. Red triangle: start. Cross: the goal of the biased walk.</p>
 </section></section>
 <section>
 <section id="the-uncorrelated-random-walk" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -222,7 +223,8 @@ Giuliano Colosimo
 <section id="diffusion-seen-from-above" class="slide level2">
 <h2>Diffusion, seen from above</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Circles: the root of the expected MSD. Ten times more steps, only <span class="math inline">\(\sqrt{10}
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · simulated data</span></p>
+<p>Circles: the root of the expected MSD. Ten times more steps, only <span class="math inline">\(\sqrt{10}
 \approx 3.2\)</span> times further.</p>
 </section></section>
 <section>
@@ -244,12 +246,14 @@ Giuliano Colosimo
 <section id="the-two-ingredients" class="slide level2">
 <h2>The two ingredients</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Every random walk in this session, and every SSF and HMM later, is built from one distribution of each kind.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · theoretical distributions</span></p>
+<p>Every random walk in this session, and every SSF and HMM later, is built from one distribution of each kind.</p>
 </section>
 <section id="the-scales-of-movement" class="slide level2">
 <h2>The scales of movement</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1056"><p>Short lags: persistence makes a CRW <strong>ballistic</strong> (MSD ∝ t²). Long lags: it forgets its direction and becomes <strong>diffusive</strong> (MSD ∝ t). The crossover is the scale of the animal’s directional memory.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1056"><p><span class="credit">Figure produced with own R code · simulated data</span></p>
+<p>Short lags: persistence makes a CRW <strong>ballistic</strong> (MSD ∝ t²). Long lags: it forgets its direction and becomes <strong>diffusive</strong> (MSD ∝ t). The crossover is the scale of the animal’s directional memory.</p>
 </section>
 <section id="quiz" class="slide level2">
 <h2>Quiz</h2>
@@ -290,7 +294,8 @@ Giuliano Colosimo
 <section id="drift-beats-spread-eventually" class="slide level2">
 <h2>Drift beats spread, eventually</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>A weak pull towards the east (bias weight 0.1). For the first 170 steps the random spread is larger than the progress; after that, drift wins for good.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · simulated data</span></p>
+<p>A weak pull towards the east (bias weight 0.1). For the first 170 steps the random spread is larger than the progress; after that, drift wins for good.</p>
 </section>
 <section id="central-places" class="slide level2">
 <h2>Central places</h2>
@@ -309,7 +314,8 @@ Giuliano Colosimo
 <section id="a-home-range-from-one-rule" class="slide level2">
 <h2>A home range from one rule</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>No memory, no map, no boundary — only a weak pull towards home. Dashed: the true 95% range, about 800 km², which Session 6 tries to recover.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · simulated data</span></p>
+<p>No memory, no map, no boundary — only a weak pull towards home. Dashed: the true 95% range, about 800 km², which Session 6 tries to recover.</p>
 </section>
 <section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>
@@ -358,7 +364,8 @@ Giuliano Colosimo
 <section id="two-ways-to-make-a-heavy-tail" class="slide level2">
 <h2>Two ways to make a heavy tail</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-8-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Grey: one exponential. Gold: a true power law. Red: two exponential modes, no power law anywhere — yet heavy-tailed enough that a power law beats a single exponential by thousands of AIC units.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-8-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · simulated data</span></p>
+<p>Grey: one exponential. Gold: a true power law. Red: two exponential modes, no power law anywhere — yet heavy-tailed enough that a power law beats a single exponential by thousands of AIC units.</p>
 </section>
 <section id="quiz-2" class="slide level2">
 <h2>Quiz</h2>
@@ -398,7 +405,8 @@ Giuliano Colosimo
 <section id="the-recipe-applied" class="slide level2">
 <h2>The recipe, applied</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-9-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Grey-green: 300 CRWs with the buffalo’s own steps and turns. Red line: the buffalo. Only the longer track is clearly more confined than its null.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-9-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank); null model simulated</span></p>
+<p>Grey-green: 300 CRWs with the buffalo’s own steps and turns. Red line: the buffalo. Only the longer track is clearly more confined than its null.</p>
 </section>
 <section id="quiz-3" class="slide level2">
 <h2>Quiz</h2>

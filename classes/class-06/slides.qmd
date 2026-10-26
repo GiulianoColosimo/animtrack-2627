@@ -132,6 +132,9 @@ draw_contour(kd_href, 95, border = ink, lwd = 2.5, lty = 2)
 legend("bottomright", c("50%", "95%"), lty = c(1, 2), lwd = 2.5, bty = "n", cex = 1.4)
 ```
 
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
+
 The same buffalo, Cilla. On the left every part of the area counts the same;
 on the right, core areas and rarely used edges are distinguished.
 
@@ -200,6 +203,9 @@ plot(dd, grow, type = "o", pch = 16, lwd = 3, col = teal, ylim = c(0, max(grow) 
      xlab = "Days tracked", ylab = "MCP 95% (km²)", main = "Area depends on duration")
 ```
 
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
+
 Left: the 95% MCP (solid) and 100% MCP (dashed) contain large stretches the
 animal hardly used. Right: the same estimate from the first 5, 10, 15… days.
 
@@ -244,6 +250,9 @@ for (h in c(0.25, 1.2)) {
 }
 ```
 
+[Figure produced with own R code · simulated data]{.credit}
+
+
 Ten fixes (ticks) in one dimension. Each gets a bump (thin lines); their sum
 (thick line) is the estimated UD. Same fixes, two bandwidths, two stories.
 
@@ -268,6 +277,9 @@ for (k in list(list(kd_href, "h_ref = %.1f km: %.0f km²"),
 }
 scale_bar(5)
 ```
+
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
 
 . . .
 
@@ -358,6 +370,9 @@ for (k in list(list(long[20001:21000, ], "1,000 fixes, every 20 min (2 weeks)"),
 }
 ```
 
+[Figure produced with own R code · simulated data]{.credit}
+
+
 The central-place animal from Session 5, whose true range (dashed) we know.
 Two weeks of dense fixes describe two weeks of the animal, not its range.
 
@@ -445,6 +460,9 @@ plot(st_geometry(ak_sf[!grepl("est", ak_sf$name), ]), add = TRUE, border = rust,
 points(xy, pch = 16, cex = 0.25, col = adjustcolor(ink, 0.3))
 ```
 
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
+
 Cilla again, on the same scale. The bridge hugs the path she travelled; AKDE
 estimates the range she would use given time, with its confidence interval
 (dashed).
@@ -493,6 +511,9 @@ plot(variogram(tel), CTMM = fit, fraction = 0.5, col.CTMM = rust, lwd = 3,
 plot(variogram(gz, dt = c(25, 259) %#% "hour"), CTMM = fit_gz, fraction = 0.65,
      col.CTMM = rust, lwd = 3, main = "Gazelle: no clear asymptote")
 ```
+
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); Mongolian gazelle, `ctmm` example data]{.credit}
+
 
 Black: data. Red: fitted model. Cilla's range-crossing time is ~6 days, so her
 3,500 fixes are worth ~19 independent ones. The gazelle's is ~5 months: two or

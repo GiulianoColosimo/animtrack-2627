@@ -117,6 +117,9 @@ for (d in list(list(rw, "Random walk"), list(crw, "Correlated (κ = 4)"),
 par(op)
 ```
 
+[Figure produced with own R code · simulated data]{.credit}
+
+
 Same number of steps. Red triangle: start. Cross: the goal of the biased walk.
 
 # 2 · The uncorrelated random walk {background-color="#14525a"}
@@ -181,6 +184,9 @@ legend("topleft", c("simulated", "n E[l²]"), pch = c(16, NA), lty = c(NA, 1), l
        col = c(teal, rust), bty = "n", cex = 1.3)
 ```
 
+[Figure produced with own R code · simulated data]{.credit}
+
+
 Circles: the root of the expected MSD. Ten times more steps, only $\sqrt{10}
 \approx 3.2$ times further.
 
@@ -229,6 +235,9 @@ for (i in 1:4) lines(th * 180 / pi, exp(kap[i] * cos(th)) / (2 * pi * besselI(ka
 legend("topright", paste("κ =", kap), col = kcols, lwd = 4, bty = "n", cex = 1.3)
 ```
 
+[Figure produced with own R code · theoretical distributions]{.credit}
+
+
 Every random walk in this session, and every SSF and HMM later, is built
 from one distribution of each kind.
 
@@ -265,6 +274,9 @@ legend("topleft", c("κ = 0", "κ = 2", "κ = 10", "slope 2: ballistic", "slope 
        bty = "n", cex = 1.3)
 par(op)
 ```
+
+[Figure produced with own R code · simulated data]{.credit}
+
 
 Short lags: persistence makes a CRW **ballistic** (MSD ∝ t²). Long lags: it
 forgets its direction and becomes **diffusive** (MSD ∝ t). The crossover is
@@ -356,6 +368,9 @@ legend("topleft", c("mean progress east: grows like t", "sideways spread: grows 
        col = c(rust, teal), lwd = 4, bty = "n", cex = 1.3)
 ```
 
+[Figure produced with own R code · simulated data]{.credit}
+
+
 A weak pull towards the east (bias weight 0.1). For the first
 `r round(cross, -1)` steps the random spread is larger than the progress;
 after that, drift wins for good.
@@ -413,6 +428,9 @@ image(kd$x, kd$y, z, col = hcl.colors(60, "YlGnBu", rev = TRUE), asp = 1, axes =
 contour(kd$x, kd$y, kd$z, levels = c95, drawlabels = FALSE, add = TRUE, lwd = 3, lty = 2)
 points(0, 0, pch = 17, cex = 1.8, col = rust)
 ```
+
+[Figure produced with own R code · simulated data]{.credit}
+
 
 No memory, no map, no boundary — only a weak pull towards home. Dashed: the
 true 95% range, about 800 km², which Session 6 tries to recover.
@@ -527,6 +545,9 @@ legend("bottomright", c("searching", "travelling"), col = c(teal, rust), lwd = 3
        bty = "n", cex = 1.3)
 ```
 
+[Figure produced with own R code · simulated data]{.credit}
+
+
 Grey: one exponential. Gold: a true power law. Red: two exponential modes, no
 power law anywhere — yet heavy-tailed enough that a power law beats a single
 exponential by thousands of AIC units.
@@ -626,6 +647,9 @@ for (k in show) {
   abline(v = k$obs, lwd = 5, col = rust)
 }
 ```
+
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); null model simulated]{.credit}
+
 
 Grey-green: 300 CRWs with the buffalo's own steps and turns. Red line: the
 buffalo. Only the longer track is clearly more confined than its null.

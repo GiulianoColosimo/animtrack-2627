@@ -138,6 +138,9 @@ plot(elev, col = hcl.colors(50, "Terrain"), axes = FALSE, box = FALSE, mar = c(0
 points(xy, pch = 16, cex = 0.25, col = adjustcolor(ink, 0.25))
 ```
 
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); SRTM elevation]{.credit}
+
+
 Cilla's fixes, one week of her track and her range as vectors; the terrain
 under them as a raster.
 
@@ -181,6 +184,8 @@ A CRS answers three questions:
 ## Geographic coordinates
 
 ![Longitude and latitude are *angles*, not distances](../../assets/figures/geographic_coordinates.jpg){width="55%" fig-align="center"}
+
+[Image: Peter Mercator, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Latitude_and_longitude_graticule_on_a_sphere.svg), public domain]{.credit}
 
 Latitude: angle north/south of the equator. Longitude: angle east/west of
 Greenwich. Units are **degrees**. This is what every GPS and every Movebank
@@ -241,6 +246,9 @@ plot(circ, add = TRUE, col = adjustcolor(teal, 0.3), border = teal, lwd = 3)
 text(20, lats, paste0(lats, "°"), cex = 1.4, pos = 4, xpd = NA)
 ```
 
+[Figure produced with own R code]{.credit}
+
+
 Every circle has an 800 km radius on the ground. Plotted as if degrees were
 metres, they stretch east–west — badly at high latitudes.
 
@@ -249,6 +257,8 @@ metres, they stretch east–west — badly at high latitudes.
 ## Projected coordinates
 
 ![Every projection preserves some properties and destroys others](../../assets/figures/projected_coordinates.jpg){width="62%" fig-align="center"}
+
+[Image: cmglee, US government, Clindberg, Palosirkka, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Comparison_of_cartography_surface_development.svg), CC BY-SA 4.0]{.credit}
 
 **Conformal** keeps angles/shape (Mercator, UTM). **Equal-area** keeps area
 (Albers, Mollweide). **Equidistant** keeps distances from a point.
@@ -338,6 +348,9 @@ for (k in list(list("EPSG:3857", "Web Mercator (EPSG:3857)"),
        border = rust, lwd = 1.5)
 }
 ```
+
+[Figure produced with own R code · data: country outlines from Natural Earth, via `spData`]{.credit}
+
 
 Every red disc covers the same 2.5 million km². Web Mercator inflates them
 towards the poles; an equal-area projection keeps their areas equal, at the
@@ -503,6 +516,9 @@ p <- st_coordinates(st_transform(c(st_transform(right, 4326), st_transform(wrong
 points(p, pch = 21, bg = c(teal, rust), cex = 3.5, lwd = 2)
 text(p, c("Kruger", "where R\nthinks they are"), pos = c(2, 4), cex = 1.9, offset = 1.1)
 ```
+
+[Figure produced with own R code · data: country outlines from Natural Earth, via `spData`]{.credit}
+
 :::
 ::: {.column width="45%"}
 `(31.76, −24.54)` read as **metres** in UTM 36S is a spot 31 m east and 24 m
@@ -697,6 +713,9 @@ text(c(990, 990, 990), c(veg[301] - 4, soil[301] + 3, water[301] + 3),
      col = c("forestgreen", gold, "steelblue"))
 ```
 
+[Figure produced with own R code · schematic curves]{.credit}
+
+
 Schematic curves. Vegetation is dark in the red and bright in the near
 infrared; soil and water are not. NDVI measures exactly that contrast.
 
@@ -737,6 +756,9 @@ for (i in 1:2) {
   points(cilla$x, cilla$y, pch = 16, cex = 0.15, col = adjustcolor(ink, 0.3))
 }
 ```
+
+[Figure produced with own R code · data: MODIS MOD13Q1 NDVI; Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
 
 MODIS NDVI at 250 m, the same landscape six months apart (dots: Cilla's
 fixes). An NDVI value is only meaningful together with its date.
@@ -780,6 +802,9 @@ for (f in c(1, 4, 20)) {
   points(cilla$x, cilla$y, pch = 16, cex = 0.2, col = adjustcolor(ink, 0.35))
 }
 ```
+
+[Figure produced with own R code · data: MODIS MOD13Q1 NDVI; Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
 
 The same February NDVI around Cilla's range at MODIS resolution, then
 averaged to ~1 km and ~5 km. At 5 km every fix gets nearly the same value.

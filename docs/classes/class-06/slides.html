@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-06">
+  <meta name="dcterms.date" content="2026-10-26">
   <title>Animal Tracking – Home ranges and space use</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -30,7 +30,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-fd96417eda74ebb0be446d6413f2e761.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-3ac394b1d208f7e66508159e07493236.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -149,7 +149,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-06</p>
+  <p class="date">2026-10-26</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -196,7 +196,8 @@ Giuliano Colosimo
 <section id="from-polygons-to-distributions" class="slide level2">
 <h2>From polygons to distributions</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The same buffalo, Cilla. On the left every part of the area counts the same; on the right, core areas and rarely used edges are distinguished.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>The same buffalo, Cilla. On the left every part of the area counts the same; on the right, core areas and rarely used edges are distinguished.</p>
 <div class="fragment">
 <div class="keyidea">
 <p>The UD is the object; “the home range” is a contour you draw on it. Say which contour, and which estimator produced the UD.</p>
@@ -235,7 +236,8 @@ Giuliano Colosimo
 <section id="mcp-on-a-real-buffalo" class="slide level2">
 <h2>MCP on a real buffalo</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Left: the 95% MCP (solid) and 100% MCP (dashed) contain large stretches the animal hardly used. Right: the same estimate from the first 5, 10, 15… days.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>Left: the 95% MCP (solid) and 100% MCP (dashed) contain large stretches the animal hardly used. Right: the same estimate from the first 5, 10, 15… days.</p>
 </section></section>
 <section>
 <section id="kernel-density-estimation" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -257,13 +259,15 @@ Giuliano Colosimo
 <section id="how-a-kernel-works" class="slide level2">
 <h2>How a kernel works</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Ten fixes (ticks) in one dimension. Each gets a bump (thin lines); their sum (thick line) is the estimated UD. Same fixes, two bandwidths, two stories.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · simulated data</span></p>
+<p>Ten fixes (ticks) in one dimension. Each gets a bump (thin lines); their sum (thick line) is the estimated UD. Same fixes, two bandwidths, two stories.</p>
 </section>
 <section id="same-buffalo-two-bandwidths" class="slide level2">
 <h2>Same buffalo, two bandwidths</h2>
 <p>The buffalo Cilla, hourly fixes over 5 months, 95% contours:</p>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><div class="fragment">
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<div class="fragment">
 <div class="keyidea">
 <p>A factor of three from one analyst’s choice. Report the bandwidth selector — and check whether LSCV actually converged. <code>adehabitatHR</code> warns you; papers rarely do.</p>
 </div>
@@ -310,7 +314,8 @@ Giuliano Colosimo
 <section id="same-number-of-fixes-different-information" class="slide level2">
 <h2>Same number of fixes, different information</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The central-place animal from Session 5, whose true range (dashed) we know. Two weeks of dense fixes describe two weeks of the animal, not its range.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · simulated data</span></p>
+<p>The central-place animal from Session 5, whose true range (dashed) we know. Two weeks of dense fixes describe two weeks of the animal, not its range.</p>
 </section>
 <section id="brownian-bridges-use-the-path" class="slide level2">
 <h2>Brownian bridges: use the path</h2>
@@ -345,7 +350,8 @@ Giuliano Colosimo
 <section id="where-it-went-where-it-lives" class="slide level2">
 <h2>Where it went, where it lives</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Cilla again, on the same scale. The bridge hugs the path she travelled; AKDE estimates the range she would use given time, with its confidence interval (dashed).</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>Cilla again, on the same scale. The bridge hugs the path she travelled; AKDE estimates the range she would use given time, with its confidence interval (dashed).</p>
 </section>
 <section id="the-variogram" class="slide level2">
 <h2>The variogram</h2>
@@ -365,7 +371,8 @@ Giuliano Colosimo
 <section id="two-variograms" class="slide level2">
 <h2>Two variograms</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-8-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Black: data. Red: fitted model. Cilla’s range-crossing time is ~6 days, so her 3,500 fixes are worth ~19 independent ones. The gazelle’s is ~5 months: two or three crossings in a year.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-8-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank); Mongolian gazelle, <code>ctmm</code> example data</span></p>
+<p>Black: data. Red: fitted model. Cilla’s range-crossing time is ~6 days, so her 3,500 fixes are worth ~19 independent ones. The gazelle’s is ~5 months: two or three crossings in a year.</p>
 </section>
 <section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>

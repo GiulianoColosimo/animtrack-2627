@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-06">
+  <meta name="dcterms.date" content="2026-10-26">
   <title>Animal Tracking – Hidden Markov models and synthesis</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -96,7 +96,7 @@
     code span.vs { color: #032f62; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-fd96417eda74ebb0be446d6413f2e761.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-3ac394b1d208f7e66508159e07493236.css">
   <link rel="stylesheet" href="../../assets/quiz.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-06</p>
+  <p class="date">2026-10-26</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -259,7 +259,8 @@ Giuliano Colosimo
 <section id="the-story-simulated" class="slide level2">
 <h2>The story, simulated</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Teal: an encamped state, short steps and random turns. Red: a travelling state, long and directed. The HMM sees only the path and has to work out the colours.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · simulated data</span></p>
+<p>Teal: an encamped state, short steps and random turns. Red: a travelling state, long and directed. The HMM sees only the path and has to work out the colours.</p>
 </section>
 <section id="what-you-get-out" class="slide level2">
 <h2>What you get out</h2>
@@ -280,7 +281,8 @@ Giuliano Colosimo
 <section id="two-states-in-real-buffalo" class="slide level2">
 <h2>Two states in real buffalo</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>Cilla and Toni, hourly. Grey: all their steps. Coloured: the two fitted state distributions, weighted by how often each state occurs; dashed: their sum.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>Cilla and Toni, hourly. Grey: all their steps. Coloured: the two fitted state distributions, weighted by how often each state occurs; dashed: their sum.</p>
 </section>
 <section id="why-the-markov-part-matters" class="slide level2">
 <h2>Why the Markov part matters</h2>
@@ -298,7 +300,8 @@ Giuliano Colosimo
 <section id="flicker-versus-persistence" class="slide level2">
 <h2>Flicker versus persistence</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The same steps labelled two ways: a fixed threshold (dashed line) switches 35 times; the HMM, which knows that behaviour persists, 27 times.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>The same steps labelled two ways: a fixed threshold (dashed line) switches 35 times; the HMM, which knows that behaviour persists, 27 times.</p>
 </section>
 <section id="quiz" class="slide level2">
 <h2>Quiz</h2>
@@ -349,6 +352,7 @@ Giuliano Colosimo
 </div>
 </div>
 </div>
+<p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
 </div><div class="column" style="width:42%;">
 <table class="caption-top">
 <thead>
@@ -473,7 +477,8 @@ Giuliano Colosimo
 <section id="what-checking-looks-like" class="slide level2">
 <h2>What checking looks like</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p>The two-state buffalo model. Points on the line mean the model describes the data; the bent tails of the step residuals say two states do not capture the full range of step lengths.</p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>The two-state buffalo model. Points on the line mean the model describes the data; the bent tails of the step residuals say two states do not capture the full range of step lengths.</p>
 </section></section>
 <section>
 <section id="the-frontier" class="title-slide slide level1 center" data-background-color="#14525a">
