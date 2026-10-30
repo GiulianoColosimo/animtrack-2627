@@ -642,8 +642,8 @@ gives you interpolated positions **with uncertainty attached**.
 A colleague reports a mean sampling interval of 2.45 hours for a collar
 programmed to fix hourly. What does that number actually tell you?
 
-- [ ] The collar was reprogrammed partway through
 - [x] Almost nothing about the schedule — a few very long gaps have inflated the mean
+- [ ] The collar was reprogrammed partway through
 - [ ] The fix success rate was about 41%
 - [ ] The animal was inactive, so the collar skipped fixes
 
@@ -746,9 +746,9 @@ You annotate two years of buffalo fixes with a single dry-season NDVI image
 and find a strong positive selection for high NDVI. What is the main problem?
 
 - [ ] NDVI saturates in dense vegetation
-- [x] The covariate is static while both the animal and the vegetation varied seasonally
 - [ ] The pixel size is too coarse
 - [ ] NDVI cannot be used for savanna
+- [x] The covariate is static while both the animal and the vegetation varied seasonally
 
 ::: {.quiz-feedback}
 The image describes one moment. Over two years, vegetation in a savanna swings
