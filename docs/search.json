@@ -2483,7 +2483,7 @@
     "href": "classes/class-03/slides.html#where-we-are-going",
     "title": "From fixes to trajectories",
     "section": "Where we are going",
-    "text": "Where we are going\n\n\nPosition data are not path data: what a step and a turning angle really are\nLocation error, and why you cannot just connect the dots\nCleaning: duplicates, impossible locations, speed outliers\nBursts, gaps and truncation; resampling to a regular grid\nWhich analyses tolerate irregular sampling, and which do not\nAnnotating a trajectory with environment matched in time\n\n\n\n\n80% of a movement analysis is getting the data into a defensible state. Today is that 80%.",
+    "text": "Where we are going\n\n\nPosition data are not path data: what a step and a turning angle really are\nLocation error, and why you cannot just connect the dots\nCleaning: duplicates, impossible locations, speed outliers\nBursts, gaps and truncation; resampling to a regular grid\nWhich analyses tolerate irregular sampling, and which do not\nAnnotating a trajectory with environment matched in time\n\n\n\n80% of a movement analysis is getting the data into a defensible state. Today is that 80%.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2496,7 +2496,7 @@
     "href": "classes/class-03/slides.html#what-a-gps-track-actually-is",
     "title": "From fixes to trajectories",
     "section": "What a GPS track actually is",
-    "text": "What a GPS track actually is\n\nA set of point estimates, each with an error, at irregular moments\nBetween two fixes the animal went somewhere; the straight line is an assumption, not an observation\nInterpolating a position between fixes invents data — useful for plotting, dangerous for inference\nEvery derived quantity — step length, speed, turning angle — inherits both the sampling interval and the location error\n\n\n\nA track is a sample of a continuous path. Treat every line you draw between fixes as a hypothesis.",
+    "text": "What a GPS track actually is\n\nA set of point estimates, each with an error, at irregular moments\nBetween two fixes the animal went somewhere; the straight line is an assumption, not an observation\nInterpolating a position between fixes invents data — useful for plotting, dangerous for inference\nEvery derived quantity — step length, speed, turning angle — inherits both the sampling interval and the location error\n\n\nA track is a sample of a continuous path. Treat every line you draw between fixes as a hypothesis.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2535,7 +2535,7 @@
     "href": "classes/class-03/slides.html#location-error-why-you-cannot-connect-the-dots",
     "title": "From fixes to trajectories",
     "section": "Location error: why you cannot connect the dots",
-    "text": "Location error: why you cannot connect the dots\n\nA 15 m error on each fix is negligible on a 1 km step, and dominates a 20 m step\nFor short steps the direction is mostly noise, so turning angles look random exactly when the animal is resting\nA single bad fix creates a spike: an impossible step out and back\nError is not independent white noise: it is correlated in time and worse in closed habitat\n\n\n\nResting animals look like they are wandering at random, and spikes look like sprints. Neither is behaviour. Both reach your models unless you look first.",
+    "text": "Location error: why you cannot connect the dots\n\nA 15 m error on each fix is negligible on a 1 km step, and dominates a 20 m step\nFor short steps the direction is mostly noise, so turning angles look random exactly when the animal is resting\nA single bad fix creates a spike: an impossible step out and back\nError is not independent white noise: it is correlated in time and worse in closed habitat\n\n\nResting animals look like they are wandering at random, and spikes look like sprints. Neither is behaviour. Both reach your models unless you look first.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2561,7 +2561,7 @@
     "href": "classes/class-03/slides.html#movebank-in-r",
     "title": "From fixes to trajectories",
     "section": "Movebank in R",
-    "text": "Movebank in R\nlibrary(move2)\n\n# Interactive login, stored in your keyring\nmovebank_store_credentials(\"your_username\")\n\n# What is available?\nmovebank_download_study_info(license_type = \"CC_0\")\n\n# Download a study\nbuff &lt;- movebank_download_study(\n  study_id  = 1764627,\n  sensor_type_id = \"gps\"\n)\n\nToday we read the CSVs from data/ instead — no accounts, no network, and everyone gets identical results. But this is how you get your own data.",
+    "text": "Movebank in R\nlibrary(move2)\n\n# Interactive login, stored in your keyring\nmovebank_store_credentials(\"your_username\")\n\n# What is available?\nmovebank_download_study_info(license_type = \"CC_0\")\n\n# Download a study\nbuff &lt;- movebank_download_study(\n  study_id  = 1764627,\n  sensor_type_id = \"gps\"\n)\nToday we read the CSVs from data/ instead — no accounts, no network, and everyone gets identical results. But this is how you get your own data.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2574,7 +2574,7 @@
     "href": "classes/class-03/slides.html#two-object-models",
     "title": "From fixes to trajectories",
     "section": "Two object models",
-    "text": "Two object models\n\n\nmove2\nAn sf data frame with a track id and a time column, plus metadata.\nClosest to Movebank’s own structure. Good for data management: multiple studies, deployments, sensors.\nmt_time(), mt_track_id(), mt_distance(), mt_speed()\n\namt\nA tibble with columns x_, y_, t_ and a CRS.\nDeliberately minimal. Built for analysis: resampling, steps, home ranges, RSF, SSF.\nmake_track(), track_resample(), steps()\n\n\n\nThey convert into each other. Use move2 to organise, amt to analyse. This course lives mostly in amt.",
+    "text": "Two object models\n\n\nmove2\nAn sf data frame with a track id and a time column, plus metadata.\nClosest to Movebank’s own structure. Good for data management: multiple studies, deployments, sensors.\nmt_time(), mt_track_id(), mt_distance(), mt_speed()\n\namt\nA tibble with columns x_, y_, t_ and a CRS.\nDeliberately minimal. Built for analysis: resampling, steps, home ranges, RSF, SSF.\nmake_track(), track_resample(), steps()\n\n\nThey convert into each other. Use move2 to organise, amt to analyse. This course lives mostly in amt.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2587,7 +2587,7 @@
     "href": "classes/class-03/slides.html#making-a-track",
     "title": "From fixes to trajectories",
     "section": "Making a track",
-    "text": "Making a track\n\n```{r}\n#| eval: false\nlibrary(amt)\nlibrary(dplyr)\n\nbuffalo &lt;- read.csv(\"data/buffalo_kruger.csv.gz\") |&gt;\n  transmute(id  = individual.local.identifier,\n            t   = as.POSIXct(timestamp, tz = \"UTC\"),\n            x   = location.long,\n            y   = location.lat) |&gt;\n  filter(!is.na(x), !is.na(y)) |&gt;\n  distinct(id, t, .keep_all = TRUE)\n\ntrk &lt;- make_track(buffalo, x, y, t, id = id, crs = 4326) |&gt;\n  transform_coords(crs_to = 32736)\n```\n\n\nThe trailing underscores (x_, y_, t_) are amt’s way of guaranteeing its own columns never collide with yours.",
+    "text": "Making a track\n\n```{r}\n#| eval: false\nlibrary(amt)\nlibrary(dplyr)\n\nbuffalo &lt;- read.csv(\"data/buffalo_kruger.csv.gz\") |&gt;\n  transmute(id  = individual.local.identifier,\n            t   = as.POSIXct(timestamp, tz = \"UTC\"),\n            x   = location.long,\n            y   = location.lat) |&gt;\n  filter(!is.na(x), !is.na(y)) |&gt;\n  distinct(id, t, .keep_all = TRUE)\n\ntrk &lt;- make_track(buffalo, x, y, t, id = id, crs = 4326) |&gt;\n  transform_coords(crs_to = 32736)\n```\n\nThe trailing underscores (x_, y_, t_) are amt’s way of guaranteeing its own columns never collide with yours.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2600,7 +2600,7 @@
     "href": "classes/class-03/slides.html#the-four-things-that-are-always-wrong",
     "title": "From fixes to trajectories",
     "section": "The four things that are always wrong",
-    "text": "The four things that are always wrong\n\nDuplicated fixes — same individual, same timestamp. The collar re-transmitted. ~13% of our buffalo file.\nMissing coordinates — a row exists, the location failed.\nImpossible locations — (0, 0), land animals at sea, points on another continent. Usually a corrupt transmission.\nSpeed outliers — a fix that implies 200 km/h for a buffalo, then a return. A spike.\n\n\n\nClean in this order, and count what you remove at each step. A cleaning step that silently deletes 30% of your data has changed your study.",
+    "text": "The four things that are always wrong\n\nDuplicated fixes — same individual, same timestamp. The collar re-transmitted. ~13% of our buffalo file.\nMissing coordinates — a row exists, the location failed.\nImpossible locations — (0, 0), land animals at sea, points on another continent. Usually a corrupt transmission.\nSpeed outliers — a fix that implies 200 km/h for a buffalo, then a return. A spike.\n\n\nClean in this order, and count what you remove at each step. A cleaning step that silently deletes 30% of your data has changed your study.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2613,7 +2613,7 @@
     "href": "classes/class-03/slides.html#duplicates-are-not-all-the-same",
     "title": "From fixes to trajectories",
     "section": "Duplicates are not all the same",
-    "text": "Duplicates are not all the same\n\nExact duplicates — every field identical. Safe to drop.\nSame timestamp, different coordinates — which is right? Keep the one with better quality (more satellites, lower DOP); if you cannot tell, keep the first and document it.\nNear-duplicates — timestamps a few seconds apart. These create near-zero dt and therefore enormous apparent speeds.\n\n\n# Blunt but explicit\ntrk |&gt; distinct(id, t_, .keep_all = TRUE)\n\n# move2 is more careful about the ambiguous case\nmove2::mt_filter_unique(x, criterion = \"first\")",
+    "text": "Duplicates are not all the same\n\nExact duplicates — every field identical. Safe to drop.\nSame timestamp, different coordinates — which is right? Keep the one with better quality (more satellites, lower DOP); if you cannot tell, keep the first and document it.\nNear-duplicates — timestamps a few seconds apart. These create near-zero dt and therefore enormous apparent speeds.\n\n# Blunt but explicit\ntrk |&gt; distinct(id, t_, .keep_all = TRUE)\n\n# move2 is more careful about the ambiguous case\nmove2::mt_filter_unique(x, criterion = \"first\")",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2626,7 +2626,7 @@
     "href": "classes/class-03/slides.html#speed-filtering-useful-and-dangerous",
     "title": "From fixes to trajectories",
     "section": "Speed filtering: useful and dangerous",
-    "text": "Speed filtering: useful and dangerous\n\nCompute speed between consecutive fixes; drop anything above a biologically plausible maximum\nBuffalo ~ 10 km/h sustained; vulture ~ 80 km/h in flight\nThe danger: a threshold that is too low deletes real fast movement — exactly the migration or escape events you may care about\nThe subtlety: one bad fix creates two fast steps (out and back). Naïve filters often delete the good neighbour instead of the bad point\n\n\n\nNever filter silently. Plot what you are about to remove, look at it, then remove it. The sdafilter/argosfilter approach — which tests whether a point is fast and forms a spike — is better than a plain speed threshold.",
+    "text": "Speed filtering: useful and dangerous\n\nCompute speed between consecutive fixes; drop anything above a biologically plausible maximum\nBuffalo ~ 10 km/h sustained; vulture ~ 80 km/h in flight\nThe danger: a threshold that is too low deletes real fast movement — exactly the migration or escape events you may care about\nThe subtlety: one bad fix creates two fast steps (out and back). Naïve filters often delete the good neighbour instead of the bad point\n\n\nNever filter silently. Plot what you are about to remove, look at it, then remove it. The sdafilter/argosfilter approach — which tests whether a point is fast and forms a spike — is better than a plain speed threshold.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2652,7 +2652,7 @@
     "href": "classes/class-03/slides.html#why-it-governs-everything",
     "title": "From fixes to trajectories",
     "section": "Why it governs everything",
-    "text": "Why it governs everything\n\nStep length and turning angle are only comparable across steps of the same duration\nHMMs (Session 8) assume a regular interval; irregular data need a continuous-time model instead\nSSFs (Session 7) compare each observed step to alternatives of the same duration\nKDE home ranges assume roughly even coverage in time\n\n\ntrk |&gt; summarize_sampling_rate_many(cols = \"id\", time_unit = \"hour\")",
+    "text": "Why it governs everything\n\nStep length and turning angle are only comparable across steps of the same duration\nHMMs (Session 8) assume a regular interval; irregular data need a continuous-time model instead\nSSFs (Session 7) compare each observed step to alternatives of the same duration\nKDE home ranges assume roughly even coverage in time\n\ntrk |&gt; summarize_sampling_rate_many(cols = \"id\", time_unit = \"hour\")",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2665,7 +2665,7 @@
     "href": "classes/class-03/slides.html#what-our-buffalo-actually-look-like",
     "title": "From fixes to trajectories",
     "section": "What our buffalo actually look like",
-    "text": "What our buffalo actually look like\n\n\n\nid\nmin\nq1\nmedian\nmean\nq3\nmax\nn\n\n\n\n\nQueen\n0.03\n1\n1\n2.45\n1\n2523\n4544\n\n\nGabs\n0.03\n1\n1\n1.22\n1\n723\n3669\n\n\nCilla\n0.05\n1\n1\n1.00\n1\n2\n3527\n\n\n\n\n\nMedian 1 hour — that is the programmed schedule\nMinimum 0.03 h = 2 minutes — near-duplicates\nMaximum 2523 hours = 105 days for Queen — the collar stopped and restarted\nMean ≫ median: the distribution is dominated by a few enormous gaps\n\n\n\n\nReport the median, not the mean, for sampling intervals. And always look at the maximum.",
+    "text": "What our buffalo actually look like\n\n\n\nid\nmin\nq1\nmedian\nmean\nq3\nmax\nn\n\n\n\n\nQueen\n0.03\n1\n1\n2.45\n1\n2523\n4544\n\n\nGabs\n0.03\n1\n1\n1.22\n1\n723\n3669\n\n\nCilla\n0.05\n1\n1\n1.00\n1\n2\n3527\n\n\n\n\nMedian 1 hour — that is the programmed schedule\nMinimum 0.03 h = 2 minutes — near-duplicates\nMaximum 2523 hours = 105 days for Queen — the collar stopped and restarted\nMean ≫ median: the distribution is dominated by a few enormous gaps\n\n\nReport the median, not the mean, for sampling intervals. And always look at the maximum.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2691,7 +2691,7 @@
     "href": "classes/class-03/slides.html#two-ways-to-hold-a-trajectory",
     "title": "From fixes to trajectories",
     "section": "Two ways to hold a trajectory",
-    "text": "Two ways to hold a trajectory\n\n\nadehabitatLT::ltraj\nThe classic (Calenge 2006). One data frame per burst, with dist, dt, R2n (squared displacement), abs.angle and rel.angle precomputed.\nredisltraj() regularises by interpolating new positions.\n\namt::track_xyt\nA tidy tibble. Steps, angles and covariates are computed when you ask.\ntrack_resample() regularises by selecting existing fixes.\n\n\n\nThe two “regularise” functions do opposite things. One keeps only what you observed; the other manufactures positions you did not observe.",
+    "text": "Two ways to hold a trajectory\n\n\nadehabitatLT::ltraj\nThe classic (Calenge 2006). One data frame per burst, with dist, dt, R2n (squared displacement), abs.angle and rel.angle precomputed.\nredisltraj() regularises by interpolating new positions.\n\namt::track_xyt\nA tidy tibble. Steps, angles and covariates are computed when you ask.\ntrack_resample() regularises by selecting existing fixes.\n\n\nThe two “regularise” functions do opposite things. One keeps only what you observed; the other manufactures positions you did not observe.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2717,7 +2717,7 @@
     "href": "classes/class-03/slides.html#truncation-the-start-and-the-end",
     "title": "From fixes to trajectories",
     "section": "Truncation: the start and the end",
-    "text": "Truncation: the start and the end\n\nAfter capture — animals often behave abnormally for days (flight, restricted movement). Many studies discard a fixed post-capture window\nBefore the end — a collar that stops moving may mean a dead animal or a dropped collar, not a resting one\nAt gaps — a burst ends wherever fixes are missing; steps are never computed across a gap\n\n\n\nDecide the truncation rules before you look at the results, write them down, and report how much data they removed.",
+    "text": "Truncation: the start and the end\n\nAfter capture — animals often behave abnormally for days (flight, restricted movement). Many studies discard a fixed post-capture window\nBefore the end — a collar that stops moving may mean a dead animal or a dropped collar, not a resting one\nAt gaps — a burst ends wherever fixes are missing; steps are never computed across a gap\n\n\nDecide the truncation rules before you look at the results, write them down, and report how much data they removed.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2756,7 +2756,7 @@
     "href": "classes/class-03/slides.html#who-tolerates-irregular-sampling",
     "title": "From fixes to trajectories",
     "section": "Who tolerates irregular sampling?",
-    "text": "Who tolerates irregular sampling?\n\n\n\n\n\n\n\n\nMethod\nIrregular sampling?\nWhy\n\n\n\n\nMCP, classical KDE\ntolerated, with care\nuneven sampling over-weights well-sampled periods\n\n\nBrownian bridge (Session 6)\nyes\nthe bridge’s variance grows with the time between fixes\n\n\nAKDE / ctmm (Session 6)\nyes\ncontinuous-time models\n\n\nSSF (Session 7)\nper burst\nevery step must span the same interval\n\n\nHMM (Session 8)\nno, not directly\ndiscrete time steps; impute a regular grid first (momentuHMM::crawlWrap)\n\n\n\n\n\nRegularity is not a cosmetic property of your data. It decides which methods you are allowed to use.",
+    "text": "Who tolerates irregular sampling?\n\n\n\n\n\n\n\n\nMethod\nIrregular sampling?\nWhy\n\n\n\n\nMCP, classical KDE\ntolerated, with care\nuneven sampling over-weights well-sampled periods\n\n\nBrownian bridge (Session 6)\nyes\nthe bridge’s variance grows with the time between fixes\n\n\nAKDE / ctmm (Session 6)\nyes\ncontinuous-time models\n\n\nSSF (Session 7)\nper burst\nevery step must span the same interval\n\n\nHMM (Session 8)\nno, not directly\ndiscrete time steps; impute a regular grid first (momentuHMM::crawlWrap)\n\n\n\n\nRegularity is not a cosmetic property of your data. It decides which methods you are allowed to use.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2795,7 +2795,7 @@
     "href": "classes/class-03/slides.html#the-operation",
     "title": "From fixes to trajectories",
     "section": "The operation",
-    "text": "The operation\nFor every fix, look up the environment there and then.\n\nStatic covariates — elevation, slope, distance to river. One raster; extract() and done.\nDynamic covariates — NDVI, temperature, snow. A stack of rasters with timestamps. You must match each fix to the right layer.\n\n\n\nA track that spans two years annotated with a single NDVI image is not annotated — it is decorated. If your covariate varies in time and your analysis does not, you have thrown away the mechanism.",
+    "text": "The operation\nFor every fix, look up the environment there and then.\n\nStatic covariates — elevation, slope, distance to river. One raster; extract() and done.\nDynamic covariates — NDVI, temperature, snow. A stack of rasters with timestamps. You must match each fix to the right layer.\n\n\nA track that spans two years annotated with a single NDVI image is not annotated — it is decorated. If your covariate varies in time and your analysis does not, you have thrown away the mechanism.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2821,7 +2821,7 @@
     "href": "classes/class-03/slides.html#doing-it-in-time",
     "title": "From fixes to trajectories",
     "section": "Doing it in time",
-    "text": "Doing it in time\n# Which layer does each fix belong to?\nlayer_dates &lt;- as.Date(c(\"2005-01-01\", \"2005-01-17\", ...))\n\nidx &lt;- findInterval(as.Date(trk$t_), layer_dates)\n\n# Extract from the whole stack, then pick the right column per row\nvals &lt;- terra::extract(ndvi_stack, vect(trk))[, -1]\ntrk$ndvi &lt;- vals[cbind(seq_len(nrow(vals)), idx)]\n\nMovebank Env-DATA does this for you, including interpolation in time, for dozens of products. Use it for real projects — but understand what it is doing first, which is what today’s exercise is for.",
+    "text": "Doing it in time\n# Which layer does each fix belong to?\nlayer_dates &lt;- as.Date(c(\"2005-01-01\", \"2005-01-17\", ...))\n\nidx &lt;- findInterval(as.Date(trk$t_), layer_dates)\n\n# Extract from the whole stack, then pick the right column per row\nvals &lt;- terra::extract(ndvi_stack, vect(trk))[, -1]\ntrk$ndvi &lt;- vals[cbind(seq_len(nrow(vals)), idx)]\nMovebank Env-DATA does this for you, including interpolation in time, for dozens of products. Use it for real projects — but understand what it is doing first, which is what today’s exercise is for.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2860,7 +2860,7 @@
     "href": "classes/class-03/slides.html#recap",
     "title": "From fixes to trajectories",
     "section": "Recap",
-    "text": "Recap\n\nA track is a sample of a path; every line between fixes is an assumption\nLocation error dominates short steps: resting looks random, spikes look like sprints\nClean in order: duplicates → missing → impossible → speed, counting as you go\ntrack_resample() selects; redisltraj() interpolates; track_resample() ignores group_by()\nRegularity decides which methods you may use later\nAnnotate in space and time\n\n\nBefore Session 4\n\nvignette(\"adehabitatLT\", package = \"adehabitatLT\"), sections on ltraj\nSkim Fauchald & Tveraa (2003), Ecology 84:282 — first-passage time",
+    "text": "Recap\n\nA track is a sample of a path; every line between fixes is an assumption\nLocation error dominates short steps: resting looks random, spikes look like sprints\nClean in order: duplicates → missing → impossible → speed, counting as you go\ntrack_resample() selects; redisltraj() interpolates; track_resample() ignores group_by()\nRegularity decides which methods you may use later\nAnnotate in space and time\n\nBefore Session 4\n\nvignette(\"adehabitatLT\", package = \"adehabitatLT\"), sections on ltraj\nSkim Fauchald & Tveraa (2003), Ecology 84:282 — first-passage time",
     "crumbs": [
       "Home",
       "Sessions",

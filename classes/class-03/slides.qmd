@@ -61,7 +61,6 @@ environment to it — in space and in time.
 6. Annotating a trajectory with environment **matched in time**
 :::
 
-. . .
 
 ::: {.keyidea}
 80% of a movement analysis is getting the data into a defensible state.
@@ -74,7 +73,7 @@ Today is that 80%.
 
 ## What a GPS track actually is
 
-::: {.incremental}
+
 - A set of **point estimates**, each with an error, at irregular moments
 - Between two fixes the animal went *somewhere*; the straight line is an
   assumption, not an observation
@@ -82,9 +81,7 @@ Today is that 80%.
   plotting, dangerous for inference
 - Every derived quantity — step length, speed, turning angle — inherits both
   the sampling interval and the location error
-:::
 
-. . .
 
 ::: {.keyidea}
 A track is a *sample* of a continuous path. Treat every line you draw between
@@ -150,7 +147,7 @@ by the axis.
 
 ## Location error: why you cannot connect the dots
 
-::: {.incremental}
+
 - A 15 m error on each fix is negligible on a 1 km step, and **dominates** a
   20 m step
 - For short steps the *direction* is mostly noise, so turning angles look
@@ -158,9 +155,7 @@ by the axis.
 - A single bad fix creates a **spike**: an impossible step out and back
 - Error is not independent white noise: it is correlated in time and worse in
   closed habitat
-:::
 
-. . .
 
 ::: {.keyidea}
 Resting animals look like they are wandering at random, and spikes look like
@@ -227,7 +222,6 @@ buff <- movebank_download_study(
 )
 ```
 
-. . .
 
 Today we read the CSVs from `data/` instead — no accounts, no network, and
 everyone gets identical results. But this is how you get your own data.
@@ -257,7 +251,6 @@ RSF, SSF.
 :::
 :::
 
-. . .
 
 ::: {.keyidea}
 They convert into each other. Use `move2` to *organise*, `amt` to *analyse*.
@@ -286,8 +279,6 @@ trk <- make_track(buffalo, x, y, t, id = id, crs = 4326) |>
   transform_coords(crs_to = 32736)
 ```
 
-. . .
-
 The trailing underscores (`x_`, `y_`, `t_`) are `amt`'s way of guaranteeing
 its own columns never collide with yours.
 
@@ -297,7 +288,7 @@ its own columns never collide with yours.
 
 ## The four things that are always wrong
 
-::: {.incremental}
+
 1. **Duplicated fixes** — same individual, same timestamp. The collar
    re-transmitted. ~13% of our buffalo file.
 2. **Missing coordinates** — a row exists, the location failed.
@@ -305,9 +296,9 @@ its own columns never collide with yours.
    continent. Usually a corrupt transmission.
 4. **Speed outliers** — a fix that implies 200 km/h for a buffalo, then a
    return. A *spike*.
-:::
 
-. . .
+
+
 
 ::: {.keyidea}
 Clean in this order, and **count what you remove at each step**. A cleaning
@@ -318,16 +309,15 @@ step that silently deletes 30% of your data has changed your study.
 
 ## Duplicates are not all the same
 
-::: {.incremental}
+
 - **Exact duplicates** — every field identical. Safe to drop.
 - **Same timestamp, different coordinates** — which is right? Keep the one
   with better quality (more satellites, lower DOP); if you cannot tell, keep
   the first and document it.
 - **Near-duplicates** — timestamps a few seconds apart. These create
   near-zero `dt` and therefore enormous apparent speeds.
-:::
 
-. . .
+
 
 ```r
 # Blunt but explicit
@@ -341,7 +331,7 @@ move2::mt_filter_unique(x, criterion = "first")
 
 ## Speed filtering: useful and dangerous
 
-::: {.incremental}
+
 - Compute speed between consecutive fixes; drop anything above a biologically
   plausible maximum
 - Buffalo ~ 10 km/h sustained; vulture ~ 80 km/h in flight
@@ -349,9 +339,8 @@ move2::mt_filter_unique(x, criterion = "first")
   exactly the migration or escape events you may care about
 - **The subtlety**: one bad fix creates *two* fast steps (out and back). Naïve
   filters often delete the good neighbour instead of the bad point
-:::
 
-. . .
+
 
 ::: {.keyidea}
 Never filter silently. Plot what you are about to remove, look at it, then
@@ -394,7 +383,7 @@ that share a common `dt`.
 
 ## Why it governs everything
 
-::: {.incremental}
+
 - **Step length and turning angle** are only comparable across steps of the
   same duration
 - **HMMs** (Session 8) assume a regular interval; irregular data need a
@@ -402,9 +391,7 @@ that share a common `dt`.
 - **SSFs** (Session 7) compare each observed step to alternatives of the *same*
   duration
 - **KDE home ranges** assume roughly even coverage in time
-:::
 
-. . .
 
 ```r
 trk |> summarize_sampling_rate_many(cols = "id", time_unit = "hour")
@@ -419,16 +406,12 @@ trk |> summarize_sampling_rate_many(cols = "id", time_unit = "hour")
 | Gabs | 0.03 | 1 | 1 | 1.22 | 1 | 723 | 3669 |
 | Cilla | 0.05 | 1 | 1 | 1.00 | 1 | 2 | 3527 |
 
-. . .
 
-::: {.incremental}
 - Median 1 hour — that is the programmed schedule
 - Minimum 0.03 h = **2 minutes** — near-duplicates
 - Maximum **2523 hours = 105 days** for Queen — the collar stopped and restarted
 - Mean ≫ median: the distribution is dominated by a few enormous gaps
-:::
 
-. . .
 
 ::: {.keyidea}
 Report the **median**, not the mean, for sampling intervals. And always look
@@ -487,8 +470,6 @@ A tidy tibble. Steps, angles and covariates are computed when you ask.
 :::
 :::
 
-. . .
-
 ::: {.keyidea}
 The two "regularise" functions do opposite things. One keeps only what you
 observed; the other manufactures positions you did not observe.
@@ -538,16 +519,14 @@ certainly did not walk.
 
 ## Truncation: the start and the end
 
-::: {.incremental}
+
 - **After capture** — animals often behave abnormally for days (flight,
   restricted movement). Many studies discard a fixed post-capture window
 - **Before the end** — a collar that stops moving may mean a dead animal or a
   dropped collar, not a resting one
 - **At gaps** — a burst ends wherever fixes are missing; steps are never
   computed across a gap
-:::
 
-. . .
 
 ::: {.keyidea}
 Decide the truncation rules **before** you look at the results, write them
@@ -567,14 +546,13 @@ trk |>
   filter_min_n_burst(min_n = 3)
 ```
 
-::: {.incremental}
+
 - `rate` — the interval you want
 - `tolerance` — how much slack. Too tight and you throw away good data; too
   loose and "hourly" steps are really 40–80 minutes
 - A **burst** breaks wherever a fix is missing. Steps are computed *within*
   bursts, never across a gap
 - `min_n = 3` because a turning angle needs three points
-:::
 
 ---
 
@@ -623,7 +601,6 @@ check the per-group counts before you accept it.
 | SSF (Session 7) | per burst | every step must span the same interval |
 | HMM (Session 8) | **no**, not directly | discrete time steps; impute a regular grid first (`momentuHMM::crawlWrap`) |
 
-. . .
 
 ::: {.keyidea}
 Regularity is not a cosmetic property of your data. It decides which methods
@@ -693,14 +670,12 @@ dividing each gap by the modal interval and counting the misses.
 
 For every fix, look up the environment **there** and **then**.
 
-::: {.incremental}
+
 - **Static** covariates — elevation, slope, distance to river. One raster;
   `extract()` and done.
 - **Dynamic** covariates — NDVI, temperature, snow. A **stack** of rasters
   with timestamps. You must match each fix to the right layer.
-:::
 
-. . .
 
 ::: {.keyidea}
 A track that spans two years annotated with a *single* NDVI image is not
@@ -758,8 +733,6 @@ vals <- terra::extract(ndvi_stack, vect(trk))[, -1]
 trk$ndvi <- vals[cbind(seq_len(nrow(vals)), idx)]
 ```
 
-. . .
-
 `Movebank Env-DATA` does this for you, including interpolation in time, for
 dozens of products. Use it for real projects — but understand what it is doing
 first, which is what today's exercise is for.
@@ -813,7 +786,6 @@ Fix: use a time series and match each fix to the contemporaneous layer.
 
 ## Recap
 
-::: {.incremental}
 - A track is a **sample** of a path; every line between fixes is an assumption
 - Location error dominates short steps: resting looks random, spikes look like sprints
 - Clean in order: **duplicates → missing → impossible → speed**, counting as you go
@@ -821,9 +793,7 @@ Fix: use a time series and match each fix to the contemporaneous layer.
   ignores `group_by()`
 - Regularity decides which methods you may use later
 - Annotate in space **and time**
-:::
 
-. . .
 
 ### Before Session 4
 

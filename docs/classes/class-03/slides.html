@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-26">
+  <meta name="dcterms.date" content="2026-10-29">
   <title>Animal Tracking – From fixes to trajectories</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-26</p>
+  <p class="date">2026-10-29</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -236,10 +236,8 @@ Giuliano Colosimo
 <li>Annotating a trajectory with environment <strong>matched in time</strong></li>
 </ol>
 </div>
-<div class="fragment">
 <div class="keyidea">
 <p>80% of a movement analysis is getting the data into a defensible state. Today is that 80%.</p>
-</div>
 </div>
 </section>
 <section>
@@ -250,15 +248,13 @@ Giuliano Colosimo
 <section id="what-a-gps-track-actually-is" class="slide level2">
 <h2>What a GPS track actually is</h2>
 <ul>
-<li class="fragment">A set of <strong>point estimates</strong>, each with an error, at irregular moments</li>
-<li class="fragment">Between two fixes the animal went <em>somewhere</em>; the straight line is an assumption, not an observation</li>
-<li class="fragment"><strong>Interpolating</strong> a position between fixes invents data — useful for plotting, dangerous for inference</li>
-<li class="fragment">Every derived quantity — step length, speed, turning angle — inherits both the sampling interval and the location error</li>
+<li>A set of <strong>point estimates</strong>, each with an error, at irregular moments</li>
+<li>Between two fixes the animal went <em>somewhere</em>; the straight line is an assumption, not an observation</li>
+<li><strong>Interpolating</strong> a position between fixes invents data — useful for plotting, dangerous for inference</li>
+<li>Every derived quantity — step length, speed, turning angle — inherits both the sampling interval and the location error</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>A track is a <em>sample</em> of a continuous path. Treat every line you draw between fixes as a hypothesis.</p>
-</div>
 </div>
 </section>
 <section id="the-step" class="slide level2">
@@ -290,15 +286,13 @@ Giuliano Colosimo
 <section id="location-error-why-you-cannot-connect-the-dots" class="slide level2">
 <h2>Location error: why you cannot connect the dots</h2>
 <ul>
-<li class="fragment">A 15 m error on each fix is negligible on a 1 km step, and <strong>dominates</strong> a 20 m step</li>
-<li class="fragment">For short steps the <em>direction</em> is mostly noise, so turning angles look random exactly when the animal is resting</li>
-<li class="fragment">A single bad fix creates a <strong>spike</strong>: an impossible step out and back</li>
-<li class="fragment">Error is not independent white noise: it is correlated in time and worse in closed habitat</li>
+<li>A 15 m error on each fix is negligible on a 1 km step, and <strong>dominates</strong> a 20 m step</li>
+<li>For short steps the <em>direction</em> is mostly noise, so turning angles look random exactly when the animal is resting</li>
+<li>A single bad fix creates a <strong>spike</strong>: an impossible step out and back</li>
+<li>Error is not independent white noise: it is correlated in time and worse in closed habitat</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>Resting animals look like they are wandering at random, and spikes look like sprints. Neither is behaviour. Both reach your models unless you look first.</p>
-</div>
 </div>
 </section>
 <section id="what-error-looks-like" class="slide level2">
@@ -327,9 +321,7 @@ Giuliano Colosimo
 <span id="cb1-11"><a></a>  <span class="at">study_id  =</span> <span class="dv">1764627</span>,</span>
 <span id="cb1-12"><a></a>  <span class="at">sensor_type_id =</span> <span class="st">"gps"</span></span>
 <span id="cb1-13"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="fragment">
 <p>Today we read the CSVs from <code>data/</code> instead — no accounts, no network, and everyone gets identical results. But this is how you get your own data.</p>
-</div>
 </section>
 <section id="two-object-models" class="slide level2">
 <h2>Two object models</h2>
@@ -345,10 +337,8 @@ Giuliano Colosimo
 <p>Deliberately minimal. Built for <strong>analysis</strong>: resampling, steps, home ranges, RSF, SSF.</p>
 <p><code>make_track()</code>, <code>track_resample()</code>, <code>steps()</code></p>
 </div></div>
-<div class="fragment">
 <div class="keyidea">
 <p>They convert into each other. Use <code>move2</code> to <em>organise</em>, <code>amt</code> to <em>analyse</em>. This course lives mostly in <code>amt</code>.</p>
-</div>
 </div>
 </section>
 <section id="making-a-track" class="slide level2">
@@ -371,9 +361,7 @@ Giuliano Colosimo
 <span id="cb2-15"><a></a>  <span class="fu">transform_coords</span>(<span class="at">crs_to =</span> <span class="dv">32736</span>)</span>
 <span id="cb2-16"><a></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="fragment">
 <p>The trailing underscores (<code>x_</code>, <code>y_</code>, <code>t_</code>) are <code>amt</code>’s way of guaranteeing its own columns never collide with yours.</p>
-</div>
 </section></section>
 <section>
 <section id="cleaning" class="title-slide slide level1 center" data-background-color="#14525a">
@@ -383,44 +371,38 @@ Giuliano Colosimo
 <section id="the-four-things-that-are-always-wrong" class="slide level2">
 <h2>The four things that are always wrong</h2>
 <ol type="1">
-<li class="fragment"><strong>Duplicated fixes</strong> — same individual, same timestamp. The collar re-transmitted. ~13% of our buffalo file.</li>
-<li class="fragment"><strong>Missing coordinates</strong> — a row exists, the location failed.</li>
-<li class="fragment"><strong>Impossible locations</strong> — (0, 0), land animals at sea, points on another continent. Usually a corrupt transmission.</li>
-<li class="fragment"><strong>Speed outliers</strong> — a fix that implies 200 km/h for a buffalo, then a return. A <em>spike</em>.</li>
+<li><strong>Duplicated fixes</strong> — same individual, same timestamp. The collar re-transmitted. ~13% of our buffalo file.</li>
+<li><strong>Missing coordinates</strong> — a row exists, the location failed.</li>
+<li><strong>Impossible locations</strong> — (0, 0), land animals at sea, points on another continent. Usually a corrupt transmission.</li>
+<li><strong>Speed outliers</strong> — a fix that implies 200 km/h for a buffalo, then a return. A <em>spike</em>.</li>
 </ol>
-<div class="fragment">
 <div class="keyidea">
 <p>Clean in this order, and <strong>count what you remove at each step</strong>. A cleaning step that silently deletes 30% of your data has changed your study.</p>
-</div>
 </div>
 </section>
 <section id="duplicates-are-not-all-the-same" class="slide level2">
 <h2>Duplicates are not all the same</h2>
 <ul>
-<li class="fragment"><strong>Exact duplicates</strong> — every field identical. Safe to drop.</li>
-<li class="fragment"><strong>Same timestamp, different coordinates</strong> — which is right? Keep the one with better quality (more satellites, lower DOP); if you cannot tell, keep the first and document it.</li>
-<li class="fragment"><strong>Near-duplicates</strong> — timestamps a few seconds apart. These create near-zero <code>dt</code> and therefore enormous apparent speeds.</li>
+<li><strong>Exact duplicates</strong> — every field identical. Safe to drop.</li>
+<li><strong>Same timestamp, different coordinates</strong> — which is right? Keep the one with better quality (more satellites, lower DOP); if you cannot tell, keep the first and document it.</li>
+<li><strong>Near-duplicates</strong> — timestamps a few seconds apart. These create near-zero <code>dt</code> and therefore enormous apparent speeds.</li>
 </ul>
-<div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co"># Blunt but explicit</span></span>
 <span id="cb3-2"><a></a>trk <span class="sc">|&gt;</span> <span class="fu">distinct</span>(id, t_, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-3"><a></a></span>
 <span id="cb3-4"><a></a><span class="co"># move2 is more careful about the ambiguous case</span></span>
 <span id="cb3-5"><a></a>move2<span class="sc">::</span><span class="fu">mt_filter_unique</span>(x, <span class="at">criterion =</span> <span class="st">"first"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="speed-filtering-useful-and-dangerous" class="slide level2">
 <h2>Speed filtering: useful and dangerous</h2>
 <ul>
-<li class="fragment">Compute speed between consecutive fixes; drop anything above a biologically plausible maximum</li>
-<li class="fragment">Buffalo ~ 10 km/h sustained; vulture ~ 80 km/h in flight</li>
-<li class="fragment"><strong>The danger</strong>: a threshold that is too low deletes real fast movement — exactly the migration or escape events you may care about</li>
-<li class="fragment"><strong>The subtlety</strong>: one bad fix creates <em>two</em> fast steps (out and back). Naïve filters often delete the good neighbour instead of the bad point</li>
+<li>Compute speed between consecutive fixes; drop anything above a biologically plausible maximum</li>
+<li>Buffalo ~ 10 km/h sustained; vulture ~ 80 km/h in flight</li>
+<li><strong>The danger</strong>: a threshold that is too low deletes real fast movement — exactly the migration or escape events you may care about</li>
+<li><strong>The subtlety</strong>: one bad fix creates <em>two</em> fast steps (out and back). Naïve filters often delete the good neighbour instead of the bad point</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>Never filter silently. Plot what you are about to remove, look at it, then remove it. The <code>sdafilter</code>/<code>argosfilter</code> approach — which tests whether a point is fast <strong>and</strong> forms a spike — is better than a plain speed threshold.</p>
-</div>
 </div>
 </section>
 <section id="quiz" class="slide level2">
@@ -448,14 +430,12 @@ Giuliano Colosimo
 <section id="why-it-governs-everything" class="slide level2">
 <h2>Why it governs everything</h2>
 <ul>
-<li class="fragment"><strong>Step length and turning angle</strong> are only comparable across steps of the same duration</li>
-<li class="fragment"><strong>HMMs</strong> (Session 8) assume a regular interval; irregular data need a continuous-time model instead</li>
-<li class="fragment"><strong>SSFs</strong> (Session 7) compare each observed step to alternatives of the <em>same</em> duration</li>
-<li class="fragment"><strong>KDE home ranges</strong> assume roughly even coverage in time</li>
+<li><strong>Step length and turning angle</strong> are only comparable across steps of the same duration</li>
+<li><strong>HMMs</strong> (Session 8) assume a regular interval; irregular data need a continuous-time model instead</li>
+<li><strong>SSFs</strong> (Session 7) compare each observed step to alternatives of the <em>same</em> duration</li>
+<li><strong>KDE home ranges</strong> assume roughly even coverage in time</li>
 </ul>
-<div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>trk <span class="sc">|&gt;</span> <span class="fu">summarize_sampling_rate_many</span>(<span class="at">cols =</span> <span class="st">"id"</span>, <span class="at">time_unit =</span> <span class="st">"hour"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="what-our-buffalo-actually-look-like" class="slide level2">
 <h2>What our buffalo actually look like</h2>
@@ -505,18 +485,14 @@ Giuliano Colosimo
 </tr>
 </tbody>
 </table>
-<div class="fragment">
 <ul>
-<li class="fragment">Median 1 hour — that is the programmed schedule</li>
-<li class="fragment">Minimum 0.03 h = <strong>2 minutes</strong> — near-duplicates</li>
-<li class="fragment">Maximum <strong>2523 hours = 105 days</strong> for Queen — the collar stopped and restarted</li>
-<li class="fragment">Mean ≫ median: the distribution is dominated by a few enormous gaps</li>
+<li>Median 1 hour — that is the programmed schedule</li>
+<li>Minimum 0.03 h = <strong>2 minutes</strong> — near-duplicates</li>
+<li>Maximum <strong>2523 hours = 105 days</strong> for Queen — the collar stopped and restarted</li>
+<li>Mean ≫ median: the distribution is dominated by a few enormous gaps</li>
 </ul>
-</div>
-<div class="fragment">
 <div class="keyidea">
 <p>Report the <strong>median</strong>, not the mean, for sampling intervals. And always look at the maximum.</p>
-</div>
 </div>
 </section>
 <section id="gaps-at-a-glance" class="slide level2">
@@ -537,10 +513,8 @@ Giuliano Colosimo
 <p>A tidy tibble. Steps, angles and covariates are computed when you ask.</p>
 <p><code>track_resample()</code> regularises by <strong>selecting</strong> existing fixes.</p>
 </div></div>
-<div class="fragment">
 <div class="keyidea">
 <p>The two “regularise” functions do opposite things. One keeps only what you observed; the other manufactures positions you did not observe.</p>
-</div>
 </div>
 </section>
 <section id="selecting-versus-interpolating" class="slide level2">
@@ -552,14 +526,12 @@ Giuliano Colosimo
 <section id="truncation-the-start-and-the-end" class="slide level2">
 <h2>Truncation: the start and the end</h2>
 <ul>
-<li class="fragment"><strong>After capture</strong> — animals often behave abnormally for days (flight, restricted movement). Many studies discard a fixed post-capture window</li>
-<li class="fragment"><strong>Before the end</strong> — a collar that stops moving may mean a dead animal or a dropped collar, not a resting one</li>
-<li class="fragment"><strong>At gaps</strong> — a burst ends wherever fixes are missing; steps are never computed across a gap</li>
+<li><strong>After capture</strong> — animals often behave abnormally for days (flight, restricted movement). Many studies discard a fixed post-capture window</li>
+<li><strong>Before the end</strong> — a collar that stops moving may mean a dead animal or a dropped collar, not a resting one</li>
+<li><strong>At gaps</strong> — a burst ends wherever fixes are missing; steps are never computed across a gap</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>Decide the truncation rules <strong>before</strong> you look at the results, write them down, and report how much data they removed.</p>
-</div>
 </div>
 </section>
 <section id="resampling-and-bursts" class="slide level2">
@@ -569,10 +541,10 @@ Giuliano Colosimo
 <span id="cb5-2"><a></a>  <span class="fu">track_resample</span>(<span class="at">rate =</span> <span class="fu">hours</span>(<span class="dv">1</span>), <span class="at">tolerance =</span> <span class="fu">minutes</span>(<span class="dv">10</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb5-3"><a></a>  <span class="fu">filter_min_n_burst</span>(<span class="at">min_n =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
-<li class="fragment"><code>rate</code> — the interval you want</li>
-<li class="fragment"><code>tolerance</code> — how much slack. Too tight and you throw away good data; too loose and “hourly” steps are really 40–80 minutes</li>
-<li class="fragment">A <strong>burst</strong> breaks wherever a fix is missing. Steps are computed <em>within</em> bursts, never across a gap</li>
-<li class="fragment"><code>min_n = 3</code> because a turning angle needs three points</li>
+<li><code>rate</code> — the interval you want</li>
+<li><code>tolerance</code> — how much slack. Too tight and you throw away good data; too loose and “hourly” steps are really 40–80 minutes</li>
+<li>A <strong>burst</strong> breaks wherever a fix is missing. Steps are computed <em>within</em> bursts, never across a gap</li>
+<li><code>min_n = 3</code> because a turning angle needs three points</li>
 </ul>
 </section>
 <section id="the-trap-track_resample-ignores-group_by" class="slide level2">
@@ -667,10 +639,8 @@ Giuliano Colosimo
 </tr>
 </tbody>
 </table>
-<div class="fragment">
 <div class="keyidea">
 <p>Regularity is not a cosmetic property of your data. It decides which methods you are allowed to use.</p>
-</div>
 </div>
 </section>
 <section id="quiz-1" class="slide level2">
@@ -714,13 +684,11 @@ Giuliano Colosimo
 <h2>The operation</h2>
 <p>For every fix, look up the environment <strong>there</strong> and <strong>then</strong>.</p>
 <ul>
-<li class="fragment"><strong>Static</strong> covariates — elevation, slope, distance to river. One raster; <code>extract()</code> and done.</li>
-<li class="fragment"><strong>Dynamic</strong> covariates — NDVI, temperature, snow. A <strong>stack</strong> of rasters with timestamps. You must match each fix to the right layer.</li>
+<li><strong>Static</strong> covariates — elevation, slope, distance to river. One raster; <code>extract()</code> and done.</li>
+<li><strong>Dynamic</strong> covariates — NDVI, temperature, snow. A <strong>stack</strong> of rasters with timestamps. You must match each fix to the right layer.</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>A track that spans two years annotated with a <em>single</em> NDVI image is not annotated — it is decorated. If your covariate varies in time and your analysis does not, you have thrown away the mechanism.</p>
-</div>
 </div>
 </section>
 <section id="decorated-versus-annotated" class="slide level2">
@@ -739,9 +707,7 @@ Giuliano Colosimo
 <span id="cb8-6"><a></a><span class="co"># Extract from the whole stack, then pick the right column per row</span></span>
 <span id="cb8-7"><a></a>vals <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(ndvi_stack, <span class="fu">vect</span>(trk))[, <span class="sc">-</span><span class="dv">1</span>]</span>
 <span id="cb8-8"><a></a>trk<span class="sc">$</span>ndvi <span class="ot">&lt;-</span> vals[<span class="fu">cbind</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(vals)), idx)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="fragment">
 <p><code>Movebank Env-DATA</code> does this for you, including interpolation in time, for dozens of products. Use it for real projects — but understand what it is doing first, which is what today’s exercise is for.</p>
-</div>
 </section>
 <section id="quiz-3" class="slide level2">
 <h2>Quiz</h2>
@@ -778,14 +744,13 @@ Giuliano Colosimo
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li class="fragment">A track is a <strong>sample</strong> of a path; every line between fixes is an assumption</li>
-<li class="fragment">Location error dominates short steps: resting looks random, spikes look like sprints</li>
-<li class="fragment">Clean in order: <strong>duplicates → missing → impossible → speed</strong>, counting as you go</li>
-<li class="fragment"><code>track_resample()</code> <strong>selects</strong>; <code>redisltraj()</code> <strong>interpolates</strong>; <code>track_resample()</code> ignores <code>group_by()</code></li>
-<li class="fragment">Regularity decides which methods you may use later</li>
-<li class="fragment">Annotate in space <strong>and time</strong></li>
+<li>A track is a <strong>sample</strong> of a path; every line between fixes is an assumption</li>
+<li>Location error dominates short steps: resting looks random, spikes look like sprints</li>
+<li>Clean in order: <strong>duplicates → missing → impossible → speed</strong>, counting as you go</li>
+<li><code>track_resample()</code> <strong>selects</strong>; <code>redisltraj()</code> <strong>interpolates</strong>; <code>track_resample()</code> ignores <code>group_by()</code></li>
+<li>Regularity decides which methods you may use later</li>
+<li>Annotate in space <strong>and time</strong></li>
 </ul>
-<div class="fragment">
 <h3 id="before-session-4">Before Session 4</h3>
 <ul>
 <li><code>vignette("adehabitatLT", package = "adehabitatLT")</code>, sections on <code>ltraj</code></li>
@@ -793,7 +758,6 @@ Giuliano Colosimo
 </ul>
 
 
-</div>
 </section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
