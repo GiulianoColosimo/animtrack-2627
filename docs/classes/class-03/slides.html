@@ -1,290 +1,788 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.21">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Giuliano Colosimo">
+<meta name="dcterms.date" content="2026-10-30">
+<title>From fixes to trajectories – Animal Tracking</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../classes/class-03/exercise.html" rel="next">
+<link href="../../classes/class-02/exercise.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-f9d2e688c83043042fa051765c26f29b.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.21">
-
-  <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-30">
-  <title>Animal Tracking – From fixes to trajectories</title>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
-  <style>
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    ul.task-list li input[type="checkbox"] {
-      width: 0.8em;
-      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
-      vertical-align: middle;
-    }
-    /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7e9717d9caa9b4d114d189eaeb260ada.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-d929c69893c3fca5e8ac47b42fec3313.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-bf10e36bdc8811b3bc51578003ecf691.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-d929c69893c3fca5e8ac47b42fec3313.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
       }
-    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-    div.sourceCode
-      { color: #24292e;  }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
     }
-    code span { color: #24292e; } /* Normal */
-    code span.al { color: #ff5555; font-weight: bold; } /* Alert */
-    code span.an { color: #6a737d; } /* Annotation */
-    code span.at { color: #d73a49; } /* Attribute */
-    code span.bn { color: #005cc5; } /* BaseN */
-    code span.bu { color: #d73a49; } /* BuiltIn */
-    code span.cf { color: #d73a49; } /* ControlFlow */
-    code span.ch { color: #032f62; } /* Char */
-    code span.cn { color: #005cc5; } /* Constant */
-    code span.co { color: #6a737d; } /* Comment */
-    code span.cv { color: #6a737d; } /* CommentVar */
-    code span.do { color: #6a737d; } /* Documentation */
-    code span.dt { color: #d73a49; } /* DataType */
-    code span.dv { color: #005cc5; } /* DecVal */
-    code span.er { color: #ff5555; text-decoration: underline; } /* Error */
-    code span.ex { color: #d73a49; font-weight: bold; } /* Extension */
-    code span.fl { color: #005cc5; } /* Float */
-    code span.fu { color: #6f42c1; } /* Function */
-    code span.im { color: #032f62; } /* Import */
-    code span.in { color: #6a737d; } /* Information */
-    code span.kw { color: #d73a49; } /* Keyword */
-    code span.op { color: #24292e; } /* Operator */
-    code span.ot { color: #6f42c1; } /* Other */
-    code span.pp { color: #d73a49; } /* Preprocessor */
-    code span.re { color: #6a737d; } /* RegionMarker */
-    code span.sc { color: #005cc5; } /* SpecialChar */
-    code span.ss { color: #032f62; } /* SpecialString */
-    code span.st { color: #032f62; } /* String */
-    code span.va { color: #e36209; } /* Variable */
-    code span.vs { color: #032f62; } /* VerbatimString */
-    code span.wa { color: #ff5555; } /* Warning */
-  </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-3ac394b1d208f7e66508159e07493236.css">
-  <link rel="stylesheet" href="../../assets/quiz.css">
-  <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
-  <style type="text/css">
-    .reveal div.sourceCode {
-      margin: 0;
-      overflow: auto;
-    }
-    .reveal div.hanging-indent {
-      margin-left: 1em;
-      text-indent: -1em;
-    }
-    .reveal .slide:not(.center) {
-      height: 100%;
-    }
-    .reveal .slide.scrollable {
-      overflow-y: auto;
-    }
-    .reveal .footnotes {
-      height: 100%;
-      overflow-y: auto;
-    }
-    .reveal .slide .absolute {
-      position: absolute;
-      display: block;
-    }
-    .reveal .footnotes ol {
-      counter-reset: ol;
-      list-style-type: none; 
-      margin-left: 0;
-    }
-    .reveal .footnotes ol li:before {
-      counter-increment: ol;
-      content: counter(ol) ". "; 
-    }
-    .reveal .footnotes ol li > p:first-child {
-      display: inline-block;
-    }
-    .reveal .slide ul,
-    .reveal .slide ol {
-      margin-bottom: 0.5em;
-    }
-    .reveal .slide ul li,
-    .reveal .slide ol li {
-      margin-top: 0.4em;
-      margin-bottom: 0.2em;
-    }
-    .reveal .slide ul[role="tablist"] li {
-      margin-bottom: 0;
-    }
-    .reveal .slide ul li > *:first-child,
-    .reveal .slide ol li > *:first-child {
-      margin-block-start: 0;
-    }
-    .reveal .slide ul li > *:last-child,
-    .reveal .slide ol li > *:last-child {
-      margin-block-end: 0;
-    }
-    .reveal .slide .columns:nth-child(3) {
-      margin-block-start: 0.8em;
-    }
-    .reveal blockquote {
-      box-shadow: none;
-    }
-    .reveal .tippy-content>* {
-      margin-top: 0.2em;
-      margin-bottom: 0.7em;
-    }
-    .reveal .tippy-content>*:last-child {
-      margin-bottom: 0.2em;
-    }
-    .reveal .slide > img.stretch.quarto-figure-center,
-    .reveal .slide > img.r-stretch.quarto-figure-center {
-      display: block;
-      margin-left: auto;
-      margin-right: auto; 
-    }
-    .reveal .slide > img.stretch.quarto-figure-left,
-    .reveal .slide > img.r-stretch.quarto-figure-left  {
-      display: block;
-      margin-left: 0;
-      margin-right: auto; 
-    }
-    .reveal .slide > img.stretch.quarto-figure-right,
-    .reveal .slide > img.r-stretch.quarto-figure-right  {
-      display: block;
-      margin-left: auto;
-      margin-right: 0; 
-    }
-  </style>
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script><link rel="stylesheet" href="../../assets/quiz.css">
 <meta property="og:title" content="From fixes to trajectories – Animal Tracking">
 <meta property="og:description" content="Session 3 — Data cleaning, bursts, resampling">
+<meta property="og:image" content="https://giulianocolosimo.github.io/animtrack-2627/classes/class-03/slides_files/figure-revealjs/unnamed-chunk-2-1.png">
 <meta property="og:site_name" content="Animal Tracking">
 <meta property="og:locale" content="en_US">
+<meta property="og:image:height" content="883">
+<meta property="og:image:width" content="2304">
 </head>
-<body class="quarto-light">
-  <div class="reveal">
-    <div class="slides">
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
-<section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">From fixes to trajectories</h1>
-  <p class="subtitle">Session 3 — Data cleaning, bursts, resampling</p>
-
-<div class="quarto-title-authors">
-<div class="quarto-title-author">
-<div class="quarto-title-author-name">
-Giuliano Colosimo 
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Animal Tracking</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link active" href="../../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../calendar.html"> 
+<span class="menu-text">Calendar</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../syllabus.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../setup.html"> 
+<span class="menu-text">Setup</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../data.html"> 
+<span class="menu-text">Data</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resources.html"> 
+<span class="menu-text">Resources</span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
 </div>
-        <p class="quarto-title-affiliation">
+      </div> <!-- /container-fluid -->
+    </nav><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Sessions</li><li class="breadcrumb-item"><a href="../../classes/class-03/slides.html">3 · From fixes to trajectories</a></li><li class="breadcrumb-item"><a href="../../classes/class-03/slides.html">Slides — Cleaning, bursts, resampling</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-center sidebar-header">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../.././assets/figures/avatar.jpg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none"><img src="../.././assets/figures/avatar.jpg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none"></a>
+      <div class="sidebar-tools-main">
+    <a href="https://github.com/GiulianoColosimo/animtrack-2627" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="mailto:giuliano.colosimo@uniroma2.it" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-envelope"></i></a>
+</div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../calendar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Calendar</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../syllabus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Syllabus</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Software setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datasets</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Sessions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">1 · Foundations</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-01/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides — Why animals move, how we watch them</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-01/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">2 · Spatial data in R</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-02/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides — The survival kit</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-02/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">3 · From fixes to trajectories</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-03/slides.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Slides — Cleaning, bursts, resampling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-03/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">4 · Quantifying movement</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-04/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides — Path descriptors, behaviour</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-04/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">5 · Movement models</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-05/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides — Random walks and simulation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-05/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">6 · Home ranges</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-06/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides — MCP → KDE → BBMM → AKDE</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-06/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">7 · Habitat selection</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-07/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides — RSF and SSF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-07/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">8 · Hidden Markov models</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-08/slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides — States, frontier, synthesis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../classes/class-08/exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../resources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Resources</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li><a href="#today" id="toc-today" class="nav-link active" data-scroll-target="#today">Today</a></li>
+  <li><a href="#where-we-are-going" id="toc-where-we-are-going" class="nav-link" data-scroll-target="#where-we-are-going">Where we are going</a></li>
+  <li>
+<a href="#positions-are-not-paths" id="toc-positions-are-not-paths" class="nav-link" data-scroll-target="#positions-are-not-paths">1 · Positions are not paths</a>
+  <ul class="collapse">
+<li><a href="#what-a-gps-track-actually-is" id="toc-what-a-gps-track-actually-is" class="nav-link" data-scroll-target="#what-a-gps-track-actually-is">What a GPS track actually is</a></li>
+  <li><a href="#the-step" id="toc-the-step" class="nav-link" data-scroll-target="#the-step">The step</a></li>
+  <li><a href="#steps-and-turns-of-a-real-buffalo" id="toc-steps-and-turns-of-a-real-buffalo" class="nav-link" data-scroll-target="#steps-and-turns-of-a-real-buffalo">Steps and turns of a real buffalo</a></li>
+  <li><a href="#location-error-why-you-cannot-connect-the-dots" id="toc-location-error-why-you-cannot-connect-the-dots" class="nav-link" data-scroll-target="#location-error-why-you-cannot-connect-the-dots">Location error: why you cannot connect the dots</a></li>
+  <li><a href="#what-error-looks-like" id="toc-what-error-looks-like" class="nav-link" data-scroll-target="#what-error-looks-like">What error looks like</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#getting-data" id="toc-getting-data" class="nav-link" data-scroll-target="#getting-data">2 · Getting data</a>
+  <ul class="collapse">
+<li><a href="#movebank-in-r" id="toc-movebank-in-r" class="nav-link" data-scroll-target="#movebank-in-r">Movebank in R</a></li>
+  <li><a href="#two-object-models" id="toc-two-object-models" class="nav-link" data-scroll-target="#two-object-models">Two object models</a></li>
+  <li><a href="#making-a-track" id="toc-making-a-track" class="nav-link" data-scroll-target="#making-a-track">Making a track</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#cleaning" id="toc-cleaning" class="nav-link" data-scroll-target="#cleaning">3 · Cleaning</a>
+  <ul class="collapse">
+<li><a href="#the-four-things-that-are-always-wrong" id="toc-the-four-things-that-are-always-wrong" class="nav-link" data-scroll-target="#the-four-things-that-are-always-wrong">The four things that are always wrong</a></li>
+  <li><a href="#duplicates-are-not-all-the-same" id="toc-duplicates-are-not-all-the-same" class="nav-link" data-scroll-target="#duplicates-are-not-all-the-same">Duplicates are not all the same</a></li>
+  <li><a href="#speed-filtering-useful-and-dangerous" id="toc-speed-filtering-useful-and-dangerous" class="nav-link" data-scroll-target="#speed-filtering-useful-and-dangerous">Speed filtering: useful and dangerous</a></li>
+  <li><a href="#quiz" id="toc-quiz" class="nav-link" data-scroll-target="#quiz">Quiz</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#bursts-gaps-and-regularity" id="toc-bursts-gaps-and-regularity" class="nav-link" data-scroll-target="#bursts-gaps-and-regularity">4 · Bursts, gaps and regularity</a>
+  <ul class="collapse">
+<li><a href="#why-it-governs-everything" id="toc-why-it-governs-everything" class="nav-link" data-scroll-target="#why-it-governs-everything">Why it governs everything</a></li>
+  <li><a href="#what-our-buffalo-actually-look-like" id="toc-what-our-buffalo-actually-look-like" class="nav-link" data-scroll-target="#what-our-buffalo-actually-look-like">What our buffalo actually look like</a></li>
+  <li><a href="#gaps-at-a-glance" id="toc-gaps-at-a-glance" class="nav-link" data-scroll-target="#gaps-at-a-glance">Gaps at a glance</a></li>
+  <li><a href="#two-ways-to-hold-a-trajectory" id="toc-two-ways-to-hold-a-trajectory" class="nav-link" data-scroll-target="#two-ways-to-hold-a-trajectory">Two ways to hold a trajectory</a></li>
+  <li><a href="#selecting-versus-interpolating" id="toc-selecting-versus-interpolating" class="nav-link" data-scroll-target="#selecting-versus-interpolating">Selecting versus interpolating</a></li>
+  <li><a href="#truncation-the-start-and-the-end" id="toc-truncation-the-start-and-the-end" class="nav-link" data-scroll-target="#truncation-the-start-and-the-end">Truncation: the start and the end</a></li>
+  <li><a href="#resampling-and-bursts" id="toc-resampling-and-bursts" class="nav-link" data-scroll-target="#resampling-and-bursts">Resampling and bursts</a></li>
+  <li><a href="#the-trap-track_resample-ignores-group_by" id="toc-the-trap-track_resample-ignores-group_by" class="nav-link" data-scroll-target="#the-trap-track_resample-ignores-group_by">The trap: <code>track_resample()</code> ignores <code>group_by()</code></a></li>
+  <li><a href="#who-tolerates-irregular-sampling" id="toc-who-tolerates-irregular-sampling" class="nav-link" data-scroll-target="#who-tolerates-irregular-sampling">Who tolerates irregular sampling?</a></li>
+  <li><a href="#quiz-1" id="toc-quiz-1" class="nav-link" data-scroll-target="#quiz-1">Quiz</a></li>
+  <li><a href="#quiz-2" id="toc-quiz-2" class="nav-link" data-scroll-target="#quiz-2">Quiz</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#attaching-the-environment" id="toc-attaching-the-environment" class="nav-link" data-scroll-target="#attaching-the-environment">5 · Attaching the environment</a>
+  <ul class="collapse">
+<li><a href="#the-operation" id="toc-the-operation" class="nav-link" data-scroll-target="#the-operation">The operation</a></li>
+  <li><a href="#decorated-versus-annotated" id="toc-decorated-versus-annotated" class="nav-link" data-scroll-target="#decorated-versus-annotated">Decorated versus annotated</a></li>
+  <li><a href="#doing-it-in-time" id="toc-doing-it-in-time" class="nav-link" data-scroll-target="#doing-it-in-time">Doing it in time</a></li>
+  <li><a href="#quiz-3" id="toc-quiz-3" class="nav-link" data-scroll-target="#quiz-3">Quiz</a></li>
+  <li><a href="#todays-practical" id="toc-todays-practical" class="nav-link" data-scroll-target="#todays-practical">Today’s practical</a></li>
+  <li>
+<a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">Recap</a>
+  <ul class="collapse">
+<li><a href="#before-session-4" id="toc-before-session-4" class="nav-link" data-scroll-target="#before-session-4">Before Session 4</a></li>
+  </ul>
+</li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/GiulianoColosimo/animtrack-2627/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="slides.html"><i class="bi bi-file-slides"></i>RevealJS</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Sessions</li><li class="breadcrumb-item"><a href="../../classes/class-03/slides.html">3 · From fixes to trajectories</a></li><li class="breadcrumb-item"><a href="../../classes/class-03/slides.html">Slides — Cleaning, bursts, resampling</a></li></ol></nav><div class="quarto-title">
+<h1 class="title">From fixes to trajectories</h1>
+<p class="subtitle lead">Session 3 — Data cleaning, bursts, resampling</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Giuliano Colosimo </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
             University of Rome Tor Vergata
           </p>
-    </div>
-</div>
+      </div>
+  </div>
 
-  <p class="date">2026-10-30</p>
-</section>
-<section id="today" class="slide level2">
-<h2>Today</h2>
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 30, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header><section id="today" class="level2"><h2 class="anchored" data-anchor-id="today">Today</h2>
 <div class="paradigm">
 <p><span class="pbox">Internal state</span> <span class="pbox">Motion capacity</span> <span class="pbox">Navigation capacity</span> <span class="pbox on">External factors</span> <span class="pbox path on">Movement path</span></p>
 </div>
 <p>We turn a table of fixes into a <strong>path</strong> we can defend, and attach the environment to it — in space and in time.</p>
-</section>
-<section id="where-we-are-going" class="slide level2">
-<h2>Where we are going</h2>
+<hr></section><section id="where-we-are-going" class="level2"><h2 class="anchored" data-anchor-id="where-we-are-going">Where we are going</h2>
 <div class="objectives">
 <ol type="1">
 <li>Position data are not path data: what a step and a turning angle really are</li>
 <li>Location error, and why you cannot just connect the dots</li>
-<li><strong>Cleaning</strong>: duplicates, impossible locations, speed outliers</li>
+<li>
+<strong>Cleaning</strong>: duplicates, impossible locations, speed outliers</li>
 <li>Bursts, gaps and truncation; <strong>resampling</strong> to a regular grid</li>
 <li>Which analyses tolerate irregular sampling, and which do not</li>
-<li>Annotating a trajectory with environment <strong>matched in time</strong></li>
+<li>Annotating a trajectory with environment <strong>matched in time</strong>
+</li>
 </ol>
 </div>
 <div class="keyidea">
 <p>80% of a movement analysis is getting the data into a defensible state. Today is that 80%.</p>
 </div>
-</section>
-<section>
-<section id="positions-are-not-paths" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>1 · Positions are not paths</h1>
-
-</section>
-<section id="what-a-gps-track-actually-is" class="slide level2">
-<h2>What a GPS track actually is</h2>
+</section><section id="positions-are-not-paths" class="level1" data-background-color="#14525a"><h1 data-background-color="#14525a">1 · Positions are not paths</h1>
+<hr>
+<section id="what-a-gps-track-actually-is" class="level2"><h2 class="anchored" data-anchor-id="what-a-gps-track-actually-is">What a GPS track actually is</h2>
 <ul>
 <li>A set of <strong>point estimates</strong>, each with an error, at irregular moments</li>
 <li>Between two fixes the animal went <em>somewhere</em>; the straight line is an assumption, not an observation</li>
-<li><strong>Interpolating</strong> a position between fixes invents data — useful for plotting, dangerous for inference</li>
+<li>
+<strong>Interpolating</strong> a position between fixes invents data — useful for plotting, dangerous for inference</li>
 <li>Every derived quantity — step length, speed, turning angle — inherits both the sampling interval and the location error</li>
 </ul>
 <div class="keyidea">
 <p>A track is a <em>sample</em> of a continuous path. Treat every line you draw between fixes as a hypothesis.</p>
 </div>
-</section>
-<section id="the-step" class="slide level2">
-<h2>The step</h2>
+<hr></section><section id="the-step" class="level2"><h2 class="anchored" data-anchor-id="the-step">The step</h2>
 <p>Two consecutive fixes define a <strong>step</strong>.</p>
 <div class="columns">
 <div class="column" style="width:55%;">
 <ul>
-<li><strong>Step length</strong> <span class="math inline">\(s_t = \lVert \mathbf{x}_{t+1} - \mathbf{x}_t \rVert\)</span></li>
-<li><strong>Absolute direction</strong> <span class="math inline">\(\phi_t = \operatorname{atan2}(\Delta y, \Delta x)\)</span></li>
-<li><strong>Turning angle</strong> <span class="math inline">\(\theta_t = \phi_t - \phi_{t-1}\)</span>, wrapped to <span class="math inline">\((-\pi, \pi]\)</span></li>
-<li><strong>Speed</strong> <span class="math inline">\(v_t = s_t / \Delta t\)</span></li>
+<li>
+<strong>Step length</strong> <span class="math inline">\(s_t = \lVert \mathbf{x}_{t+1} - \mathbf{x}_t \rVert\)</span>
+</li>
+<li>
+<strong>Absolute direction</strong> <span class="math inline">\(\phi_t = \operatorname{atan2}(\Delta y, \Delta x)\)</span>
+</li>
+<li>
+<strong>Turning angle</strong> <span class="math inline">\(\theta_t = \phi_t - \phi_{t-1}\)</span>, wrapped to <span class="math inline">\((-\pi, \pi]\)</span>
+</li>
+<li>
+<strong>Speed</strong> <span class="math inline">\(v_t = s_t / \Delta t\)</span>
+</li>
 </ul>
 </div><div class="column" style="width:45%;">
 <div class="keyidea">
 <p>A turning angle needs <strong>three</strong> fixes. A step needs two. That is why <code>filter_min_n_burst(min_n = 3)</code> exists.</p>
 </div>
-</div></div>
-<div class="fragment">
-<p>Turning angles are <strong>circular</strong> data: −179° and +179° are 2° apart, not 358°. Never take an arithmetic mean of angles.</p>
 </div>
-</section>
-<section id="steps-and-turns-of-a-real-buffalo" class="slide level2">
-<h2>Steps and turns of a real buffalo</h2>
-
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+</div>
+<p>. . .</p>
+<p>Turning angles are <strong>circular</strong> data: −179° and +179° are 2° apart, not 358°. Never take an arithmetic mean of angles.</p>
+<hr></section><section id="steps-and-turns-of-a-real-buffalo" class="level2"><h2 class="anchored" data-anchor-id="steps-and-turns-of-a-real-buffalo">Steps and turns of a real buffalo</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
 <p>Cilla, hourly steps. Short steps dominate; turning angles concentrate near 0° (keep going). The bars at −180° and +180° are the same reversal, split in two by the axis.</p>
-</section>
-<section id="location-error-why-you-cannot-connect-the-dots" class="slide level2">
-<h2>Location error: why you cannot connect the dots</h2>
+<hr></section><section id="location-error-why-you-cannot-connect-the-dots" class="level2"><h2 class="anchored" data-anchor-id="location-error-why-you-cannot-connect-the-dots">Location error: why you cannot connect the dots</h2>
 <ul>
 <li>A 15 m error on each fix is negligible on a 1 km step, and <strong>dominates</strong> a 20 m step</li>
 <li>For short steps the <em>direction</em> is mostly noise, so turning angles look random exactly when the animal is resting</li>
@@ -294,119 +792,116 @@ Giuliano Colosimo
 <div class="keyidea">
 <p>Resting animals look like they are wandering at random, and spikes look like sprints. Neither is behaviour. Both reach your models unless you look first.</p>
 </div>
-</section>
-<section id="what-error-looks-like" class="slide level2">
-<h2>What error looks like</h2>
-
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank); right panel simulated</span></p>
+<hr></section><section id="what-error-looks-like" class="level2"><h2 class="anchored" data-anchor-id="what-error-looks-like">What error looks like</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank); right panel simulated</span></p>
 <p>Left: real data, 24 hours either side of a corrupt fix. Right: simulated — 48 hourly fixes of a motionless collar with 15 m error. It “walks” 1 km a day and turns at random.</p>
-</section></section>
-<section>
-<section id="getting-data" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>2 · Getting data</h1>
-
-</section>
-<section id="movebank-in-r" class="slide level2">
-<h2>Movebank in R</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(move2)</span>
-<span id="cb1-2"><a></a></span>
-<span id="cb1-3"><a></a><span class="co"># Interactive login, stored in your keyring</span></span>
-<span id="cb1-4"><a></a><span class="fu">movebank_store_credentials</span>(<span class="st">"your_username"</span>)</span>
-<span id="cb1-5"><a></a></span>
-<span id="cb1-6"><a></a><span class="co"># What is available?</span></span>
-<span id="cb1-7"><a></a><span class="fu">movebank_download_study_info</span>(<span class="at">license_type =</span> <span class="st">"CC_0"</span>)</span>
-<span id="cb1-8"><a></a></span>
-<span id="cb1-9"><a></a><span class="co"># Download a study</span></span>
-<span id="cb1-10"><a></a>buff <span class="ot">&lt;-</span> <span class="fu">movebank_download_study</span>(</span>
-<span id="cb1-11"><a></a>  <span class="at">study_id  =</span> <span class="dv">1764627</span>,</span>
-<span id="cb1-12"><a></a>  <span class="at">sensor_type_id =</span> <span class="st">"gps"</span></span>
-<span id="cb1-13"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section></section><section id="getting-data" class="level1" data-background-color="#14525a"><h1 data-background-color="#14525a">2 · Getting data</h1>
+<hr>
+<section id="movebank-in-r" class="level2"><h2 class="anchored" data-anchor-id="movebank-in-r">Movebank in R</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bartk.gitlab.io/move2/">move2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Interactive login, stored in your keyring</span></span>
+<span><span class="fu"><a href="https://bartk.gitlab.io/move2/reference/movebank_store_credentials.html">movebank_store_credentials</a></span><span class="op">(</span><span class="st">"your_username"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># What is available?</span></span>
+<span><span class="fu"><a href="https://bartk.gitlab.io/move2/reference/movebank_download_study.html">movebank_download_study_info</a></span><span class="op">(</span>license_type <span class="op">=</span> <span class="st">"CC_0"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Download a study</span></span>
+<span><span class="va">buff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://bartk.gitlab.io/move2/reference/movebank_download_study.html">movebank_download_study</a></span><span class="op">(</span></span>
+<span>  study_id  <span class="op">=</span> <span class="fl">1764627</span>,</span>
+<span>  sensor_type_id <span class="op">=</span> <span class="st">"gps"</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Today we read the CSVs from <code>data/</code> instead — no accounts, no network, and everyone gets identical results. But this is how you get your own data.</p>
-</section>
-<section id="two-object-models" class="slide level2">
-<h2>Two object models</h2>
+<hr></section><section id="two-object-models" class="level2"><h2 class="anchored" data-anchor-id="two-object-models">Two object models</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<h3 id="move2"><code>move2</code></h3>
+<section id="move2" class="level3"><h3 class="anchored" data-anchor-id="move2"><code>move2</code></h3>
 <p>An <strong><code>sf</code> data frame</strong> with a track id and a time column, plus metadata.</p>
 <p>Closest to Movebank’s own structure. Good for <strong>data management</strong>: multiple studies, deployments, sensors.</p>
-<p><code>mt_time()</code>, <code>mt_track_id()</code>, <code>mt_distance()</code>, <code>mt_speed()</code></p>
+<p><code><a href="https://bartk.gitlab.io/move2/reference/mt_time.html">mt_time()</a></code>, <code><a href="https://bartk.gitlab.io/move2/reference/mt_track_id.html">mt_track_id()</a></code>, <code><a href="https://bartk.gitlab.io/move2/reference/mt_distance.html">mt_distance()</a></code>, <code><a href="https://bartk.gitlab.io/move2/reference/mt_distance.html">mt_speed()</a></code></p>
+</section>
 </div><div class="column" style="width:50%;">
-<h3 id="amt"><code>amt</code></h3>
+<section id="amt" class="level3"><h3 class="anchored" data-anchor-id="amt"><code>amt</code></h3>
 <p>A <strong>tibble</strong> with columns <code>x_</code>, <code>y_</code>, <code>t_</code> and a CRS.</p>
 <p>Deliberately minimal. Built for <strong>analysis</strong>: resampling, steps, home ranges, RSF, SSF.</p>
 <p><code>make_track()</code>, <code>track_resample()</code>, <code>steps()</code></p>
-</div></div>
+</section>
+</div>
+</div>
 <div class="keyidea">
 <p>They convert into each other. Use <code>move2</code> to <em>organise</em>, <code>amt</code> to <em>analyse</em>. This course lives mostly in <code>amt</code>.</p>
 </div>
-</section>
-<section id="making-a-track" class="slide level2">
-<h2>Making a track</h2>
+<hr></section><section id="making-a-track" class="level2"><h2 class="anchored" data-anchor-id="making-a-track">Making a track</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a></a><span class="in">```{r}</span></span>
-<span id="cb2-2"><a></a><span class="co">#| eval: false</span></span>
-<span id="cb2-3"><a></a><span class="fu">library</span>(amt)</span>
-<span id="cb2-4"><a></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-5"><a></a></span>
-<span id="cb2-6"><a></a>buffalo <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/buffalo_kruger.csv.gz"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb2-7"><a></a>  <span class="fu">transmute</span>(<span class="at">id  =</span> individual.local.identifier,</span>
-<span id="cb2-8"><a></a>            <span class="at">t   =</span> <span class="fu">as.POSIXct</span>(timestamp, <span class="at">tz =</span> <span class="st">"UTC"</span>),</span>
-<span id="cb2-9"><a></a>            <span class="at">x   =</span> location.long,</span>
-<span id="cb2-10"><a></a>            <span class="at">y   =</span> location.lat) <span class="sc">|&gt;</span></span>
-<span id="cb2-11"><a></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(x), <span class="sc">!</span><span class="fu">is.na</span>(y)) <span class="sc">|&gt;</span></span>
-<span id="cb2-12"><a></a>  <span class="fu">distinct</span>(id, t, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-13"><a></a></span>
-<span id="cb2-14"><a></a>trk <span class="ot">&lt;-</span> <span class="fu">make_track</span>(buffalo, x, y, t, <span class="at">id =</span> id, <span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span></span>
-<span id="cb2-15"><a></a>  <span class="fu">transform_coords</span>(<span class="at">crs_to =</span> <span class="dv">32736</span>)</span>
-<span id="cb2-16"><a></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(amt)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>buffalo <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/buffalo_kruger.csv.gz"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">id  =</span> individual.local.identifier,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">t   =</span> <span class="fu">as.POSIXct</span>(timestamp, <span class="at">tz =</span> <span class="st">"UTC"</span>),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">x   =</span> location.long,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">y   =</span> location.lat) <span class="sc">|&gt;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(x), <span class="sc">!</span><span class="fu">is.na</span>(y)) <span class="sc">|&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(id, t, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>trk <span class="ot">&lt;-</span> <span class="fu">make_track</span>(buffalo, x, y, t, <span class="at">id =</span> id, <span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transform_coords</span>(<span class="at">crs_to =</span> <span class="dv">32736</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The trailing underscores (<code>x_</code>, <code>y_</code>, <code>t_</code>) are <code>amt</code>’s way of guaranteeing its own columns never collide with yours.</p>
-</section></section>
-<section>
-<section id="cleaning" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>3 · Cleaning</h1>
-
-</section>
-<section id="the-four-things-that-are-always-wrong" class="slide level2">
-<h2>The four things that are always wrong</h2>
+</section></section><section id="cleaning" class="level1" data-background-color="#14525a"><h1 data-background-color="#14525a">3 · Cleaning</h1>
+<hr>
+<section id="the-four-things-that-are-always-wrong" class="level2"><h2 class="anchored" data-anchor-id="the-four-things-that-are-always-wrong">The four things that are always wrong</h2>
 <ol type="1">
-<li><strong>Duplicated fixes</strong> — same individual, same timestamp. The collar re-transmitted. ~13% of our buffalo file.</li>
-<li><strong>Missing coordinates</strong> — a row exists, the location failed.</li>
-<li><strong>Impossible locations</strong> — (0, 0), land animals at sea, points on another continent. Usually a corrupt transmission.</li>
-<li><strong>Speed outliers</strong> — a fix that implies 200 km/h for a buffalo, then a return. A <em>spike</em>.</li>
+<li>
+<strong>Duplicated fixes</strong> — same individual, same timestamp. The collar re-transmitted. ~13% of our buffalo file.</li>
+<li>
+<strong>Missing coordinates</strong> — a row exists, the location failed.</li>
+<li>
+<strong>Impossible locations</strong> — (0, 0), land animals at sea, points on another continent. Usually a corrupt transmission.</li>
+<li>
+<strong>Speed outliers</strong> — a fix that implies 200 km/h for a buffalo, then a return. A <em>spike</em>.</li>
 </ol>
 <div class="keyidea">
 <p>Clean in this order, and <strong>count what you remove at each step</strong>. A cleaning step that silently deletes 30% of your data has changed your study.</p>
 </div>
-</section>
-<section id="duplicates-are-not-all-the-same" class="slide level2">
-<h2>Duplicates are not all the same</h2>
+<hr></section><section id="duplicates-are-not-all-the-same" class="level2"><h2 class="anchored" data-anchor-id="duplicates-are-not-all-the-same">Duplicates are not all the same</h2>
 <ul>
-<li><strong>Exact duplicates</strong> — every field identical. Safe to drop.</li>
-<li><strong>Same timestamp, different coordinates</strong> — which is right? Keep the one with better quality (more satellites, lower DOP); if you cannot tell, keep the first and document it.</li>
-<li><strong>Near-duplicates</strong> — timestamps a few seconds apart. These create near-zero <code>dt</code> and therefore enormous apparent speeds.</li>
+<li>
+<strong>Exact duplicates</strong> — every field identical. Safe to drop.</li>
+<li>
+<strong>Same timestamp, different coordinates</strong> — which is right? Keep the one with better quality (more satellites, lower DOP); if you cannot tell, keep the first and document it.</li>
+<li>
+<strong>Near-duplicates</strong> — timestamps a few seconds apart. These create near-zero <code>dt</code> and therefore enormous apparent speeds.</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co"># Blunt but explicit</span></span>
-<span id="cb3-2"><a></a>trk <span class="sc">|&gt;</span> <span class="fu">distinct</span>(id, t_, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-3"><a></a></span>
-<span id="cb3-4"><a></a><span class="co"># move2 is more careful about the ambiguous case</span></span>
-<span id="cb3-5"><a></a>move2<span class="sc">::</span><span class="fu">mt_filter_unique</span>(x, <span class="at">criterion =</span> <span class="st">"first"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="speed-filtering-useful-and-dangerous" class="slide level2">
-<h2>Speed filtering: useful and dangerous</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Blunt but explicit</span></span>
+<span><span class="va">trk</span> <span class="op">|&gt;</span> <span class="fu">distinct</span><span class="op">(</span><span class="va">id</span>, <span class="va">t_</span>, .keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># move2 is more careful about the ambiguous case</span></span>
+<span><span class="fu">move2</span><span class="fu">::</span><span class="fu"><a href="https://bartk.gitlab.io/move2/reference/mt_filter_unique.html">mt_filter_unique</a></span><span class="op">(</span><span class="va">x</span>, criterion <span class="op">=</span> <span class="st">"first"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr></section><section id="speed-filtering-useful-and-dangerous" class="level2"><h2 class="anchored" data-anchor-id="speed-filtering-useful-and-dangerous">Speed filtering: useful and dangerous</h2>
 <ul>
 <li>Compute speed between consecutive fixes; drop anything above a biologically plausible maximum</li>
 <li>Buffalo ~ 10 km/h sustained; vulture ~ 80 km/h in flight</li>
-<li><strong>The danger</strong>: a threshold that is too low deletes real fast movement — exactly the migration or escape events you may care about</li>
-<li><strong>The subtlety</strong>: one bad fix creates <em>two</em> fast steps (out and back). Naïve filters often delete the good neighbour instead of the bad point</li>
+<li>
+<strong>The danger</strong>: a threshold that is too low deletes real fast movement — exactly the migration or escape events you may care about</li>
+<li>
+<strong>The subtlety</strong>: one bad fix creates <em>two</em> fast steps (out and back). Naïve filters often delete the good neighbour instead of the bad point</li>
 </ul>
 <div class="keyidea">
 <p>Never filter silently. Plot what you are about to remove, look at it, then remove it. The <code>sdafilter</code>/<code>argosfilter</code> approach — which tests whether a point is fast <strong>and</strong> forms a spike — is better than a plain speed threshold.</p>
 </div>
-</section>
-<section id="quiz" class="slide level2">
-<h2>Quiz</h2>
+<hr></section><section id="quiz" class="level2"><h2 class="anchored" data-anchor-id="quiz">Quiz</h2>
 <div class="quiz">
 <p>You remove all fixes implying a speed above 15 km/h from the buffalo data, and your dataset shrinks by 0.4%. Then you compute mean daily displacement and it <em>drops by 18%</em>. What is the most likely explanation?</p>
 <ul class="task-list">
@@ -421,27 +916,23 @@ Giuliano Colosimo
 <p>Correct order: remove duplicates and near-duplicates <strong>first</strong>, resample to a regular interval <strong>second</strong>, and only then consider a speed filter — on steps that share a common <code>dt</code>.</p>
 </div>
 </div>
-</section></section>
-<section>
-<section id="bursts-gaps-and-regularity" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>4 · Bursts, gaps and regularity</h1>
-
-</section>
-<section id="why-it-governs-everything" class="slide level2">
-<h2>Why it governs everything</h2>
+</section></section><section id="bursts-gaps-and-regularity" class="level1" data-background-color="#14525a"><h1 data-background-color="#14525a">4 · Bursts, gaps and regularity</h1>
+<hr>
+<section id="why-it-governs-everything" class="level2"><h2 class="anchored" data-anchor-id="why-it-governs-everything">Why it governs everything</h2>
 <ul>
-<li><strong>Step length and turning angle</strong> are only comparable across steps of the same duration</li>
-<li><strong>HMMs</strong> (Session 8) assume a regular interval; irregular data need a continuous-time model instead</li>
-<li><strong>SSFs</strong> (Session 7) compare each observed step to alternatives of the <em>same</em> duration</li>
-<li><strong>KDE home ranges</strong> assume roughly even coverage in time</li>
+<li>
+<strong>Step length and turning angle</strong> are only comparable across steps of the same duration</li>
+<li>
+<strong>HMMs</strong> (Session 8) assume a regular interval; irregular data need a continuous-time model instead</li>
+<li>
+<strong>SSFs</strong> (Session 7) compare each observed step to alternatives of the <em>same</em> duration</li>
+<li>
+<strong>KDE home ranges</strong> assume roughly even coverage in time</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>trk <span class="sc">|&gt;</span> <span class="fu">summarize_sampling_rate_many</span>(<span class="at">cols =</span> <span class="st">"id"</span>, <span class="at">time_unit =</span> <span class="st">"hour"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="what-our-buffalo-actually-look-like" class="slide level2">
-<h2>What our buffalo actually look like</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">trk</span> <span class="op">|&gt;</span> <span class="fu">summarize_sampling_rate_many</span><span class="op">(</span>cols <span class="op">=</span> <span class="st">"id"</span>, time_unit <span class="op">=</span> <span class="st">"hour"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr></section><section id="what-our-buffalo-actually-look-like" class="level2"><h2 class="anchored" data-anchor-id="what-our-buffalo-actually-look-like">What our buffalo actually look like</h2>
+<table class="caption-top table">
+<thead><tr class="header">
 <th style="text-align: left;">id</th>
 <th style="text-align: right;">min</th>
 <th style="text-align: right;">q1</th>
@@ -450,8 +941,7 @@ Giuliano Colosimo
 <th style="text-align: right;">q3</th>
 <th style="text-align: right;">max</th>
 <th style="text-align: right;">n</th>
-</tr>
-</thead>
+</tr></thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Queen</td>
@@ -494,72 +984,82 @@ Giuliano Colosimo
 <div class="keyidea">
 <p>Report the <strong>median</strong>, not the mean, for sampling intervals. And always look at the maximum.</p>
 </div>
-</section>
-<section id="gaps-at-a-glance" class="slide level2">
-<h2>Gaps at a glance</h2>
-
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<hr></section><section id="gaps-at-a-glance" class="level2"><h2 class="anchored" data-anchor-id="gaps-at-a-glance">Gaps at a glance</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
 <p>One tick per fix. Queen’s collar went silent for 105 days in mid-2005; Pepper’s schedule frays into gaps through late 2006.</p>
-</section>
-<section id="two-ways-to-hold-a-trajectory" class="slide level2">
-<h2>Two ways to hold a trajectory</h2>
+<hr></section><section id="two-ways-to-hold-a-trajectory" class="level2"><h2 class="anchored" data-anchor-id="two-ways-to-hold-a-trajectory">Two ways to hold a trajectory</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<h3 id="adehabitatltltraj"><code>adehabitatLT::ltraj</code></h3>
+<section id="adehabitatltltraj" class="level3"><h3 class="anchored" data-anchor-id="adehabitatltltraj"><code>adehabitatLT::ltraj</code></h3>
 <p>The classic (Calenge 2006). One data frame per <strong>burst</strong>, with <code>dist</code>, <code>dt</code>, <code>R2n</code> (squared displacement), <code>abs.angle</code> and <code>rel.angle</code> precomputed.</p>
 <p><code>redisltraj()</code> regularises by <strong>interpolating</strong> new positions.</p>
+</section>
 </div><div class="column" style="width:50%;">
-<h3 id="amttrack_xyt"><code>amt::track_xyt</code></h3>
+<section id="amttrack_xyt" class="level3"><h3 class="anchored" data-anchor-id="amttrack_xyt"><code>amt::track_xyt</code></h3>
 <p>A tidy tibble. Steps, angles and covariates are computed when you ask.</p>
 <p><code>track_resample()</code> regularises by <strong>selecting</strong> existing fixes.</p>
-</div></div>
+</section>
+</div>
+</div>
 <div class="keyidea">
 <p>The two “regularise” functions do opposite things. One keeps only what you observed; the other manufactures positions you did not observe.</p>
 </div>
-</section>
-<section id="selecting-versus-interpolating" class="slide level2">
-<h2>Selecting versus interpolating</h2>
-
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<hr></section><section id="selecting-versus-interpolating" class="level2"><h2 class="anchored" data-anchor-id="selecting-versus-interpolating">Selecting versus interpolating</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
 <p>Toni across a 9-hour gap. Selection ends the burst at the gap; interpolation fills it with evenly spaced positions on a straight line the buffalo almost certainly did not walk.</p>
-</section>
-<section id="truncation-the-start-and-the-end" class="slide level2">
-<h2>Truncation: the start and the end</h2>
+<hr></section><section id="truncation-the-start-and-the-end" class="level2"><h2 class="anchored" data-anchor-id="truncation-the-start-and-the-end">Truncation: the start and the end</h2>
 <ul>
-<li><strong>After capture</strong> — animals often behave abnormally for days (flight, restricted movement). Many studies discard a fixed post-capture window</li>
-<li><strong>Before the end</strong> — a collar that stops moving may mean a dead animal or a dropped collar, not a resting one</li>
-<li><strong>At gaps</strong> — a burst ends wherever fixes are missing; steps are never computed across a gap</li>
+<li>
+<strong>After capture</strong> — animals often behave abnormally for days (flight, restricted movement). Many studies discard a fixed post-capture window</li>
+<li>
+<strong>Before the end</strong> — a collar that stops moving may mean a dead animal or a dropped collar, not a resting one</li>
+<li>
+<strong>At gaps</strong> — a burst ends wherever fixes are missing; steps are never computed across a gap</li>
 </ul>
 <div class="keyidea">
 <p>Decide the truncation rules <strong>before</strong> you look at the results, write them down, and report how much data they removed.</p>
 </div>
-</section>
-<section id="resampling-and-bursts" class="slide level2">
-<h2>Resampling and bursts</h2>
+<hr></section><section id="resampling-and-bursts" class="level2"><h2 class="anchored" data-anchor-id="resampling-and-bursts">Resampling and bursts</h2>
 <p><code>track_resample()</code> keeps fixes that fall on a regular grid within a tolerance, and labels contiguous runs as <strong>bursts</strong>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>trk <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a></a>  <span class="fu">track_resample</span>(<span class="at">rate =</span> <span class="fu">hours</span>(<span class="dv">1</span>), <span class="at">tolerance =</span> <span class="fu">minutes</span>(<span class="dv">10</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a></a>  <span class="fu">filter_min_n_burst</span>(<span class="at">min_n =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">trk</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">track_resample</span><span class="op">(</span>rate <span class="op">=</span> <span class="fu">hours</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, tolerance <span class="op">=</span> <span class="fu">minutes</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">filter_min_n_burst</span><span class="op">(</span>min_n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
-<li><code>rate</code> — the interval you want</li>
-<li><code>tolerance</code> — how much slack. Too tight and you throw away good data; too loose and “hourly” steps are really 40–80 minutes</li>
+<li>
+<code>rate</code> — the interval you want</li>
+<li>
+<code>tolerance</code> — how much slack. Too tight and you throw away good data; too loose and “hourly” steps are really 40–80 minutes</li>
 <li>A <strong>burst</strong> breaks wherever a fix is missing. Steps are computed <em>within</em> bursts, never across a gap</li>
-<li><code>min_n = 3</code> because a turning angle needs three points</li>
+<li>
+<code>min_n = 3</code> because a turning angle needs three points</li>
 </ul>
-</section>
-<section id="the-trap-track_resample-ignores-group_by" class="slide level2">
-<h2>The trap: <code>track_resample()</code> ignores <code>group_by()</code></h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># WRONG — one time grid laid across six interleaved animals</span></span>
-<span id="cb6-2"><a></a>trk <span class="sc">|&gt;</span> <span class="fu">group_by</span>(id) <span class="sc">|&gt;</span> <span class="fu">track_resample</span>(<span class="at">rate =</span> <span class="fu">hours</span>(<span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<table class="caption-top">
-<thead>
-<tr class="header">
+<hr></section><section id="the-trap-track_resample-ignores-group_by" class="level2"><h2 class="anchored" data-anchor-id="the-trap-track_resample-ignores-group_by">The trap: <code>track_resample()</code> ignores <code>group_by()</code>
+</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># WRONG — one time grid laid across six interleaved animals</span></span>
+<span><span class="va">trk</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">track_resample</span><span class="op">(</span>rate <span class="op">=</span> <span class="fu">hours</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead><tr class="header">
 <th style="text-align: left;">id</th>
 <th style="text-align: right;">fixes before</th>
 <th style="text-align: right;">grouped (wrong)</th>
 <th style="text-align: right;">per animal (right)</th>
-</tr>
-</thead>
+</tr></thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Cilla</td>
@@ -581,36 +1081,31 @@ Giuliano Colosimo
 </tr>
 </tbody>
 </table>
-<div class="fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co"># RIGHT — each animal gets its own grid</span></span>
-<span id="cb7-2"><a></a>resample_one <span class="ot">&lt;-</span> <span class="cf">function</span>(d) {</span>
-<span id="cb7-3"><a></a>  <span class="fu">track_resample</span>(d, <span class="at">rate =</span> <span class="fu">hours</span>(<span class="dv">1</span>), <span class="at">tolerance =</span> <span class="fu">minutes</span>(<span class="dv">10</span>))</span>
-<span id="cb7-4"><a></a>}</span>
-<span id="cb7-5"><a></a></span>
-<span id="cb7-6"><a></a>trk <span class="sc">|&gt;</span></span>
-<span id="cb7-7"><a></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>id) <span class="sc">|&gt;</span></span>
-<span id="cb7-8"><a></a>  <span class="fu">mutate</span>(<span class="at">data =</span> <span class="fu">lapply</span>(data, resample_one)) <span class="sc">|&gt;</span></span>
-<span id="cb7-9"><a></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>. . .</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># RIGHT — each animal gets its own grid</span></span>
+<span><span class="va">resample_one</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">track_resample</span><span class="op">(</span><span class="va">d</span>, rate <span class="op">=</span> <span class="fu">hours</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, tolerance <span class="op">=</span> <span class="fu">minutes</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">trk</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">nest</span><span class="op">(</span>data <span class="op">=</span> <span class="op">-</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">resample_one</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">unnest</span><span class="op">(</span>cols <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="keyidea">
 <p>No error, no warning — just 58% of your data gone. <strong>Not every function respects <code>dplyr</code> grouping.</strong> When a step removes far more than you expected, check the per-group counts before you accept it.</p>
 </div>
-</div>
-</section>
-<section id="who-tolerates-irregular-sampling" class="slide level2">
-<h2>Who tolerates irregular sampling?</h2>
-<table class="caption-top">
+<hr></section><section id="who-tolerates-irregular-sampling" class="level2"><h2 class="anchored" data-anchor-id="who-tolerates-irregular-sampling">Who tolerates irregular sampling?</h2>
+<table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
 <col style="width: 33%">
 <col style="width: 33%">
 </colgroup>
-<thead>
-<tr class="header">
+<thead><tr class="header">
 <th style="text-align: left;">Method</th>
 <th style="text-align: left;">Irregular sampling?</th>
 <th style="text-align: left;">Why</th>
-</tr>
-</thead>
+</tr></thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">MCP, classical KDE</td>
@@ -634,17 +1129,16 @@ Giuliano Colosimo
 </tr>
 <tr class="odd">
 <td style="text-align: left;">HMM (Session 8)</td>
-<td style="text-align: left;"><strong>no</strong>, not directly</td>
-<td style="text-align: left;">discrete time steps; impute a regular grid first (<code>momentuHMM::crawlWrap</code>)</td>
+<td style="text-align: left;">
+<strong>no</strong>, not directly</td>
+<td style="text-align: left;">discrete time steps; impute a regular grid first (<code><a href="https://rdrr.io/pkg/momentuHMM/man/crawlWrap.html">momentuHMM::crawlWrap</a></code>)</td>
 </tr>
 </tbody>
 </table>
 <div class="keyidea">
 <p>Regularity is not a cosmetic property of your data. It decides which methods you are allowed to use.</p>
 </div>
-</section>
-<section id="quiz-1" class="slide level2">
-<h2>Quiz</h2>
+<hr></section><section id="quiz-1" class="level2"><h2 class="anchored" data-anchor-id="quiz-1">Quiz</h2>
 <div class="quiz">
 <p><code>track_resample()</code> <strong>interpolates</strong> missing locations to give you a regular series. True or false?</p>
 <ul class="task-list">
@@ -652,14 +1146,12 @@ Giuliano Colosimo
 <li><label><input type="checkbox" checked="">False — it selects existing fixes and discards the rest</label></li>
 </ul>
 <div class="quiz-feedback">
-<p><code>amt::track_resample()</code> is a <strong>filter</strong>, not an interpolator. It walks the track and keeps the fixes that fall close enough to a regular time grid; where no fix is available, the burst simply ends. You never gain observations you did not make.</p>
+<p><code><a href="https://rdrr.io/pkg/amt/man/track_resample.html">amt::track_resample()</a></code> is a <strong>filter</strong>, not an interpolator. It walks the track and keeps the fixes that fall close enough to a regular time grid; where no fix is available, the burst simply ends. You never gain observations you did not make.</p>
 <p>That is deliberate. Interpolating locations invents data and then feeds the invention into a model as if it were an observation, which biases step-length and turning-angle distributions towards straighter, slower movement.</p>
 <p>If you genuinely need locations between fixes, use a model that says so — a continuous-time movement model (<code>ctmm</code>) or a state-space model — which gives you interpolated positions <strong>with uncertainty attached</strong>.</p>
 </div>
 </div>
-</section>
-<section id="quiz-2" class="slide level2">
-<h2>Quiz</h2>
+<hr></section><section id="quiz-2" class="level2"><h2 class="anchored" data-anchor-id="quiz-2">Quiz</h2>
 <div class="quiz">
 <p>A colleague reports a mean sampling interval of 2.45 hours for a collar programmed to fix hourly. What does that number actually tell you?</p>
 <ul class="task-list">
@@ -674,43 +1166,41 @@ Giuliano Colosimo
 <p>And no, you cannot read the fix success rate off the mean. Success rate is the proportion of <em>scheduled attempts</em> that returned a location, which you get by dividing each gap by the modal interval and counting the misses.</p>
 </div>
 </div>
-</section></section>
-<section>
-<section id="attaching-the-environment" class="title-slide slide level1 center" data-background-color="#14525a">
-<h1>5 · Attaching the environment</h1>
-
-</section>
-<section id="the-operation" class="slide level2">
-<h2>The operation</h2>
+</section></section><section id="attaching-the-environment" class="level1" data-background-color="#14525a"><h1 data-background-color="#14525a">5 · Attaching the environment</h1>
+<hr>
+<section id="the-operation" class="level2"><h2 class="anchored" data-anchor-id="the-operation">The operation</h2>
 <p>For every fix, look up the environment <strong>there</strong> and <strong>then</strong>.</p>
 <ul>
-<li><strong>Static</strong> covariates — elevation, slope, distance to river. One raster; <code>extract()</code> and done.</li>
-<li><strong>Dynamic</strong> covariates — NDVI, temperature, snow. A <strong>stack</strong> of rasters with timestamps. You must match each fix to the right layer.</li>
+<li>
+<strong>Static</strong> covariates — elevation, slope, distance to river. One raster; <code>extract()</code> and done.</li>
+<li>
+<strong>Dynamic</strong> covariates — NDVI, temperature, snow. A <strong>stack</strong> of rasters with timestamps. You must match each fix to the right layer.</li>
 </ul>
 <div class="keyidea">
 <p>A track that spans two years annotated with a <em>single</em> NDVI image is not annotated — it is decorated. If your covariate varies in time and your analysis does not, you have thrown away the mechanism.</p>
 </div>
-</section>
-<section id="decorated-versus-annotated" class="slide level2">
-<h2>Decorated versus annotated</h2>
-
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank); MODIS MOD13Q1 NDVI</span></p>
+<hr></section><section id="decorated-versus-annotated" class="level2"><h2 class="anchored" data-anchor-id="decorated-versus-annotated">Decorated versus annotated</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank); MODIS MOD13Q1 NDVI</span></p>
 <p>Queen in 2005. One February image says she lived in green vegetation all year. Matched in time, NDVI halves by September — and the months with no composite nearby are honestly blank.</p>
-</section>
-<section id="doing-it-in-time" class="slide level2">
-<h2>Doing it in time</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># Which layer does each fix belong to?</span></span>
-<span id="cb8-2"><a></a>layer_dates <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">c</span>(<span class="st">"2005-01-01"</span>, <span class="st">"2005-01-17"</span>, ...))</span>
-<span id="cb8-3"><a></a></span>
-<span id="cb8-4"><a></a>idx <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(<span class="fu">as.Date</span>(trk<span class="sc">$</span>t_), layer_dates)</span>
-<span id="cb8-5"><a></a></span>
-<span id="cb8-6"><a></a><span class="co"># Extract from the whole stack, then pick the right column per row</span></span>
-<span id="cb8-7"><a></a>vals <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(ndvi_stack, <span class="fu">vect</span>(trk))[, <span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb8-8"><a></a>trk<span class="sc">$</span>ndvi <span class="ot">&lt;-</span> vals[<span class="fu">cbind</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(vals)), idx)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr></section><section id="doing-it-in-time" class="level2"><h2 class="anchored" data-anchor-id="doing-it-in-time">Doing it in time</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Which layer does each fix belong to?</span></span>
+<span><span class="va">layer_dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"2005-01-01"</span>, <span class="st">"2005-01-17"</span>, <span class="va">...</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/findInterval.html">findInterval</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="va">trk</span><span class="op">$</span><span class="va">t_</span><span class="op">)</span>, <span class="va">layer_dates</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Extract from the whole stack, then pick the right column per row</span></span>
+<span><span class="va">vals</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html">extract</a></span><span class="op">(</span><span class="va">ndvi_stack</span>, <span class="fu">vect</span><span class="op">(</span><span class="va">trk</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">trk</span><span class="op">$</span><span class="va">ndvi</span> <span class="op">&lt;-</span> <span class="va">vals</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">vals</span><span class="op">)</span><span class="op">)</span>, <span class="va">idx</span><span class="op">)</span><span class="op">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>Movebank Env-DATA</code> does this for you, including interpolation in time, for dozens of products. Use it for real projects — but understand what it is doing first, which is what today’s exercise is for.</p>
-</section>
-<section id="quiz-3" class="slide level2">
-<h2>Quiz</h2>
+<hr></section><section id="quiz-3" class="level2"><h2 class="anchored" data-anchor-id="quiz-3">Quiz</h2>
 <div class="quiz">
 <p>You annotate two years of buffalo fixes with a single dry-season NDVI image and find a strong positive selection for high NDVI. What is the main problem?</p>
 <ul class="task-list">
@@ -726,557 +1216,611 @@ Giuliano Colosimo
 <p>Fix: use a time series and match each fix to the contemporaneous layer.</p>
 </div>
 </div>
-</section>
-<section id="todays-practical" class="slide level2">
-<h2>Today’s practical</h2>
+<hr></section><section id="todays-practical" class="level2"><h2 class="anchored" data-anchor-id="todays-practical">Today’s practical</h2>
 <div class="objectives">
 <p><strong><a href="../../classes/class-03/exercise.html">→ Session 3 practical</a></strong></p>
 <ol type="1">
-<li>Build the same trajectory in <code>adehabitatLT</code> and in <code>amt</code></li>
+<li>Build the same trajectory in <code>adehabitatLT</code> and in <code>amt</code>
+</li>
 <li>Clean it, counting what you remove</li>
 <li>Quantify and visualise sampling irregularity</li>
 <li>Resample: selection (<code>track_resample</code>) versus interpolation (<code>redisltraj</code>)</li>
-<li>Day or night? <code>time_of_day()</code></li>
-<li>Attach NDVI <strong>matched to the season of each fix</strong></li>
+<li>Day or night? <code>time_of_day()</code>
+</li>
+<li>Attach NDVI <strong>matched to the season of each fix</strong>
+</li>
 </ol>
 </div>
-</section>
-<section id="recap" class="slide level2">
-<h2>Recap</h2>
+<hr></section><section id="recap" class="level2"><h2 class="anchored" data-anchor-id="recap">Recap</h2>
 <ul>
 <li>A track is a <strong>sample</strong> of a path; every line between fixes is an assumption</li>
 <li>Location error dominates short steps: resting looks random, spikes look like sprints</li>
 <li>Clean in order: <strong>duplicates → missing → impossible → speed</strong>, counting as you go</li>
-<li><code>track_resample()</code> <strong>selects</strong>; <code>redisltraj()</code> <strong>interpolates</strong>; <code>track_resample()</code> ignores <code>group_by()</code></li>
+<li>
+<code>track_resample()</code> <strong>selects</strong>; <code>redisltraj()</code> <strong>interpolates</strong>; <code>track_resample()</code> ignores <code>group_by()</code>
+</li>
 <li>Regularity decides which methods you may use later</li>
-<li>Annotate in space <strong>and time</strong></li>
+<li>Annotate in space <strong>and time</strong>
+</li>
 </ul>
-<h3 id="before-session-4">Before Session 4</h3>
+<section id="before-session-4" class="level3"><h3 class="anchored" data-anchor-id="before-session-4">Before Session 4</h3>
 <ul>
-<li><code>vignette("adehabitatLT", package = "adehabitatLT")</code>, sections on <code>ltraj</code></li>
+<li>
+<code><a href="https://cran.rstudio.com/web/packages/adehabitatLT/vignettes/adehabitatLT.pdf">vignette("adehabitatLT", package = "adehabitatLT")</a></code>, sections on <code>ltraj</code>
+</li>
 <li>Skim Fauchald &amp; Tveraa (2003), <em>Ecology</em> 84:282 — first-passage time</li>
 </ul>
 
 
-</section></section>
-    </div>
-  <div class="quarto-auto-generated-content" style="display: none;">
-<p><img src="../../assets/figures/Tor-Vergata_logo_cmyk.png" class="slide-logo"></p>
-<div class="footer footer-default">
-<p><a href="../../index.html">Animal Tracking 2026-2027 · Session 3</a></p>
-</div>
-</div></div>
+</section></section></section></main><!-- /main --><script>
+/* ---------------------------------------------------------------
+   Pop-up quiz engine for the Animal Tracking course.
 
-  <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="../../site_libs/revealjs/dist/reveal.js"></script>
-  <!-- reveal.js plugins -->
-  <script src="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="../../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
-  <script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
-  
+   Authoring (plain Quarto markdown, works in slides and pages):
 
-  <script src="../../site_libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="../../site_libs/revealjs/plugin/search/search.js"></script>
-  <script src="../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="../../site_libs/revealjs/plugin/math/math.js"></script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+     ::: {.quiz}
+     Which of these is a *fix*?
 
-  <script>
+     - [ ] A collar attached to an animal
+     - [x] One timestamped location estimate
+     - [ ] The home range of an individual
 
-      // Full list of configuration options available at:
-      // https://revealjs.com/config/
-      Reveal.initialize({
-'controlsAuto': true,
-'previewLinksAuto': true,
-'pdfSeparateFragments': false,
-'autoAnimateEasing': "ease",
-'autoAnimateDuration': 1,
-'autoAnimateUnmatched': true,
-'jumpToSlide': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'chalkboard': {"buttons":true},
-'smaller': false,
- 
-        // Display controls in the bottom right corner
-        controls: false,
+     ::: {.quiz-feedback}
+     A fix is a single location estimate with a timestamp.
+     :::
+     :::
 
-        // Help the user learn the controls by providing hints, for example by
-        // bouncing the down arrow when they first encounter a vertical slide
-        controlsTutorial: false,
+   The `[x]` marks the correct answer (several `[x]` are allowed).
+   Clicking any option reveals all correct answers plus the feedback.
+----------------------------------------------------------------*/
+(function () {
+  function revealAnswer(quiz, chosen) {
+    if (quiz.classList.contains("quiz-answered")) return;
+    quiz.classList.add("quiz-answered");
+    if (chosen) chosen.classList.add("quiz-chosen");
+    quiz.querySelectorAll(":scope > ul > li").forEach(function (li) {
+      li.classList.add(li.dataset.correct === "true" ? "quiz-is-correct" : "quiz-is-wrong");
+      li.setAttribute("aria-disabled", "true");
+    });
+    var fb = quiz.querySelector(":scope > .quiz-feedback");
+    if (fb) fb.classList.remove("quiz-hidden");
+    var btn = quiz.querySelector(":scope > .quiz-reset");
+    if (btn) btn.hidden = false;
+  }
 
-        // Determines where controls appear, "edges" or "bottom-right"
-        controlsLayout: 'edges',
+  function resetQuiz(quiz) {
+    quiz.classList.remove("quiz-answered");
+    quiz.querySelectorAll(":scope > ul > li").forEach(function (li) {
+      li.classList.remove("quiz-chosen", "quiz-is-correct", "quiz-is-wrong");
+      li.removeAttribute("aria-disabled");
+    });
+    var fb = quiz.querySelector(":scope > .quiz-feedback");
+    if (fb) fb.classList.add("quiz-hidden");
+    var btn = quiz.querySelector(":scope > .quiz-reset");
+    if (btn) btn.hidden = true;
+  }
 
-        // Visibility rule for backwards navigation arrows; "faded", "hidden"
-        // or "visible"
-        controlsBackArrows: 'faded',
+  function initQuiz(quiz) {
+    if (quiz.dataset.quizReady) return;
+    var list = quiz.querySelector(":scope > ul");
+    if (!list) return;
+    quiz.dataset.quizReady = "1";
+    list.classList.add("quiz-options");
+    list.classList.remove("task-list");
 
-        // Display a presentation progress bar
-        progress: true,
+    var fb = quiz.querySelector(":scope > .quiz-feedback");
+    if (fb) fb.classList.add("quiz-hidden");
 
-        // Display the page number of the current slide
-        slideNumber: 'c/t',
-
-        // 'all', 'print', or 'speaker'
-        showSlideNumber: 'all',
-
-        // Add the current slide number to the URL hash so that reloading the
-        // page/copying the URL will return you to the same slide
-        hash: true,
-
-        // Start with 1 for the hash rather than 0
-        hashOneBasedIndex: false,
-
-        // Flags if we should monitor the hash and change slides accordingly
-        respondToHashChanges: true,
-
-        // Push each slide change to the browser history
-        history: false,
-
-        // Enable keyboard shortcuts for navigation
-        keyboard: true,
-
-        // Enable the slide overview mode
-        overview: true,
-
-        // Disables the default reveal.js slide layout (scaling and centering)
-        // so that you can use custom CSS layout
-        disableLayout: false,
-
-        // Vertical centering of slides
-        center: false,
-
-        // Enables touch navigation on devices with touch input
-        touch: true,
-
-        // Loop the presentation
-        loop: false,
-
-        // Change the presentation direction to be RTL
-        rtl: false,
-
-        // see https://revealjs.com/vertical-slides/#navigation-mode
-        navigationMode: 'linear',
-
-        // Randomizes the order of slides each time the presentation loads
-        shuffle: false,
-
-        // Turns fragments on and off globally
-        fragments: true,
-
-        // Flags whether to include the current fragment in the URL,
-        // so that reloading brings you to the same fragment position
-        fragmentInURL: false,
-
-        // Flags if the presentation is running in an embedded mode,
-        // i.e. contained within a limited portion of the screen
-        embedded: false,
-
-        // Flags if we should show a help overlay when the questionmark
-        // key is pressed
-        help: true,
-
-        // Flags if it should be possible to pause the presentation (blackout)
-        pause: true,
-
-        // Flags if speaker notes should be visible to all viewers
-        showNotes: false,
-
-        // Global override for autoplaying embedded media (null/true/false)
-        autoPlayMedia: null,
-
-        // Global override for preloading lazy-loaded iframes (null/true/false)
-        preloadIframes: null,
-
-        // Number of milliseconds between automatically proceeding to the
-        // next slide, disabled when set to 0, this value can be overwritten
-        // by using a data-autoslide attribute on your slides
-        autoSlide: 0,
-
-        // Stop auto-sliding after user input
-        autoSlideStoppable: true,
-
-        // Use this method for navigation when auto-sliding
-        autoSlideMethod: null,
-
-        // Specify the average time in seconds that you think you will spend
-        // presenting each slide. This is used to show a pacing timer in the
-        // speaker view
-        defaultTiming: null,
-
-        // Enable slide navigation via mouse wheel
-        mouseWheel: false,
-
-        // The display mode that will be used to show slides
-        display: 'block',
-
-        // Hide cursor if inactive
-        hideInactiveCursor: true,
-
-        // Time before the cursor is hidden (in ms)
-        hideCursorTime: 5000,
-
-        // Opens links in an iframe preview overlay
-        previewLinks: false,
-
-        // Transition style (none/fade/slide/convex/concave/zoom)
-        transition: 'none',
-
-        // Transition speed (default/fast/slow)
-        transitionSpeed: 'default',
-
-        // Transition style for full page slide backgrounds
-        // (none/fade/slide/convex/concave/zoom)
-        backgroundTransition: 'none',
-
-        // Number of slides away from the current that are visible
-        viewDistance: 3,
-
-        // Number of slides away from the current that are visible on mobile
-        // devices. It is advisable to set this to a lower number than
-        // viewDistance in order to save resources.
-        mobileViewDistance: 2,
-
-        // The "normal" size of the presentation, aspect ratio will be preserved
-        // when the presentation is scaled to fit different resolutions. Can be
-        // specified using percentage units.
-        width: 1280,
-
-        height: 760,
-
-        // Factor of the display size that should remain empty around the content
-        margin: 0.1,
-
-        math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
-          config: 'TeX-AMS_HTML-full',
-          tex2jax: {
-            inlineMath: [['\\(','\\)']],
-            displayMath: [['\\[','\\]']],
-            balanceBraces: true,
-            processEscapes: false,
-            processRefs: true,
-            processEnvironments: true,
-            preview: 'TeX',
-            skipTags: ['script','noscript','style','textarea','pre','code'],
-            ignoreClass: 'tex2jax_ignore',
-            processClass: 'tex2jax_process'
-          },
-        },
-
-        // reveal.js plugins
-        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
-
-          RevealMath,
-          RevealNotes,
-          RevealSearch,
-          RevealZoom
-        ]
+    Array.prototype.forEach.call(list.children, function (li) {
+      var box = li.querySelector('input[type="checkbox"]');
+      li.dataset.correct = box && box.checked ? "true" : "false";
+      if (box) box.remove();
+      // Pandoc wraps task-list items in <label>; unwrap so the whole row is clickable.
+      var label = li.querySelector("label");
+      if (label) { while (label.firstChild) li.insertBefore(label.firstChild, label); label.remove(); }
+      li.setAttribute("role", "button");
+      li.setAttribute("tabindex", "0");
+      li.addEventListener("click", function () { revealAnswer(quiz, li); });
+      li.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); revealAnswer(quiz, li); }
       });
-    </script>
-    <script>
-    /* ---------------------------------------------------------------
-       Pop-up quiz engine for the Animal Tracking course.
+    });
 
-       Authoring (plain Quarto markdown, works in slides and pages):
+    var reset = document.createElement("button");
+    reset.className = "quiz-reset";
+    reset.type = "button";
+    reset.hidden = true;
+    reset.textContent = "↺ ask again";
+    reset.addEventListener("click", function () { resetQuiz(quiz); });
+    quiz.appendChild(reset);
+  }
 
-         ::: {.quiz}
-         Which of these is a *fix*?
+  function initAll() { document.querySelectorAll("div.quiz").forEach(initQuiz); }
 
-         - [ ] A collar attached to an animal
-         - [x] One timestamped location estimate
-         - [ ] The home range of an individual
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initAll);
+  } else {
+    initAll();
+  }
+  // Reveal.js builds some slides lazily; re-scan on every slide change.
+  document.addEventListener("ready", initAll);
+  if (window.Reveal && window.Reveal.on) window.Reveal.on("slidechanged", initAll);
+})();
+</script><script>
+  // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+  // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+  // slide changes (different for each slide format).
+  (function () {
+    // dispatch for htmlwidgets
+    function fireSlideEnter() {
+      const event = window.document.createEvent("Event");
+      event.initEvent("slideenter", true, true);
+      window.document.dispatchEvent(event);
+    }
 
-         ::: {.quiz-feedback}
-         A fix is a single location estimate with a timestamp.
-         :::
-         :::
+    function fireSlideChanged(previousSlide, currentSlide) {
+      fireSlideEnter();
 
-       The `[x]` marks the correct answer (several `[x]` are allowed).
-       Clicking any option reveals all correct answers plus the feedback.
-    ----------------------------------------------------------------*/
-    (function () {
-      function revealAnswer(quiz, chosen) {
-        if (quiz.classList.contains("quiz-answered")) return;
-        quiz.classList.add("quiz-answered");
-        if (chosen) chosen.classList.add("quiz-chosen");
-        quiz.querySelectorAll(":scope > ul > li").forEach(function (li) {
-          li.classList.add(li.dataset.correct === "true" ? "quiz-is-correct" : "quiz-is-wrong");
-          li.setAttribute("aria-disabled", "true");
-        });
-        var fb = quiz.querySelector(":scope > .quiz-feedback");
-        if (fb) fb.classList.remove("quiz-hidden");
-        var btn = quiz.querySelector(":scope > .quiz-reset");
-        if (btn) btn.hidden = false;
+      // dispatch for shiny
+      if (window.jQuery) {
+        if (previousSlide) {
+          window.jQuery(previousSlide).trigger("hidden");
+        }
+        if (currentSlide) {
+          window.jQuery(currentSlide).trigger("shown");
+        }
       }
+    }
 
-      function resetQuiz(quiz) {
-        quiz.classList.remove("quiz-answered");
-        quiz.querySelectorAll(":scope > ul > li").forEach(function (li) {
-          li.classList.remove("quiz-chosen", "quiz-is-correct", "quiz-is-wrong");
-          li.removeAttribute("aria-disabled");
-        });
-        var fb = quiz.querySelector(":scope > .quiz-feedback");
-        if (fb) fb.classList.add("quiz-hidden");
-        var btn = quiz.querySelector(":scope > .quiz-reset");
-        if (btn) btn.hidden = true;
+    // hookup for slidy
+    if (window.w3c_slidy) {
+      window.w3c_slidy.add_observer(function (slide_num) {
+        // slide_num starts at position 1
+        fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+      });
+    }
+
+  })();
+</script><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
-
-      function initQuiz(quiz) {
-        if (quiz.dataset.quizReady) return;
-        var list = quiz.querySelector(":scope > ul");
-        if (!list) return;
-        quiz.dataset.quizReady = "1";
-        list.classList.add("quiz-options");
-        list.classList.remove("task-list");
-
-        var fb = quiz.querySelector(":scope > .quiz-feedback");
-        if (fb) fb.classList.add("quiz-hidden");
-
-        Array.prototype.forEach.call(list.children, function (li) {
-          var box = li.querySelector('input[type="checkbox"]');
-          li.dataset.correct = box && box.checked ? "true" : "false";
-          if (box) box.remove();
-          // Pandoc wraps task-list items in <label>; unwrap so the whole row is clickable.
-          var label = li.querySelector("label");
-          if (label) { while (label.firstChild) li.insertBefore(label.firstChild, label); label.remove(); }
-          li.setAttribute("role", "button");
-          li.setAttribute("tabindex", "0");
-          li.addEventListener("click", function () { revealAnswer(quiz, li); });
-          li.addEventListener("keydown", function (e) {
-            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); revealAnswer(quiz, li); }
-          });
-        });
-
-        var reset = document.createElement("button");
-        reset.className = "quiz-reset";
-        reset.type = "button";
-        reset.hidden = true;
-        reset.textContent = "↺ ask again";
-        reset.addEventListener("click", function () { resetQuiz(quiz); });
-        quiz.appendChild(reset);
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
       }
-
-      function initAll() { document.querySelectorAll("div.quiz").forEach(initQuiz); }
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initAll);
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/giulianocolosimo\.github\.io\/animtrack-2627\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
       } else {
-        initAll();
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
-      // Reveal.js builds some slides lazily; re-scan on every slide change.
-      document.addEventListener("ready", initAll);
-      if (window.Reveal && window.Reveal.on) window.Reveal.on("slidechanged", initAll);
-    })();
-    </script>
-    
-    <script>
-      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-      // slide changes (different for each slide format).
-      (function () {
-        // dispatch for htmlwidgets
-        function fireSlideEnter() {
-          const event = window.document.createEvent("Event");
-          event.initEvent("slideenter", true, true);
-          window.document.dispatchEvent(event);
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
         }
-
-        function fireSlideChanged(previousSlide, currentSlide) {
-          fireSlideEnter();
-
-          // dispatch for shiny
-          if (window.jQuery) {
-            if (previousSlide) {
-              window.jQuery(previousSlide).trigger("hidden");
-            }
-            if (currentSlide) {
-              window.jQuery(currentSlide).trigger("shown");
-            }
-          }
-        }
-
-        // hookup for slidy
-        if (window.w3c_slidy) {
-          window.w3c_slidy.add_observer(function (slide_num) {
-            // slide_num starts at position 1
-            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-          });
-        }
-
-      })();
-    </script>
-
-    <script id="quarto-html-after-body" type="application/javascript">
-      window.document.addEventListener("DOMContentLoaded", function (event) {
-        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-        tabsets.forEach(function(tabset) {
-          const tabby = new Tabby('#' + tabset.id);
-        });
-        const isCodeAnnotation = (el) => {
-          for (const clz of el.classList) {
-            if (clz.startsWith('code-annotation-')) {                     
-              return true;
-            }
-          }
-          return false;
-        }
-        const onCopySuccess = function(e) {
-          // button target
-          const button = e.trigger;
-          // don't keep focus
-          button.blur();
-          // flash "checked"
-          button.classList.add('code-copy-button-checked');
-          var currentTitle = button.getAttribute("title");
-          button.setAttribute("title", "Copied!");
-          let tooltip;
-          if (window.bootstrap) {
-            button.setAttribute("data-bs-toggle", "tooltip");
-            button.setAttribute("data-bs-placement", "left");
-            button.setAttribute("data-bs-title", "Copied!");
-            tooltip = new bootstrap.Tooltip(button, 
-              { trigger: "manual", 
-                customClass: "code-copy-button-tooltip",
-                offset: [0, -8]});
-            tooltip.show();    
-          }
-          setTimeout(function() {
-            if (tooltip) {
-              tooltip.hide();
-              button.removeAttribute("data-bs-title");
-              button.removeAttribute("data-bs-toggle");
-              button.removeAttribute("data-bs-placement");
-            }
-            button.setAttribute("title", currentTitle);
-            button.classList.remove('code-copy-button-checked');
-          }, 1000);
-          // clear code selection
-          e.clearSelection();
-        }
-        const getTextToCopy = function(trigger) {
-            const codeEl = trigger.previousElementSibling.cloneNode(true);
-            for (const childEl of codeEl.children) {
-              if (isCodeAnnotation(childEl)) {
-                childEl.remove();
-              }
-            }
-            return codeEl.innerText;
-        }
-        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-          text: getTextToCopy
-        });
-        clipboard.on('success', onCopySuccess);
-        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-            text: getTextToCopy,
-            container: window.document.getElementById('quarto-embedded-source-code-modal')
-          });
-          clipboardModal.on('success', onCopySuccess);
-        }
-          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var mailtoRegex = new RegExp(/^mailto:/);
-            var filterRegex = new RegExp("https:\/\/giulianocolosimo\.github\.io\/animtrack-2627\/");
-          var isInternal = (href) => {
-              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-          }
-          // Inspect non-navigation links and adorn them if external
-         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-          for (var i=0; i<links.length; i++) {
-            const link = links[i];
-            if (!isInternal(link.href)) {
-              // undo the damage that might have been done by quarto-nav.js in the case of
-              // links that we want to consider external
-              if (link.dataset.originalHref !== undefined) {
-                link.href = link.dataset.originalHref;
-              }
-            }
-          }
-        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-          const config = {
-            allowHTML: true,
-            maxWidth: 500,
-            delay: 100,
-            arrow: false,
-            appendTo: function(el) {
-                return el.closest('section.slide') || el.parentElement;
-            },
-            interactive: true,
-            interactiveBorder: 10,
-            theme: 'light-border',
-            placement: 'bottom-start',
-          };
-          if (contentFn) {
-            config.content = contentFn;
-          }
-          if (onTriggerFn) {
-            config.onTrigger = onTriggerFn;
-          }
-          if (onUntriggerFn) {
-            config.onUntrigger = onUntriggerFn;
-          }
-            config['offset'] = [0,0];
-            config['maxWidth'] = 700;
-          window.tippy(el, config); 
-        }
-        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-        for (var i=0; i<noterefs.length; i++) {
-          const ref = noterefs[i];
-          tippyHover(ref, function() {
-            // use id or data attribute instead here
-            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-            try { href = new URL(href).hash; } catch {}
-            const id = href.replace(/^#\/?/, "");
-            const note = window.document.getElementById(id);
-            if (note) {
-              return note.innerHTML;
-            } else {
-              return "";
-            }
-          });
-        }
-        const findCites = (el) => {
-          const parentEl = el.parentElement;
-          if (parentEl) {
-            const cites = parentEl.dataset.cites;
-            if (cites) {
-              return {
-                el,
-                cites: cites.split(' ')
-              };
-            } else {
-              return findCites(el.parentElement)
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
             }
           } else {
-            return undefined;
-          }
-        };
-        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-        for (var i=0; i<bibliorefs.length; i++) {
-          const ref = bibliorefs[i];
-          const citeInfo = findCites(ref);
-          if (citeInfo) {
-            tippyHover(citeInfo.el, function() {
-              var popup = window.document.createElement('div');
-              citeInfo.cites.forEach(function(cite) {
-                var citeDiv = window.document.createElement('div');
-                citeDiv.classList.add('hanging-indent');
-                citeDiv.classList.add('csl-entry');
-                var biblioDiv = window.document.getElementById('ref-' + cite);
-                if (biblioDiv) {
-                  citeDiv.innerHTML = biblioDiv.innerHTML;
-                }
-                popup.appendChild(citeDiv);
-              });
-              return popup.innerHTML;
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
             });
           }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
         }
+      }, function(instance) {
       });
-      </script>
-    
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../../classes/class-02/exercise.html" class="pagination-link" aria-label="Practical">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Practical</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../classes/class-03/exercise.html" class="pagination-link" aria-label="Practical">
+        <span class="nav-page-text">Practical</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Giuliano Colosimo — CC BY-NC-SA 4.0</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/GiulianoColosimo/animtrack-2627/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
 
 </body></html>

@@ -20,9 +20,10 @@ class_time <- "11:00-13:00"
 
 classes <- as.Date(c("2026-10-16", "2026-10-23", "2026-10-30",
                      "2026-11-06", "2026-11-13", "2026-11-20",
-                     "2026-11-27", "2026-12-04"))
+                     "2026-11-27", "2026-12-04",
+                     "2026-12-11"))   # make-up for the canceled 6 November
 
-canceled <- as.Date(character(0))   # e.g. as.Date("2026-11-13")
+canceled <- as.Date("2026-11-06")   # instructor unavailable
 
 # Italian national holidays falling on weekdays in the months shown
 holidays <- as.Date(c("2026-12-08",   # Immacolata Concezione
@@ -32,6 +33,9 @@ holidays <- as.Date(c("2026-12-08",   # Immacolata Concezione
 # Classes actually held, numbered 1..n in date order. If a class is canceled
 # and a make-up date is added to `classes`, numbering stays 1..8.
 held <- sort(classes[!(classes %in% canceled)])
+
+# "Friday 6 November" (no leading zero on the day)
+fmt_day <- function(d) paste(format(d, "%A"), as.integer(format(d, "%d")), format(d, "%B"))
 
 # Same colours as the Conservation Biology calendar
 palette <- c("Session"          = "green",
@@ -78,8 +82,8 @@ schedule <- data.frame(
   check.names = FALSE
 )
 kable(schedule,
-      caption = paste0("The course will begin on Friday, October 16, 2026, ",
-                       "and runs for eight consecutive Fridays until December 4. ",
+      caption = paste0("The course began on ", fmt_day(min(held)), " 2026 ",
+                       "and runs for eight sessions until ", fmt_day(max(held)), ". ",
                        "The deadline for the final report will be ",
                        "published here during the course."))
 ```
@@ -118,8 +122,8 @@ tab <- data.frame(
 kable(tab, align = c("c", "l", "l", "l"))
 ```
 
-No Italian national holiday falls on a class Friday this year, so there are no
-gaps in the schedule.
+The session of `r fmt_day(canceled)` is **canceled**. Sessions 4–8 each move one
+week later, so the course now ends on `r fmt_day(max(held))`.
 
 ## Monthly view
 

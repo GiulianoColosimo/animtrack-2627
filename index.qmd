@@ -44,7 +44,7 @@ each method succeeds and fails.
 | **Degree** | MSc Biologia Ambientale |
 | **Credits** | 2 CFU — 16 hours |
 | **Structure** | 8 sessions × 2 hours: ~45 minutes of theory, ~75 minutes of R |
-| **When** | Fridays 11:00–13:00, 16 October – 4 December 2026 — see the [calendar](calendar.qmd) |
+| **When** | Fridays 11:00–13:00, 16 October – 11 December 2026 (no session on 6 November) — see the [calendar](calendar.qmd) |
 | **Language** | English |
 | **Software** | R, RStudio, Quarto — all free and open source |
 | **Assessment** | Reproducible report, weekly practicals, participation — see the [syllabus](syllabus.qmd) |
