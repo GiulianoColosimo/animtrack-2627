@@ -100,12 +100,10 @@ know.
 
 . . .
 
-::: {.incremental}
 - Note what it **excludes**: exploratory forays, migration, dispersal
 - Note what it does **not** say: nothing about probability, nothing about 95%
 - Powell & Mitchell (2012): a home range is the part of its **cognitive map**
   an animal chooses to keep up to date — our estimators are crude proxies
-:::
 
 ---
 
@@ -133,7 +131,6 @@ legend("bottomright", c("50%", "95%"), lty = c(1, 2), lwd = 2.5, bty = "n", cex 
 ```
 
 [Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
-
 
 The same buffalo, Cilla. On the left every part of the area counts the same;
 on the right, core areas and rarely used edges are distinguished.
@@ -205,7 +202,6 @@ plot(dd, grow, type = "o", pch = 16, lwd = 3, col = teal, ylim = c(0, max(grow) 
 
 [Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
 
-
 Left: the 95% MCP (solid) and 100% MCP (dashed) contain large stretches the
 animal hardly used. Right: the same estimate from the first 5, 10, 15… days.
 
@@ -218,14 +214,12 @@ animal hardly used. Right: the same estimate from the first 5, 10, 15… days.
 Put a small bump (kernel) on each fix and sum them into a **utilisation
 distribution** (Worton 1989).
 
-::: {.incremental}
 - Gives a **density**: core areas, disjoint patches, used and unused parts
 - The answer is dominated by the **bandwidth** $h$
   - $h_\text{ref}$ — optimal if the UD were a single bivariate normal; usually
     **over-smooths** real, multi-modal ranges
   - $h_\text{LSCV}$ — least-squares cross-validation; often **under-smooths**
     into fragments, and frequently **fails to converge**
-:::
 
 ---
 
@@ -251,7 +245,6 @@ for (h in c(0.25, 1.2)) {
 ```
 
 [Figure produced with own R code · simulated data]{.credit}
-
 
 Ten fixes (ticks) in one dimension. Each gets a bump (thin lines); their sum
 (thick line) is the estimated UD. Same fixes, two bandwidths, two stories.
@@ -279,7 +272,6 @@ scale_bar(5)
 ```
 
 [Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
-
 
 . . .
 
@@ -328,13 +320,9 @@ Classical KDE assumes fixes are **independent** draws from the UD.
 Hourly GPS fixes are nothing of the sort — the animal was 300 m away an hour
 ago and will be 300 m away in an hour.
 
-::: {.incremental}
 - The **effective** sample size is far smaller than $n$
 - The UD comes out **too narrow** — the range is under-estimated
 - Collecting more fixes at a higher rate makes it **worse**, not better
-:::
-
-. . .
 
 ::: {.keyidea}
 This is why area estimates from 1990s VHF studies (a few dozen fixes, days
@@ -372,7 +360,6 @@ for (k in list(list(long[20001:21000, ], "1,000 fixes, every 20 min (2 weeks)"),
 
 [Figure produced with own R code · simulated data]{.credit}
 
-
 The central-place animal from Session 5, whose true range (dashed) we know.
 Two weeks of dense fixes describe two weeks of the animal, not its range.
 
@@ -383,16 +370,12 @@ Two weeks of dense fixes describe two weeks of the animal, not its range.
 Horne et al. (2007): between two consecutive fixes the animal was *somewhere*
 on a random bridge connecting them.
 
-::: {.incremental}
 - The uncertainty of the bridge **grows with the time gap** and shrinks near
   each fix, scaled by a mobility parameter estimated from the data
 - Uses the order of the fixes, not just their positions
 - Handles **irregular sampling** naturally
 - Answers a specific question: **where was the animal during the tracking
   period?** — its *occurrence* distribution
-:::
-
-. . .
 
 ::: {.keyidea}
 A Brownian bridge maps where the animal **went**, not where it **could go**. It
@@ -406,16 +389,12 @@ estimates — correctly so, for the question it answers.
 
 Fleming et al. (2015): stop treating autocorrelation as a nuisance.
 
-::: {.incremental}
 1. Fit a **continuous-time movement model** to the track (`ctmm`)
 2. The model tells you how long the animal takes to cross its range — the
    **range-crossing time** $\tau_\text{position}$
 3. From that, the **effective sample size**: roughly how many times the
    animal crossed its range during tracking
 4. Weight the kernel accordingly: **AKDE**
-:::
-
-. . .
 
 ::: {.keyidea}
 AKDE estimates the **range** distribution — where the animal would be found in
@@ -462,7 +441,6 @@ points(xy, pch = 16, cex = 0.25, col = adjustcolor(ink, 0.3))
 
 [Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
 
-
 Cilla again, on the same scale. The bridge hugs the path she travelled; AKDE
 estimates the range she would use given time, with its confidence interval
 (dashed).
@@ -474,7 +452,6 @@ estimates the range she would use given time, with its confidence interval
 The **semi-variance** as a function of time lag: how far apart, on average,
 two positions $\Delta t$ apart are.
 
-::: {.incremental}
 - Rises at short lags as the animal moves away
 - **Levels off** at an asymptote if the animal is range-resident: beyond the
   range-crossing time, positions are as far apart as they will ever be
@@ -482,9 +459,6 @@ two positions $\Delta t$ apart are.
   nomadic
 - Proportional to the mean squared displacement of Session 5: the same curve,
   rescaled
-:::
-
-. . .
 
 ::: {.keyidea}
 Look at the variogram **before** estimating any home range. No asymptote, no
@@ -513,7 +487,6 @@ plot(variogram(gz, dt = c(25, 259) %#% "hour"), CTMM = fit_gz, fraction = 0.65,
 ```
 
 [Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); Mongolian gazelle, `ctmm` example data]{.credit}
-
 
 Black: data. Red: fitted model. Cilla's range-crossing time is ~6 days, so her
 3,500 fixes are worth ~19 independent ones. The gazelle's is ~5 months: two or
@@ -552,7 +525,6 @@ are nomadic; for them, a home range may simply be the wrong concept.
 
 ## Stationarity and the occupation timescale
 
-::: {.incremental}
 - Every estimator assumes the UD is **stationary** over the tracking period:
   the animal's space use is not systematically changing
 - Seasonal shifts, dispersal and migration all violate it — segment first
@@ -561,9 +533,6 @@ are nomadic; for them, a home range may simply be the wrong concept.
   animal has not yet shown you its range
 - In Session 5, a buffalo tracked for 36 days was indistinguishable from a
   random walker; one tracked for 157 days was clearly confined
-:::
-
-. . .
 
 ::: {.keyidea}
 "Must the time series be stationary?" Yes — over the timescale you summarise.
@@ -632,16 +601,12 @@ question. Choose the estimator from the question, and state the question.
 
 ## Recap
 
-::: {.incremental}
 - The UD is the object; a home range is a contour on it
 - MCP for comparability only; KDE depends on bandwidth and ignores
   autocorrelation
 - Brownian bridges map **occurrence**; AKDE estimates the **range** with a CI
 - Autocorrelation is information: effective sample size = range crossings
 - Check the variogram and stationarity **first**
-:::
-
-. . .
 
 ### Before Session 7
 

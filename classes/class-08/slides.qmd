@@ -93,7 +93,6 @@ A hidden Markov model is the most direct attempt in the course to infer the
 Imagine the animal has a hidden label at each time step — say
 **"encamped"** or **"travelling"**.
 
-::: {.incremental}
 1. At each step the animal is in one of $N$ states, $S_t$
 2. The state evolves as a **Markov chain**: $P(S_t \mid S_{t-1})$ — where you
    go next depends only on where you are now
@@ -101,9 +100,6 @@ Imagine the animal has a hidden label at each time step — say
    distributions**: step length ~ gamma($\mu_i$, $\sigma_i$), turning angle ~
    von Mises($\mu_i$, $\kappa_i$)
 4. You never see $S_t$. You see only the steps
-:::
-
-. . .
 
 ::: {.keyidea}
 The model asks: *what sequence of hidden states, and what state-specific
@@ -151,7 +147,6 @@ lines(th * 180 / pi, exp(kap[2] * cos(th)) / (2 * pi * besselI(kap[2], 0)), lwd 
 
 [Figure produced with own R code · simulated data]{.credit}
 
-
 Teal: an encamped state, short steps and random turns. Red: a travelling
 state, long and directed. The HMM sees only the path and has to work out the
 colours.
@@ -160,16 +155,12 @@ colours.
 
 ## What you get out
 
-::: {.incremental}
 - **State-dependent parameters** — e.g. state 1: mean step 40 m, turning
   angles ~uniform; state 2: mean step 600 m, angles concentrated at 0
 - **Transition probability matrix** $\Gamma$ — and from it the expected
   **dwell time** in each state, $1/(1-\gamma_{ii})$
 - **The most likely state sequence** (Viterbi) — one label per step
 - **State probabilities** per step — the honest version, with uncertainty
-:::
-
-. . .
 
 ```r
 m <- momentuHMM::fitHMM(data, nbStates = 2,
@@ -214,7 +205,6 @@ scale_bar(1)
 
 [Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
 
-
 Cilla and Toni, hourly. Grey: all their steps. Coloured: the two fitted
 state distributions, weighted by how often each state occurs; dashed: their
 sum.
@@ -226,15 +216,11 @@ sum.
 A clustering method looks at each step in isolation. An HMM knows that
 **behaviour persists**: an animal that was resting is probably still resting.
 
-::: {.incremental}
 - This borrows strength across time and produces far less "flickering" between
   states
 - The transition matrix is itself biology: how long does a foraging bout last?
 - Transitions can depend on covariates: *is the animal more likely to start
   travelling when NDVI is low?*
-:::
-
-. . .
 
 ```r
 fitHMM(data, nbStates = 2, ..., formula = ~ ndvi + cosinor(hour, period = 24))
@@ -268,7 +254,6 @@ axis(2, at = c(1.5, 0.5), labels = c("threshold", "HMM"), tick = FALSE, las = 1,
 ```
 
 [Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
-
 
 The same steps labelled two ways: a fixed threshold (dashed line) switches
 `r switches[["threshold"]]` times; the HMM, which knows that behaviour
@@ -311,7 +296,6 @@ are not what you think.
 
 ## Three things a threshold cannot do
 
-::: {.incremental}
 1. **Quantify uncertainty** — an HMM gives every step a *probability* of being
    in each state, not a hard label. Steps near the boundary are honestly
    ambiguous
@@ -320,9 +304,6 @@ are not what you think.
    of a journey is not labelled "resting"
 3. **Explain switching** — covariates on the transition probabilities ask
    *when* and *where* animals change behaviour
-:::
-
-. . .
 
 ::: {.keyidea}
 In Session 4 the buffalo's hourly speeds had no valley to cut at. That is
@@ -379,16 +360,12 @@ You fit this model in today's practical.
 
 HMMs as normally fitted assume a **constant time step**.
 
-::: {.incremental}
 - Feed them irregular data and the step-length distribution mixes intervals;
   the model interprets a long gap as fast movement
 - "Solutions" that are not solutions: interpolating to a regular grid invents
   data and biases the state distributions
 - Real solutions: resample and accept the data loss (Session 3); or use a
   **continuous-time** model (`ctmm`, `momentuHMM` with `crawlWrap`)
-:::
-
-. . .
 
 ::: {.keyidea}
 This is why the bat dataset cannot be given an HMM: 165 bursts with a median
@@ -399,15 +376,11 @@ of 4 fixes cannot inform a transition matrix (Session 3).
 
 ## Problem 2 — how many states?
 
-::: {.incremental}
 - AIC and BIC **almost always prefer more states**. They are answering "which
   model fits best", not "which states are real behaviours"
 - With enough data, 4 and 5 states will beat 2 and 3 every time
 - Extra states often capture **outliers**, or the shape of the step-length
   distribution, not behaviour
-:::
-
-. . .
 
 ::: {.keyidea}
 Choose the number of states from **biology and the question**, then check the
@@ -453,16 +426,12 @@ simpler one, and say why.
 The model returns *state 1* and *state 2*. It does **not** return "foraging"
 and "travelling".
 
-::: {.incremental}
 - Labelling them is an **interpretation**, and it needs external evidence:
   accelerometer data, direct observation, known behaviours at known times
 - "Short steps and random turns" is consistent with foraging — and with
   resting, with sheltering, and with the animal being dead
 - Papers that name states from step lengths alone are making an assumption,
   not a measurement
-:::
-
-. . .
 
 State the evidence for your labels, or call them "state 1" and "state 2" and
 describe them by their parameters.
@@ -500,7 +469,6 @@ and discusses the plausible behaviours without asserting one.
 
 ## Practical fitting advice
 
-::: {.incremental}
 - **Starting values matter a lot.** The likelihood is multimodal. Fit from
   many random starts and keep the best
 - Check for **zero step lengths** — a gamma distribution cannot handle
@@ -510,7 +478,6 @@ and discusses the plausible behaviours without asserting one.
   of the HMM world
 - Plot the state-dependent densities over the histogram of your data. If they
   do not look like your data, nothing downstream is trustworthy
-:::
 
 ---
 
@@ -532,7 +499,6 @@ for (k in list(list(pr$stepRes, "Step pseudo-residuals"), list(pr$angleRes, "Ang
 
 [Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
 
-
 The two-state buffalo model. Points on the line mean the model describes the
 data; the bent tails of the step residuals say two states do not capture the
 full range of step lengths.
@@ -543,7 +509,6 @@ full range of step lengths.
 
 ## Location error, modelled
 
-::: {.incremental}
 - An HMM assumes the positions are exact. **State-space models** add an
   explicit observation layer: a true, unobserved path, and noisy fixes of it
   (Jonsen et al. 2005)
@@ -552,13 +517,11 @@ full range of step lengths.
 - Continuous-time versions (`crawl`: Johnson et al. 2008) handle irregular
   sampling and predict positions *with uncertainty* — the honest version of
   interpolation from Session 3
-:::
 
 ---
 
 ## Energy landscapes
 
-::: {.incremental}
 - The cost of moving is not the same everywhere: slope, wind, currents,
   thermals, substrate
 - An **energy landscape** maps that cost (Wilson et al. 2012; Shepard et al.
@@ -567,9 +530,6 @@ full range of step lengths.
   follow thermals and ridges; ungulates avoid steep ground
 - With accelerometers you can estimate energy expenditure directly and ask
   whether routes minimise it
-:::
-
-. . .
 
 ::: {.keyidea}
 Motion capacity becomes a map — and a covariate you can put in an SSF.
@@ -579,7 +539,6 @@ Motion capacity becomes a map — and a covariate you can put in an SSF.
 
 ## Collective movement
 
-::: {.incremental}
 - Animals rarely move independently: herds, flocks, schools, family groups
 - Simple local rules — attraction, alignment, repulsion — produce coordinated
   groups; a few informed individuals can steer many (Couzin et al. 2005)
@@ -587,13 +546,11 @@ Motion capacity becomes a map — and a covariate you can put in an SSF.
   how decisions are made
 - Statistically: your "independent" animals may not be. Six buffalo from one
   herd are not six replicates
-:::
 
 ---
 
 ## Learning behaviour from sensors
 
-::: {.incremental}
 - Tri-axial accelerometers at 10–50 Hz record *what the body is doing*
 - Supervised **machine learning** — random forests, support vector machines,
   and now deep neural networks — classify behaviours from acceleration signatures
@@ -601,9 +558,6 @@ Motion capacity becomes a map — and a covariate you can put in an SSF.
 - Training data come from observed or captive animals with known behaviour
 - The answer to "how do I name my HMM states?" — an independent sensor that
   measures behaviour
-:::
-
-. . .
 
 ::: {.keyidea}
 A classifier is only as good as its labelled training data, and it transfers
@@ -615,7 +569,6 @@ has not seen.
 
 ## The big-data era
 
-::: {.incremental}
 - **Movebank** holds billions of locations from thousands of studies; the
   **ICARUS** initiative put tracking receivers in orbit
 - Collaborative networks (e.g. **EUROMAMMALS**) pool data across studies,
@@ -625,9 +578,6 @@ has not seen.
   al. 2022)
 - New problems: data standards, sharing, credit, and the security of
   sensitive species
-:::
-
-. . .
 
 ::: {.keyidea}
 The skills of this course — cleaning, regularising, honest uncertainty — are
@@ -664,7 +614,6 @@ exactly as for the habitat-selection models of Session 7.
 
 ## What you have learned to do
 
-::: {.incremental}
 1. **Choose** a technology and a fix interval, and name their biases *(1)*
 2. **Handle** spatial data without lying about coordinate systems *(2)*
 3. **Clean** a track, count what you removed, annotate it in space and time *(3)*
@@ -673,13 +622,11 @@ exactly as for the habitat-selection models of Session 7.
 6. **Estimate** space use, and say which question the estimate answers *(6)*
 7. **Model** selection and movement together *(7)*
 8. **Infer** behavioural states, and supply the evidence for their names *(8)*
-:::
 
 ---
 
 ## Six habits worth keeping
 
-::: {.incremental}
 - **Look at the data before modelling it.** Plot coordinates against time. Plot
   step length against time gap. Every dataset in this course had a defect you
   could see in one plot.
@@ -690,7 +637,6 @@ exactly as for the habitat-selection models of Session 7.
 - **State your availability domain.** Half of habitat-selection disagreements
   are definitional.
 - **Report effect sizes, not p-values.** You chose the sample size.
-:::
 
 ---
 

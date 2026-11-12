@@ -77,7 +77,6 @@ whether it describes the animal or the sampling.
 
 ## Everything here is scale-dependent
 
-::: {.incremental}
 - Sample every 5 minutes: many short steps — but so short that GPS error
   randomises their *direction*
 - Sample hourly: clear directional persistence
@@ -85,9 +84,6 @@ whether it describes the animal or the sampling.
   (the animal looks like it moves at random)
 - **Total path length** grows without bound as the interval shrinks — the
   coastline paradox
-:::
-
-. . .
 
 ::: {.keyidea}
 "Mean step length" is not a property of the animal. It is a property of the
@@ -127,7 +123,6 @@ axis(1, at = rates)
 
 [Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
 
-
 The same buffalo, Cilla, resampled to coarser and coarser intervals. Neither
 number is a property of the animal alone.
 
@@ -163,7 +158,6 @@ and sinuosity for **searching** movement (how much does it wiggle?).
 
 ## Fractal dimension
 
-::: {.incremental}
 - Measure path length with a "ruler" of length $r$; on a fractal path
   $L(r) \propto r^{1-D}$, so $D$ comes from the slope of log L on log r
 - $D = 1$: straight line; $D \to 2$: a path that fills the plane
@@ -171,9 +165,6 @@ and sinuosity for **searching** movement (how much does it wiggle?).
 - The catch (Benhamou 2004; Turchin 1996): real animal paths are rarely
   fractal across more than a narrow range of scales, and $D$ estimated from a
   correlated random walk varies with $r$
-:::
-
-. . .
 
 ::: {.keyidea}
 If $D$ changes with the ruler, the path is not fractal — and the change itself
@@ -189,14 +180,10 @@ $$\text{NSD}(t) = \lVert \mathbf{x}_t - \mathbf{x}_0 \rVert^2$$
 The squared distance from the starting point. A remarkably effective
 diagnostic:
 
-::: {.incremental}
 - **Sedentary** — NSD rises then plateaus at a low value
 - **Migratory** — a sigmoid up, a plateau, a sigmoid back down
 - **Dispersal** — a single step up to a new plateau
 - **Nomadic** — rises roughly linearly, no plateau
-:::
-
-. . .
 
 Fitting these shapes as competing non-linear models (Bunnefeld et al. 2011) is
 a cheap and surprisingly effective way to classify movement strategies.
@@ -226,7 +213,6 @@ for (k in names(shapes)) {
 ```
 
 [Figure produced with own R code · schematic curves]{.credit}
-
 
 NSD against time for the four strategies of Bunnefeld et al. (2011).
 
@@ -286,7 +272,6 @@ text(mean(dates), max(d$nsd) / 1e6 * 0.55, sprintf("√δ = %s km", format(round
 ```
 
 [Figure produced with own R code · data: turkey vulture Leo, Bildstein et al. (Movebank)]{.credit}
-
 
 Daily NSD of the vulture Leo, June 2007 to May 2008, and the fitted migrant
 model. The parameters read as biology: a migration distance in thousands of
@@ -355,15 +340,11 @@ step with alternatives of *exactly the same duration*.
 Fauchald & Tveraa (2003): around each fix, draw a circle of radius $r$ and
 measure the **time** the animal takes to leave it.
 
-::: {.incremental}
 - Where the animal searches intensively, first-passage time (FPT) is long;
   where it travels, FPT is short
 - Repeat for many radii and compute the **variance of log FPT** along the path
 - The radius at which that variance **peaks** is the spatial scale of
   area-restricted search
-:::
-
-. . .
 
 ::: {.keyidea}
 FPT turns "where does the animal slow down?" into a scale: *how big* are the
@@ -411,7 +392,6 @@ legend("topright", c("searching", "travelling"), col = c(rust, teal), lwd = 4, b
 
 [Figure produced with own R code · simulated data]{.credit}
 
-
 A simulated animal alternating travel and intensive search. Inside a patch it
 takes many hours to leave a 400 m circle; in transit, one or two.
 
@@ -449,16 +429,12 @@ typical resting movement.
 
 An animal is not doing one thing all day.
 
-::: {.incremental}
 - Resting, foraging, travelling, migrating — each with its own **step-length
   and turning-angle signature**
 - Pool them and every summary is a meaningless average: a "mean step length"
   that describes no actual behaviour
 - Leo's six-year track contains residency **and** migration. A single home
   range spans two continents (Session 1)
-:::
-
-. . .
 
 ::: {.keyidea}
 **Segment first, then analyse.** Almost every method in this course assumes a
@@ -539,7 +515,6 @@ question.
 
 ## Thresholds and expert rules
 
-::: {.incremental}
 - **Speed threshold** — "steps faster than $v^*$ are travelling". Transparent
   and reproducible
 - **Expert rules** — combine several: speed *and* turning angle *and* time of
@@ -548,7 +523,6 @@ question.
   with an empty valley between modes
 - Without that valley, the threshold is an arbitrary decision dressed up as a
   result
-:::
 
 ---
 
@@ -577,7 +551,6 @@ axis(1, at = log10(c(0.01, 0.1, 1, 10) + 0.001), labels = c(0.01, 0.1, 1, 10))
 
 [Figure produced with own R code · data: turkey vulture Leo, Bildstein et al. (Movebank); Kruger buffalo, Getz et al. (Movebank)]{.credit}
 
-
 Left: Leo's migration days (> 50 km, dashed) form a separate mode. Right: the
 buffalo's speeds are a continuum with no gap; any cut-off is arbitrary.
 
@@ -588,16 +561,12 @@ buffalo's speeds are a continuum with no gap; any cut-off is arbitrary.
 BCPA (Gurarie et al. 2009) looks for places where the **statistical
 properties** of the movement change.
 
-::: {.incremental}
 - Works on a single variable, typically **persistence velocity**
   $V\cos\theta$: fast *and* straight gives high values
 - Slides a window along the track; within each window finds the most likely
   break in mean, variance or autocorrelation
 - Collects breaks that recur across windows into **change points**
 - Works with irregular sampling, which is its great practical strength
-:::
-
-. . .
 
 ::: {.keyidea}
 BCPA tells you **where** the process changes. It does not tell you what the
@@ -631,7 +600,6 @@ segments(to_time(ph$t0), ph$mu.hat / 1000, to_time(ph$t1), ph$mu.hat / 1000, lwd
 ```
 
 [Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
-
 
 Persistence velocity over the first 25 days of hourly fixes (grey), the
 `r nrow(cps$breaks)` change points BCPA finds with a 50-fix window (dashed),
@@ -684,7 +652,6 @@ today's practical.
 
 ## Recap
 
-::: {.incremental}
 - Path descriptors — NSD, straightness, sinuosity, fractal dimension — all
   depend on the sampling interval and the window
 - NSD model classification is powerful; **read the parameters**, not just AIC
@@ -692,9 +659,6 @@ today's practical.
 - Encamped versus transit is usually all hourly GPS can resolve
 - Thresholds are honest only across an empty valley; BCPA finds changes, not
   behaviours, and its answer depends on the fix rate
-:::
-
-. . .
 
 ### Before Session 5
 

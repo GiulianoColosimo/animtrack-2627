@@ -89,15 +89,11 @@ and then fits them together.
 An animal **selects** a resource when it uses it **disproportionately to its
 availability**.
 
-::: {.incremental}
 - Use alone tells you nothing. A wolf in a landscape that is 95% forest will
   be found mostly in forest whether or not it prefers forest
 - So every selection analysis needs two samples:
   - **Used** — where the animal was
   - **Available** — where it could have been
-:::
-
-. . .
 
 ::: {.keyidea}
 The second sample is not data. **You construct it**, and the construction
@@ -132,7 +128,6 @@ text(bp, share, sprintf("%.1f%%", share), pos = 3, cex = 1.6)
 ```
 
 [Figure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via `amt`]{.credit}
-
 
 Green: forest. Almost every fix is in forest — but so is almost everything
 available. The signal is in the comparison: outside forest, Lupe turns up
@@ -240,7 +235,6 @@ with(few[few$case_, ], { segments(x1_, y1_, x2_, y2_, col = rust, lwd = 4); poin
 
 [Figure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via `amt`]{.credit}
 
-
 The same fisher (red). Each panel zooms into the dashed box of the previous
 one: the study area, the home range, and eight steps with their control steps
 (grey).
@@ -254,19 +248,16 @@ $$w(\mathbf{x}) = \exp(\beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_k x_k)$$
 $w(\mathbf{x})$ is the **relative** probability of use, proportional to the
 true probability by an unknown constant.
 
-::: {.incremental}
 - Fitted with logistic regression on used (1) vs available (0) points
 - There is **no intercept you can interpret** — it absorbs the arbitrary
   number of available points you drew
 - Only **relative** statements are licensed: "twice as likely as", never
   "40% probability of use"
-:::
 
 ---
 
 ## Used–available is not case–control
 
-::: {.incremental}
 - "Available" points are not known **absences**. The animal may well have used
   them; you just did not observe it
 - Formally, the used–available design fits an **inhomogeneous Poisson point
@@ -274,9 +265,6 @@ true probability by an unknown constant.
 - This is why the **infinitely weighted logistic regression** trick works:
   give available points a huge weight and the logistic coefficients converge
   to the correct point-process coefficients
-:::
-
-. . .
 
 ```r
 d$w <- ifelse(d$case_, 1, 5000)
@@ -316,7 +304,6 @@ lets you compare effect sizes across covariates measured in different units.
 
 ## Three decisions
 
-::: {.incremental}
 1. **The domain.** Study area? MCP? KDE? Buffer around the track? This *is*
    your choice of Johnson order.
 2. **How many points.** Too few and the estimates are noisy; the coefficients
@@ -324,9 +311,6 @@ lets you compare effect sizes across covariates measured in different units.
 3. **How they are distributed.** Uniform random is the default. But should
    inaccessible areas (open water, cliffs, the other side of a motorway) be
    "available" at all?
-:::
-
-. . .
 
 ::: {.keyidea}
 Changing the availability domain can reverse the sign of a coefficient. This
@@ -365,7 +349,6 @@ abline(h = tail(stab$b, 1), lty = 2, col = "grey50")
 
 [Figure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via `amt`]{.credit}
 
-
 Lupe's forest coefficient and 95% CI, refitted with more and more available
 points. The estimate settles by about ten per fix; the interval hardly
 narrows, because the information is in the 774 used fixes.
@@ -376,16 +359,12 @@ narrows, because the information is in the 774 used fixes.
 
 ## An animal cannot be anywhere
 
-::: {.incremental}
 - An RSF treats every point in the home range as equally available at every
   moment
 - But a buffalo at 08:00 cannot be 20 km away at 09:00. It can reach perhaps a
   kilometre
 - So most of the "available" set was never a real alternative
 - Availability is **local**, and it **moves with the animal**
-:::
-
-. . .
 
 ::: {.keyidea}
 A step selection function fixes this by defining availability from the
@@ -399,16 +378,12 @@ have gone?
 
 For each observed step:
 
-::: {.incremental}
 1. Take the starting point $\mathbf{x}_{t}$
 2. Draw $k$ **control steps** from the animal's own distributions of step
    length and turning angle
 3. That gives one **stratum**: 1 used step + $k$ available steps, all from the
    same starting point at the same time
 4. Compare them with **conditional logistic regression**
-:::
-
-. . .
 
 Because the comparison is *within* a stratum, everything constant at that
 moment — time of day, season, the animal's internal state, its identity —
@@ -445,7 +420,6 @@ text(0.05, seq(0.9, 0.9 - 0.075 * nrow(tab), length.out = nrow(tab) + 1)[-1] + 0
 
 [Figure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via `amt`]{.credit}
 
-
 Square: where the fisher was. Dotted: the steps that brought it there. The
 model asks only how the used step differs from its own controls.
 
@@ -459,15 +433,11 @@ P(\text{step } j \text{ chosen}) =
 {\sum_{i \in \text{stratum}} \exp(\boldsymbol{\beta}^{\top}\mathbf{x}_i)}
 $$
 
-::: {.incremental}
 - Identical machinery to a **Cox proportional hazards** model — which is why
   `survival::clogit()` and `amt::fit_issf()` both go through `coxph()`
 - Each stratum contributes only the *contrast* between the used step and its
   controls
 - No intercept. Again, only **relative** statements
-:::
-
-. . .
 
 ```r
 fit_issf(case_ ~ elevation_end + sl_ + log(sl_) +
@@ -481,15 +451,11 @@ fit_issf(case_ ~ elevation_end + sl_ + log(sl_) +
 
 The paper that made SSFs standard: elk in Yellowstone after wolves returned.
 
-::: {.incremental}
 - Each observed step compared with control steps drawn from the elk's own
   step-length and turning-angle distributions
 - Elk avoided aspen stands in areas with high wolf density
 - The effect changed where elk browsed, and so which aspen could regenerate — a
   behavioural route to a trophic cascade
-:::
-
-. . .
 
 ::: {.keyidea}
 The SSF made it possible to ask how predators change **fine-scale movement
@@ -535,14 +501,10 @@ To generate control steps you need the animal's step-length and turning-angle
 distributions. But those distributions are **themselves affected by habitat** —
 an animal moves slowly in good habitat and fast through bad.
 
-::: {.incremental}
 - Estimate them from the raw data, and they are already contaminated by
   selection
 - Use them to define availability, and you bake the contamination in
 - The estimated selection coefficients are then biased
-:::
-
-. . .
 
 ::: {.keyidea}
 **Integrated step selection analysis** (Avgar et al. 2016) solves this by
@@ -556,15 +518,11 @@ estimating the movement kernel and the selection coefficients
 
 Include the movement variables as covariates in the conditional model:
 
-::: {.incremental}
 - `sl_` and `log(sl_)` — together these correct the **gamma** step-length
   distribution used to generate the controls
 - `cos(ta_)` — corrects the **von Mises** turning-angle concentration
 - The fitted coefficients on these terms tell you how the *realised* movement
   kernel differs from the *tentative* one you sampled from
-:::
-
-. . .
 
 ```r
 fit_issf(case_ ~ elevation_end + grassland_end +
@@ -627,7 +585,6 @@ lines(th * 180 / pi, dvm(th, ta1$params$kappa), lwd = 4, col = rust)
 
 [Figure produced with own R code · data: fisher Lupe, LaPoint et al. (2013), via `amt`]{.credit}
 
-
 Grey: the distributions Lupe's control steps were drawn from. Red: the
 movement kernel after the iSSA correction. For this fisher the correction is
 small (mean step `r round(prod(unlist(sl0$params)))` →
@@ -648,12 +605,10 @@ case_ ~ grassland_end +
         strata(step_id_)
 ```
 
-::: {.incremental}
 - `_start` covariates modify the **movement kernel** — how the animal moves
   *from* that habitat
 - `_end` covariates capture **selection** — which habitat it moves *into*
 - Mixing them up is the single most common error in iSSA papers
-:::
 
 ---
 
@@ -691,13 +646,9 @@ exactly what iSSA buys you, and it is invisible to an RSF.
 
 An iSSA gives you two things at once:
 
-::: {.incremental}
 - a **movement kernel** — how far and how straight the animal moves, and how
   that depends on where it is
 - a **selection function** — which destinations it prefers
-:::
-
-. . .
 
 Multiply them and you have the animal's **redistribution kernel**: the
 probability of being at each place one step from now. Iterate it, and you
@@ -747,7 +698,6 @@ show(move * sel, "= where it goes next")
 
 [Figure produced with own R code · simulated data]{.credit}
 
-
 The simulated animal of today's practical (β = 1.5) in a 1.8 km window.
 Square: where it is; arrow: its last step. Movement says how far and which
 way; selection tilts the kernel towards better habitat.
@@ -760,20 +710,17 @@ The natural effect size for an SSF (Avgar et al. 2017; Fieberg et al. 2021):
 
 $$\text{RSS}(x_1, x_2) = \exp\big(\beta\,(x_1 - x_2)\big)$$
 
-::: {.incremental}
 - "How many times more likely is the animal to take a step ending at $x_1$
   rather than $x_2$, given both were equally reachable?"
 - For a binary habitat, RSS = $e^{\beta}$
 - For a continuous covariate, RSS depends on the difference you pick — report
   it for a biologically meaningful one
-:::
 
 # 6 · Doing it well {background-color="#14525a"}
 
 ---
 
 ## Practical decisions
-::: {.incremental}
 - **How many control steps?** 10 is a common default; check that coefficients
   stabilise as you increase it, exactly as for RSF availability
 - **Sampling interval.** All steps in the analysis must share one duration.
@@ -783,13 +730,11 @@ $$\text{RSS}(x_1, x_2) = \exp\big(\beta\,(x_1 - x_2)\big)$$
   such as roads and rivers
 - **Zero-length steps** break the gamma distribution — `amt` warns and
   replaces them
-:::
 
 ---
 
 ## Multiple animals, again
 
-::: {.incremental}
 - **Two-stage**: fit each animal, then summarise the coefficients. Simple,
   transparent, and adequate for small samples
 - **Mixed conditional models**: Muff et al. (2020) show how to fit these in
@@ -797,22 +742,17 @@ $$\text{RSS}(x_1, x_2) = \exp\big(\beta\,(x_1 - x_2)\big)$$
   intercepts
 - A random intercept alone is **not** enough — it does not let individuals
   differ in selection, which is usually the biology you care about
-:::
 
 ---
 
 ## Validation
 
-::: {.incremental}
 - **Used–habitat calibration** plots (Fieberg et al. 2018)
 - Withhold **whole individuals**, or whole time blocks — never random steps,
   because autocorrelation leaks the answer into the test set
 - **Simulate** from the fitted model and compare the simulated space use with
   the observed. If your model cannot regenerate something resembling the real
   track, it has not captured the process
-:::
-
-. . .
 
 ```r
 amt::simulate_path(...)   # redistribution kernel from the fitted iSSA
@@ -886,7 +826,6 @@ choice.
 
 ## Recap
 
-::: {.incremental}
 - Selection = use **relative to availability**; state the order and the domain
 - RSF: used vs available; RSPF needs real absences; SSF: each step vs its own
   alternatives
@@ -894,9 +833,6 @@ choice.
 - iSSA estimates movement and selection together; `_end` covariates select,
   `_start` covariates modify movement
 - A fitted iSSA is a **generative** model: it can simulate
-:::
-
-. . .
 
 ### Before Session 8
 

@@ -71,16 +71,12 @@ becomes the **ground truth** you test estimators against in Sessions 6 and 7.
 
 ## You cannot rewind an animal
 
-::: {.incremental}
 - A tracking study observes **one realisation** of a random process
 - To ask "is this unusual?" you need the distribution of what *could* have
   happened — and nature will not rerun the experiment
 - A movement model is a recipe that **generates** tracks. Run it a thousand
   times and you have that distribution
 - Compare the real track with the simulated ones: where does it fall?
-:::
-
-. . .
 
 ::: {.keyidea}
 A random walk is a **null model**. When the animal departs from it, the
@@ -119,7 +115,6 @@ par(op)
 
 [Figure produced with own R code · simulated data]{.credit}
 
-
 Same number of steps. Red triangle: start. Cross: the goal of the biased walk.
 
 # 2 · The uncorrelated random walk {background-color="#14525a"}
@@ -128,7 +123,6 @@ Same number of steps. Red triangle: start. Cross: the goal of the biased walk.
 
 ## The Brownian baseline
 
-::: {.incremental}
 - Each step has a random length and a **uniformly random** direction,
   independent of the previous one
 - The animal has no memory and no goal
@@ -137,9 +131,6 @@ Same number of steps. Red triangle: start. Cross: the goal of the biased walk.
   $$\text{MSD}(n) = n\,\mathrm{E}[l^2]$$
 - MSD grows **linearly** with time: $\text{MSD} = 4Dt$ in two dimensions, with
   $D$ the diffusion coefficient
-:::
-
-. . .
 
 ::: {.keyidea}
 Linear MSD means the typical distance from the start grows only as
@@ -186,7 +177,6 @@ legend("topleft", c("simulated", "n E[l²]"), pch = c(16, NA), lty = c(NA, 1), l
 
 [Figure produced with own R code · simulated data]{.credit}
 
-
 Circles: the root of the expected MSD. Ten times more steps, only $\sqrt{10}
 \approx 3.2$ times further.
 
@@ -200,13 +190,11 @@ A **correlated random walk** (CRW) draws each new heading close to the last:
 
 $$\phi_t = \phi_{t-1} + \theta_t, \qquad \theta_t \sim \text{von Mises}(0, \kappa)$$
 
-::: {.incremental}
 - $\kappa = 0$: turning angles uniform — the uncorrelated walk
 - large $\kappa$: turning angles near zero — nearly straight lines
 - Step lengths from a gamma, Weibull or log-normal distribution
 - Two parameters for steps, one for turns: the same ingredients as the step
   selection functions of Session 7 and the hidden Markov models of Session 8
-:::
 
 ---
 
@@ -236,7 +224,6 @@ legend("topright", paste("κ =", kap), col = kcols, lwd = 4, bty = "n", cex = 1.
 ```
 
 [Figure produced with own R code · theoretical distributions]{.credit}
-
 
 Every random walk in this session, and every SSF and HMM later, is built
 from one distribution of each kind.
@@ -277,7 +264,6 @@ par(op)
 
 [Figure produced with own R code · simulated data]{.credit}
 
-
 Short lags: persistence makes a CRW **ballistic** (MSD ∝ t²). Long lags: it
 forgets its direction and becomes **diffusive** (MSD ∝ t). The crossover is
 the scale of the animal's directional memory.
@@ -316,7 +302,6 @@ flat because GPS error sets a floor on the smallest measurable displacement.
 
 Add a preferred direction — towards a den, a water hole, a breeding ground:
 
-::: {.incremental}
 - **Biased random walk (BRW)**: each heading drawn around the bearing to the
   goal, with no memory of the last heading
 - **Biased correlated random walk (BCRW)**: a compromise between the previous
@@ -324,9 +309,6 @@ Add a preferred direction — towards a den, a water hole, a breeding ground:
 - Two processes act at once: **advection** (drift towards the goal, distance
   ∝ $t$) and **diffusion** (random spread, distance ∝ $\sqrt{t}$)
 - Over long enough times, advection always wins
-:::
-
-. . .
 
 ::: {.keyidea}
 Weak bias is invisible over a few steps and decisive over many. That is why
@@ -370,7 +352,6 @@ legend("topleft", c("mean progress east: grows like t", "sideways spread: grows 
 
 [Figure produced with own R code · simulated data]{.credit}
 
-
 A weak pull towards the east (bias weight 0.1). For the first
 `r round(cross, -1)` steps the random spread is larger than the progress;
 after that, drift wins for good.
@@ -382,15 +363,11 @@ after that, drift wins for good.
 A BCRW whose goal is its own **home** produces something new: the animal
 wanders, drifts back, wanders again. It never escapes.
 
-::: {.incremental}
 - The track stays within a bounded area: a **home range** emerges from a simple
   movement rule
 - The long-run spread of positions is a stationary **utilisation distribution**
 - Mechanistic home-range models (Moorcroft & Lewis 2006) build on exactly this
   idea
-:::
-
-. . .
 
 ::: {.keyidea}
 In the practical this central-place walker becomes our **ground-truth
@@ -431,7 +408,6 @@ points(0, 0, pch = 17, cex = 1.8, col = rust)
 
 [Figure produced with own R code · simulated data]{.credit}
 
-
 No memory, no map, no boundary — only a weak pull towards home. Dashed: the
 true 95% range, about 800 km², which Session 6 tries to recover.
 
@@ -466,7 +442,6 @@ short track, even a genuine bias is swamped by noise.
 
 ## The Lévy hypothesis
 
-::: {.incremental}
 - Step lengths drawn from a **power law**: $P(l) \propto l^{-\mu}$, with
   $1 < \mu \le 3$
 - No characteristic scale: many short steps, occasional enormous ones
@@ -474,13 +449,11 @@ short track, even a genuine bias is swamped by noise.
   Viswanathan et al. (1999) showed that $\mu \approx 2$ is an **optimal search**
   strategy for sparse, randomly placed targets
 - A seductive idea: a universal, scale-free rule for foraging
-:::
 
 ---
 
 ## The reversal
 
-::: {.incremental}
 - Edwards et al. (2007) reanalysed the albatross data with better records:
   the long "flights" included time sitting on the water. **The Lévy pattern
   disappeared**
@@ -492,9 +465,6 @@ short track, even a genuine bias is swamped by noise.
   fits beautifully
 - Lévy-like patterns do appear in some marine predators, but depend on
   environmental context (Sims et al. 2008; Humphries et al. 2010)
-:::
-
-. . .
 
 ::: {.keyidea}
 The honest position: a power-law fit is not evidence of a Lévy *strategy*.
@@ -547,7 +517,6 @@ legend("bottomright", c("searching", "travelling"), col = c(teal, rust), lwd = 3
 
 [Figure produced with own R code · simulated data]{.credit}
 
-
 Grey: one exponential. Gold: a true power law. Red: two exponential modes, no
 power law anywhere — yet heavy-tailed enough that a power law beats a single
 exponential by thousands of AIC units.
@@ -584,16 +553,12 @@ belong to a distinct behavioural state (Session 8).
 
 ## The recipe
 
-::: {.incremental}
 1. Choose a **statistic** that captures your question — net displacement,
    radius of gyration, time to reach water
 2. Choose a **null process** that lacks the mechanism you are testing — a CRW
    with the animal's own step and turn distributions, but no memory
 3. **Simulate** it many times; compute the statistic each time
 4. Locate the observed value in the simulated distribution
-:::
-
-. . .
 
 ::: {.keyidea}
 The null must match the animal in everything **except** the mechanism. A null
@@ -650,7 +615,6 @@ for (k in show) {
 
 [Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank); null model simulated]{.credit}
 
-
 Grey-green: 300 CRWs with the buffalo's own steps and turns. Red line: the
 buffalo. Only the longer track is clearly more confined than its null.
 
@@ -701,7 +665,6 @@ diagnoses.
 
 ## Recap
 
-::: {.incremental}
 - Simulation replaces the replication nature will not give you
 - Uncorrelated walk: MSD ∝ t. CRW: ballistic at short scales, diffusive at long
 - Bias adds drift, which always wins eventually; a bias towards home
@@ -709,9 +672,6 @@ diagnoses.
 - Power-law step lengths are not evidence of a Lévy strategy
 - A simulation null must match the animal in everything but the mechanism —
   and has power only if the track is long enough
-:::
-
-. . .
 
 ### Before Session 6
 

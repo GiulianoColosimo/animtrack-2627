@@ -2899,7 +2899,7 @@
     "href": "classes/class-04/slides.html#everything-here-is-scale-dependent",
     "title": "Quantifying movement",
     "section": "Everything here is scale-dependent",
-    "text": "Everything here is scale-dependent\n\nSample every 5 minutes: many short steps — but so short that GPS error randomises their direction\nSample hourly: clear directional persistence\nSample every 12 hours: few long steps, turning angles ≈ uniform (the animal looks like it moves at random)\nTotal path length grows without bound as the interval shrinks — the coastline paradox\n\n\n\n“Mean step length” is not a property of the animal. It is a property of the animal and your sampling interval. Always report the interval alongside it, and never compare step lengths measured at different rates.\nThere is a sweet spot: fine enough to resolve the behaviour, coarse enough that a typical step is much longer than your GPS error.",
+    "text": "Everything here is scale-dependent\n\nSample every 5 minutes: many short steps — but so short that GPS error randomises their direction\nSample hourly: clear directional persistence\nSample every 12 hours: few long steps, turning angles ≈ uniform (the animal looks like it moves at random)\nTotal path length grows without bound as the interval shrinks — the coastline paradox\n\n\n“Mean step length” is not a property of the animal. It is a property of the animal and your sampling interval. Always report the interval alongside it, and never compare step lengths measured at different rates.\nThere is a sweet spot: fine enough to resolve the behaviour, coarse enough that a typical step is much longer than your GPS error.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2938,7 +2938,7 @@
     "href": "classes/class-04/slides.html#fractal-dimension",
     "title": "Quantifying movement",
     "section": "Fractal dimension",
-    "text": "Fractal dimension\n\nMeasure path length with a “ruler” of length \\(r\\); on a fractal path \\(L(r) \\propto r^{1-D}\\), so \\(D\\) comes from the slope of log L on log r\n\\(D = 1\\): straight line; \\(D \\to 2\\): a path that fills the plane\nAppealing because it claims to be scale-free\nThe catch (Benhamou 2004; Turchin 1996): real animal paths are rarely fractal across more than a narrow range of scales, and \\(D\\) estimated from a correlated random walk varies with \\(r\\)\n\n\n\nIf \\(D\\) changes with the ruler, the path is not fractal — and the change itself tells you the scale at which the behaviour changes.",
+    "text": "Fractal dimension\n\nMeasure path length with a “ruler” of length \\(r\\); on a fractal path \\(L(r) \\propto r^{1-D}\\), so \\(D\\) comes from the slope of log L on log r\n\\(D = 1\\): straight line; \\(D \\to 2\\): a path that fills the plane\nAppealing because it claims to be scale-free\nThe catch (Benhamou 2004; Turchin 1996): real animal paths are rarely fractal across more than a narrow range of scales, and \\(D\\) estimated from a correlated random walk varies with \\(r\\)\n\n\nIf \\(D\\) changes with the ruler, the path is not fractal — and the change itself tells you the scale at which the behaviour changes.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2951,7 +2951,7 @@
     "href": "classes/class-04/slides.html#net-squared-displacement-nsd",
     "title": "Quantifying movement",
     "section": "Net squared displacement (NSD)",
-    "text": "Net squared displacement (NSD)\n\\[\\text{NSD}(t) = \\lVert \\mathbf{x}_t - \\mathbf{x}_0 \\rVert^2\\]\nThe squared distance from the starting point. A remarkably effective diagnostic:\n\nSedentary — NSD rises then plateaus at a low value\nMigratory — a sigmoid up, a plateau, a sigmoid back down\nDispersal — a single step up to a new plateau\nNomadic — rises roughly linearly, no plateau\n\n\nFitting these shapes as competing non-linear models (Bunnefeld et al. 2011) is a cheap and surprisingly effective way to classify movement strategies.",
+    "text": "Net squared displacement (NSD)\n\\[\\text{NSD}(t) = \\lVert \\mathbf{x}_t - \\mathbf{x}_0 \\rVert^2\\]\nThe squared distance from the starting point. A remarkably effective diagnostic:\n\nSedentary — NSD rises then plateaus at a low value\nMigratory — a sigmoid up, a plateau, a sigmoid back down\nDispersal — a single step up to a new plateau\nNomadic — rises roughly linearly, no plateau\n\nFitting these shapes as competing non-linear models (Bunnefeld et al. 2011) is a cheap and surprisingly effective way to classify movement strategies.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3029,7 +3029,7 @@
     "href": "classes/class-04/slides.html#how-long-to-leave-a-circle",
     "title": "Quantifying movement",
     "section": "How long to leave a circle?",
-    "text": "How long to leave a circle?\nFauchald & Tveraa (2003): around each fix, draw a circle of radius \\(r\\) and measure the time the animal takes to leave it.\n\nWhere the animal searches intensively, first-passage time (FPT) is long; where it travels, FPT is short\nRepeat for many radii and compute the variance of log FPT along the path\nThe radius at which that variance peaks is the spatial scale of area-restricted search\n\n\n\nFPT turns “where does the animal slow down?” into a scale: how big are the patches it responds to?",
+    "text": "How long to leave a circle?\nFauchald & Tveraa (2003): around each fix, draw a circle of radius \\(r\\) and measure the time the animal takes to leave it.\n\nWhere the animal searches intensively, first-passage time (FPT) is long; where it travels, FPT is short\nRepeat for many radii and compute the variance of log FPT along the path\nThe radius at which that variance peaks is the spatial scale of area-restricted search\n\n\nFPT turns “where does the animal slow down?” into a scale: how big are the patches it responds to?",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3068,7 +3068,7 @@
     "href": "classes/class-04/slides.html#the-problem",
     "title": "Quantifying movement",
     "section": "The problem",
-    "text": "The problem\nAn animal is not doing one thing all day.\n\nResting, foraging, travelling, migrating — each with its own step-length and turning-angle signature\nPool them and every summary is a meaningless average: a “mean step length” that describes no actual behaviour\nLeo’s six-year track contains residency and migration. A single home range spans two continents (Session 1)\n\n\n\nSegment first, then analyse. Almost every method in this course assumes a homogeneous process. Segmentation is how you earn that assumption.",
+    "text": "The problem\nAn animal is not doing one thing all day.\n\nResting, foraging, travelling, migrating — each with its own step-length and turning-angle signature\nPool them and every summary is a meaningless average: a “mean step length” that describes no actual behaviour\nLeo’s six-year track contains residency and migration. A single home range spans two continents (Session 1)\n\n\nSegment first, then analyse. Almost every method in this course assumes a homogeneous process. Segmentation is how you earn that assumption.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3146,7 +3146,7 @@
     "href": "classes/class-04/slides.html#behavioural-change-point-analysis",
     "title": "Quantifying movement",
     "section": "Behavioural change-point analysis",
-    "text": "Behavioural change-point analysis\nBCPA (Gurarie et al. 2009) looks for places where the statistical properties of the movement change.\n\nWorks on a single variable, typically persistence velocity \\(V\\cos\\theta\\): fast and straight gives high values\nSlides a window along the track; within each window finds the most likely break in mean, variance or autocorrelation\nCollects breaks that recur across windows into change points\nWorks with irregular sampling, which is its great practical strength\n\n\n\nBCPA tells you where the process changes. It does not tell you what the animal was doing, and it cannot know whether a change is behavioural or a change in your collar’s schedule.",
+    "text": "Behavioural change-point analysis\nBCPA (Gurarie et al. 2009) looks for places where the statistical properties of the movement change.\n\nWorks on a single variable, typically persistence velocity \\(V\\cos\\theta\\): fast and straight gives high values\nSlides a window along the track; within each window finds the most likely break in mean, variance or autocorrelation\nCollects breaks that recur across windows into change points\nWorks with irregular sampling, which is its great practical strength\n\n\nBCPA tells you where the process changes. It does not tell you what the animal was doing, and it cannot know whether a change is behavioural or a change in your collar’s schedule.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3198,7 +3198,7 @@
     "href": "classes/class-04/slides.html#recap",
     "title": "Quantifying movement",
     "section": "Recap",
-    "text": "Recap\n\nPath descriptors — NSD, straightness, sinuosity, fractal dimension — all depend on the sampling interval and the window\nNSD model classification is powerful; read the parameters, not just AIC\nFPT finds the scale of area-restricted search — above the noise floor\nEncamped versus transit is usually all hourly GPS can resolve\nThresholds are honest only across an empty valley; BCPA finds changes, not behaviours, and its answer depends on the fix rate\n\n\nBefore Session 5\n\nCodling, Plank & Benhamou (2008), Random walk models in biology, J R Soc Interface 5:813 — sections 1–3\nMake sure library(circular) loads",
+    "text": "Recap\n\nPath descriptors — NSD, straightness, sinuosity, fractal dimension — all depend on the sampling interval and the window\nNSD model classification is powerful; read the parameters, not just AIC\nFPT finds the scale of area-restricted search — above the noise floor\nEncamped versus transit is usually all hourly GPS can resolve\nThresholds are honest only across an empty valley; BCPA finds changes, not behaviours, and its answer depends on the fix rate\n\nBefore Session 5\n\nCodling, Plank & Benhamou (2008), Random walk models in biology, J R Soc Interface 5:813 — sections 1–3\nMake sure library(circular) loads",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3250,7 +3250,7 @@
     "href": "classes/class-05/slides.html#you-cannot-rewind-an-animal",
     "title": "Movement models and simulation",
     "section": "You cannot rewind an animal",
-    "text": "You cannot rewind an animal\n\nA tracking study observes one realisation of a random process\nTo ask “is this unusual?” you need the distribution of what could have happened — and nature will not rerun the experiment\nA movement model is a recipe that generates tracks. Run it a thousand times and you have that distribution\nCompare the real track with the simulated ones: where does it fall?\n\n\n\nA random walk is a null model. When the animal departs from it, the departure is the biology: memory, attraction, avoidance, a home range.",
+    "text": "You cannot rewind an animal\n\nA tracking study observes one realisation of a random process\nTo ask “is this unusual?” you need the distribution of what could have happened — and nature will not rerun the experiment\nA movement model is a recipe that generates tracks. Run it a thousand times and you have that distribution\nCompare the real track with the simulated ones: where does it fall?\n\n\nA random walk is a null model. When the animal departs from it, the departure is the biology: memory, attraction, avoidance, a home range.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3276,7 +3276,7 @@
     "href": "classes/class-05/slides.html#the-brownian-baseline",
     "title": "Movement models and simulation",
     "section": "The Brownian baseline",
-    "text": "The Brownian baseline\n\nEach step has a random length and a uniformly random direction, independent of the previous one\nThe animal has no memory and no goal\nAfter \\(n\\) steps the expected squared distance from the start — the mean squared displacement — is \\[\\text{MSD}(n) = n\\,\\mathrm{E}[l^2]\\]\nMSD grows linearly with time: \\(\\text{MSD} = 4Dt\\) in two dimensions, with \\(D\\) the diffusion coefficient\n\n\n\nLinear MSD means the typical distance from the start grows only as \\(\\sqrt{t}\\). A random walker four times as long gets only twice as far.",
+    "text": "The Brownian baseline\n\nEach step has a random length and a uniformly random direction, independent of the previous one\nThe animal has no memory and no goal\nAfter \\(n\\) steps the expected squared distance from the start — the mean squared displacement — is \\[\\text{MSD}(n) = n\\,\\mathrm{E}[l^2]\\]\nMSD grows linearly with time: \\(\\text{MSD} = 4Dt\\) in two dimensions, with \\(D\\) the diffusion coefficient\n\n\nLinear MSD means the typical distance from the start grows only as \\(\\sqrt{t}\\). A random walker four times as long gets only twice as far.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3354,7 +3354,7 @@
     "href": "classes/class-05/slides.html#advection-and-diffusion",
     "title": "Movement models and simulation",
     "section": "Advection and diffusion",
-    "text": "Advection and diffusion\nAdd a preferred direction — towards a den, a water hole, a breeding ground:\n\nBiased random walk (BRW): each heading drawn around the bearing to the goal, with no memory of the last heading\nBiased correlated random walk (BCRW): a compromise between the previous heading (persistence) and the bearing to the goal (bias)\nTwo processes act at once: advection (drift towards the goal, distance ∝ \\(t\\)) and diffusion (random spread, distance ∝ \\(\\sqrt{t}\\))\nOver long enough times, advection always wins\n\n\n\nWeak bias is invisible over a few steps and decisive over many. That is why orientation mechanisms are so hard to detect in short tracks and so obvious in migrations.",
+    "text": "Advection and diffusion\nAdd a preferred direction — towards a den, a water hole, a breeding ground:\n\nBiased random walk (BRW): each heading drawn around the bearing to the goal, with no memory of the last heading\nBiased correlated random walk (BCRW): a compromise between the previous heading (persistence) and the bearing to the goal (bias)\nTwo processes act at once: advection (drift towards the goal, distance ∝ \\(t\\)) and diffusion (random spread, distance ∝ \\(\\sqrt{t}\\))\nOver long enough times, advection always wins\n\n\nWeak bias is invisible over a few steps and decisive over many. That is why orientation mechanisms are so hard to detect in short tracks and so obvious in migrations.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3380,7 +3380,7 @@
     "href": "classes/class-05/slides.html#central-places",
     "title": "Movement models and simulation",
     "section": "Central places",
-    "text": "Central places\nA BCRW whose goal is its own home produces something new: the animal wanders, drifts back, wanders again. It never escapes.\n\nThe track stays within a bounded area: a home range emerges from a simple movement rule\nThe long-run spread of positions is a stationary utilisation distribution\nMechanistic home-range models (Moorcroft & Lewis 2006) build on exactly this idea\n\n\n\nIn the practical this central-place walker becomes our ground-truth animal: we know its true home range, so in Session 6 we can check which estimator gets it right.",
+    "text": "Central places\nA BCRW whose goal is its own home produces something new: the animal wanders, drifts back, wanders again. It never escapes.\n\nThe track stays within a bounded area: a home range emerges from a simple movement rule\nThe long-run spread of positions is a stationary utilisation distribution\nMechanistic home-range models (Moorcroft & Lewis 2006) build on exactly this idea\n\n\nIn the practical this central-place walker becomes our ground-truth animal: we know its true home range, so in Session 6 we can check which estimator gets it right.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3432,7 +3432,7 @@
     "href": "classes/class-05/slides.html#the-reversal",
     "title": "Movement models and simulation",
     "section": "The reversal",
-    "text": "The reversal\n\nEdwards et al. (2007) reanalysed the albatross data with better records: the long “flights” included time sitting on the water. The Lévy pattern disappeared\nThey also showed that log–log regression of histograms, the standard method at the time, is biased; power laws must be fitted by maximum likelihood and compared with alternatives (Clauset et al. 2009)\nBenhamou (2007): an animal switching between two behaviours, each a simple random walk, produces a step-length distribution that a power law fits beautifully\nLévy-like patterns do appear in some marine predators, but depend on environmental context (Sims et al. 2008; Humphries et al. 2010)\n\n\n\nThe honest position: a power-law fit is not evidence of a Lévy strategy. Different mechanisms produce indistinguishable step-length distributions.",
+    "text": "The reversal\n\nEdwards et al. (2007) reanalysed the albatross data with better records: the long “flights” included time sitting on the water. The Lévy pattern disappeared\nThey also showed that log–log regression of histograms, the standard method at the time, is biased; power laws must be fitted by maximum likelihood and compared with alternatives (Clauset et al. 2009)\nBenhamou (2007): an animal switching between two behaviours, each a simple random walk, produces a step-length distribution that a power law fits beautifully\nLévy-like patterns do appear in some marine predators, but depend on environmental context (Sims et al. 2008; Humphries et al. 2010)\n\n\nThe honest position: a power-law fit is not evidence of a Lévy strategy. Different mechanisms produce indistinguishable step-length distributions.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3471,7 +3471,7 @@
     "href": "classes/class-05/slides.html#the-recipe",
     "title": "Movement models and simulation",
     "section": "The recipe",
-    "text": "The recipe\n\nChoose a statistic that captures your question — net displacement, radius of gyration, time to reach water\nChoose a null process that lacks the mechanism you are testing — a CRW with the animal’s own step and turn distributions, but no memory\nSimulate it many times; compute the statistic each time\nLocate the observed value in the simulated distribution\n\n\n\nThe null must match the animal in everything except the mechanism. A null with the wrong step lengths is a straw man, and rejecting it proves nothing.",
+    "text": "The recipe\n\nChoose a statistic that captures your question — net displacement, radius of gyration, time to reach water\nChoose a null process that lacks the mechanism you are testing — a CRW with the animal’s own step and turn distributions, but no memory\nSimulate it many times; compute the statistic each time\nLocate the observed value in the simulated distribution\n\n\nThe null must match the animal in everything except the mechanism. A null with the wrong step lengths is a straw man, and rejecting it proves nothing.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3523,7 +3523,7 @@
     "href": "classes/class-05/slides.html#recap",
     "title": "Movement models and simulation",
     "section": "Recap",
-    "text": "Recap\n\nSimulation replaces the replication nature will not give you\nUncorrelated walk: MSD ∝ t. CRW: ballistic at short scales, diffusive at long\nBias adds drift, which always wins eventually; a bias towards home creates a home range\nPower-law step lengths are not evidence of a Lévy strategy\nA simulation null must match the animal in everything but the mechanism — and has power only if the track is long enough\n\n\nBefore Session 6\n\nFleming et al. (2015), Ecology 96:1182 — autocorrelated KDE\nMake sure library(ctmm) and library(adehabitatHR) both load",
+    "text": "Recap\n\nSimulation replaces the replication nature will not give you\nUncorrelated walk: MSD ∝ t. CRW: ballistic at short scales, diffusive at long\nBias adds drift, which always wins eventually; a bias towards home creates a home range\nPower-law step lengths are not evidence of a Lévy strategy\nA simulation null must match the animal in everything but the mechanism — and has power only if the track is long enough\n\nBefore Session 6\n\nFleming et al. (2015), Ecology 96:1182 — autocorrelated KDE\nMake sure library(ctmm) and library(adehabitatHR) both load",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3679,7 +3679,7 @@
     "href": "classes/class-06/slides.html#the-problem-classical-kde-has-with-gps",
     "title": "Home ranges and space use",
     "section": "The problem classical KDE has with GPS",
-    "text": "The problem classical KDE has with GPS\nClassical KDE assumes fixes are independent draws from the UD.\n\nHourly GPS fixes are nothing of the sort — the animal was 300 m away an hour ago and will be 300 m away in an hour.\n\nThe effective sample size is far smaller than \\(n\\)\nThe UD comes out too narrow — the range is under-estimated\nCollecting more fixes at a higher rate makes it worse, not better\n\n\n\n\nThis is why area estimates from 1990s VHF studies (a few dozen fixes, days apart) and modern GPS studies (thousands, an hour apart) are not comparable.",
+    "text": "The problem classical KDE has with GPS\nClassical KDE assumes fixes are independent draws from the UD.\n\nHourly GPS fixes are nothing of the sort — the animal was 300 m away an hour ago and will be 300 m away in an hour.\n\nThe effective sample size is far smaller than \\(n\\)\nThe UD comes out too narrow — the range is under-estimated\nCollecting more fixes at a higher rate makes it worse, not better\n\n\nThis is why area estimates from 1990s VHF studies (a few dozen fixes, days apart) and modern GPS studies (thousands, an hour apart) are not comparable.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3705,7 +3705,7 @@
     "href": "classes/class-06/slides.html#brownian-bridges-use-the-path",
     "title": "Home ranges and space use",
     "section": "Brownian bridges: use the path",
-    "text": "Brownian bridges: use the path\nHorne et al. (2007): between two consecutive fixes the animal was somewhere on a random bridge connecting them.\n\nThe uncertainty of the bridge grows with the time gap and shrinks near each fix, scaled by a mobility parameter estimated from the data\nUses the order of the fixes, not just their positions\nHandles irregular sampling naturally\nAnswers a specific question: where was the animal during the tracking period? — its occurrence distribution\n\n\n\nA Brownian bridge maps where the animal went, not where it could go. It shrinks around the observed path, so it is usually the smallest of the estimates — correctly so, for the question it answers.",
+    "text": "Brownian bridges: use the path\nHorne et al. (2007): between two consecutive fixes the animal was somewhere on a random bridge connecting them.\n\nThe uncertainty of the bridge grows with the time gap and shrinks near each fix, scaled by a mobility parameter estimated from the data\nUses the order of the fixes, not just their positions\nHandles irregular sampling naturally\nAnswers a specific question: where was the animal during the tracking period? — its occurrence distribution\n\n\nA Brownian bridge maps where the animal went, not where it could go. It shrinks around the observed path, so it is usually the smallest of the estimates — correctly so, for the question it answers.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3718,7 +3718,7 @@
     "href": "classes/class-06/slides.html#autocorrelation-is-information",
     "title": "Home ranges and space use",
     "section": "Autocorrelation is information",
-    "text": "Autocorrelation is information\nFleming et al. (2015): stop treating autocorrelation as a nuisance.\n\nFit a continuous-time movement model to the track (ctmm)\nThe model tells you how long the animal takes to cross its range — the range-crossing time \\(\\tau_\\text{position}\\)\nFrom that, the effective sample size: roughly how many times the animal crossed its range during tracking\nWeight the kernel accordingly: AKDE\n\n\n\nAKDE estimates the range distribution — where the animal would be found in the long run — and gives it a confidence interval. If you track for three range-crossing times, you effectively have three observations, however many fixes you collected.",
+    "text": "Autocorrelation is information\nFleming et al. (2015): stop treating autocorrelation as a nuisance.\n\nFit a continuous-time movement model to the track (ctmm)\nThe model tells you how long the animal takes to cross its range — the range-crossing time \\(\\tau_\\text{position}\\)\nFrom that, the effective sample size: roughly how many times the animal crossed its range during tracking\nWeight the kernel accordingly: AKDE\n\n\nAKDE estimates the range distribution — where the animal would be found in the long run — and gives it a confidence interval. If you track for three range-crossing times, you effectively have three observations, however many fixes you collected.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3744,7 +3744,7 @@
     "href": "classes/class-06/slides.html#the-variogram",
     "title": "Home ranges and space use",
     "section": "The variogram",
-    "text": "The variogram\nThe semi-variance as a function of time lag: how far apart, on average, two positions \\(\\Delta t\\) apart are.\n\nRises at short lags as the animal moves away\nLevels off at an asymptote if the animal is range-resident: beyond the range-crossing time, positions are as far apart as they will ever be\nKeeps rising if the animal is not range-resident — drifting, dispersing, nomadic\nProportional to the mean squared displacement of Session 5: the same curve, rescaled\n\n\n\nLook at the variogram before estimating any home range. No asymptote, no home range.",
+    "text": "The variogram\nThe semi-variance as a function of time lag: how far apart, on average, two positions \\(\\Delta t\\) apart are.\n\nRises at short lags as the animal moves away\nLevels off at an asymptote if the animal is range-resident: beyond the range-crossing time, positions are as far apart as they will ever be\nKeeps rising if the animal is not range-resident — drifting, dispersing, nomadic\nProportional to the mean squared displacement of Session 5: the same curve, rescaled\n\n\nLook at the variogram before estimating any home range. No asymptote, no home range.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3783,7 +3783,7 @@
     "href": "classes/class-06/slides.html#stationarity-and-the-occupation-timescale",
     "title": "Home ranges and space use",
     "section": "Stationarity and the occupation timescale",
-    "text": "Stationarity and the occupation timescale\n\nEvery estimator assumes the UD is stationary over the tracking period: the animal’s space use is not systematically changing\nSeasonal shifts, dispersal and migration all violate it — segment first (Session 4) and estimate one range per stationary period\nThe track must be much longer than the range-crossing time, or the animal has not yet shown you its range\nIn Session 5, a buffalo tracked for 36 days was indistinguishable from a random walker; one tracked for 157 days was clearly confined\n\n\n\n“Must the time series be stationary?” Yes — over the timescale you summarise. A home range is always a home range for a stated period.",
+    "text": "Stationarity and the occupation timescale\n\nEvery estimator assumes the UD is stationary over the tracking period: the animal’s space use is not systematically changing\nSeasonal shifts, dispersal and migration all violate it — segment first (Session 4) and estimate one range per stationary period\nThe track must be much longer than the range-crossing time, or the animal has not yet shown you its range\nIn Session 5, a buffalo tracked for 36 days was indistinguishable from a random walker; one tracked for 157 days was clearly confined\n\n\n“Must the time series be stationary?” Yes — over the timescale you summarise. A home range is always a home range for a stated period.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3835,7 +3835,7 @@
     "href": "classes/class-06/slides.html#recap",
     "title": "Home ranges and space use",
     "section": "Recap",
-    "text": "Recap\n\nThe UD is the object; a home range is a contour on it\nMCP for comparability only; KDE depends on bandwidth and ignores autocorrelation\nBrownian bridges map occurrence; AKDE estimates the range with a CI\nAutocorrelation is information: effective sample size = range crossings\nCheck the variogram and stationarity first\n\n\nBefore Session 7\n\nFieberg et al. (2021), J Anim Ecol 90:1027 — the “how-to” guide to habitat-selection parameters. The most useful paper of the course\nFortin et al. (2005), Ecology 86:1320 — the first step selection function",
+    "text": "Recap\n\nThe UD is the object; a home range is a contour on it\nMCP for comparability only; KDE depends on bandwidth and ignores autocorrelation\nBrownian bridges map occurrence; AKDE estimates the range with a CI\nAutocorrelation is information: effective sample size = range crossings\nCheck the variogram and stationarity first\n\nBefore Session 7\n\nFieberg et al. (2021), J Anim Ecol 90:1027 — the “how-to” guide to habitat-selection parameters. The most useful paper of the course\nFortin et al. (2005), Ecology 86:1320 — the first step selection function",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3887,7 +3887,7 @@
     "href": "classes/class-07/slides.html#selection-is-a-comparison",
     "title": "Habitat selection on the move",
     "section": "Selection is a comparison",
-    "text": "Selection is a comparison\nAn animal selects a resource when it uses it disproportionately to its availability.\n\nUse alone tells you nothing. A wolf in a landscape that is 95% forest will be found mostly in forest whether or not it prefers forest\nSo every selection analysis needs two samples:\n\nUsed — where the animal was\nAvailable — where it could have been\n\n\n\n\nThe second sample is not data. You construct it, and the construction encodes a hypothesis. Most disagreements about habitat selection results are disagreements about availability.",
+    "text": "Selection is a comparison\nAn animal selects a resource when it uses it disproportionately to its availability.\n\nUse alone tells you nothing. A wolf in a landscape that is 95% forest will be found mostly in forest whether or not it prefers forest\nSo every selection analysis needs two samples:\n\nUsed — where the animal was\nAvailable — where it could have been\n\n\n\nThe second sample is not data. You construct it, and the construction encodes a hypothesis. Most disagreements about habitat selection results are disagreements about availability.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3978,7 +3978,7 @@
     "href": "classes/class-07/slides.html#usedavailable-is-not-casecontrol",
     "title": "Habitat selection on the move",
     "section": "Used–available is not case–control",
-    "text": "Used–available is not case–control\n\n“Available” points are not known absences. The animal may well have used them; you just did not observe it\nFormally, the used–available design fits an inhomogeneous Poisson point process, and logistic regression is a computational device for it\nThis is why the infinitely weighted logistic regression trick works: give available points a huge weight and the logistic coefficients converge to the correct point-process coefficients\n\n\nd$w &lt;- ifelse(d$case_, 1, 5000)\nglm(case_ ~ elevation + grassland, data = d,\n    family = binomial(), weights = d$w)",
+    "text": "Used–available is not case–control\n\n“Available” points are not known absences. The animal may well have used them; you just did not observe it\nFormally, the used–available design fits an inhomogeneous Poisson point process, and logistic regression is a computational device for it\nThis is why the infinitely weighted logistic regression trick works: give available points a huge weight and the logistic coefficients converge to the correct point-process coefficients\n\nd$w &lt;- ifelse(d$case_, 1, 5000)\nglm(case_ ~ elevation + grassland, data = d,\n    family = binomial(), weights = d$w)",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4004,7 +4004,7 @@
     "href": "classes/class-07/slides.html#three-decisions",
     "title": "Habitat selection on the move",
     "section": "Three decisions",
-    "text": "Three decisions\n\nThe domain. Study area? MCP? KDE? Buffer around the track? This is your choice of Johnson order.\nHow many points. Too few and the estimates are noisy; the coefficients should stabilise as you add more. Check that they do.\nHow they are distributed. Uniform random is the default. But should inaccessible areas (open water, cliffs, the other side of a motorway) be “available” at all?\n\n\n\nChanging the availability domain can reverse the sign of a coefficient. This is not a flaw in the method — it is the method working. Different domains ask different questions.",
+    "text": "Three decisions\n\nThe domain. Study area? MCP? KDE? Buffer around the track? This is your choice of Johnson order.\nHow many points. Too few and the estimates are noisy; the coefficients should stabilise as you add more. Check that they do.\nHow they are distributed. Uniform random is the default. But should inaccessible areas (open water, cliffs, the other side of a motorway) be “available” at all?\n\n\nChanging the availability domain can reverse the sign of a coefficient. This is not a flaw in the method — it is the method working. Different domains ask different questions.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4030,7 +4030,7 @@
     "href": "classes/class-07/slides.html#an-animal-cannot-be-anywhere",
     "title": "Habitat selection on the move",
     "section": "An animal cannot be anywhere",
-    "text": "An animal cannot be anywhere\n\nAn RSF treats every point in the home range as equally available at every moment\nBut a buffalo at 08:00 cannot be 20 km away at 09:00. It can reach perhaps a kilometre\nSo most of the “available” set was never a real alternative\nAvailability is local, and it moves with the animal\n\n\n\nA step selection function fixes this by defining availability from the animal’s own movement capacity: from where it was, where could it plausibly have gone?",
+    "text": "An animal cannot be anywhere\n\nAn RSF treats every point in the home range as equally available at every moment\nBut a buffalo at 08:00 cannot be 20 km away at 09:00. It can reach perhaps a kilometre\nSo most of the “available” set was never a real alternative\nAvailability is local, and it moves with the animal\n\n\nA step selection function fixes this by defining availability from the animal’s own movement capacity: from where it was, where could it plausibly have gone?",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4043,7 +4043,7 @@
     "href": "classes/class-07/slides.html#the-design",
     "title": "Habitat selection on the move",
     "section": "The design",
-    "text": "The design\nFor each observed step:\n\nTake the starting point \\(\\mathbf{x}_{t}\\)\nDraw \\(k\\) control steps from the animal’s own distributions of step length and turning angle\nThat gives one stratum: 1 used step + \\(k\\) available steps, all from the same starting point at the same time\nCompare them with conditional logistic regression\n\n\nBecause the comparison is within a stratum, everything constant at that moment — time of day, season, the animal’s internal state, its identity — cancels out. That is a remarkably clean piece of control.",
+    "text": "The design\nFor each observed step:\n\nTake the starting point \\(\\mathbf{x}_{t}\\)\nDraw \\(k\\) control steps from the animal’s own distributions of step length and turning angle\nThat gives one stratum: 1 used step + \\(k\\) available steps, all from the same starting point at the same time\nCompare them with conditional logistic regression\n\nBecause the comparison is within a stratum, everything constant at that moment — time of day, season, the animal’s internal state, its identity — cancels out. That is a remarkably clean piece of control.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4069,7 +4069,7 @@
     "href": "classes/class-07/slides.html#conditional-logistic-regression",
     "title": "Habitat selection on the move",
     "section": "Conditional logistic regression",
-    "text": "Conditional logistic regression\n\\[\nP(\\text{step } j \\text{ chosen}) =\n\\frac{\\exp(\\boldsymbol{\\beta}^{\\top}\\mathbf{x}_j)}\n{\\sum_{i \\in \\text{stratum}} \\exp(\\boldsymbol{\\beta}^{\\top}\\mathbf{x}_i)}\n\\]\n\nIdentical machinery to a Cox proportional hazards model — which is why survival::clogit() and amt::fit_issf() both go through coxph()\nEach stratum contributes only the contrast between the used step and its controls\nNo intercept. Again, only relative statements\n\n\nfit_issf(case_ ~ elevation_end + sl_ + log(sl_) +\n                 strata(step_id_),\n         data = d)",
+    "text": "Conditional logistic regression\n\\[\nP(\\text{step } j \\text{ chosen}) =\n\\frac{\\exp(\\boldsymbol{\\beta}^{\\top}\\mathbf{x}_j)}\n{\\sum_{i \\in \\text{stratum}} \\exp(\\boldsymbol{\\beta}^{\\top}\\mathbf{x}_i)}\n\\]\n\nIdentical machinery to a Cox proportional hazards model — which is why survival::clogit() and amt::fit_issf() both go through coxph()\nEach stratum contributes only the contrast between the used step and its controls\nNo intercept. Again, only relative statements\n\nfit_issf(case_ ~ elevation_end + sl_ + log(sl_) +\n                 strata(step_id_),\n         data = d)",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4082,7 +4082,7 @@
     "href": "classes/class-07/slides.html#fortin-et-al.-2005",
     "title": "Habitat selection on the move",
     "section": "Fortin et al. (2005)",
-    "text": "Fortin et al. (2005)\nThe paper that made SSFs standard: elk in Yellowstone after wolves returned.\n\nEach observed step compared with control steps drawn from the elk’s own step-length and turning-angle distributions\nElk avoided aspen stands in areas with high wolf density\nThe effect changed where elk browsed, and so which aspen could regenerate — a behavioural route to a trophic cascade\n\n\n\nThe SSF made it possible to ask how predators change fine-scale movement decisions, not just where prey live.",
+    "text": "Fortin et al. (2005)\nThe paper that made SSFs standard: elk in Yellowstone after wolves returned.\n\nEach observed step compared with control steps drawn from the elk’s own step-length and turning-angle distributions\nElk avoided aspen stands in areas with high wolf density\nThe effect changed where elk browsed, and so which aspen could regenerate — a behavioural route to a trophic cascade\n\n\nThe SSF made it possible to ask how predators change fine-scale movement decisions, not just where prey live.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4108,7 +4108,7 @@
     "href": "classes/class-07/slides.html#the-circularity-problem",
     "title": "Habitat selection on the move",
     "section": "The circularity problem",
-    "text": "The circularity problem\nTo generate control steps you need the animal’s step-length and turning-angle distributions. But those distributions are themselves affected by habitat — an animal moves slowly in good habitat and fast through bad.\n\nEstimate them from the raw data, and they are already contaminated by selection\nUse them to define availability, and you bake the contamination in\nThe estimated selection coefficients are then biased\n\n\n\nIntegrated step selection analysis (Avgar et al. 2016) solves this by estimating the movement kernel and the selection coefficients simultaneously, from the same model.",
+    "text": "The circularity problem\nTo generate control steps you need the animal’s step-length and turning-angle distributions. But those distributions are themselves affected by habitat — an animal moves slowly in good habitat and fast through bad.\n\nEstimate them from the raw data, and they are already contaminated by selection\nUse them to define availability, and you bake the contamination in\nThe estimated selection coefficients are then biased\n\n\nIntegrated step selection analysis (Avgar et al. 2016) solves this by estimating the movement kernel and the selection coefficients simultaneously, from the same model.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4121,7 +4121,7 @@
     "href": "classes/class-07/slides.html#how-issa-does-it",
     "title": "Habitat selection on the move",
     "section": "How iSSA does it",
-    "text": "How iSSA does it\nInclude the movement variables as covariates in the conditional model:\n\nsl_ and log(sl_) — together these correct the gamma step-length distribution used to generate the controls\ncos(ta_) — corrects the von Mises turning-angle concentration\nThe fitted coefficients on these terms tell you how the realised movement kernel differs from the tentative one you sampled from\n\n\nfit_issf(case_ ~ elevation_end + grassland_end +\n                 sl_ + log(sl_) + cos(ta_) +\n                 strata(step_id_), data = d)",
+    "text": "How iSSA does it\nInclude the movement variables as covariates in the conditional model:\n\nsl_ and log(sl_) — together these correct the gamma step-length distribution used to generate the controls\ncos(ta_) — corrects the von Mises turning-angle concentration\nThe fitted coefficients on these terms tell you how the realised movement kernel differs from the tentative one you sampled from\n\nfit_issf(case_ ~ elevation_end + grassland_end +\n                 sl_ + log(sl_) + cos(ta_) +\n                 strata(step_id_), data = d)",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4186,7 +4186,7 @@
     "href": "classes/class-07/slides.html#from-coefficients-back-to-movement",
     "title": "Habitat selection on the move",
     "section": "From coefficients back to movement",
-    "text": "From coefficients back to movement\nAn iSSA gives you two things at once:\n\na movement kernel — how far and how straight the animal moves, and how that depends on where it is\na selection function — which destinations it prefers\n\n\nMultiply them and you have the animal’s redistribution kernel: the probability of being at each place one step from now. Iterate it, and you simulate new tracks — in the current landscape, or in one you are planning to change.\n\nThat is the bridge to mechanistic models: a fitted iSSA is a generative model of movement, like the random walks of Session 5, but with the environment built in.",
+    "text": "From coefficients back to movement\nAn iSSA gives you two things at once:\n\na movement kernel — how far and how straight the animal moves, and how that depends on where it is\na selection function — which destinations it prefers\n\nMultiply them and you have the animal’s redistribution kernel: the probability of being at each place one step from now. Iterate it, and you simulate new tracks — in the current landscape, or in one you are planning to change.\n\nThat is the bridge to mechanistic models: a fitted iSSA is a generative model of movement, like the random walks of Session 5, but with the environment built in.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4251,7 +4251,7 @@
     "href": "classes/class-07/slides.html#validation",
     "title": "Habitat selection on the move",
     "section": "Validation",
-    "text": "Validation\n\nUsed–habitat calibration plots (Fieberg et al. 2018)\nWithhold whole individuals, or whole time blocks — never random steps, because autocorrelation leaks the answer into the test set\nSimulate from the fitted model and compare the simulated space use with the observed. If your model cannot regenerate something resembling the real track, it has not captured the process\n\n\namt::simulate_path(...)   # redistribution kernel from the fitted iSSA",
+    "text": "Validation\n\nUsed–habitat calibration plots (Fieberg et al. 2018)\nWithhold whole individuals, or whole time blocks — never random steps, because autocorrelation leaks the answer into the test set\nSimulate from the fitted model and compare the simulated space use with the observed. If your model cannot regenerate something resembling the real track, it has not captured the process\n\namt::simulate_path(...)   # redistribution kernel from the fitted iSSA",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4303,7 +4303,7 @@
     "href": "classes/class-07/slides.html#recap",
     "title": "Habitat selection on the move",
     "section": "Recap",
-    "text": "Recap\n\nSelection = use relative to availability; state the order and the domain\nRSF: used vs available; RSPF needs real absences; SSF: each step vs its own alternatives\nstrata(step_id_) is the design, not a detail\niSSA estimates movement and selection together; _end covariates select, _start covariates modify movement\nA fitted iSSA is a generative model: it can simulate\n\n\nBefore Session 8\n\nMcClintock et al. (2020), Uncovering ecological state dynamics with hidden Markov models, Ecology Letters 23:1878 — sections 1–3\nMake sure library(momentuHMM) loads, and prepare a 3–5 minute mini-project pitch",
+    "text": "Recap\n\nSelection = use relative to availability; state the order and the domain\nRSF: used vs available; RSPF needs real absences; SSF: each step vs its own alternatives\nstrata(step_id_) is the design, not a detail\niSSA estimates movement and selection together; _end covariates select, _start covariates modify movement\nA fitted iSSA is a generative model: it can simulate\n\nBefore Session 8\n\nMcClintock et al. (2020), Uncovering ecological state dynamics with hidden Markov models, Ecology Letters 23:1878 — sections 1–3\nMake sure library(momentuHMM) loads, and prepare a 3–5 minute mini-project pitch",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4355,7 +4355,7 @@
     "href": "classes/class-08/slides.html#the-generative-story",
     "title": "Hidden Markov models and synthesis",
     "section": "The generative story",
-    "text": "The generative story\nImagine the animal has a hidden label at each time step — say “encamped” or “travelling”.\n\nAt each step the animal is in one of \\(N\\) states, \\(S_t\\)\nThe state evolves as a Markov chain: \\(P(S_t \\mid S_{t-1})\\) — where you go next depends only on where you are now\nGiven the state, the observations are drawn from state-specific distributions: step length ~ gamma(\\(\\mu_i\\), \\(\\sigma_i\\)), turning angle ~ von Mises(\\(\\mu_i\\), \\(\\kappa_i\\))\nYou never see \\(S_t\\). You see only the steps\n\n\n\nThe model asks: what sequence of hidden states, and what state-specific distributions, would make the observed steps most likely?",
+    "text": "The generative story\nImagine the animal has a hidden label at each time step — say “encamped” or “travelling”.\n\nAt each step the animal is in one of \\(N\\) states, \\(S_t\\)\nThe state evolves as a Markov chain: \\(P(S_t \\mid S_{t-1})\\) — where you go next depends only on where you are now\nGiven the state, the observations are drawn from state-specific distributions: step length ~ gamma(\\(\\mu_i\\), \\(\\sigma_i\\)), turning angle ~ von Mises(\\(\\mu_i\\), \\(\\kappa_i\\))\nYou never see \\(S_t\\). You see only the steps\n\n\nThe model asks: what sequence of hidden states, and what state-specific distributions, would make the observed steps most likely?",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4381,7 +4381,7 @@
     "href": "classes/class-08/slides.html#what-you-get-out",
     "title": "Hidden Markov models and synthesis",
     "section": "What you get out",
-    "text": "What you get out\n\nState-dependent parameters — e.g. state 1: mean step 40 m, turning angles ~uniform; state 2: mean step 600 m, angles concentrated at 0\nTransition probability matrix \\(\\Gamma\\) — and from it the expected dwell time in each state, \\(1/(1-\\gamma_{ii})\\)\nThe most likely state sequence (Viterbi) — one label per step\nState probabilities per step — the honest version, with uncertainty\n\n\nm &lt;- momentuHMM::fitHMM(data, nbStates = 2,\n        dist = list(step = \"gamma\", angle = \"vm\"),\n        Par0 = list(step  = c(20, 400, 20, 400),   # means, then sds\n                    angle = c(0.5, 2)))            # concentrations\nviterbi(m)",
+    "text": "What you get out\n\nState-dependent parameters — e.g. state 1: mean step 40 m, turning angles ~uniform; state 2: mean step 600 m, angles concentrated at 0\nTransition probability matrix \\(\\Gamma\\) — and from it the expected dwell time in each state, \\(1/(1-\\gamma_{ii})\\)\nThe most likely state sequence (Viterbi) — one label per step\nState probabilities per step — the honest version, with uncertainty\n\nm &lt;- momentuHMM::fitHMM(data, nbStates = 2,\n        dist = list(step = \"gamma\", angle = \"vm\"),\n        Par0 = list(step  = c(20, 400, 20, 400),   # means, then sds\n                    angle = c(0.5, 2)))            # concentrations\nviterbi(m)",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4407,7 +4407,7 @@
     "href": "classes/class-08/slides.html#why-the-markov-part-matters",
     "title": "Hidden Markov models and synthesis",
     "section": "Why the Markov part matters",
-    "text": "Why the Markov part matters\nA clustering method looks at each step in isolation. An HMM knows that behaviour persists: an animal that was resting is probably still resting.\n\nThis borrows strength across time and produces far less “flickering” between states\nThe transition matrix is itself biology: how long does a foraging bout last?\nTransitions can depend on covariates: is the animal more likely to start travelling when NDVI is low?\n\n\nfitHMM(data, nbStates = 2, ..., formula = ~ ndvi + cosinor(hour, period = 24))\nThat formula is the bridge between Session 3’s environmental annotation and this one.",
+    "text": "Why the Markov part matters\nA clustering method looks at each step in isolation. An HMM knows that behaviour persists: an animal that was resting is probably still resting.\n\nThis borrows strength across time and produces far less “flickering” between states\nThe transition matrix is itself biology: how long does a foraging bout last?\nTransitions can depend on covariates: is the animal more likely to start travelling when NDVI is low?\n\nfitHMM(data, nbStates = 2, ..., formula = ~ ndvi + cosinor(hour, period = 24))\nThat formula is the bridge between Session 3’s environmental annotation and this one.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4446,7 +4446,7 @@
     "href": "classes/class-08/slides.html#three-things-a-threshold-cannot-do",
     "title": "Hidden Markov models and synthesis",
     "section": "Three things a threshold cannot do",
-    "text": "Three things a threshold cannot do\n\nQuantify uncertainty — an HMM gives every step a probability of being in each state, not a hard label. Steps near the boundary are honestly ambiguous\nUse persistence — behaviour lasts; the transition matrix lets neighbouring steps inform each other, so a single slow step in the middle of a journey is not labelled “resting”\nExplain switching — covariates on the transition probabilities ask when and where animals change behaviour\n\n\n\nIn Session 4 the buffalo’s hourly speeds had no valley to cut at. That is exactly the situation an HMM was built for.",
+    "text": "Three things a threshold cannot do\n\nQuantify uncertainty — an HMM gives every step a probability of being in each state, not a hard label. Steps near the boundary are honestly ambiguous\nUse persistence — behaviour lasts; the transition matrix lets neighbouring steps inform each other, so a single slow step in the middle of a journey is not labelled “resting”\nExplain switching — covariates on the transition probabilities ask when and where animals change behaviour\n\n\nIn Session 4 the buffalo’s hourly speeds had no valley to cut at. That is exactly the situation an HMM was built for.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4472,7 +4472,7 @@
     "href": "classes/class-08/slides.html#problem-1-irregular-sampling",
     "title": "Hidden Markov models and synthesis",
     "section": "Problem 1 — irregular sampling",
-    "text": "Problem 1 — irregular sampling\nHMMs as normally fitted assume a constant time step.\n\nFeed them irregular data and the step-length distribution mixes intervals; the model interprets a long gap as fast movement\n“Solutions” that are not solutions: interpolating to a regular grid invents data and biases the state distributions\nReal solutions: resample and accept the data loss (Session 3); or use a continuous-time model (ctmm, momentuHMM with crawlWrap)\n\n\n\nThis is why the bat dataset cannot be given an HMM: 165 bursts with a median of 4 fixes cannot inform a transition matrix (Session 3).",
+    "text": "Problem 1 — irregular sampling\nHMMs as normally fitted assume a constant time step.\n\nFeed them irregular data and the step-length distribution mixes intervals; the model interprets a long gap as fast movement\n“Solutions” that are not solutions: interpolating to a regular grid invents data and biases the state distributions\nReal solutions: resample and accept the data loss (Session 3); or use a continuous-time model (ctmm, momentuHMM with crawlWrap)\n\n\nThis is why the bat dataset cannot be given an HMM: 165 bursts with a median of 4 fixes cannot inform a transition matrix (Session 3).",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4485,7 +4485,7 @@
     "href": "classes/class-08/slides.html#problem-2-how-many-states",
     "title": "Hidden Markov models and synthesis",
     "section": "Problem 2 — how many states?",
-    "text": "Problem 2 — how many states?\n\nAIC and BIC almost always prefer more states. They are answering “which model fits best”, not “which states are real behaviours”\nWith enough data, 4 and 5 states will beat 2 and 3 every time\nExtra states often capture outliers, or the shape of the step-length distribution, not behaviour\n\n\n\nChoose the number of states from biology and the question, then check the fit. Pseudo-residuals and state-dependent distribution plots tell you far more than a table of AICs. Two or three states are almost always enough for what a tracking dataset can actually resolve.",
+    "text": "Problem 2 — how many states?\n\nAIC and BIC almost always prefer more states. They are answering “which model fits best”, not “which states are real behaviours”\nWith enough data, 4 and 5 states will beat 2 and 3 every time\nExtra states often capture outliers, or the shape of the step-length distribution, not behaviour\n\n\nChoose the number of states from biology and the question, then check the fit. Pseudo-residuals and state-dependent distribution plots tell you far more than a table of AICs. Two or three states are almost always enough for what a tracking dataset can actually resolve.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4511,7 +4511,7 @@
     "href": "classes/class-08/slides.html#problem-3-naming-the-states",
     "title": "Hidden Markov models and synthesis",
     "section": "Problem 3 — naming the states",
-    "text": "Problem 3 — naming the states\nThe model returns state 1 and state 2. It does not return “foraging” and “travelling”.\n\nLabelling them is an interpretation, and it needs external evidence: accelerometer data, direct observation, known behaviours at known times\n“Short steps and random turns” is consistent with foraging — and with resting, with sheltering, and with the animal being dead\nPapers that name states from step lengths alone are making an assumption, not a measurement\n\n\nState the evidence for your labels, or call them “state 1” and “state 2” and describe them by their parameters.",
+    "text": "Problem 3 — naming the states\nThe model returns state 1 and state 2. It does not return “foraging” and “travelling”.\n\nLabelling them is an interpretation, and it needs external evidence: accelerometer data, direct observation, known behaviours at known times\n“Short steps and random turns” is consistent with foraging — and with resting, with sheltering, and with the animal being dead\nPapers that name states from step lengths alone are making an assumption, not a measurement\n\nState the evidence for your labels, or call them “state 1” and “state 2” and describe them by their parameters.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4576,7 +4576,7 @@
     "href": "classes/class-08/slides.html#energy-landscapes",
     "title": "Hidden Markov models and synthesis",
     "section": "Energy landscapes",
-    "text": "Energy landscapes\n\nThe cost of moving is not the same everywhere: slope, wind, currents, thermals, substrate\nAn energy landscape maps that cost (Wilson et al. 2012; Shepard et al.\n\n\n\nAnimals often choose the cheap path, not the short one: soaring birds follow thermals and ridges; ungulates avoid steep ground\nWith accelerometers you can estimate energy expenditure directly and ask whether routes minimise it\n\n\n\nMotion capacity becomes a map — and a covariate you can put in an SSF.",
+    "text": "Energy landscapes\n\nThe cost of moving is not the same everywhere: slope, wind, currents, thermals, substrate\nAn energy landscape maps that cost (Wilson et al. 2012; Shepard et al.\n\n\n\nAnimals often choose the cheap path, not the short one: soaring birds follow thermals and ridges; ungulates avoid steep ground\nWith accelerometers you can estimate energy expenditure directly and ask whether routes minimise it\n\n\nMotion capacity becomes a map — and a covariate you can put in an SSF.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4602,7 +4602,7 @@
     "href": "classes/class-08/slides.html#learning-behaviour-from-sensors",
     "title": "Hidden Markov models and synthesis",
     "section": "Learning behaviour from sensors",
-    "text": "Learning behaviour from sensors\n\nTri-axial accelerometers at 10–50 Hz record what the body is doing\nSupervised machine learning — random forests, support vector machines, and now deep neural networks — classify behaviours from acceleration signatures (Nathan et al. 2012; Wang 2019)\nTraining data come from observed or captive animals with known behaviour\nThe answer to “how do I name my HMM states?” — an independent sensor that measures behaviour\n\n\n\nA classifier is only as good as its labelled training data, and it transfers poorly between individuals, seasons and populations. Validate on animals it has not seen.",
+    "text": "Learning behaviour from sensors\n\nTri-axial accelerometers at 10–50 Hz record what the body is doing\nSupervised machine learning — random forests, support vector machines, and now deep neural networks — classify behaviours from acceleration signatures (Nathan et al. 2012; Wang 2019)\nTraining data come from observed or captive animals with known behaviour\nThe answer to “how do I name my HMM states?” — an independent sensor that measures behaviour\n\n\nA classifier is only as good as its labelled training data, and it transfers poorly between individuals, seasons and populations. Validate on animals it has not seen.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4615,7 +4615,7 @@
     "href": "classes/class-08/slides.html#the-big-data-era",
     "title": "Hidden Markov models and synthesis",
     "section": "The big-data era",
-    "text": "The big-data era\n\nMovebank holds billions of locations from thousands of studies; the ICARUS initiative put tracking receivers in orbit\nCollaborative networks (e.g. EUROMAMMALS) pool data across studies, countries and decades\nQuestions no single study could answer: how movement responds to human footprint across continents; how migration changes with climate (Nathan et al. 2022)\nNew problems: data standards, sharing, credit, and the security of sensitive species\n\n\n\nThe skills of this course — cleaning, regularising, honest uncertainty — are what make pooled data trustworthy. At scale, errors compound too.",
+    "text": "The big-data era\n\nMovebank holds billions of locations from thousands of studies; the ICARUS initiative put tracking receivers in orbit\nCollaborative networks (e.g. EUROMAMMALS) pool data across studies, countries and decades\nQuestions no single study could answer: how movement responds to human footprint across continents; how migration changes with climate (Nathan et al. 2022)\nNew problems: data standards, sharing, credit, and the security of sensitive species\n\n\nThe skills of this course — cleaning, regularising, honest uncertainty — are what make pooled data trustworthy. At scale, errors compound too.",
     "crumbs": [
       "Home",
       "Sessions",

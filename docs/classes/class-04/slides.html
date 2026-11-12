@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-26">
+  <meta name="dcterms.date" content="2026-11-12">
   <title>Animal Tracking – Quantifying movement</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -149,7 +149,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-26</p>
+  <p class="date">2026-11-12</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -183,16 +183,14 @@ Giuliano Colosimo
 <section id="everything-here-is-scale-dependent" class="slide level2">
 <h2>Everything here is scale-dependent</h2>
 <ul>
-<li class="fragment">Sample every 5 minutes: many short steps — but so short that GPS error randomises their <em>direction</em></li>
-<li class="fragment">Sample hourly: clear directional persistence</li>
-<li class="fragment">Sample every 12 hours: few long steps, turning angles ≈ uniform (the animal looks like it moves at random)</li>
-<li class="fragment"><strong>Total path length</strong> grows without bound as the interval shrinks — the coastline paradox</li>
+<li>Sample every 5 minutes: many short steps — but so short that GPS error randomises their <em>direction</em></li>
+<li>Sample hourly: clear directional persistence</li>
+<li>Sample every 12 hours: few long steps, turning angles ≈ uniform (the animal looks like it moves at random)</li>
+<li><strong>Total path length</strong> grows without bound as the interval shrinks — the coastline paradox</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>“Mean step length” is not a property of the animal. It is a property of the animal <strong>and your sampling interval</strong>. Always report the interval alongside it, and never compare step lengths measured at different rates.</p>
 <p>There is a sweet spot: fine enough to resolve the behaviour, coarse enough that a typical step is much longer than your GPS error.</p>
-</div>
 </div>
 </section>
 <section id="the-coastline-paradox-in-a-buffalo" class="slide level2">
@@ -222,15 +220,13 @@ Giuliano Colosimo
 <section id="fractal-dimension" class="slide level2">
 <h2>Fractal dimension</h2>
 <ul>
-<li class="fragment">Measure path length with a “ruler” of length <span class="math inline">\(r\)</span>; on a fractal path <span class="math inline">\(L(r) \propto r^{1-D}\)</span>, so <span class="math inline">\(D\)</span> comes from the slope of log L on log r</li>
-<li class="fragment"><span class="math inline">\(D = 1\)</span>: straight line; <span class="math inline">\(D \to 2\)</span>: a path that fills the plane</li>
-<li class="fragment">Appealing because it claims to be <strong>scale-free</strong></li>
-<li class="fragment">The catch (Benhamou 2004; Turchin 1996): real animal paths are rarely fractal across more than a narrow range of scales, and <span class="math inline">\(D\)</span> estimated from a correlated random walk varies with <span class="math inline">\(r\)</span></li>
+<li>Measure path length with a “ruler” of length <span class="math inline">\(r\)</span>; on a fractal path <span class="math inline">\(L(r) \propto r^{1-D}\)</span>, so <span class="math inline">\(D\)</span> comes from the slope of log L on log r</li>
+<li><span class="math inline">\(D = 1\)</span>: straight line; <span class="math inline">\(D \to 2\)</span>: a path that fills the plane</li>
+<li>Appealing because it claims to be <strong>scale-free</strong></li>
+<li>The catch (Benhamou 2004; Turchin 1996): real animal paths are rarely fractal across more than a narrow range of scales, and <span class="math inline">\(D\)</span> estimated from a correlated random walk varies with <span class="math inline">\(r\)</span></li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>If <span class="math inline">\(D\)</span> changes with the ruler, the path is not fractal — and the change itself tells you the scale at which the behaviour changes.</p>
-</div>
 </div>
 </section>
 <section id="net-squared-displacement-nsd" class="slide level2">
@@ -238,14 +234,12 @@ Giuliano Colosimo
 <p><span class="math display">\[\text{NSD}(t) = \lVert \mathbf{x}_t - \mathbf{x}_0 \rVert^2\]</span></p>
 <p>The squared distance from the starting point. A remarkably effective diagnostic:</p>
 <ul>
-<li class="fragment"><strong>Sedentary</strong> — NSD rises then plateaus at a low value</li>
-<li class="fragment"><strong>Migratory</strong> — a sigmoid up, a plateau, a sigmoid back down</li>
-<li class="fragment"><strong>Dispersal</strong> — a single step up to a new plateau</li>
-<li class="fragment"><strong>Nomadic</strong> — rises roughly linearly, no plateau</li>
+<li><strong>Sedentary</strong> — NSD rises then plateaus at a low value</li>
+<li><strong>Migratory</strong> — a sigmoid up, a plateau, a sigmoid back down</li>
+<li><strong>Dispersal</strong> — a single step up to a new plateau</li>
+<li><strong>Nomadic</strong> — rises roughly linearly, no plateau</li>
 </ul>
-<div class="fragment">
 <p>Fitting these shapes as competing non-linear models (Bunnefeld et al.&nbsp;2011) is a cheap and surprisingly effective way to classify movement strategies.</p>
-</div>
 </section>
 <section id="four-shapes" class="slide level2">
 <h2>Four shapes</h2>
@@ -346,14 +340,12 @@ Giuliano Colosimo
 <h2>How long to leave a circle?</h2>
 <p>Fauchald &amp; Tveraa (2003): around each fix, draw a circle of radius <span class="math inline">\(r\)</span> and measure the <strong>time</strong> the animal takes to leave it.</p>
 <ul>
-<li class="fragment">Where the animal searches intensively, first-passage time (FPT) is long; where it travels, FPT is short</li>
-<li class="fragment">Repeat for many radii and compute the <strong>variance of log FPT</strong> along the path</li>
-<li class="fragment">The radius at which that variance <strong>peaks</strong> is the spatial scale of area-restricted search</li>
+<li>Where the animal searches intensively, first-passage time (FPT) is long; where it travels, FPT is short</li>
+<li>Repeat for many radii and compute the <strong>variance of log FPT</strong> along the path</li>
+<li>The radius at which that variance <strong>peaks</strong> is the spatial scale of area-restricted search</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>FPT turns “where does the animal slow down?” into a scale: <em>how big</em> are the patches it responds to?</p>
-</div>
 </div>
 </section>
 <section id="first-passage-time-drawn" class="slide level2">
@@ -387,14 +379,12 @@ Giuliano Colosimo
 <h2>The problem</h2>
 <p>An animal is not doing one thing all day.</p>
 <ul>
-<li class="fragment">Resting, foraging, travelling, migrating — each with its own <strong>step-length and turning-angle signature</strong></li>
-<li class="fragment">Pool them and every summary is a meaningless average: a “mean step length” that describes no actual behaviour</li>
-<li class="fragment">Leo’s six-year track contains residency <strong>and</strong> migration. A single home range spans two continents (Session 1)</li>
+<li>Resting, foraging, travelling, migrating — each with its own <strong>step-length and turning-angle signature</strong></li>
+<li>Pool them and every summary is a meaningless average: a “mean step length” that describes no actual behaviour</li>
+<li>Leo’s six-year track contains residency <strong>and</strong> migration. A single home range spans two continents (Session 1)</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p><strong>Segment first, then analyse.</strong> Almost every method in this course assumes a homogeneous process. Segmentation is how you earn that assumption.</p>
-</div>
 </div>
 </section>
 <section id="encamped-versus-transit" class="slide level2">
@@ -489,10 +479,10 @@ Giuliano Colosimo
 <section id="thresholds-and-expert-rules" class="slide level2">
 <h2>Thresholds and expert rules</h2>
 <ul>
-<li class="fragment"><strong>Speed threshold</strong> — “steps faster than <span class="math inline">\(v^*\)</span> are travelling”. Transparent and reproducible</li>
-<li class="fragment"><strong>Expert rules</strong> — combine several: speed <em>and</em> turning angle <em>and</em> time of day, chosen from knowledge of the species</li>
-<li class="fragment">Both are defensible <strong>only when the metric is clearly bimodal</strong> — a histogram with an empty valley between modes</li>
-<li class="fragment">Without that valley, the threshold is an arbitrary decision dressed up as a result</li>
+<li><strong>Speed threshold</strong> — “steps faster than <span class="math inline">\(v^*\)</span> are travelling”. Transparent and reproducible</li>
+<li><strong>Expert rules</strong> — combine several: speed <em>and</em> turning angle <em>and</em> time of day, chosen from knowledge of the species</li>
+<li>Both are defensible <strong>only when the metric is clearly bimodal</strong> — a histogram with an empty valley between modes</li>
+<li>Without that valley, the threshold is an arbitrary decision dressed up as a result</li>
 </ul>
 </section>
 <section id="an-honest-threshold-and-a-dishonest-one" class="slide level2">
@@ -505,15 +495,13 @@ Giuliano Colosimo
 <h2>Behavioural change-point analysis</h2>
 <p>BCPA (Gurarie et al.&nbsp;2009) looks for places where the <strong>statistical properties</strong> of the movement change.</p>
 <ul>
-<li class="fragment">Works on a single variable, typically <strong>persistence velocity</strong> <span class="math inline">\(V\cos\theta\)</span>: fast <em>and</em> straight gives high values</li>
-<li class="fragment">Slides a window along the track; within each window finds the most likely break in mean, variance or autocorrelation</li>
-<li class="fragment">Collects breaks that recur across windows into <strong>change points</strong></li>
-<li class="fragment">Works with irregular sampling, which is its great practical strength</li>
+<li>Works on a single variable, typically <strong>persistence velocity</strong> <span class="math inline">\(V\cos\theta\)</span>: fast <em>and</em> straight gives high values</li>
+<li>Slides a window along the track; within each window finds the most likely break in mean, variance or autocorrelation</li>
+<li>Collects breaks that recur across windows into <strong>change points</strong></li>
+<li>Works with irregular sampling, which is its great practical strength</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>BCPA tells you <strong>where</strong> the process changes. It does not tell you what the animal was doing, and it cannot know whether a change is behavioural or a change in your collar’s schedule.</p>
-</div>
 </div>
 </section>
 <section id="bcpa-on-cilla" class="slide level2">
@@ -555,19 +543,17 @@ Giuliano Colosimo
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li class="fragment">Path descriptors — NSD, straightness, sinuosity, fractal dimension — all depend on the sampling interval and the window</li>
-<li class="fragment">NSD model classification is powerful; <strong>read the parameters</strong>, not just AIC</li>
-<li class="fragment">FPT finds the scale of area-restricted search — above the noise floor</li>
-<li class="fragment">Encamped versus transit is usually all hourly GPS can resolve</li>
-<li class="fragment">Thresholds are honest only across an empty valley; BCPA finds changes, not behaviours, and its answer depends on the fix rate</li>
+<li>Path descriptors — NSD, straightness, sinuosity, fractal dimension — all depend on the sampling interval and the window</li>
+<li>NSD model classification is powerful; <strong>read the parameters</strong>, not just AIC</li>
+<li>FPT finds the scale of area-restricted search — above the noise floor</li>
+<li>Encamped versus transit is usually all hourly GPS can resolve</li>
+<li>Thresholds are honest only across an empty valley; BCPA finds changes, not behaviours, and its answer depends on the fix rate</li>
 </ul>
-<div class="fragment">
 <h3 id="before-session-5">Before Session 5</h3>
 <ul>
 <li>Codling, Plank &amp; Benhamou (2008), <em>Random walk models in biology</em>, J R Soc Interface 5:813 — sections 1–3</li>
 <li>Make sure <code>library(circular)</code> loads</li>
 </ul>
-</div>
 </section>
 <section id="section" class="slide level2 center">
 <h2></h2>

@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-26">
+  <meta name="dcterms.date" content="2026-11-12">
   <title>Animal Tracking – Hidden Markov models and synthesis</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-26</p>
+  <p class="date">2026-11-12</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -245,15 +245,13 @@ Giuliano Colosimo
 <h2>The generative story</h2>
 <p>Imagine the animal has a hidden label at each time step — say <strong>“encamped”</strong> or <strong>“travelling”</strong>.</p>
 <ol type="1">
-<li class="fragment">At each step the animal is in one of <span class="math inline">\(N\)</span> states, <span class="math inline">\(S_t\)</span></li>
-<li class="fragment">The state evolves as a <strong>Markov chain</strong>: <span class="math inline">\(P(S_t \mid S_{t-1})\)</span> — where you go next depends only on where you are now</li>
-<li class="fragment">Given the state, the observations are drawn from <strong>state-specific distributions</strong>: step length ~ gamma(<span class="math inline">\(\mu_i\)</span>, <span class="math inline">\(\sigma_i\)</span>), turning angle ~ von Mises(<span class="math inline">\(\mu_i\)</span>, <span class="math inline">\(\kappa_i\)</span>)</li>
-<li class="fragment">You never see <span class="math inline">\(S_t\)</span>. You see only the steps</li>
+<li>At each step the animal is in one of <span class="math inline">\(N\)</span> states, <span class="math inline">\(S_t\)</span></li>
+<li>The state evolves as a <strong>Markov chain</strong>: <span class="math inline">\(P(S_t \mid S_{t-1})\)</span> — where you go next depends only on where you are now</li>
+<li>Given the state, the observations are drawn from <strong>state-specific distributions</strong>: step length ~ gamma(<span class="math inline">\(\mu_i\)</span>, <span class="math inline">\(\sigma_i\)</span>), turning angle ~ von Mises(<span class="math inline">\(\mu_i\)</span>, <span class="math inline">\(\kappa_i\)</span>)</li>
+<li>You never see <span class="math inline">\(S_t\)</span>. You see only the steps</li>
 </ol>
-<div class="fragment">
 <div class="keyidea">
 <p>The model asks: <em>what sequence of hidden states, and what state-specific distributions, would make the observed steps most likely?</em></p>
-</div>
 </div>
 </section>
 <section id="the-story-simulated" class="slide level2">
@@ -265,18 +263,16 @@ Giuliano Colosimo
 <section id="what-you-get-out" class="slide level2">
 <h2>What you get out</h2>
 <ul>
-<li class="fragment"><strong>State-dependent parameters</strong> — e.g.&nbsp;state 1: mean step 40 m, turning angles ~uniform; state 2: mean step 600 m, angles concentrated at 0</li>
-<li class="fragment"><strong>Transition probability matrix</strong> <span class="math inline">\(\Gamma\)</span> — and from it the expected <strong>dwell time</strong> in each state, <span class="math inline">\(1/(1-\gamma_{ii})\)</span></li>
-<li class="fragment"><strong>The most likely state sequence</strong> (Viterbi) — one label per step</li>
-<li class="fragment"><strong>State probabilities</strong> per step — the honest version, with uncertainty</li>
+<li><strong>State-dependent parameters</strong> — e.g.&nbsp;state 1: mean step 40 m, turning angles ~uniform; state 2: mean step 600 m, angles concentrated at 0</li>
+<li><strong>Transition probability matrix</strong> <span class="math inline">\(\Gamma\)</span> — and from it the expected <strong>dwell time</strong> in each state, <span class="math inline">\(1/(1-\gamma_{ii})\)</span></li>
+<li><strong>The most likely state sequence</strong> (Viterbi) — one label per step</li>
+<li><strong>State probabilities</strong> per step — the honest version, with uncertainty</li>
 </ul>
-<div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>m <span class="ot">&lt;-</span> momentuHMM<span class="sc">::</span><span class="fu">fitHMM</span>(data, <span class="at">nbStates =</span> <span class="dv">2</span>,</span>
 <span id="cb1-2"><a></a>        <span class="at">dist =</span> <span class="fu">list</span>(<span class="at">step =</span> <span class="st">"gamma"</span>, <span class="at">angle =</span> <span class="st">"vm"</span>),</span>
 <span id="cb1-3"><a></a>        <span class="at">Par0 =</span> <span class="fu">list</span>(<span class="at">step  =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">400</span>, <span class="dv">20</span>, <span class="dv">400</span>),   <span class="co"># means, then sds</span></span>
 <span id="cb1-4"><a></a>                    <span class="at">angle =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">2</span>)))            <span class="co"># concentrations</span></span>
 <span id="cb1-5"><a></a><span class="fu">viterbi</span>(m)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="two-states-in-real-buffalo" class="slide level2">
 <h2>Two states in real buffalo</h2>
@@ -288,14 +284,12 @@ Giuliano Colosimo
 <h2>Why the Markov part matters</h2>
 <p>A clustering method looks at each step in isolation. An HMM knows that <strong>behaviour persists</strong>: an animal that was resting is probably still resting.</p>
 <ul>
-<li class="fragment">This borrows strength across time and produces far less “flickering” between states</li>
-<li class="fragment">The transition matrix is itself biology: how long does a foraging bout last?</li>
-<li class="fragment">Transitions can depend on covariates: <em>is the animal more likely to start travelling when NDVI is low?</em></li>
+<li>This borrows strength across time and produces far less “flickering” between states</li>
+<li>The transition matrix is itself biology: how long does a foraging bout last?</li>
+<li>Transitions can depend on covariates: <em>is the animal more likely to start travelling when NDVI is low?</em></li>
 </ul>
-<div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">fitHMM</span>(data, <span class="at">nbStates =</span> <span class="dv">2</span>, ..., <span class="at">formula =</span> <span class="sc">~</span> ndvi <span class="sc">+</span> <span class="fu">cosinor</span>(hour, <span class="at">period =</span> <span class="dv">24</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>That formula is the bridge between Session 3’s environmental annotation and this one.</p>
-</div>
 </section>
 <section id="flicker-versus-persistence" class="slide level2">
 <h2>Flicker versus persistence</h2>
@@ -328,14 +322,12 @@ Giuliano Colosimo
 <section id="three-things-a-threshold-cannot-do" class="slide level2">
 <h2>Three things a threshold cannot do</h2>
 <ol type="1">
-<li class="fragment"><strong>Quantify uncertainty</strong> — an HMM gives every step a <em>probability</em> of being in each state, not a hard label. Steps near the boundary are honestly ambiguous</li>
-<li class="fragment"><strong>Use persistence</strong> — behaviour lasts; the transition matrix lets neighbouring steps inform each other, so a single slow step in the middle of a journey is not labelled “resting”</li>
-<li class="fragment"><strong>Explain switching</strong> — covariates on the transition probabilities ask <em>when</em> and <em>where</em> animals change behaviour</li>
+<li><strong>Quantify uncertainty</strong> — an HMM gives every step a <em>probability</em> of being in each state, not a hard label. Steps near the boundary are honestly ambiguous</li>
+<li><strong>Use persistence</strong> — behaviour lasts; the transition matrix lets neighbouring steps inform each other, so a single slow step in the middle of a journey is not labelled “resting”</li>
+<li><strong>Explain switching</strong> — covariates on the transition probabilities ask <em>when</em> and <em>where</em> animals change behaviour</li>
 </ol>
-<div class="fragment">
 <div class="keyidea">
 <p>In Session 4 the buffalo’s hourly speeds had no valley to cut at. That is exactly the situation an HMM was built for.</p>
-</div>
 </div>
 </section>
 <section id="a-diel-rhythm-estimated" class="slide level2">
@@ -396,27 +388,23 @@ Giuliano Colosimo
 <h2>Problem 1 — irregular sampling</h2>
 <p>HMMs as normally fitted assume a <strong>constant time step</strong>.</p>
 <ul>
-<li class="fragment">Feed them irregular data and the step-length distribution mixes intervals; the model interprets a long gap as fast movement</li>
-<li class="fragment">“Solutions” that are not solutions: interpolating to a regular grid invents data and biases the state distributions</li>
-<li class="fragment">Real solutions: resample and accept the data loss (Session 3); or use a <strong>continuous-time</strong> model (<code>ctmm</code>, <code>momentuHMM</code> with <code>crawlWrap</code>)</li>
+<li>Feed them irregular data and the step-length distribution mixes intervals; the model interprets a long gap as fast movement</li>
+<li>“Solutions” that are not solutions: interpolating to a regular grid invents data and biases the state distributions</li>
+<li>Real solutions: resample and accept the data loss (Session 3); or use a <strong>continuous-time</strong> model (<code>ctmm</code>, <code>momentuHMM</code> with <code>crawlWrap</code>)</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>This is why the bat dataset cannot be given an HMM: 165 bursts with a median of 4 fixes cannot inform a transition matrix (Session 3).</p>
-</div>
 </div>
 </section>
 <section id="problem-2-how-many-states" class="slide level2">
 <h2>Problem 2 — how many states?</h2>
 <ul>
-<li class="fragment">AIC and BIC <strong>almost always prefer more states</strong>. They are answering “which model fits best”, not “which states are real behaviours”</li>
-<li class="fragment">With enough data, 4 and 5 states will beat 2 and 3 every time</li>
-<li class="fragment">Extra states often capture <strong>outliers</strong>, or the shape of the step-length distribution, not behaviour</li>
+<li>AIC and BIC <strong>almost always prefer more states</strong>. They are answering “which model fits best”, not “which states are real behaviours”</li>
+<li>With enough data, 4 and 5 states will beat 2 and 3 every time</li>
+<li>Extra states often capture <strong>outliers</strong>, or the shape of the step-length distribution, not behaviour</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>Choose the number of states from <strong>biology and the question</strong>, then check the fit. Pseudo-residuals and state-dependent distribution plots tell you far more than a table of AICs. Two or three states are almost always enough for what a tracking dataset can actually resolve.</p>
-</div>
 </div>
 </section>
 <section id="quiz-1" class="slide level2">
@@ -440,13 +428,11 @@ Giuliano Colosimo
 <h2>Problem 3 — naming the states</h2>
 <p>The model returns <em>state 1</em> and <em>state 2</em>. It does <strong>not</strong> return “foraging” and “travelling”.</p>
 <ul>
-<li class="fragment">Labelling them is an <strong>interpretation</strong>, and it needs external evidence: accelerometer data, direct observation, known behaviours at known times</li>
-<li class="fragment">“Short steps and random turns” is consistent with foraging — and with resting, with sheltering, and with the animal being dead</li>
-<li class="fragment">Papers that name states from step lengths alone are making an assumption, not a measurement</li>
+<li>Labelling them is an <strong>interpretation</strong>, and it needs external evidence: accelerometer data, direct observation, known behaviours at known times</li>
+<li>“Short steps and random turns” is consistent with foraging — and with resting, with sheltering, and with the animal being dead</li>
+<li>Papers that name states from step lengths alone are making an assumption, not a measurement</li>
 </ul>
-<div class="fragment">
 <p>State the evidence for your labels, or call them “state 1” and “state 2” and describe them by their parameters.</p>
-</div>
 </section>
 <section id="quiz-2" class="slide level2">
 <h2>Quiz</h2>
@@ -468,10 +454,10 @@ Giuliano Colosimo
 <section id="practical-fitting-advice" class="slide level2">
 <h2>Practical fitting advice</h2>
 <ul>
-<li class="fragment"><strong>Starting values matter a lot.</strong> The likelihood is multimodal. Fit from many random starts and keep the best</li>
-<li class="fragment">Check for <strong>zero step lengths</strong> — a gamma distribution cannot handle them. Give <code>momentuHMM</code> one zero-mass parameter per state: a zero-inflated gamma</li>
-<li class="fragment">Always inspect <strong>pseudo-residuals</strong> (<code>plotPR</code>) — they are the residual plot of the HMM world</li>
-<li class="fragment">Plot the state-dependent densities over the histogram of your data. If they do not look like your data, nothing downstream is trustworthy</li>
+<li><strong>Starting values matter a lot.</strong> The likelihood is multimodal. Fit from many random starts and keep the best</li>
+<li>Check for <strong>zero step lengths</strong> — a gamma distribution cannot handle them. Give <code>momentuHMM</code> one zero-mass parameter per state: a zero-inflated gamma</li>
+<li>Always inspect <strong>pseudo-residuals</strong> (<code>plotPR</code>) — they are the residual plot of the HMM world</li>
+<li>Plot the state-dependent densities over the histogram of your data. If they do not look like your data, nothing downstream is trustworthy</li>
 </ul>
 </section>
 <section id="what-checking-looks-like" class="slide level2">
@@ -488,63 +474,57 @@ Giuliano Colosimo
 <section id="location-error-modelled" class="slide level2">
 <h2>Location error, modelled</h2>
 <ul>
-<li class="fragment">An HMM assumes the positions are exact. <strong>State-space models</strong> add an explicit observation layer: a true, unobserved path, and noisy fixes of it (Jonsen et al.&nbsp;2005)</li>
-<li class="fragment">Essential for Argos and light-level geolocation, where error is as large as the movement</li>
-<li class="fragment">Continuous-time versions (<code>crawl</code>: Johnson et al.&nbsp;2008) handle irregular sampling and predict positions <em>with uncertainty</em> — the honest version of interpolation from Session 3</li>
+<li>An HMM assumes the positions are exact. <strong>State-space models</strong> add an explicit observation layer: a true, unobserved path, and noisy fixes of it (Jonsen et al.&nbsp;2005)</li>
+<li>Essential for Argos and light-level geolocation, where error is as large as the movement</li>
+<li>Continuous-time versions (<code>crawl</code>: Johnson et al.&nbsp;2008) handle irregular sampling and predict positions <em>with uncertainty</em> — the honest version of interpolation from Session 3</li>
 </ul>
 </section>
 <section id="energy-landscapes" class="slide level2">
 <h2>Energy landscapes</h2>
 <ul>
-<li class="fragment">The cost of moving is not the same everywhere: slope, wind, currents, thermals, substrate</li>
-<li class="fragment">An <strong>energy landscape</strong> maps that cost (Wilson et al.&nbsp;2012; Shepard et al.
+<li>The cost of moving is not the same everywhere: slope, wind, currents, thermals, substrate</li>
+<li>An <strong>energy landscape</strong> maps that cost (Wilson et al.&nbsp;2012; Shepard et al.
 <ol start="2013" type="1">
-<li class="fragment"></li>
+<li></li>
 </ol></li>
-<li class="fragment">Animals often choose the <em>cheap</em> path, not the short one: soaring birds follow thermals and ridges; ungulates avoid steep ground</li>
-<li class="fragment">With accelerometers you can estimate energy expenditure directly and ask whether routes minimise it</li>
+<li>Animals often choose the <em>cheap</em> path, not the short one: soaring birds follow thermals and ridges; ungulates avoid steep ground</li>
+<li>With accelerometers you can estimate energy expenditure directly and ask whether routes minimise it</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>Motion capacity becomes a map — and a covariate you can put in an SSF.</p>
-</div>
 </div>
 </section>
 <section id="collective-movement" class="slide level2">
 <h2>Collective movement</h2>
 <ul>
-<li class="fragment">Animals rarely move independently: herds, flocks, schools, family groups</li>
-<li class="fragment">Simple local rules — attraction, alignment, repulsion — produce coordinated groups; a few informed individuals can steer many (Couzin et al.&nbsp;2005)</li>
-<li class="fragment">Tracking several group members at once reveals who leads, who follows, and how decisions are made</li>
-<li class="fragment">Statistically: your “independent” animals may not be. Six buffalo from one herd are not six replicates</li>
+<li>Animals rarely move independently: herds, flocks, schools, family groups</li>
+<li>Simple local rules — attraction, alignment, repulsion — produce coordinated groups; a few informed individuals can steer many (Couzin et al.&nbsp;2005)</li>
+<li>Tracking several group members at once reveals who leads, who follows, and how decisions are made</li>
+<li>Statistically: your “independent” animals may not be. Six buffalo from one herd are not six replicates</li>
 </ul>
 </section>
 <section id="learning-behaviour-from-sensors" class="slide level2">
 <h2>Learning behaviour from sensors</h2>
 <ul>
-<li class="fragment">Tri-axial accelerometers at 10–50 Hz record <em>what the body is doing</em></li>
-<li class="fragment">Supervised <strong>machine learning</strong> — random forests, support vector machines, and now deep neural networks — classify behaviours from acceleration signatures (Nathan et al.&nbsp;2012; Wang 2019)</li>
-<li class="fragment">Training data come from observed or captive animals with known behaviour</li>
-<li class="fragment">The answer to “how do I name my HMM states?” — an independent sensor that measures behaviour</li>
+<li>Tri-axial accelerometers at 10–50 Hz record <em>what the body is doing</em></li>
+<li>Supervised <strong>machine learning</strong> — random forests, support vector machines, and now deep neural networks — classify behaviours from acceleration signatures (Nathan et al.&nbsp;2012; Wang 2019)</li>
+<li>Training data come from observed or captive animals with known behaviour</li>
+<li>The answer to “how do I name my HMM states?” — an independent sensor that measures behaviour</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>A classifier is only as good as its labelled training data, and it transfers poorly between individuals, seasons and populations. Validate on animals it has not seen.</p>
-</div>
 </div>
 </section>
 <section id="the-big-data-era" class="slide level2">
 <h2>The big-data era</h2>
 <ul>
-<li class="fragment"><strong>Movebank</strong> holds billions of locations from thousands of studies; the <strong>ICARUS</strong> initiative put tracking receivers in orbit</li>
-<li class="fragment">Collaborative networks (e.g.&nbsp;<strong>EUROMAMMALS</strong>) pool data across studies, countries and decades</li>
-<li class="fragment">Questions no single study could answer: how movement responds to human footprint across continents; how migration changes with climate (Nathan et al.&nbsp;2022)</li>
-<li class="fragment">New problems: data standards, sharing, credit, and the security of sensitive species</li>
+<li><strong>Movebank</strong> holds billions of locations from thousands of studies; the <strong>ICARUS</strong> initiative put tracking receivers in orbit</li>
+<li>Collaborative networks (e.g.&nbsp;<strong>EUROMAMMALS</strong>) pool data across studies, countries and decades</li>
+<li>Questions no single study could answer: how movement responds to human footprint across continents; how migration changes with climate (Nathan et al.&nbsp;2022)</li>
+<li>New problems: data standards, sharing, credit, and the security of sensitive species</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>The skills of this course — cleaning, regularising, honest uncertainty — are what make pooled data trustworthy. At scale, errors compound too.</p>
-</div>
 </div>
 </section>
 <section id="quiz-3" class="slide level2">
@@ -570,25 +550,25 @@ Giuliano Colosimo
 <section id="what-you-have-learned-to-do" class="slide level2">
 <h2>What you have learned to do</h2>
 <ol type="1">
-<li class="fragment"><strong>Choose</strong> a technology and a fix interval, and name their biases <em>(1)</em></li>
-<li class="fragment"><strong>Handle</strong> spatial data without lying about coordinate systems <em>(2)</em></li>
-<li class="fragment"><strong>Clean</strong> a track, count what you removed, annotate it in space and time <em>(3)</em></li>
-<li class="fragment"><strong>Quantify</strong> a path, and doubt your classifications <em>(4)</em></li>
-<li class="fragment"><strong>Simulate</strong> a null, and a ground truth <em>(5)</em></li>
-<li class="fragment"><strong>Estimate</strong> space use, and say which question the estimate answers <em>(6)</em></li>
-<li class="fragment"><strong>Model</strong> selection and movement together <em>(7)</em></li>
-<li class="fragment"><strong>Infer</strong> behavioural states, and supply the evidence for their names <em>(8)</em></li>
+<li><strong>Choose</strong> a technology and a fix interval, and name their biases <em>(1)</em></li>
+<li><strong>Handle</strong> spatial data without lying about coordinate systems <em>(2)</em></li>
+<li><strong>Clean</strong> a track, count what you removed, annotate it in space and time <em>(3)</em></li>
+<li><strong>Quantify</strong> a path, and doubt your classifications <em>(4)</em></li>
+<li><strong>Simulate</strong> a null, and a ground truth <em>(5)</em></li>
+<li><strong>Estimate</strong> space use, and say which question the estimate answers <em>(6)</em></li>
+<li><strong>Model</strong> selection and movement together <em>(7)</em></li>
+<li><strong>Infer</strong> behavioural states, and supply the evidence for their names <em>(8)</em></li>
 </ol>
 </section>
 <section id="six-habits-worth-keeping" class="slide level2">
 <h2>Six habits worth keeping</h2>
 <ul>
-<li class="fragment"><strong>Look at the data before modelling it.</strong> Plot coordinates against time. Plot step length against time gap. Every dataset in this course had a defect you could see in one plot.</li>
-<li class="fragment"><strong>Count what you remove</strong>, at every step, and put the table in the paper.</li>
-<li class="fragment"><strong>Check that an argument did what you think.</strong> <code>buffer=</code> was silently ignored; <code>group_by()</code> was silently ignored. Both cost us most of a dataset.</li>
-<li class="fragment"><strong>Test your method on a truth you know.</strong> Simulate it first.</li>
-<li class="fragment"><strong>State your availability domain.</strong> Half of habitat-selection disagreements are definitional.</li>
-<li class="fragment"><strong>Report effect sizes, not p-values.</strong> You chose the sample size.</li>
+<li><strong>Look at the data before modelling it.</strong> Plot coordinates against time. Plot step length against time gap. Every dataset in this course had a defect you could see in one plot.</li>
+<li><strong>Count what you remove</strong>, at every step, and put the table in the paper.</li>
+<li><strong>Check that an argument did what you think.</strong> <code>buffer=</code> was silently ignored; <code>group_by()</code> was silently ignored. Both cost us most of a dataset.</li>
+<li><strong>Test your method on a truth you know.</strong> Simulate it first.</li>
+<li><strong>State your availability domain.</strong> Half of habitat-selection disagreements are definitional.</li>
+<li><strong>Report effect sizes, not p-values.</strong> You chose the sample size.</li>
 </ul>
 </section>
 <section id="your-mini-project" class="slide level2">

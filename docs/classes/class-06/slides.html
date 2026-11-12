@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-26">
+  <meta name="dcterms.date" content="2026-11-12">
   <title>Animal Tracking – Home ranges and space use</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -149,7 +149,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-26</p>
+  <p class="date">2026-11-12</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -187,9 +187,9 @@ Giuliano Colosimo
 </blockquote>
 <div class="fragment">
 <ul>
-<li class="fragment">Note what it <strong>excludes</strong>: exploratory forays, migration, dispersal</li>
-<li class="fragment">Note what it does <strong>not</strong> say: nothing about probability, nothing about 95%</li>
-<li class="fragment">Powell &amp; Mitchell (2012): a home range is the part of its <strong>cognitive map</strong> an animal chooses to keep up to date — our estimators are crude proxies</li>
+<li>Note what it <strong>excludes</strong>: exploratory forays, migration, dispersal</li>
+<li>Note what it does <strong>not</strong> say: nothing about probability, nothing about 95%</li>
+<li>Powell &amp; Mitchell (2012): a home range is the part of its <strong>cognitive map</strong> an animal chooses to keep up to date — our estimators are crude proxies</li>
 </ul>
 </div>
 </section>
@@ -248,11 +248,11 @@ Giuliano Colosimo
 <h2>KDE</h2>
 <p>Put a small bump (kernel) on each fix and sum them into a <strong>utilisation distribution</strong> (Worton 1989).</p>
 <ul>
-<li class="fragment">Gives a <strong>density</strong>: core areas, disjoint patches, used and unused parts</li>
-<li class="fragment">The answer is dominated by the <strong>bandwidth</strong> <span class="math inline">\(h\)</span>
+<li>Gives a <strong>density</strong>: core areas, disjoint patches, used and unused parts</li>
+<li>The answer is dominated by the <strong>bandwidth</strong> <span class="math inline">\(h\)</span>
 <ul>
-<li class="fragment"><span class="math inline">\(h_\text{ref}\)</span> — optimal if the UD were a single bivariate normal; usually <strong>over-smooths</strong> real, multi-modal ranges</li>
-<li class="fragment"><span class="math inline">\(h_\text{LSCV}\)</span> — least-squares cross-validation; often <strong>under-smooths</strong> into fragments, and frequently <strong>fails to converge</strong></li>
+<li><span class="math inline">\(h_\text{ref}\)</span> — optimal if the UD were a single bivariate normal; usually <strong>over-smooths</strong> real, multi-modal ranges</li>
+<li><span class="math inline">\(h_\text{LSCV}\)</span> — least-squares cross-validation; often <strong>under-smooths</strong> into fragments, and frequently <strong>fails to converge</strong></li>
 </ul></li>
 </ul>
 </section>
@@ -300,12 +300,10 @@ Giuliano Colosimo
 <div class="fragment">
 <p>Hourly GPS fixes are nothing of the sort — the animal was 300 m away an hour ago and will be 300 m away in an hour.</p>
 <ul>
-<li class="fragment">The <strong>effective</strong> sample size is far smaller than <span class="math inline">\(n\)</span></li>
-<li class="fragment">The UD comes out <strong>too narrow</strong> — the range is under-estimated</li>
-<li class="fragment">Collecting more fixes at a higher rate makes it <strong>worse</strong>, not better</li>
+<li>The <strong>effective</strong> sample size is far smaller than <span class="math inline">\(n\)</span></li>
+<li>The UD comes out <strong>too narrow</strong> — the range is under-estimated</li>
+<li>Collecting more fixes at a higher rate makes it <strong>worse</strong>, not better</li>
 </ul>
-</div>
-<div class="fragment">
 <div class="keyidea">
 <p>This is why area estimates from 1990s VHF studies (a few dozen fixes, days apart) and modern GPS studies (thousands, an hour apart) are not comparable.</p>
 </div>
@@ -321,30 +319,26 @@ Giuliano Colosimo
 <h2>Brownian bridges: use the path</h2>
 <p>Horne et al.&nbsp;(2007): between two consecutive fixes the animal was <em>somewhere</em> on a random bridge connecting them.</p>
 <ul>
-<li class="fragment">The uncertainty of the bridge <strong>grows with the time gap</strong> and shrinks near each fix, scaled by a mobility parameter estimated from the data</li>
-<li class="fragment">Uses the order of the fixes, not just their positions</li>
-<li class="fragment">Handles <strong>irregular sampling</strong> naturally</li>
-<li class="fragment">Answers a specific question: <strong>where was the animal during the tracking period?</strong> — its <em>occurrence</em> distribution</li>
+<li>The uncertainty of the bridge <strong>grows with the time gap</strong> and shrinks near each fix, scaled by a mobility parameter estimated from the data</li>
+<li>Uses the order of the fixes, not just their positions</li>
+<li>Handles <strong>irregular sampling</strong> naturally</li>
+<li>Answers a specific question: <strong>where was the animal during the tracking period?</strong> — its <em>occurrence</em> distribution</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>A Brownian bridge maps where the animal <strong>went</strong>, not where it <strong>could go</strong>. It shrinks around the observed path, so it is usually the smallest of the estimates — correctly so, for the question it answers.</p>
-</div>
 </div>
 </section>
 <section id="autocorrelation-is-information" class="slide level2">
 <h2>Autocorrelation is information</h2>
 <p>Fleming et al.&nbsp;(2015): stop treating autocorrelation as a nuisance.</p>
 <ol type="1">
-<li class="fragment">Fit a <strong>continuous-time movement model</strong> to the track (<code>ctmm</code>)</li>
-<li class="fragment">The model tells you how long the animal takes to cross its range — the <strong>range-crossing time</strong> <span class="math inline">\(\tau_\text{position}\)</span></li>
-<li class="fragment">From that, the <strong>effective sample size</strong>: roughly how many times the animal crossed its range during tracking</li>
-<li class="fragment">Weight the kernel accordingly: <strong>AKDE</strong></li>
+<li>Fit a <strong>continuous-time movement model</strong> to the track (<code>ctmm</code>)</li>
+<li>The model tells you how long the animal takes to cross its range — the <strong>range-crossing time</strong> <span class="math inline">\(\tau_\text{position}\)</span></li>
+<li>From that, the <strong>effective sample size</strong>: roughly how many times the animal crossed its range during tracking</li>
+<li>Weight the kernel accordingly: <strong>AKDE</strong></li>
 </ol>
-<div class="fragment">
 <div class="keyidea">
 <p>AKDE estimates the <strong>range</strong> distribution — where the animal would be found in the long run — and gives it a <strong>confidence interval</strong>. If you track for three range-crossing times, you effectively have three observations, however many fixes you collected.</p>
-</div>
 </div>
 </section>
 <section id="where-it-went-where-it-lives" class="slide level2">
@@ -357,15 +351,13 @@ Giuliano Colosimo
 <h2>The variogram</h2>
 <p>The <strong>semi-variance</strong> as a function of time lag: how far apart, on average, two positions <span class="math inline">\(\Delta t\)</span> apart are.</p>
 <ul>
-<li class="fragment">Rises at short lags as the animal moves away</li>
-<li class="fragment"><strong>Levels off</strong> at an asymptote if the animal is range-resident: beyond the range-crossing time, positions are as far apart as they will ever be</li>
-<li class="fragment"><strong>Keeps rising</strong> if the animal is not range-resident — drifting, dispersing, nomadic</li>
-<li class="fragment">Proportional to the mean squared displacement of Session 5: the same curve, rescaled</li>
+<li>Rises at short lags as the animal moves away</li>
+<li><strong>Levels off</strong> at an asymptote if the animal is range-resident: beyond the range-crossing time, positions are as far apart as they will ever be</li>
+<li><strong>Keeps rising</strong> if the animal is not range-resident — drifting, dispersing, nomadic</li>
+<li>Proportional to the mean squared displacement of Session 5: the same curve, rescaled</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>Look at the variogram <strong>before</strong> estimating any home range. No asymptote, no home range.</p>
-</div>
 </div>
 </section>
 <section id="two-variograms" class="slide level2">
@@ -398,15 +390,13 @@ Giuliano Colosimo
 <section id="stationarity-and-the-occupation-timescale" class="slide level2">
 <h2>Stationarity and the occupation timescale</h2>
 <ul>
-<li class="fragment">Every estimator assumes the UD is <strong>stationary</strong> over the tracking period: the animal’s space use is not systematically changing</li>
-<li class="fragment">Seasonal shifts, dispersal and migration all violate it — segment first (Session 4) and estimate one range per stationary period</li>
-<li class="fragment">The track must be much longer than the <strong>range-crossing time</strong>, or the animal has not yet shown you its range</li>
-<li class="fragment">In Session 5, a buffalo tracked for 36 days was indistinguishable from a random walker; one tracked for 157 days was clearly confined</li>
+<li>Every estimator assumes the UD is <strong>stationary</strong> over the tracking period: the animal’s space use is not systematically changing</li>
+<li>Seasonal shifts, dispersal and migration all violate it — segment first (Session 4) and estimate one range per stationary period</li>
+<li>The track must be much longer than the <strong>range-crossing time</strong>, or the animal has not yet shown you its range</li>
+<li>In Session 5, a buffalo tracked for 36 days was indistinguishable from a random walker; one tracked for 157 days was clearly confined</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>“Must the time series be stationary?” Yes — over the timescale you summarise. A home range is always a home range <em>for a stated period</em>.</p>
-</div>
 </div>
 </section>
 <section id="choosing-an-estimator" class="slide level2">
@@ -490,19 +480,17 @@ Giuliano Colosimo
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li class="fragment">The UD is the object; a home range is a contour on it</li>
-<li class="fragment">MCP for comparability only; KDE depends on bandwidth and ignores autocorrelation</li>
-<li class="fragment">Brownian bridges map <strong>occurrence</strong>; AKDE estimates the <strong>range</strong> with a CI</li>
-<li class="fragment">Autocorrelation is information: effective sample size = range crossings</li>
-<li class="fragment">Check the variogram and stationarity <strong>first</strong></li>
+<li>The UD is the object; a home range is a contour on it</li>
+<li>MCP for comparability only; KDE depends on bandwidth and ignores autocorrelation</li>
+<li>Brownian bridges map <strong>occurrence</strong>; AKDE estimates the <strong>range</strong> with a CI</li>
+<li>Autocorrelation is information: effective sample size = range crossings</li>
+<li>Check the variogram and stationarity <strong>first</strong></li>
 </ul>
-<div class="fragment">
 <h3 id="before-session-7">Before Session 7</h3>
 <ul>
 <li>Fieberg et al.&nbsp;(2021), <em>J Anim Ecol</em> 90:1027 — the “how-to” guide to habitat-selection parameters. The most useful paper of the course</li>
 <li>Fortin et al.&nbsp;(2005), <em>Ecology</em> 86:1320 — the first step selection function</li>
 </ul>
-</div>
 </section>
 <section id="section" class="slide level2 center">
 <h2></h2>

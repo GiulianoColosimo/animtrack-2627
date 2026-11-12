@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-26">
+  <meta name="dcterms.date" content="2026-11-12">
   <title>Animal Tracking – Movement models and simulation</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -149,7 +149,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-26</p>
+  <p class="date">2026-11-12</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -184,15 +184,13 @@ Giuliano Colosimo
 <section id="you-cannot-rewind-an-animal" class="slide level2">
 <h2>You cannot rewind an animal</h2>
 <ul>
-<li class="fragment">A tracking study observes <strong>one realisation</strong> of a random process</li>
-<li class="fragment">To ask “is this unusual?” you need the distribution of what <em>could</em> have happened — and nature will not rerun the experiment</li>
-<li class="fragment">A movement model is a recipe that <strong>generates</strong> tracks. Run it a thousand times and you have that distribution</li>
-<li class="fragment">Compare the real track with the simulated ones: where does it fall?</li>
+<li>A tracking study observes <strong>one realisation</strong> of a random process</li>
+<li>To ask “is this unusual?” you need the distribution of what <em>could</em> have happened — and nature will not rerun the experiment</li>
+<li>A movement model is a recipe that <strong>generates</strong> tracks. Run it a thousand times and you have that distribution</li>
+<li>Compare the real track with the simulated ones: where does it fall?</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>A random walk is a <strong>null model</strong>. When the animal departs from it, the departure is the biology: memory, attraction, avoidance, a home range.</p>
-</div>
 </div>
 </section>
 <section id="four-canonical-walks" class="slide level2">
@@ -209,15 +207,13 @@ Giuliano Colosimo
 <section id="the-brownian-baseline" class="slide level2">
 <h2>The Brownian baseline</h2>
 <ul>
-<li class="fragment">Each step has a random length and a <strong>uniformly random</strong> direction, independent of the previous one</li>
-<li class="fragment">The animal has no memory and no goal</li>
-<li class="fragment">After <span class="math inline">\(n\)</span> steps the expected squared distance from the start — the <strong>mean squared displacement</strong> — is <span class="math display">\[\text{MSD}(n) = n\,\mathrm{E}[l^2]\]</span></li>
-<li class="fragment">MSD grows <strong>linearly</strong> with time: <span class="math inline">\(\text{MSD} = 4Dt\)</span> in two dimensions, with <span class="math inline">\(D\)</span> the diffusion coefficient</li>
+<li>Each step has a random length and a <strong>uniformly random</strong> direction, independent of the previous one</li>
+<li>The animal has no memory and no goal</li>
+<li>After <span class="math inline">\(n\)</span> steps the expected squared distance from the start — the <strong>mean squared displacement</strong> — is <span class="math display">\[\text{MSD}(n) = n\,\mathrm{E}[l^2]\]</span></li>
+<li>MSD grows <strong>linearly</strong> with time: <span class="math inline">\(\text{MSD} = 4Dt\)</span> in two dimensions, with <span class="math inline">\(D\)</span> the diffusion coefficient</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>Linear MSD means the typical distance from the start grows only as <span class="math inline">\(\sqrt{t}\)</span>. A random walker four times as long gets only twice as far.</p>
-</div>
 </div>
 </section>
 <section id="diffusion-seen-from-above" class="slide level2">
@@ -237,10 +233,10 @@ Giuliano Colosimo
 <p>A <strong>correlated random walk</strong> (CRW) draws each new heading close to the last:</p>
 <p><span class="math display">\[\phi_t = \phi_{t-1} + \theta_t, \qquad \theta_t \sim \text{von Mises}(0, \kappa)\]</span></p>
 <ul>
-<li class="fragment"><span class="math inline">\(\kappa = 0\)</span>: turning angles uniform — the uncorrelated walk</li>
-<li class="fragment">large <span class="math inline">\(\kappa\)</span>: turning angles near zero — nearly straight lines</li>
-<li class="fragment">Step lengths from a gamma, Weibull or log-normal distribution</li>
-<li class="fragment">Two parameters for steps, one for turns: the same ingredients as the step selection functions of Session 7 and the hidden Markov models of Session 8</li>
+<li><span class="math inline">\(\kappa = 0\)</span>: turning angles uniform — the uncorrelated walk</li>
+<li>large <span class="math inline">\(\kappa\)</span>: turning angles near zero — nearly straight lines</li>
+<li>Step lengths from a gamma, Weibull or log-normal distribution</li>
+<li>Two parameters for steps, one for turns: the same ingredients as the step selection functions of Session 7 and the hidden Markov models of Session 8</li>
 </ul>
 </section>
 <section id="the-two-ingredients" class="slide level2">
@@ -280,15 +276,13 @@ Giuliano Colosimo
 <h2>Advection and diffusion</h2>
 <p>Add a preferred direction — towards a den, a water hole, a breeding ground:</p>
 <ul>
-<li class="fragment"><strong>Biased random walk (BRW)</strong>: each heading drawn around the bearing to the goal, with no memory of the last heading</li>
-<li class="fragment"><strong>Biased correlated random walk (BCRW)</strong>: a compromise between the previous heading (persistence) and the bearing to the goal (bias)</li>
-<li class="fragment">Two processes act at once: <strong>advection</strong> (drift towards the goal, distance ∝ <span class="math inline">\(t\)</span>) and <strong>diffusion</strong> (random spread, distance ∝ <span class="math inline">\(\sqrt{t}\)</span>)</li>
-<li class="fragment">Over long enough times, advection always wins</li>
+<li><strong>Biased random walk (BRW)</strong>: each heading drawn around the bearing to the goal, with no memory of the last heading</li>
+<li><strong>Biased correlated random walk (BCRW)</strong>: a compromise between the previous heading (persistence) and the bearing to the goal (bias)</li>
+<li>Two processes act at once: <strong>advection</strong> (drift towards the goal, distance ∝ <span class="math inline">\(t\)</span>) and <strong>diffusion</strong> (random spread, distance ∝ <span class="math inline">\(\sqrt{t}\)</span>)</li>
+<li>Over long enough times, advection always wins</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>Weak bias is invisible over a few steps and decisive over many. That is why orientation mechanisms are so hard to detect in short tracks and so obvious in migrations.</p>
-</div>
 </div>
 </section>
 <section id="drift-beats-spread-eventually" class="slide level2">
@@ -301,14 +295,12 @@ Giuliano Colosimo
 <h2>Central places</h2>
 <p>A BCRW whose goal is its own <strong>home</strong> produces something new: the animal wanders, drifts back, wanders again. It never escapes.</p>
 <ul>
-<li class="fragment">The track stays within a bounded area: a <strong>home range</strong> emerges from a simple movement rule</li>
-<li class="fragment">The long-run spread of positions is a stationary <strong>utilisation distribution</strong></li>
-<li class="fragment">Mechanistic home-range models (Moorcroft &amp; Lewis 2006) build on exactly this idea</li>
+<li>The track stays within a bounded area: a <strong>home range</strong> emerges from a simple movement rule</li>
+<li>The long-run spread of positions is a stationary <strong>utilisation distribution</strong></li>
+<li>Mechanistic home-range models (Moorcroft &amp; Lewis 2006) build on exactly this idea</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>In the practical this central-place walker becomes our <strong>ground-truth animal</strong>: we know its true home range, so in Session 6 we can check which estimator gets it right.</p>
-</div>
 </div>
 </section>
 <section id="a-home-range-from-one-rule" class="slide level2">
@@ -341,24 +333,22 @@ Giuliano Colosimo
 <section id="the-lévy-hypothesis" class="slide level2">
 <h2>The Lévy hypothesis</h2>
 <ul>
-<li class="fragment">Step lengths drawn from a <strong>power law</strong>: <span class="math inline">\(P(l) \propto l^{-\mu}\)</span>, with <span class="math inline">\(1 &lt; \mu \le 3\)</span></li>
-<li class="fragment">No characteristic scale: many short steps, occasional enormous ones</li>
-<li class="fragment">Viswanathan et al.&nbsp;(1996) reported Lévy flights in wandering albatrosses; Viswanathan et al.&nbsp;(1999) showed that <span class="math inline">\(\mu \approx 2\)</span> is an <strong>optimal search</strong> strategy for sparse, randomly placed targets</li>
-<li class="fragment">A seductive idea: a universal, scale-free rule for foraging</li>
+<li>Step lengths drawn from a <strong>power law</strong>: <span class="math inline">\(P(l) \propto l^{-\mu}\)</span>, with <span class="math inline">\(1 &lt; \mu \le 3\)</span></li>
+<li>No characteristic scale: many short steps, occasional enormous ones</li>
+<li>Viswanathan et al.&nbsp;(1996) reported Lévy flights in wandering albatrosses; Viswanathan et al.&nbsp;(1999) showed that <span class="math inline">\(\mu \approx 2\)</span> is an <strong>optimal search</strong> strategy for sparse, randomly placed targets</li>
+<li>A seductive idea: a universal, scale-free rule for foraging</li>
 </ul>
 </section>
 <section id="the-reversal" class="slide level2">
 <h2>The reversal</h2>
 <ul>
-<li class="fragment">Edwards et al.&nbsp;(2007) reanalysed the albatross data with better records: the long “flights” included time sitting on the water. <strong>The Lévy pattern disappeared</strong></li>
-<li class="fragment">They also showed that log–log regression of histograms, the standard method at the time, is biased; power laws must be fitted by <strong>maximum likelihood</strong> and compared with alternatives (Clauset et al.&nbsp;2009)</li>
-<li class="fragment">Benhamou (2007): an animal <strong>switching between two behaviours</strong>, each a simple random walk, produces a step-length distribution that a power law fits beautifully</li>
-<li class="fragment">Lévy-like patterns do appear in some marine predators, but depend on environmental context (Sims et al.&nbsp;2008; Humphries et al.&nbsp;2010)</li>
+<li>Edwards et al.&nbsp;(2007) reanalysed the albatross data with better records: the long “flights” included time sitting on the water. <strong>The Lévy pattern disappeared</strong></li>
+<li>They also showed that log–log regression of histograms, the standard method at the time, is biased; power laws must be fitted by <strong>maximum likelihood</strong> and compared with alternatives (Clauset et al.&nbsp;2009)</li>
+<li>Benhamou (2007): an animal <strong>switching between two behaviours</strong>, each a simple random walk, produces a step-length distribution that a power law fits beautifully</li>
+<li>Lévy-like patterns do appear in some marine predators, but depend on environmental context (Sims et al.&nbsp;2008; Humphries et al.&nbsp;2010)</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>The honest position: a power-law fit is not evidence of a Lévy <em>strategy</em>. Different mechanisms produce indistinguishable step-length distributions.</p>
-</div>
 </div>
 </section>
 <section id="two-ways-to-make-a-heavy-tail" class="slide level2">
@@ -391,15 +381,13 @@ Giuliano Colosimo
 <section id="the-recipe" class="slide level2">
 <h2>The recipe</h2>
 <ol type="1">
-<li class="fragment">Choose a <strong>statistic</strong> that captures your question — net displacement, radius of gyration, time to reach water</li>
-<li class="fragment">Choose a <strong>null process</strong> that lacks the mechanism you are testing — a CRW with the animal’s own step and turn distributions, but no memory</li>
-<li class="fragment"><strong>Simulate</strong> it many times; compute the statistic each time</li>
-<li class="fragment">Locate the observed value in the simulated distribution</li>
+<li>Choose a <strong>statistic</strong> that captures your question — net displacement, radius of gyration, time to reach water</li>
+<li>Choose a <strong>null process</strong> that lacks the mechanism you are testing — a CRW with the animal’s own step and turn distributions, but no memory</li>
+<li><strong>Simulate</strong> it many times; compute the statistic each time</li>
+<li>Locate the observed value in the simulated distribution</li>
 </ol>
-<div class="fragment">
 <div class="keyidea">
 <p>The null must match the animal in everything <strong>except</strong> the mechanism. A null with the wrong step lengths is a straw man, and rejecting it proves nothing.</p>
-</div>
 </div>
 </section>
 <section id="the-recipe-applied" class="slide level2">
@@ -441,19 +429,17 @@ Giuliano Colosimo
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li class="fragment">Simulation replaces the replication nature will not give you</li>
-<li class="fragment">Uncorrelated walk: MSD ∝ t. CRW: ballistic at short scales, diffusive at long</li>
-<li class="fragment">Bias adds drift, which always wins eventually; a bias towards home <strong>creates</strong> a home range</li>
-<li class="fragment">Power-law step lengths are not evidence of a Lévy strategy</li>
-<li class="fragment">A simulation null must match the animal in everything but the mechanism — and has power only if the track is long enough</li>
+<li>Simulation replaces the replication nature will not give you</li>
+<li>Uncorrelated walk: MSD ∝ t. CRW: ballistic at short scales, diffusive at long</li>
+<li>Bias adds drift, which always wins eventually; a bias towards home <strong>creates</strong> a home range</li>
+<li>Power-law step lengths are not evidence of a Lévy strategy</li>
+<li>A simulation null must match the animal in everything but the mechanism — and has power only if the track is long enough</li>
 </ul>
-<div class="fragment">
 <h3 id="before-session-6">Before Session 6</h3>
 <ul>
 <li>Fleming et al.&nbsp;(2015), <em>Ecology</em> 96:1182 — autocorrelated KDE</li>
 <li>Make sure <code>library(ctmm)</code> and <code>library(adehabitatHR)</code> both load</li>
 </ul>
-</div>
 </section>
 <section id="section" class="slide level2 center">
 <h2></h2>

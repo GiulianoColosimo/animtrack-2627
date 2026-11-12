@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-10-26">
+  <meta name="dcterms.date" content="2026-11-12">
   <title>Animal Tracking – Habitat selection on the move</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -215,7 +215,7 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-10-26</p>
+  <p class="date">2026-11-12</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
@@ -245,17 +245,15 @@ Giuliano Colosimo
 <h2>Selection is a comparison</h2>
 <p>An animal <strong>selects</strong> a resource when it uses it <strong>disproportionately to its availability</strong>.</p>
 <ul>
-<li class="fragment">Use alone tells you nothing. A wolf in a landscape that is 95% forest will be found mostly in forest whether or not it prefers forest</li>
-<li class="fragment">So every selection analysis needs two samples:
+<li>Use alone tells you nothing. A wolf in a landscape that is 95% forest will be found mostly in forest whether or not it prefers forest</li>
+<li>So every selection analysis needs two samples:
 <ul>
-<li class="fragment"><strong>Used</strong> — where the animal was</li>
-<li class="fragment"><strong>Available</strong> — where it could have been</li>
+<li><strong>Used</strong> — where the animal was</li>
+<li><strong>Available</strong> — where it could have been</li>
 </ul></li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>The second sample is not data. <strong>You construct it</strong>, and the construction encodes a hypothesis. Most disagreements about habitat selection results are disagreements about availability.</p>
-</div>
 </div>
 </section>
 <section id="used-and-available-for-one-fisher" class="slide level2">
@@ -385,23 +383,21 @@ Giuliano Colosimo
 <p><span class="math display">\[w(\mathbf{x}) = \exp(\beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_k x_k)\]</span></p>
 <p><span class="math inline">\(w(\mathbf{x})\)</span> is the <strong>relative</strong> probability of use, proportional to the true probability by an unknown constant.</p>
 <ul>
-<li class="fragment">Fitted with logistic regression on used (1) vs available (0) points</li>
-<li class="fragment">There is <strong>no intercept you can interpret</strong> — it absorbs the arbitrary number of available points you drew</li>
-<li class="fragment">Only <strong>relative</strong> statements are licensed: “twice as likely as”, never “40% probability of use”</li>
+<li>Fitted with logistic regression on used (1) vs available (0) points</li>
+<li>There is <strong>no intercept you can interpret</strong> — it absorbs the arbitrary number of available points you drew</li>
+<li>Only <strong>relative</strong> statements are licensed: “twice as likely as”, never “40% probability of use”</li>
 </ul>
 </section>
 <section id="usedavailable-is-not-casecontrol" class="slide level2">
 <h2>Used–available is not case–control</h2>
 <ul>
-<li class="fragment">“Available” points are not known <strong>absences</strong>. The animal may well have used them; you just did not observe it</li>
-<li class="fragment">Formally, the used–available design fits an <strong>inhomogeneous Poisson point process</strong>, and logistic regression is a computational device for it</li>
-<li class="fragment">This is why the <strong>infinitely weighted logistic regression</strong> trick works: give available points a huge weight and the logistic coefficients converge to the correct point-process coefficients</li>
+<li>“Available” points are not known <strong>absences</strong>. The animal may well have used them; you just did not observe it</li>
+<li>Formally, the used–available design fits an <strong>inhomogeneous Poisson point process</strong>, and logistic regression is a computational device for it</li>
+<li>This is why the <strong>infinitely weighted logistic regression</strong> trick works: give available points a huge weight and the logistic coefficients converge to the correct point-process coefficients</li>
 </ul>
-<div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>d<span class="sc">$</span>w <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(d<span class="sc">$</span>case_, <span class="dv">1</span>, <span class="dv">5000</span>)</span>
 <span id="cb1-2"><a></a><span class="fu">glm</span>(case_ <span class="sc">~</span> elevation <span class="sc">+</span> grassland, <span class="at">data =</span> d,</span>
 <span id="cb1-3"><a></a>    <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">weights =</span> d<span class="sc">$</span>w)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="quiz-1" class="slide level2">
 <h2>Quiz</h2>
@@ -423,14 +419,12 @@ Giuliano Colosimo
 <section id="three-decisions" class="slide level2">
 <h2>Three decisions</h2>
 <ol type="1">
-<li class="fragment"><strong>The domain.</strong> Study area? MCP? KDE? Buffer around the track? This <em>is</em> your choice of Johnson order.</li>
-<li class="fragment"><strong>How many points.</strong> Too few and the estimates are noisy; the coefficients should <strong>stabilise</strong> as you add more. Check that they do.</li>
-<li class="fragment"><strong>How they are distributed.</strong> Uniform random is the default. But should inaccessible areas (open water, cliffs, the other side of a motorway) be “available” at all?</li>
+<li><strong>The domain.</strong> Study area? MCP? KDE? Buffer around the track? This <em>is</em> your choice of Johnson order.</li>
+<li><strong>How many points.</strong> Too few and the estimates are noisy; the coefficients should <strong>stabilise</strong> as you add more. Check that they do.</li>
+<li><strong>How they are distributed.</strong> Uniform random is the default. But should inaccessible areas (open water, cliffs, the other side of a motorway) be “available” at all?</li>
 </ol>
-<div class="fragment">
 <div class="keyidea">
 <p>Changing the availability domain can reverse the sign of a coefficient. This is not a flaw in the method — it is the method working. Different domains ask different questions.</p>
-</div>
 </div>
 </section>
 <section id="do-the-coefficients-stabilise" class="slide level2">
@@ -447,29 +441,25 @@ Giuliano Colosimo
 <section id="an-animal-cannot-be-anywhere" class="slide level2">
 <h2>An animal cannot be anywhere</h2>
 <ul>
-<li class="fragment">An RSF treats every point in the home range as equally available at every moment</li>
-<li class="fragment">But a buffalo at 08:00 cannot be 20 km away at 09:00. It can reach perhaps a kilometre</li>
-<li class="fragment">So most of the “available” set was never a real alternative</li>
-<li class="fragment">Availability is <strong>local</strong>, and it <strong>moves with the animal</strong></li>
+<li>An RSF treats every point in the home range as equally available at every moment</li>
+<li>But a buffalo at 08:00 cannot be 20 km away at 09:00. It can reach perhaps a kilometre</li>
+<li>So most of the “available” set was never a real alternative</li>
+<li>Availability is <strong>local</strong>, and it <strong>moves with the animal</strong></li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>A step selection function fixes this by defining availability from the animal’s own movement capacity: from where it <em>was</em>, where could it plausibly have gone?</p>
-</div>
 </div>
 </section>
 <section id="the-design" class="slide level2">
 <h2>The design</h2>
 <p>For each observed step:</p>
 <ol type="1">
-<li class="fragment">Take the starting point <span class="math inline">\(\mathbf{x}_{t}\)</span></li>
-<li class="fragment">Draw <span class="math inline">\(k\)</span> <strong>control steps</strong> from the animal’s own distributions of step length and turning angle</li>
-<li class="fragment">That gives one <strong>stratum</strong>: 1 used step + <span class="math inline">\(k\)</span> available steps, all from the same starting point at the same time</li>
-<li class="fragment">Compare them with <strong>conditional logistic regression</strong></li>
+<li>Take the starting point <span class="math inline">\(\mathbf{x}_{t}\)</span></li>
+<li>Draw <span class="math inline">\(k\)</span> <strong>control steps</strong> from the animal’s own distributions of step length and turning angle</li>
+<li>That gives one <strong>stratum</strong>: 1 used step + <span class="math inline">\(k\)</span> available steps, all from the same starting point at the same time</li>
+<li>Compare them with <strong>conditional logistic regression</strong></li>
 </ol>
-<div class="fragment">
 <p>Because the comparison is <em>within</em> a stratum, everything constant at that moment — time of day, season, the animal’s internal state, its identity — cancels out. That is a remarkably clean piece of control.</p>
-</div>
 </section>
 <section id="one-stratum" class="slide level2">
 <h2>One stratum</h2>
@@ -485,28 +475,24 @@ P(\text{step } j \text{ chosen}) =
 {\sum_{i \in \text{stratum}} \exp(\boldsymbol{\beta}^{\top}\mathbf{x}_i)}
 \]</span></p>
 <ul>
-<li class="fragment">Identical machinery to a <strong>Cox proportional hazards</strong> model — which is why <code>survival::clogit()</code> and <code>amt::fit_issf()</code> both go through <code>coxph()</code></li>
-<li class="fragment">Each stratum contributes only the <em>contrast</em> between the used step and its controls</li>
-<li class="fragment">No intercept. Again, only <strong>relative</strong> statements</li>
+<li>Identical machinery to a <strong>Cox proportional hazards</strong> model — which is why <code>survival::clogit()</code> and <code>amt::fit_issf()</code> both go through <code>coxph()</code></li>
+<li>Each stratum contributes only the <em>contrast</em> between the used step and its controls</li>
+<li>No intercept. Again, only <strong>relative</strong> statements</li>
 </ul>
-<div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">fit_issf</span>(case_ <span class="sc">~</span> elevation_end <span class="sc">+</span> sl_ <span class="sc">+</span> <span class="fu">log</span>(sl_) <span class="sc">+</span></span>
 <span id="cb2-2"><a></a>                 <span class="fu">strata</span>(step_id_),</span>
 <span id="cb2-3"><a></a>         <span class="at">data =</span> d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="fortin-et-al.-2005" class="slide level2">
 <h2>Fortin et al.&nbsp;(2005)</h2>
 <p>The paper that made SSFs standard: elk in Yellowstone after wolves returned.</p>
 <ul>
-<li class="fragment">Each observed step compared with control steps drawn from the elk’s own step-length and turning-angle distributions</li>
-<li class="fragment">Elk avoided aspen stands in areas with high wolf density</li>
-<li class="fragment">The effect changed where elk browsed, and so which aspen could regenerate — a behavioural route to a trophic cascade</li>
+<li>Each observed step compared with control steps drawn from the elk’s own step-length and turning-angle distributions</li>
+<li>Elk avoided aspen stands in areas with high wolf density</li>
+<li>The effect changed where elk browsed, and so which aspen could regenerate — a behavioural route to a trophic cascade</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p>The SSF made it possible to ask how predators change <strong>fine-scale movement decisions</strong>, not just where prey live.</p>
-</div>
 </div>
 </section>
 <section id="quiz-2" class="slide level2">
@@ -535,29 +521,25 @@ P(\text{step } j \text{ chosen}) =
 <h2>The circularity problem</h2>
 <p>To generate control steps you need the animal’s step-length and turning-angle distributions. But those distributions are <strong>themselves affected by habitat</strong> — an animal moves slowly in good habitat and fast through bad.</p>
 <ul>
-<li class="fragment">Estimate them from the raw data, and they are already contaminated by selection</li>
-<li class="fragment">Use them to define availability, and you bake the contamination in</li>
-<li class="fragment">The estimated selection coefficients are then biased</li>
+<li>Estimate them from the raw data, and they are already contaminated by selection</li>
+<li>Use them to define availability, and you bake the contamination in</li>
+<li>The estimated selection coefficients are then biased</li>
 </ul>
-<div class="fragment">
 <div class="keyidea">
 <p><strong>Integrated step selection analysis</strong> (Avgar et al.&nbsp;2016) solves this by estimating the movement kernel and the selection coefficients <strong>simultaneously</strong>, from the same model.</p>
-</div>
 </div>
 </section>
 <section id="how-issa-does-it" class="slide level2">
 <h2>How iSSA does it</h2>
 <p>Include the movement variables as covariates in the conditional model:</p>
 <ul>
-<li class="fragment"><code>sl_</code> and <code>log(sl_)</code> — together these correct the <strong>gamma</strong> step-length distribution used to generate the controls</li>
-<li class="fragment"><code>cos(ta_)</code> — corrects the <strong>von Mises</strong> turning-angle concentration</li>
-<li class="fragment">The fitted coefficients on these terms tell you how the <em>realised</em> movement kernel differs from the <em>tentative</em> one you sampled from</li>
+<li><code>sl_</code> and <code>log(sl_)</code> — together these correct the <strong>gamma</strong> step-length distribution used to generate the controls</li>
+<li><code>cos(ta_)</code> — corrects the <strong>von Mises</strong> turning-angle concentration</li>
+<li>The fitted coefficients on these terms tell you how the <em>realised</em> movement kernel differs from the <em>tentative</em> one you sampled from</li>
 </ul>
-<div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">fit_issf</span>(case_ <span class="sc">~</span> elevation_end <span class="sc">+</span> grassland_end <span class="sc">+</span></span>
 <span id="cb3-2"><a></a>                 sl_ <span class="sc">+</span> <span class="fu">log</span>(sl_) <span class="sc">+</span> <span class="fu">cos</span>(ta_) <span class="sc">+</span></span>
 <span id="cb3-3"><a></a>                 <span class="fu">strata</span>(step_id_), <span class="at">data =</span> d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="reading-the-movement-coefficients" class="slide level2">
 <h2>Reading the movement coefficients</h2>
@@ -609,9 +591,9 @@ P(\text{step } j \text{ chosen}) =
 <span id="cb4-4"><a></a>        <span class="fu">cos</span>(ta_)<span class="sc">:</span>grassland_start <span class="sc">+</span>   <span class="co"># straighter?</span></span>
 <span id="cb4-5"><a></a>        <span class="fu">strata</span>(step_id_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
-<li class="fragment"><code>_start</code> covariates modify the <strong>movement kernel</strong> — how the animal moves <em>from</em> that habitat</li>
-<li class="fragment"><code>_end</code> covariates capture <strong>selection</strong> — which habitat it moves <em>into</em></li>
-<li class="fragment">Mixing them up is the single most common error in iSSA papers</li>
+<li><code>_start</code> covariates modify the <strong>movement kernel</strong> — how the animal moves <em>from</em> that habitat</li>
+<li><code>_end</code> covariates capture <strong>selection</strong> — which habitat it moves <em>into</em></li>
+<li>Mixing them up is the single most common error in iSSA papers</li>
 </ul>
 </section>
 <section id="quiz-3" class="slide level2">
@@ -640,14 +622,12 @@ P(\text{step } j \text{ chosen}) =
 <h2>From coefficients back to movement</h2>
 <p>An iSSA gives you two things at once:</p>
 <ul>
-<li class="fragment">a <strong>movement kernel</strong> — how far and how straight the animal moves, and how that depends on where it is</li>
-<li class="fragment">a <strong>selection function</strong> — which destinations it prefers</li>
+<li>a <strong>movement kernel</strong> — how far and how straight the animal moves, and how that depends on where it is</li>
+<li>a <strong>selection function</strong> — which destinations it prefers</li>
 </ul>
-<div class="fragment">
 <p>Multiply them and you have the animal’s <strong>redistribution kernel</strong>: the probability of being at each place one step from now. Iterate it, and you <strong>simulate</strong> new tracks — in the current landscape, or in one you are planning to change.</p>
 <div class="keyidea">
 <p>That is the bridge to mechanistic models: a fitted iSSA is a generative model of movement, like the random walks of Session 5, but with the environment built in.</p>
-</div>
 </div>
 </section>
 <section id="a-redistribution-kernel-built" class="slide level2">
@@ -661,9 +641,9 @@ P(\text{step } j \text{ chosen}) =
 <p>The natural effect size for an SSF (Avgar et al.&nbsp;2017; Fieberg et al.&nbsp;2021):</p>
 <p><span class="math display">\[\text{RSS}(x_1, x_2) = \exp\big(\beta\,(x_1 - x_2)\big)\]</span></p>
 <ul>
-<li class="fragment">“How many times more likely is the animal to take a step ending at <span class="math inline">\(x_1\)</span> rather than <span class="math inline">\(x_2\)</span>, given both were equally reachable?”</li>
-<li class="fragment">For a binary habitat, RSS = <span class="math inline">\(e^{\beta}\)</span></li>
-<li class="fragment">For a continuous covariate, RSS depends on the difference you pick — report it for a biologically meaningful one</li>
+<li>“How many times more likely is the animal to take a step ending at <span class="math inline">\(x_1\)</span> rather than <span class="math inline">\(x_2\)</span>, given both were equally reachable?”</li>
+<li>For a binary habitat, RSS = <span class="math inline">\(e^{\beta}\)</span></li>
+<li>For a continuous covariate, RSS depends on the difference you pick — report it for a biologically meaningful one</li>
 </ul>
 </section></section>
 <section>
@@ -674,30 +654,28 @@ P(\text{step } j \text{ chosen}) =
 <section id="practical-decisions" class="slide level2">
 <h2>Practical decisions</h2>
 <ul>
-<li class="fragment"><strong>How many control steps?</strong> 10 is a common default; check that coefficients stabilise as you increase it, exactly as for RSF availability</li>
-<li class="fragment"><strong>Sampling interval.</strong> All steps in the analysis must share one duration. Resample first (Session 3)</li>
-<li class="fragment"><strong>Where to measure covariates.</strong> At the end point, along the step, or averaged over it? Measuring <em>along</em> the step is more defensible for barriers such as roads and rivers</li>
-<li class="fragment"><strong>Zero-length steps</strong> break the gamma distribution — <code>amt</code> warns and replaces them</li>
+<li><strong>How many control steps?</strong> 10 is a common default; check that coefficients stabilise as you increase it, exactly as for RSF availability</li>
+<li><strong>Sampling interval.</strong> All steps in the analysis must share one duration. Resample first (Session 3)</li>
+<li><strong>Where to measure covariates.</strong> At the end point, along the step, or averaged over it? Measuring <em>along</em> the step is more defensible for barriers such as roads and rivers</li>
+<li><strong>Zero-length steps</strong> break the gamma distribution — <code>amt</code> warns and replaces them</li>
 </ul>
 </section>
 <section id="multiple-animals-again" class="slide level2">
 <h2>Multiple animals, again</h2>
 <ul>
-<li class="fragment"><strong>Two-stage</strong>: fit each animal, then summarise the coefficients. Simple, transparent, and adequate for small samples</li>
-<li class="fragment"><strong>Mixed conditional models</strong>: Muff et al.&nbsp;(2020) show how to fit these in <code>glmmTMB</code> with random slopes and a fixed large variance on the stratum intercepts</li>
-<li class="fragment">A random intercept alone is <strong>not</strong> enough — it does not let individuals differ in selection, which is usually the biology you care about</li>
+<li><strong>Two-stage</strong>: fit each animal, then summarise the coefficients. Simple, transparent, and adequate for small samples</li>
+<li><strong>Mixed conditional models</strong>: Muff et al.&nbsp;(2020) show how to fit these in <code>glmmTMB</code> with random slopes and a fixed large variance on the stratum intercepts</li>
+<li>A random intercept alone is <strong>not</strong> enough — it does not let individuals differ in selection, which is usually the biology you care about</li>
 </ul>
 </section>
 <section id="validation" class="slide level2">
 <h2>Validation</h2>
 <ul>
-<li class="fragment"><strong>Used–habitat calibration</strong> plots (Fieberg et al.&nbsp;2018)</li>
-<li class="fragment">Withhold <strong>whole individuals</strong>, or whole time blocks — never random steps, because autocorrelation leaks the answer into the test set</li>
-<li class="fragment"><strong>Simulate</strong> from the fitted model and compare the simulated space use with the observed. If your model cannot regenerate something resembling the real track, it has not captured the process</li>
+<li><strong>Used–habitat calibration</strong> plots (Fieberg et al.&nbsp;2018)</li>
+<li>Withhold <strong>whole individuals</strong>, or whole time blocks — never random steps, because autocorrelation leaks the answer into the test set</li>
+<li><strong>Simulate</strong> from the fitted model and compare the simulated space use with the observed. If your model cannot regenerate something resembling the real track, it has not captured the process</li>
 </ul>
-<div class="fragment">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>amt<span class="sc">::</span><span class="fu">simulate_path</span>(...)   <span class="co"># redistribution kernel from the fitted iSSA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="quiz-4" class="slide level2">
 <h2>Quiz</h2>
@@ -786,19 +764,17 @@ P(\text{step } j \text{ chosen}) =
 <section id="recap" class="slide level2">
 <h2>Recap</h2>
 <ul>
-<li class="fragment">Selection = use <strong>relative to availability</strong>; state the order and the domain</li>
-<li class="fragment">RSF: used vs available; RSPF needs real absences; SSF: each step vs its own alternatives</li>
-<li class="fragment"><code>strata(step_id_)</code> is the design, not a detail</li>
-<li class="fragment">iSSA estimates movement and selection together; <code>_end</code> covariates select, <code>_start</code> covariates modify movement</li>
-<li class="fragment">A fitted iSSA is a <strong>generative</strong> model: it can simulate</li>
+<li>Selection = use <strong>relative to availability</strong>; state the order and the domain</li>
+<li>RSF: used vs available; RSPF needs real absences; SSF: each step vs its own alternatives</li>
+<li><code>strata(step_id_)</code> is the design, not a detail</li>
+<li>iSSA estimates movement and selection together; <code>_end</code> covariates select, <code>_start</code> covariates modify movement</li>
+<li>A fitted iSSA is a <strong>generative</strong> model: it can simulate</li>
 </ul>
-<div class="fragment">
 <h3 id="before-session-8">Before Session 8</h3>
 <ul>
 <li>McClintock et al.&nbsp;(2020), <em>Uncovering ecological state dynamics with hidden Markov models</em>, Ecology Letters 23:1878 — sections 1–3</li>
 <li>Make sure <code>library(momentuHMM)</code> loads, and prepare a 3–5 minute <strong>mini-project pitch</strong></li>
 </ul>
-</div>
 </section>
 <section id="section" class="slide level2 center">
 <h2></h2>
