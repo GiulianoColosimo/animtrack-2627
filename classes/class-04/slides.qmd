@@ -48,8 +48,7 @@ leo <- read_leo()
 [Movement path]{.pbox .path .on}
 :::
 
-From numbers describing a **path** to inferences about **behaviour** — the
-first time we try to climb from the bottom box to the ones above it.
+From numbers describing a **path** to inferences about **behaviour**. We try to climb from the bottom box to the ones above it.
 
 ---
 
@@ -77,13 +76,13 @@ whether it describes the animal or the sampling.
 
 ## Everything here is scale-dependent
 
-- Sample every 5 minutes: many short steps — but so short that GPS error
+- Sample every 5 minutes: many short steps, but so short that GPS error
   randomises their *direction*
 - Sample hourly: clear directional persistence
 - Sample every 12 hours: few long steps, turning angles ≈ uniform
   (the animal looks like it moves at random)
-- **Total path length** grows without bound as the interval shrinks — the
-  coastline paradox
+- **Total path length** grows as the interval shrinks (the
+  coastline paradox)
 
 ::: {.keyidea}
 "Mean step length" is not a property of the animal. It is a property of the
@@ -133,14 +132,21 @@ number is a property of the animal alone.
 ::: {.columns}
 ::: {.column width="50%"}
 ### Straightness index
-$$\text{ST} = \frac{D}{L}$$
-Net displacement over path length, between 0 and 1.
+$$\text{ST} = \frac{d}{L}$$
+Net displacement $d$ over path length $L$, between 0\ and\ 1.
 
 Intuitive, but it depends on the length of the window you compute it over.
 :::
 ::: {.column width="50%"}
 ### Sinuosity (Benhamou 2004)
-Built from the step length and the concentration of turning angles.
+$$S = 2\left[p\left(\frac{1+c}{1-c} + b^2\right)\right]^{-1/2}$$
+Built from the step length and the concentration of turning angles[^sinuosity].
+
+[^sinuosity]: $p$: mean step length. $c$: mean cosine of the turning angles
+    (1 = always straight on, 0 = no preferred direction). $b$: coefficient of
+    variation of step length (SD / mean), 0 if the path is rediscretised into
+    equal steps. $S$ is in radians per √metre: how much the heading changes per
+    square root of distance travelled.
 
 Describes the *local* tortuosity of a random search path, and is far less
 sensitive to the window.
@@ -173,6 +179,65 @@ tells you the scale at which the behaviour changes.
 
 ---
 
+## Fractal dimension, in a buffalo
+
+```{r}
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.6
+#| fig-align: center
+# Divider ("ruler") method: walk a ruler of length r along the path and count
+# the steps; the measured length is steps x r
+divider_length <- function(x, y, r) {
+  n <- length(x); px <- x[1]; py <- y[1]; j <- 2; steps <- 0
+  repeat {
+    while (j <= n && (x[j] - px)^2 + (y[j] - py)^2 < r^2) j <- j + 1
+    if (j > n) break
+    ax <- x[j - 1]; ay <- y[j - 1]; dx <- x[j] - ax; dy <- y[j] - ay
+    A <- dx^2 + dy^2; B <- 2 * (dx * (ax - px) + dy * (ay - py))
+    C <- (ax - px)^2 + (ay - py)^2 - r^2
+    s <- (-B + sqrt(B^2 - 4 * A * C)) / (2 * A)   # where the ruler cuts this segment
+    px <- ax + s * dx; py <- ay + s * dy; steps <- steps + 1
+  }
+  steps * r
+}
+ruler <- 25 * 2^seq(0, 8, by = 0.5)                 # 25 m to 6.4 km
+path_L <- sapply(ruler, function(r) divider_length(cilla$x_, cilla$y_, r))
+fit_in <- ruler >= 100
+fd_fit <- lm(log10(path_L[fit_in]) ~ log10(ruler[fit_in]))
+D_single <- 1 - unname(coef(fd_fit)[2])
+r_mid <- sqrt(ruler[-1] * ruler[-length(ruler)])
+D_local <- 1 - diff(log(path_L)) / diff(log(ruler))
+step_med <- median(sqrt(diff(cilla$x_)^2 + diff(cilla$y_)^2))
+xt <- c(25, 100, 400, 1600, 6400); xl <- c("25 m", "100 m", "400 m", "1.6 km", "6.4 km")
+par(mfrow = c(1, 2)); slide_par()
+plot(ruler, path_L / 1000, log = "xy", pch = 16, cex = 1.6, col = teal, xaxt = "n", yaxt = "n",
+     xlim = range(ruler), xlab = "Ruler length", ylab = "Path length (km)",
+     main = "One straight line does not fit")
+axis(1, at = xt, labels = xl); axis(2, at = c(250, 400, 600, 1000))
+curve(10^(coef(fd_fit)[1] + coef(fd_fit)[2] * log10(x)) / 1000, from = 100, to = max(ruler),
+      add = TRUE, lty = 2, lwd = 3, col = rust)
+text(30, 300, sprintf("single fit, 100 m to 6.4 km: D = %.2f", D_single), col = rust,
+     cex = 1.3, adj = 0)
+plot(r_mid, D_local, log = "x", type = "o", pch = 16, cex = 1.6, lwd = 3, col = teal,
+     xaxt = "n", xlim = range(ruler), ylim = c(0.82, 2.15),
+     xlab = "Ruler length", ylab = "Local D", main = "D changes with the ruler")
+axis(1, at = xt, labels = xl)
+abline(h = c(1, 2), lty = 3, col = "grey50", lwd = 2)
+text(25, 2.04, "fills the plane", adj = c(0, 0), cex = 1.3, col = "grey40")
+text(25, 0.96, "straight line", adj = c(0, 1), cex = 1.3, col = "grey40")
+abline(v = step_med, lty = 2, col = gold, lwd = 2)
+text(step_med, 1.7, "median step\nbetween fixes", pos = 4, cex = 1.3, col = gold)
+```
+
+[Figure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)]{.credit}
+
+Cilla's track measured with rulers from 25 m to 6.4 km. Up to the spacing of
+her fixes it looks straight; beyond a kilometre it folds back inside her home
+range and $D$ climbs towards `r sprintf("%.1f", max(D_local))`.
+
+---
+
 ## Net squared displacement (NSD)
 
 $$\text{NSD}(t) = \lVert \mathbf{x}_t - \mathbf{x}_0 \rVert^2$$
@@ -180,10 +245,10 @@ $$\text{NSD}(t) = \lVert \mathbf{x}_t - \mathbf{x}_0 \rVert^2$$
 The squared distance from the starting point. A remarkably effective
 diagnostic:
 
-- **Sedentary** — NSD rises then plateaus at a low value
-- **Migratory** — a sigmoid up, a plateau, a sigmoid back down
-- **Dispersal** — a single step up to a new plateau
-- **Nomadic** — rises roughly linearly, no plateau
+- **Sedentary**: NSD rises then plateaus at a low value
+- **Migratory**: a sigmoid up, a plateau, a sigmoid back down
+- **Dispersal**: a single step up to a new plateau
+- **Nomadic**: rises roughly linearly, no plateau
 
 Fitting these shapes as competing non-linear models (Bunnefeld et al. 2011) is
 a cheap and surprisingly effective way to classify movement strategies.
@@ -223,12 +288,21 @@ NSD against time for the four strategies of Bunnefeld et al. (2011).
 Bunnefeld et al. (2011) fit competing **non-linear models** to each NSD curve
 and let the data choose:
 
-| Strategy | NSD shape | Model |
+| Strategy | NSD shape | Model[^nsd-letters] |
 |:--|:--|:--|
 | Nomad | keeps rising | $\beta t$ |
 | Resident | rises, then plateaus | $c\,(1 - e^{-kt})$ |
 | Disperser | one sigmoid step | $\delta / (1 + e^{(\theta - t)/\phi})$ |
 | Migrant | up, plateau, back down | difference of two sigmoids |
+
+[^nsd-letters]: $t$: days since the first fix. $\beta$: how fast NSD grows
+    (km² per day). $c$: the plateau, which scales with home-range size.
+    $k$: how quickly NSD approaches that plateau. $\delta$: NSD at the new
+    plateau, so $\sqrt{\delta}$ is the distance moved. $\theta$: the date NSD
+    reaches half of $\delta$, the middle of the move. $\phi$: how long the move
+    takes (the days from half to about ¾ of $\delta$). Migrant: a sigmoid up
+    ($\theta_1$, $\phi_1$) minus a sigmoid back down ($\theta_2$, $\phi_2$),
+    sharing $\delta$. $e$ is Euler's number (≈ 2.718).
 
 . . .
 
@@ -287,8 +361,8 @@ You fit the four NSD models to a year of data for a savanna buffalo, and the
 you conclude?
 
 - [ ] The buffalo is a migrant
-- [x] It shifted within its range; AIC picked the most flexible curve, and the parameters say it is not a migration
 - [ ] The resident model must have failed to converge
+- [x] It shifted within its range; AIC picked the most flexible curve, and the parameters say it is not a migration
 - [ ] Buffalo cannot be classified with NSD
 
 ::: {.quiz-feedback}
@@ -313,9 +387,9 @@ A reports 180 m, study B reports 640 m. Both are competent. What is the most
 likely explanation?
 
 - [ ] Study B's collars had worse GPS accuracy
-- [x] Study B sampled at a longer interval
 - [ ] Study B included migratory individuals
 - [ ] One of them made an arithmetic error
+- [x] Study B sampled at a longer interval
 
 ::: {.quiz-feedback}
 Step length scales with the sampling interval. An animal sampled hourly
@@ -515,12 +589,12 @@ question.
 
 ## Thresholds and expert rules
 
-- **Speed threshold** — "steps faster than $v^*$ are travelling". Transparent
+- **Speed threshold**: "steps faster than $v^*$ are travelling". Transparent
   and reproducible
-- **Expert rules** — combine several: speed *and* turning angle *and* time of
+- **Expert rules**: combine several: speed *and* turning angle *and* time of
   day, chosen from knowledge of the species
-- Both are defensible **only when the metric is clearly bimodal** — a histogram
-  with an empty valley between modes
+- Both are defensible **only when the metric is clearly bimodal** (a histogram
+  with an empty valley between modes)
 - Without that valley, the threshold is an arbitrary decision dressed up as a
   result
 

@@ -2873,7 +2873,7 @@
     "href": "classes/class-04/slides.html#today",
     "title": "Quantifying movement",
     "section": "Today",
-    "text": "Today\n\nInternal state Motion capacity Navigation capacity External factors Movement path\n\nFrom numbers describing a path to inferences about behaviour — the first time we try to climb from the bottom box to the ones above it.",
+    "text": "Today\n\nInternal state Motion capacity Navigation capacity External factors Movement path\n\nFrom numbers describing a path to inferences about behaviour. We try to climb from the bottom box to the ones above it.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2899,7 +2899,7 @@
     "href": "classes/class-04/slides.html#everything-here-is-scale-dependent",
     "title": "Quantifying movement",
     "section": "Everything here is scale-dependent",
-    "text": "Everything here is scale-dependent\n\nSample every 5 minutes: many short steps — but so short that GPS error randomises their direction\nSample hourly: clear directional persistence\nSample every 12 hours: few long steps, turning angles ≈ uniform (the animal looks like it moves at random)\nTotal path length grows without bound as the interval shrinks — the coastline paradox\n\n\n“Mean step length” is not a property of the animal. It is a property of the animal and your sampling interval. Always report the interval alongside it, and never compare step lengths measured at different rates.\nThere is a sweet spot: fine enough to resolve the behaviour, coarse enough that a typical step is much longer than your GPS error.",
+    "text": "Everything here is scale-dependent\n\nSample every 5 minutes: many short steps, but so short that GPS error randomises their direction\nSample hourly: clear directional persistence\nSample every 12 hours: few long steps, turning angles ≈ uniform (the animal looks like it moves at random)\nTotal path length grows as the interval shrinks (the coastline paradox)\n\n\n“Mean step length” is not a property of the animal. It is a property of the animal and your sampling interval. Always report the interval alongside it, and never compare step lengths measured at different rates.\nThere is a sweet spot: fine enough to resolve the behaviour, coarse enough that a typical step is much longer than your GPS error.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2925,7 +2925,7 @@
     "href": "classes/class-04/slides.html#straightness-and-sinuosity",
     "title": "Quantifying movement",
     "section": "Straightness and sinuosity",
-    "text": "Straightness and sinuosity\n\n\nStraightness index\n\\[\\text{ST} = \\frac{D}{L}\\] Net displacement over path length, between 0 and 1.\nIntuitive, but it depends on the length of the window you compute it over.\n\nSinuosity (Benhamou 2004)\nBuilt from the step length and the concentration of turning angles.\nDescribes the local tortuosity of a random search path, and is far less sensitive to the window.\n\n\n\nUse straightness for oriented movement (how directly did it get there?) and sinuosity for searching movement (how much does it wiggle?).",
+    "text": "Straightness and sinuosity\n\n\nStraightness index\n\\[\\text{ST} = \\frac{d}{L}\\] Net displacement \\(d\\) over path length \\(L\\), between 0 and 1.\nIntuitive, but it depends on the length of the window you compute it over.\n\nSinuosity (Benhamou 2004)\n\\[S = 2\\left[p\\left(\\frac{1+c}{1-c} + b^2\\right)\\right]^{-1/2}\\] Built from the step length and the concentration of turning angles1.\nDescribes the local tortuosity of a random search path, and is far less sensitive to the window.\n\n\n\nUse straightness for oriented movement (how directly did it get there?) and sinuosity for searching movement (how much does it wiggle?).\n\n\n\\(p\\): mean step length. \\(c\\): mean cosine of the turning angles (1 = always straight on, 0 = no preferred direction). \\(b\\): coefficient of variation of step length (SD / mean), 0 if the path is rediscretised into equal steps. \\(S\\) is in radians per √metre: how much the heading changes per square root of distance travelled.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2951,7 +2951,7 @@
     "href": "classes/class-04/slides.html#net-squared-displacement-nsd",
     "title": "Quantifying movement",
     "section": "Net squared displacement (NSD)",
-    "text": "Net squared displacement (NSD)\n\\[\\text{NSD}(t) = \\lVert \\mathbf{x}_t - \\mathbf{x}_0 \\rVert^2\\]\nThe squared distance from the starting point. A remarkably effective diagnostic:\n\nSedentary — NSD rises then plateaus at a low value\nMigratory — a sigmoid up, a plateau, a sigmoid back down\nDispersal — a single step up to a new plateau\nNomadic — rises roughly linearly, no plateau\n\nFitting these shapes as competing non-linear models (Bunnefeld et al. 2011) is a cheap and surprisingly effective way to classify movement strategies.",
+    "text": "Net squared displacement (NSD)\n\\[\\text{NSD}(t) = \\lVert \\mathbf{x}_t - \\mathbf{x}_0 \\rVert^2\\]\nThe squared distance from the starting point. A remarkably effective diagnostic:\n\nSedentary: NSD rises then plateaus at a low value\nMigratory: a sigmoid up, a plateau, a sigmoid back down\nDispersal: a single step up to a new plateau\nNomadic: rises roughly linearly, no plateau\n\nFitting these shapes as competing non-linear models (Bunnefeld et al. 2011) is a cheap and surprisingly effective way to classify movement strategies.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -2977,7 +2977,7 @@
     "href": "classes/class-04/slides.html#classifying-strategies-from-nsd",
     "title": "Quantifying movement",
     "section": "Classifying strategies from NSD",
-    "text": "Classifying strategies from NSD\nBunnefeld et al. (2011) fit competing non-linear models to each NSD curve and let the data choose:\n\n\n\n\n\n\n\n\nStrategy\nNSD shape\nModel\n\n\n\n\nNomad\nkeeps rising\n\\(\\beta t\\)\n\n\nResident\nrises, then plateaus\n\\(c\\,(1 - e^{-kt})\\)\n\n\nDisperser\none sigmoid step\n\\(\\delta / (1 + e^{(\\theta - t)/\\phi})\\)\n\n\nMigrant\nup, plateau, back down\ndifference of two sigmoids\n\n\n\n\n\nThe fitted parameters are the biology: \\(\\sqrt{\\delta}\\) is the migration distance, \\(\\theta_1\\) and \\(\\theta_2\\) the departure and return dates. Never report the winning model without looking at them.",
+    "text": "Classifying strategies from NSD\nBunnefeld et al. (2011) fit competing non-linear models to each NSD curve and let the data choose:\n\n\n\n\n\n\n\n\nStrategy\nNSD shape\nModel1\n\n\n\n\nNomad\nkeeps rising\n\\(\\beta t\\)\n\n\nResident\nrises, then plateaus\n\\(c\\,(1 - e^{-kt})\\)\n\n\nDisperser\none sigmoid step\n\\(\\delta / (1 + e^{(\\theta - t)/\\phi})\\)\n\n\nMigrant\nup, plateau, back down\ndifference of two sigmoids\n\n\n\n\n\nThe fitted parameters are the biology: \\(\\sqrt{\\delta}\\) is the migration distance, \\(\\theta_1\\) and \\(\\theta_2\\) the departure and return dates. Never report the winning model without looking at them.\n\n\n\\(t\\): days since the first fix. \\(\\beta\\): how fast NSD grows (km² per day). \\(c\\): the plateau, which scales with home-range size. \\(k\\): how quickly NSD approaches that plateau. \\(\\delta\\): NSD at the new plateau, so \\(\\sqrt{\\delta}\\) is the distance moved. \\(\\theta\\): the date NSD reaches half of \\(\\delta\\), the middle of the move. \\(\\phi\\): how long the move takes (the days from half to about ¾ of \\(\\delta\\)). Migrant: a sigmoid up (\\(\\theta_1\\), \\(\\phi_1\\)) minus a sigmoid back down (\\(\\theta_2\\), \\(\\phi_2\\)), sharing \\(\\delta\\). \\(e\\) is Euler’s number (≈ 2.718).",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3003,7 +3003,7 @@
     "href": "classes/class-04/slides.html#quiz",
     "title": "Quantifying movement",
     "section": "Quiz",
-    "text": "Quiz\n\nYou fit the four NSD models to a year of data for a savanna buffalo, and the migrant model wins by ΔAIC = 60. The fitted displacement is 12 km. What do you conclude?\n\nThe buffalo is a migrant\nIt shifted within its range; AIC picked the most flexible curve, and the parameters say it is not a migration\nThe resident model must have failed to converge\nBuffalo cannot be classified with NSD\n\n\nThe double-sigmoid “migrant” curve is the most flexible of the four: it also fits an animal that drifts to one side of its home range for a few months and comes back. AIC rewards that fit — and with hundreds of autocorrelated daily points, AIC differences are grossly inflated.\nThe parameters settle it: 12 km is a home-range-scale shift. A real migrant such as Leo the vulture gives a displacement of thousands of kilometres. Read the parameters, not just the winner.",
+    "text": "Quiz\n\nYou fit the four NSD models to a year of data for a savanna buffalo, and the migrant model wins by ΔAIC = 60. The fitted displacement is 12 km. What do you conclude?\n\nThe buffalo is a migrant\nThe resident model must have failed to converge\nIt shifted within its range; AIC picked the most flexible curve, and the parameters say it is not a migration\nBuffalo cannot be classified with NSD\n\n\nThe double-sigmoid “migrant” curve is the most flexible of the four: it also fits an animal that drifts to one side of its home range for a few months and comes back. AIC rewards that fit — and with hundreds of autocorrelated daily points, AIC differences are grossly inflated.\nThe parameters settle it: 12 km is a home-range-scale shift. A real migrant such as Leo the vulture gives a displacement of thousands of kilometres. Read the parameters, not just the winner.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3016,7 +3016,7 @@
     "href": "classes/class-04/slides.html#quiz-1",
     "title": "Quantifying movement",
     "section": "Quiz",
-    "text": "Quiz\n\nTwo studies report mean step length for the same population of roe deer. Study A reports 180 m, study B reports 640 m. Both are competent. What is the most likely explanation?\n\nStudy B’s collars had worse GPS accuracy\nStudy B sampled at a longer interval\nStudy B included migratory individuals\nOne of them made an arithmetic error\n\n\nStep length scales with the sampling interval. An animal sampled hourly produces shorter steps than the same animal sampled every four hours, because the straight line between fixes cuts across all the wiggles in between.\nThis is why step length is not comparable across studies unless the interval matches, and why you must state the interval in every methods section.\nIt is also why Session 7’s step selection functions always compare an observed step with alternatives of exactly the same duration.",
+    "text": "Quiz\n\nTwo studies report mean step length for the same population of roe deer. Study A reports 180 m, study B reports 640 m. Both are competent. What is the most likely explanation?\n\nStudy B’s collars had worse GPS accuracy\nStudy B included migratory individuals\nOne of them made an arithmetic error\nStudy B sampled at a longer interval\n\n\nStep length scales with the sampling interval. An animal sampled hourly produces shorter steps than the same animal sampled every four hours, because the straight line between fixes cuts across all the wiggles in between.\nThis is why step length is not comparable across studies unless the interval matches, and why you must state the interval in every methods section.\nIt is also why Session 7’s step selection functions always compare an observed step with alternatives of exactly the same duration.",
     "crumbs": [
       "Home",
       "Sessions",
@@ -3120,7 +3120,7 @@
     "href": "classes/class-04/slides.html#thresholds-and-expert-rules",
     "title": "Quantifying movement",
     "section": "Thresholds and expert rules",
-    "text": "Thresholds and expert rules\n\nSpeed threshold — “steps faster than \\(v^*\\) are travelling”. Transparent and reproducible\nExpert rules — combine several: speed and turning angle and time of day, chosen from knowledge of the species\nBoth are defensible only when the metric is clearly bimodal — a histogram with an empty valley between modes\nWithout that valley, the threshold is an arbitrary decision dressed up as a result",
+    "text": "Thresholds and expert rules\n\nSpeed threshold: “steps faster than \\(v^*\\) are travelling”. Transparent and reproducible\nExpert rules: combine several: speed and turning angle and time of day, chosen from knowledge of the species\nBoth are defensible only when the metric is clearly bimodal (a histogram with an empty valley between modes)\nWithout that valley, the threshold is an arbitrary decision dressed up as a result",
     "crumbs": [
       "Home",
       "Sessions",
@@ -4860,6 +4860,19 @@
       "Sessions",
       "3 · From fixes to trajectories",
       "Slides — Cleaning, bursts, resampling"
+    ]
+  },
+  {
+    "objectID": "classes/class-04/slides.html#fractal-dimension-in-a-buffalo",
+    "href": "classes/class-04/slides.html#fractal-dimension-in-a-buffalo",
+    "title": "Quantifying movement",
+    "section": "Fractal dimension, in a buffalo",
+    "text": "Fractal dimension, in a buffalo\n\nFigure produced with own R code · data: Kruger buffalo, Getz et al. (Movebank)\nCilla’s track measured with rulers from 25 m to 6.4 km. Up to the spacing of her fixes it looks straight; beyond a kilometre it folds back inside her home range and \\(D\\) climbs towards 1.8.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "4 · Quantifying movement",
+      "Slides — Path descriptors, behaviour"
     ]
   }
 ]

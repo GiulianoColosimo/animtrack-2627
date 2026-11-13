@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.21">
 
   <meta name="author" content="Giuliano Colosimo">
-  <meta name="dcterms.date" content="2026-11-12">
+  <meta name="dcterms.date" content="2026-11-13">
   <title>Animal Tracking – Quantifying movement</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -149,14 +149,14 @@ Giuliano Colosimo
     </div>
 </div>
 
-  <p class="date">2026-11-12</p>
+  <p class="date">2026-11-13</p>
 </section>
 <section id="today" class="slide level2">
 <h2>Today</h2>
 <div class="paradigm">
 <p><span class="pbox on">Internal state</span> <span class="pbox on">Motion capacity</span> <span class="pbox">Navigation capacity</span> <span class="pbox">External factors</span> <span class="pbox path on">Movement path</span></p>
 </div>
-<p>From numbers describing a <strong>path</strong> to inferences about <strong>behaviour</strong> — the first time we try to climb from the bottom box to the ones above it.</p>
+<p>From numbers describing a <strong>path</strong> to inferences about <strong>behaviour</strong>. We try to climb from the bottom box to the ones above it.</p>
 </section>
 <section id="where-we-are-going" class="slide level2">
 <h2>Where we are going</h2>
@@ -183,10 +183,10 @@ Giuliano Colosimo
 <section id="everything-here-is-scale-dependent" class="slide level2">
 <h2>Everything here is scale-dependent</h2>
 <ul>
-<li>Sample every 5 minutes: many short steps — but so short that GPS error randomises their <em>direction</em></li>
+<li>Sample every 5 minutes: many short steps, but so short that GPS error randomises their <em>direction</em></li>
 <li>Sample hourly: clear directional persistence</li>
 <li>Sample every 12 hours: few long steps, turning angles ≈ uniform (the animal looks like it moves at random)</li>
-<li><strong>Total path length</strong> grows without bound as the interval shrinks — the coastline paradox</li>
+<li><strong>Total path length</strong> grows as the interval shrinks (the coastline paradox)</li>
 </ul>
 <div class="keyidea">
 <p>“Mean step length” is not a property of the animal. It is a property of the animal <strong>and your sampling interval</strong>. Always report the interval alongside it, and never compare step lengths measured at different rates.</p>
@@ -204,11 +204,11 @@ Giuliano Colosimo
 <div class="columns">
 <div class="column" style="width:50%;">
 <h3 id="straightness-index">Straightness index</h3>
-<p><span class="math display">\[\text{ST} = \frac{D}{L}\]</span> Net displacement over path length, between 0 and 1.</p>
+<p><span class="math display">\[\text{ST} = \frac{d}{L}\]</span> Net displacement <span class="math inline">\(d\)</span> over path length <span class="math inline">\(L\)</span>, between 0&nbsp;and&nbsp;1.</p>
 <p>Intuitive, but it depends on the length of the window you compute it over.</p>
 </div><div class="column" style="width:50%;">
 <h3 id="sinuosity-benhamou-2004">Sinuosity (Benhamou 2004)</h3>
-<p>Built from the step length and the concentration of turning angles.</p>
+<p><span class="math display">\[S = 2\left[p\left(\frac{1+c}{1-c} + b^2\right)\right]^{-1/2}\]</span> Built from the step length and the concentration of turning angles<sup>1</sup>.</p>
 <p>Describes the <em>local</em> tortuosity of a random search path, and is far less sensitive to the window.</p>
 </div></div>
 <div class="fragment">
@@ -216,7 +216,7 @@ Giuliano Colosimo
 <p>Use straightness for <strong>oriented</strong> movement (how directly did it get there?) and sinuosity for <strong>searching</strong> movement (how much does it wiggle?).</p>
 </div>
 </div>
-</section>
+<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="math inline">\(p\)</span>: mean step length. <span class="math inline">\(c\)</span>: mean cosine of the turning angles (1 = always straight on, 0 = no preferred direction). <span class="math inline">\(b\)</span>: coefficient of variation of step length (SD / mean), 0 if the path is rediscretised into equal steps. <span class="math inline">\(S\)</span> is in radians per √metre: how much the heading changes per square root of distance travelled.</p></li></ol></aside></section>
 <section id="fractal-dimension" class="slide level2">
 <h2>Fractal dimension</h2>
 <ul>
@@ -229,22 +229,28 @@ Giuliano Colosimo
 <p>If <span class="math inline">\(D\)</span> changes with the ruler, the path is not fractal — and the change itself tells you the scale at which the behaviour changes.</p>
 </div>
 </section>
+<section id="fractal-dimension-in-a-buffalo" class="slide level2">
+<h2>Fractal dimension, in a buffalo</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<p>Cilla’s track measured with rulers from 25 m to 6.4 km. Up to the spacing of her fixes it looks straight; beyond a kilometre it folds back inside her home range and <span class="math inline">\(D\)</span> climbs towards 1.8.</p>
+</section>
 <section id="net-squared-displacement-nsd" class="slide level2">
 <h2>Net squared displacement (NSD)</h2>
 <p><span class="math display">\[\text{NSD}(t) = \lVert \mathbf{x}_t - \mathbf{x}_0 \rVert^2\]</span></p>
 <p>The squared distance from the starting point. A remarkably effective diagnostic:</p>
 <ul>
-<li><strong>Sedentary</strong> — NSD rises then plateaus at a low value</li>
-<li><strong>Migratory</strong> — a sigmoid up, a plateau, a sigmoid back down</li>
-<li><strong>Dispersal</strong> — a single step up to a new plateau</li>
-<li><strong>Nomadic</strong> — rises roughly linearly, no plateau</li>
+<li><strong>Sedentary</strong>: NSD rises then plateaus at a low value</li>
+<li><strong>Migratory</strong>: a sigmoid up, a plateau, a sigmoid back down</li>
+<li><strong>Dispersal</strong>: a single step up to a new plateau</li>
+<li><strong>Nomadic</strong>: rises roughly linearly, no plateau</li>
 </ul>
 <p>Fitting these shapes as competing non-linear models (Bunnefeld et al.&nbsp;2011) is a cheap and surprisingly effective way to classify movement strategies.</p>
 </section>
 <section id="four-shapes" class="slide level2">
 <h2>Four shapes</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · schematic curves</span></p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · schematic curves</span></p>
 <p>NSD against time for the four strategies of Bunnefeld et al.&nbsp;(2011).</p>
 </section>
 <section id="classifying-strategies-from-nsd" class="slide level2">
@@ -260,7 +266,7 @@ Giuliano Colosimo
 <tr class="header">
 <th style="text-align: left;">Strategy</th>
 <th style="text-align: left;">NSD shape</th>
-<th style="text-align: left;">Model</th>
+<th style="text-align: left;">Model<sup>1</sup></th>
 </tr>
 </thead>
 <tbody>
@@ -291,11 +297,11 @@ Giuliano Colosimo
 <p>The fitted <strong>parameters</strong> are the biology: <span class="math inline">\(\sqrt{\delta}\)</span> is the migration distance, <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span> the departure and return dates. Never report the winning model without looking at them.</p>
 </div>
 </div>
-</section>
+<aside><ol class="aside-footnotes"><li id="fn2"><p><span class="math inline">\(t\)</span>: days since the first fix. <span class="math inline">\(\beta\)</span>: how fast NSD grows (km² per day). <span class="math inline">\(c\)</span>: the plateau, which scales with home-range size. <span class="math inline">\(k\)</span>: how quickly NSD approaches that plateau. <span class="math inline">\(\delta\)</span>: NSD at the new plateau, so <span class="math inline">\(\sqrt{\delta}\)</span> is the distance moved. <span class="math inline">\(\theta\)</span>: the date NSD reaches half of <span class="math inline">\(\delta\)</span>, the middle of the move. <span class="math inline">\(\phi\)</span>: how long the move takes (the days from half to about ¾ of <span class="math inline">\(\delta\)</span>). Migrant: a sigmoid up (<span class="math inline">\(\theta_1\)</span>, <span class="math inline">\(\phi_1\)</span>) minus a sigmoid back down (<span class="math inline">\(\theta_2\)</span>, <span class="math inline">\(\phi_2\)</span>), sharing <span class="math inline">\(\delta\)</span>. <span class="math inline">\(e\)</span> is Euler’s number (≈ 2.718).</p></li></ol></aside></section>
 <section id="a-real-migrant-leo" class="slide level2">
 <h2>A real migrant: Leo</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: turkey vulture Leo, Bildstein et al.&nbsp;(Movebank)</span></p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: turkey vulture Leo, Bildstein et al.&nbsp;(Movebank)</span></p>
 <p>Daily NSD of the vulture Leo, June 2007 to May 2008, and the fitted migrant model. The parameters read as biology: a migration distance in thousands of kilometres, a departure date and a return date.</p>
 </section>
 <section id="quiz" class="slide level2">
@@ -304,8 +310,8 @@ Giuliano Colosimo
 <p>You fit the four NSD models to a year of data for a savanna buffalo, and the <strong>migrant</strong> model wins by ΔAIC = 60. The fitted displacement is 12 km. What do you conclude?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">The buffalo is a migrant</label></li>
-<li><label><input type="checkbox" checked="">It shifted within its range; AIC picked the most flexible curve, and the parameters say it is not a migration</label></li>
 <li><label><input type="checkbox">The resident model must have failed to converge</label></li>
+<li><label><input type="checkbox" checked="">It shifted within its range; AIC picked the most flexible curve, and the parameters say it is not a migration</label></li>
 <li><label><input type="checkbox">Buffalo cannot be classified with NSD</label></li>
 </ul>
 <div class="quiz-feedback">
@@ -320,9 +326,9 @@ Giuliano Colosimo
 <p>Two studies report mean step length for the same population of roe deer. Study A reports 180 m, study B reports 640 m. Both are competent. What is the most likely explanation?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">Study B’s collars had worse GPS accuracy</label></li>
-<li><label><input type="checkbox" checked="">Study B sampled at a longer interval</label></li>
 <li><label><input type="checkbox">Study B included migratory individuals</label></li>
 <li><label><input type="checkbox">One of them made an arithmetic error</label></li>
+<li><label><input type="checkbox" checked="">Study B sampled at a longer interval</label></li>
 </ul>
 <div class="quiz-feedback">
 <p>Step length scales with the sampling interval. An animal sampled hourly produces shorter steps than the same animal sampled every four hours, because the straight line between fixes cuts across all the wiggles in between.</p>
@@ -351,7 +357,7 @@ Giuliano Colosimo
 <section id="first-passage-time-drawn" class="slide level2">
 <h2>First-passage time, drawn</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · simulated data</span></p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · simulated data</span></p>
 <p>A simulated animal alternating travel and intensive search. Inside a patch it takes many hours to leave a 400 m circle; in transit, one or two.</p>
 </section>
 <section id="quiz-2" class="slide level2">
@@ -479,16 +485,16 @@ Giuliano Colosimo
 <section id="thresholds-and-expert-rules" class="slide level2">
 <h2>Thresholds and expert rules</h2>
 <ul>
-<li><strong>Speed threshold</strong> — “steps faster than <span class="math inline">\(v^*\)</span> are travelling”. Transparent and reproducible</li>
-<li><strong>Expert rules</strong> — combine several: speed <em>and</em> turning angle <em>and</em> time of day, chosen from knowledge of the species</li>
-<li>Both are defensible <strong>only when the metric is clearly bimodal</strong> — a histogram with an empty valley between modes</li>
+<li><strong>Speed threshold</strong>: “steps faster than <span class="math inline">\(v^*\)</span> are travelling”. Transparent and reproducible</li>
+<li><strong>Expert rules</strong>: combine several: speed <em>and</em> turning angle <em>and</em> time of day, chosen from knowledge of the species</li>
+<li>Both are defensible <strong>only when the metric is clearly bimodal</strong> (a histogram with an empty valley between modes)</li>
 <li>Without that valley, the threshold is an arbitrary decision dressed up as a result</li>
 </ul>
 </section>
 <section id="an-honest-threshold-and-a-dishonest-one" class="slide level2">
 <h2>An honest threshold, and a dishonest one</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: turkey vulture Leo, Bildstein et al.&nbsp;(Movebank); Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: turkey vulture Leo, Bildstein et al.&nbsp;(Movebank); Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
 <p>Left: Leo’s migration days (&gt; 50 km, dashed) form a separate mode. Right: the buffalo’s speeds are a continuum with no gap; any cut-off is arbitrary.</p>
 </section>
 <section id="behavioural-change-point-analysis" class="slide level2">
@@ -507,7 +513,7 @@ Giuliano Colosimo
 <section id="bcpa-on-cilla" class="slide level2">
 <h2>BCPA on Cilla</h2>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-8-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1152"><p><span class="credit">Figure produced with own R code · data: Kruger buffalo, Getz et al.&nbsp;(Movebank)</span></p>
 <p>Persistence velocity over the first 25 days of hourly fixes (grey), the 28 change points BCPA finds with a 50-fix window (dashed), and the mean of each of the 29 phases (teal).</p>
 </section>
 <section id="quiz-3" class="slide level2">
@@ -562,6 +568,7 @@ Giuliano Colosimo
 
 
 </section></section>
+
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="../../assets/figures/Tor-Vergata_logo_cmyk.png" class="slide-logo"></p>
